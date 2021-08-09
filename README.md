@@ -6,7 +6,7 @@ Just the start of a simple game for learning about C++ and SFML.  The point is m
 * C++17
 * Only dependency is [SFML](https://www.sfml-dev.org)
 * Cross Platform (CMake setup for Windows/VS, MacOS/Clang, and Linux/GCC)
-* Media files are all [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)) and in this repo to make deployment super easy
+* Media files are all [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/) and in this repo to make deployment super easy
 * Spunky
 
 ##
