@@ -27,25 +27,25 @@ namespace halloween
         , m_isFinished(true)
     {
         // there are two blood splat animation in the same texture
-        m_textureCoords1.push_back({ 0, 0, 128, 128 });
-        m_textureCoords1.push_back({ 128, 0, 128, 128 });
-        m_textureCoords1.push_back({ 256, 0, 128, 128 });
-        m_textureCoords1.push_back({ 384, 0, 128, 128 });
-        m_textureCoords1.push_back({ 512, 0, 128, 128 });
-        m_textureCoords1.push_back({ 640, 0, 128, 128 });
-        m_textureCoords1.push_back({ 768, 0, 128, 128 });
-        m_textureCoords1.push_back({ 896, 0, 128, 128 });
-        m_textureCoords1.push_back({ 1024, 0, 128, 128 });
+        m_textureCoords1.emplace_back(0, 0, 128, 128);
+        m_textureCoords1.emplace_back(128, 0, 128, 128);
+        m_textureCoords1.emplace_back(256, 0, 128, 128);
+        m_textureCoords1.emplace_back(384, 0, 128, 128);
+        m_textureCoords1.emplace_back(512, 0, 128, 128);
+        m_textureCoords1.emplace_back(640, 0, 128, 128);
+        m_textureCoords1.emplace_back(768, 0, 128, 128);
+        m_textureCoords1.emplace_back(896, 0, 128, 128);
+        m_textureCoords1.emplace_back(1024, 0, 128, 128);
 
-        m_textureCoords2.push_back({ 0, 128, 128, 128 });
-        m_textureCoords2.push_back({ 128, 128, 128, 128 });
-        m_textureCoords2.push_back({ 256, 128, 128, 128 });
-        m_textureCoords2.push_back({ 384, 128, 128, 128 });
-        m_textureCoords2.push_back({ 512, 128, 128, 128 });
-        m_textureCoords2.push_back({ 640, 128, 128, 128 });
-        m_textureCoords2.push_back({ 768, 128, 128, 128 });
-        m_textureCoords2.push_back({ 896, 128, 128, 128 });
-        m_textureCoords2.push_back({ 1024, 128, 128, 128 });
+        m_textureCoords2.emplace_back(0, 128, 128, 128);
+        m_textureCoords2.emplace_back(128, 128, 128, 128);
+        m_textureCoords2.emplace_back(256, 128, 128, 128);
+        m_textureCoords2.emplace_back(384, 128, 128, 128);
+        m_textureCoords2.emplace_back(512, 128, 128, 128);
+        m_textureCoords2.emplace_back(640, 128, 128, 128);
+        m_textureCoords2.emplace_back(768, 128, 128, 128);
+        m_textureCoords2.emplace_back(896, 128, 128, 128);
+        m_textureCoords2.emplace_back(1024, 128, 128, 128);
     }
 
     void Blood::setup(const Settings & settings)
