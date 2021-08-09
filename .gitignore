@@ -30,3 +30,17 @@
 *.exe
 *.out
 *.app
+
+**/build
+**/xcode
+**/Release
+**/Debug
+**/.vscode
+*.DS_Store
+*.oa
+*.ncb
+*.sln
+*.suo
+*.vap
+*.dbp
+*.ilk
