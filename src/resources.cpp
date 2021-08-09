@@ -9,7 +9,7 @@
 #include "settings.hpp"
 #include "util.hpp"
 
-namespace slnghn
+namespace halloween
 {
 
     Resources::Resources()
@@ -59,4 +59,4 @@ namespace slnghn
         object_texture2.gid = 257;
     }
 
-} // namespace slnghn
+} // namespace halloween

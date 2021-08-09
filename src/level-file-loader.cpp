@@ -15,7 +15,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace slnghn
+namespace halloween
 {
 
     LevelFileLoader::LevelFileLoader()
@@ -208,4 +208,4 @@ namespace slnghn
         }
     }
 
-} // namespace slnghn
+} // namespace halloween

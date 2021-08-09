@@ -20,7 +20,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     Avatar::Avatar()
@@ -605,4 +605,4 @@ namespace slnghn
         m_sprite.setPosition(m_sprite.getPosition().x, 0.0f);
     }
 
-} // namespace slnghn
+} // namespace halloween

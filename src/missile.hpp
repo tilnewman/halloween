@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
     struct Settings;
@@ -47,6 +47,6 @@ namespace slnghn
         std::vector<Missile> m_missiles;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // MISSLE_HPP_INCLUDED

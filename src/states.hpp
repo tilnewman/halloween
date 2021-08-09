@@ -20,7 +20,7 @@ namespace sf
     class RenderStates;
 } // namespace sf
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
 
@@ -290,6 +290,6 @@ namespace slnghn
         StateOpt_t m_changePendingOpt;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // STATES_HPP_INCLUDED

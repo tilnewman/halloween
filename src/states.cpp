@@ -25,7 +25,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
 
-namespace slnghn
+namespace halloween
 {
     StateBase::StateBase(const State state, const State nextState, const float minDurationSec)
         : m_state(state)
@@ -391,4 +391,4 @@ namespace slnghn
         // clang-format on
     }
 
-} // namespace slnghn
+} // namespace halloween

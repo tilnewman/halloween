@@ -15,7 +15,7 @@
 
 #include <algorithm>
 
-namespace slnghn
+namespace halloween
 {
     Coin::Coin(const sf::Texture & TEXTURE, const sf::Vector2f & POSITION)
         : is_alive(true)
@@ -127,4 +127,4 @@ namespace slnghn
             std::end(m_coins));
     }
 
-} // namespace slnghn
+} // namespace halloween

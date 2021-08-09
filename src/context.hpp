@@ -15,7 +15,7 @@ namespace util
     class SoundPlayer;
 } // namespace util
 
-namespace slnghn
+namespace halloween
 {
     struct Level;
     class Coins;
@@ -83,6 +83,6 @@ namespace slnghn
         bool will_quit;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // CONTEXT_HPP_INCLUDED

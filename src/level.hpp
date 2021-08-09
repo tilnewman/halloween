@@ -9,7 +9,7 @@
 
 #include <SFML/Graphics/Rect.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
     struct TileTexture;
@@ -48,6 +48,6 @@ namespace slnghn
             TileLayer & layer) const;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // LEVEL_HPP_INCLUDED

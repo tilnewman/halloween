@@ -12,7 +12,7 @@
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/System/Vector2.hpp>
 
-namespace slnghn
+namespace halloween
 {
     //
     enum class TileImage
@@ -65,6 +65,6 @@ namespace slnghn
         std::vector<TileLayer> layers;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // TILESET_HPP_INCLUDED

@@ -14,7 +14,7 @@
 
 #include <sstream>
 
-namespace slnghn
+namespace halloween
 {
 
     InfoRegion::InfoRegion()
@@ -76,4 +76,4 @@ namespace slnghn
         util::fitAndCenterInside(m_text, util::scaleRectInPlaceCopy(m_region, { 1.0f, 0.5f }));
     }
 
-} // namespace slnghn
+} // namespace halloween

@@ -8,7 +8,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Image.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     PauseScreen::PauseScreen()
@@ -82,4 +82,4 @@ namespace slnghn
         target.draw(m_text);
     }
 
-} // namespace slnghn
+} // namespace halloween

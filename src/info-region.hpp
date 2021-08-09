@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
 
@@ -41,6 +41,6 @@ namespace slnghn
         std::vector<sf::Vertex> m_bgVerts;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // INFO_REGION_HPP_INCLUDED

@@ -12,7 +12,7 @@
 #include <cmath>
 #include <vector>
 
-namespace slnghn
+namespace halloween
 {
 
     sf::VideoMode ResolutionPicker::pickCloseTo(const sf::VideoMode & TARGET)
@@ -63,4 +63,4 @@ namespace slnghn
         return modes.front();
     }
 
-} // namespace slnghn
+} // namespace halloween

@@ -5,7 +5,7 @@
 //
 #include <SFML/Window/VideoMode.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     struct ResolutionPicker
@@ -13,6 +13,6 @@ namespace slnghn
         static sf::VideoMode pickCloseTo(const sf::VideoMode & TARGET);
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // RESOLUTION_PICKER_HPP_INCLUDED

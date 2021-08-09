@@ -10,7 +10,7 @@
 
 #include "util.hpp"
 
-namespace slnghn
+namespace halloween
 {
 
     AvatarAnim::AvatarAnim()
@@ -80,4 +80,4 @@ namespace slnghn
         return true;
     }
 
-} // namespace slnghn
+} // namespace halloween

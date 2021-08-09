@@ -9,7 +9,7 @@
 
 #include <SFML/Graphics/Texture.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     class AvatarAnim
@@ -43,6 +43,6 @@ namespace slnghn
         std::vector<sf::Texture> m_textures;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // AVATAR_ANIM_HPP_INCLUDED

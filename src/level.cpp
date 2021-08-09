@@ -14,7 +14,7 @@
 #include "settings.hpp"
 #include "util.hpp"
 
-namespace slnghn
+namespace halloween
 {
 
     Level::Level()
@@ -151,4 +151,4 @@ namespace slnghn
             }
         }
     }
-} // namespace slnghn
+} // namespace halloween

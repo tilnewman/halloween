@@ -12,7 +12,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Settings;
 
@@ -64,6 +64,6 @@ namespace slnghn
         }
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // RESOURCES_HPP_INCLUDED

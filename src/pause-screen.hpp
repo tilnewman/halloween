@@ -10,7 +10,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     class PauseScreen
@@ -29,6 +29,6 @@ namespace slnghn
         sf::Text m_text;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // PAUSE_SCREEN_HPP_INCLUDED

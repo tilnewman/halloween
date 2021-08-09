@@ -7,7 +7,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     struct Settings
@@ -19,6 +19,6 @@ namespace slnghn
         const sf::Vector2u target_res = { 1920, 1080 };
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // SETTINGS_HPP_INCLUDED

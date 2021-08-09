@@ -7,7 +7,7 @@
 
 int main()
 {
-    slnghn::GameLoop gameLoop;
+    halloween::GameLoop gameLoop;
 
     try
     {

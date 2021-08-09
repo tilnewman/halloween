@@ -8,7 +8,7 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
     struct Resources;
@@ -32,6 +32,6 @@ namespace slnghn
         sf::FloatRect m_infoRegion;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // SCREEN_REGIONS_HPP_INCLUDED

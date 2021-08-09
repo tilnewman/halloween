@@ -13,7 +13,7 @@
 #include "settings.hpp"
 #include "util.hpp"
 
-namespace slnghn
+namespace halloween
 {
     Blood::Blood()
         : m_texture()
@@ -127,4 +127,4 @@ namespace slnghn
         }
     }
 
-} // namespace slnghn
+} // namespace halloween

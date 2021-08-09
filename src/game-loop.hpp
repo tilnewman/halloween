@@ -22,7 +22,7 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Vector2.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     class GameLoop
@@ -63,6 +63,6 @@ namespace slnghn
 
         Context m_context;
     };
-} // namespace slnghn
+} // namespace halloween
 
 #endif // GAME_LOOP_HPP_INCLUDED

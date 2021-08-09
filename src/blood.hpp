@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
     struct Settings;
@@ -39,6 +39,6 @@ namespace slnghn
         bool m_isFinished;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // BLOOD_HPP_INCLUDED

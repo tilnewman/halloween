@@ -13,7 +13,7 @@
 
 #include <SFML/Graphics/Rect.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     ScreenRegions::ScreenRegions()
@@ -42,4 +42,4 @@ namespace slnghn
         m_infoRegion.height = context.media.bg_sprite.getPosition().y;
     }
 
-} // namespace slnghn
+} // namespace halloween

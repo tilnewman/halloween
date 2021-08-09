@@ -8,7 +8,7 @@
 
 #include <SFML/Window/VideoMode.hpp>
 
-namespace slnghn
+namespace halloween
 {
 
     GameLoop::GameLoop()
@@ -180,4 +180,4 @@ namespace slnghn
         m_window.display();
     }
 
-} // namespace slnghn
+} // namespace halloween

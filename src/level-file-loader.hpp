@@ -11,7 +11,7 @@
 
 #include <SFML/Graphics/Rect.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
     struct Settings;
@@ -45,6 +45,6 @@ namespace slnghn
         std::string m_path;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // LEVEL_FILE_LOADER_HPP_INCLUDED

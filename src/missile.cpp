@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-namespace slnghn
+namespace halloween
 {
 
     Missiles::Missiles()
@@ -110,4 +110,4 @@ namespace slnghn
         }
     }
 
-} // namespace slnghn
+} // namespace halloween

@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Settings;
     struct Context;
@@ -74,6 +74,6 @@ namespace slnghn
         float m_deadDelaySec;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // AVATAR_HPP_INCLUDED

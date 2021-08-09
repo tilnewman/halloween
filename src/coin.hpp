@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-namespace slnghn
+namespace halloween
 {
     struct Context;
     struct Settings;
@@ -49,6 +49,6 @@ namespace slnghn
         std::size_t m_textureIndex;
     };
 
-} // namespace slnghn
+} // namespace halloween
 
 #endif // COIN_HPP_INCLUDED
