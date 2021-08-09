@@ -161,7 +161,7 @@ namespace util
             return outMax;
         }
 
-        return (
+        return static_cast<U>(
             outMin +
             static_cast<U>(((number - inMin) * static_cast<T>(outMax - outMin)) / (inMax - inMin)));
     }
