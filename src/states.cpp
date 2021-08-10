@@ -192,9 +192,22 @@ namespace halloween
             return true;
         }
 
-        if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space))
+        if (event.type == sf::Event::KeyPressed)
         {
-            context.state.setChangePending(State::Pause);
+            if (event.key.code == sf::Keyboard::Space)
+            {
+                context.state.setChangePending(State::Pause);
+            }
+            else if (event.key.code == sf::Keyboard::F1)
+            {
+                sf::Texture texture;
+                if (texture.create(context.window.getSize().x, context.window.getSize().y))
+                {
+                    texture.update(context.window);
+                    sf::Image image{ texture.copyToImage() };
+                    image.saveToFile("screenshot.png");
+                }
+            }
         }
 
         return context.state.isChangePending();
