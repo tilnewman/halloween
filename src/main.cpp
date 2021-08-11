@@ -2,8 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "game-loop.hpp"
 
-#include <exception>
 #include <iostream>
+#include <stdexcept>
 
 int main()
 {
