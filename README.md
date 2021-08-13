@@ -11,7 +11,7 @@ Just the start of a simple game for learning about C++ and SFML.  The point is m
 
 ##
 
-[![screenshoot](https://www.zurreal.com/halloween/screenshot.jpg)]
+(https://www.zurreal.com/halloween/screenshot.jpg)
 
 ##
 
