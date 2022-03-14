@@ -44,3 +44,5 @@
 *.vap
 *.dbp
 *.ilk
+src/.clang-tidy
+*.cpt_backup
