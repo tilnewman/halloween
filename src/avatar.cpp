@@ -488,6 +488,7 @@ namespace halloween
         footRect.top += (AVATAR_RECT.height * 0.8f);
         footRect.height -= (AVATAR_RECT.height * 0.8f);
 
+        bool hasHitSomething{ false };
         sf::FloatRect intersection;
         for (const sf::FloatRect & COLL_RECT : context.level.walk_collisions)
         {
@@ -496,6 +497,7 @@ namespace halloween
                 continue;
             }
 
+            hasHitSomething = true;
             const sf::Vector2f COLL_CENTER = util::center(COLL_RECT);
 
             if ((m_velocity.y < 0.0f) && (COLL_CENTER.y < AVATAR_CENTER.y))
@@ -536,6 +538,11 @@ namespace halloween
                     m_sprite.move(intersection.width, 0.0f);
                 }
             }
+        }
+
+        if (!hasHitSomething)
+        {
+            m_hasLanded = false;
         }
     }
 
