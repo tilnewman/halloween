@@ -18,12 +18,12 @@ namespace halloween
       public:
         ScreenRegions();
 
-        void setup(Context & context, const sf::Vector2u & WINDOW_SIZE);
+        void setup(Context & context, const sf::Vector2u & windowSize);
 
-        sf::Vector2f wholeSize() const { return m_wholeSize; }
-        sf::FloatRect wholeRegion() const { return m_wholeRegion; }
-        sf::FloatRect mapRegion() const { return m_mapRegion; }
-        sf::FloatRect infoRegion() const { return m_infoRegion; }
+        inline const sf::Vector2f wholeSize() const { return m_wholeSize; }
+        inline const sf::FloatRect wholeRegion() const { return m_wholeRegion; }
+        inline const sf::FloatRect mapRegion() const { return m_mapRegion; }
+        inline const sf::FloatRect infoRegion() const { return m_infoRegion; }
 
       private:
         sf::Vector2f m_wholeSize;

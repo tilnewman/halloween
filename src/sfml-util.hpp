@@ -177,37 +177,56 @@ namespace sf
 namespace util
 {
 
+    // floor
+
     template <typename T>
-    [[nodiscard]] sf::Rect<T> floor(const sf::Rect<T> & rect)
+    void floor(sf::Rect<T> & rect)
     {
-        return { std::floor(rect.left),
-                 std::floor(rect.top),
-                 std::floor(rect.width),
-                 std::floor(rect.height) };
+        rect.left = std::floor(rect.left);
+        rect.top = std::floor(rect.top);
+        rect.width = std::floor(rect.width);
+        rect.height = std::floor(rect.height);
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2<T> floor(const sf::Vector2<T> & vec)
+    [[nodiscard]] const sf::Rect<T> floorCopy(const sf::Rect<T> & rect)
     {
-        return { std::floor(vec.x), std::floor(vec.y) };
+        auto temp = rect;
+        floor(temp);
+        return temp;
+    }
+
+    template <typename T>
+    void floor(sf::Vector2<T> & vec)
+    {
+        vec.x = std::floor(vec.x);
+        vec.y = std::floor(vec.y);
+    }
+
+    template <typename T>
+    [[nodiscard]] const sf::Vector2<T> floorCopy(const sf::Vector2<T> & vec)
+    {
+        auto temp = vec;
+        floor(temp);
+        return temp;
     }
 
     // position, size, and center
 
     template <typename T>
-    [[nodiscard]] sf::Vector2<T> position(const sf::Rect<T> & rect)
+    [[nodiscard]] const sf::Vector2<T> position(const sf::Rect<T> & rect)
     {
         return { rect.left, rect.top };
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2f position(const T & thing)
+    [[nodiscard]] const sf::Vector2f position(const T & thing)
     {
         return position(thing.getGlobalBounds());
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2f positionLocal(const T & thing)
+    [[nodiscard]] const sf::Vector2f positionLocal(const T & thing)
     {
         return position(thing.getLocalBounds());
     }
@@ -237,37 +256,37 @@ namespace util
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2<T> size(const sf::Rect<T> & rect)
+    [[nodiscard]] const sf::Vector2<T> size(const sf::Rect<T> & rect)
     {
         return { rect.width, rect.height };
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2f size(const T & thing)
+    [[nodiscard]] const sf::Vector2f size(const T & thing)
     {
         return size(thing.getGlobalBounds());
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2f sizeLocal(const T & thing)
+    [[nodiscard]] const sf::Vector2f sizeLocal(const T & thing)
     {
         return size(thing.getLocalBounds());
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2<T> center(const sf::Rect<T> & rect)
+    [[nodiscard]] const sf::Vector2<T> center(const sf::Rect<T> & rect)
     {
         return (position(rect) + (size(rect) / T(2)));
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2f center(const T & thing)
+    [[nodiscard]] const sf::Vector2f center(const T & thing)
     {
         return center(thing.getGlobalBounds());
     }
 
     template <typename T>
-    [[nodiscard]] sf::Vector2f centerLocal(const T & thing)
+    [[nodiscard]] const sf::Vector2f centerLocal(const T & thing)
     {
         return center(thing.getLocalBounds());
     }
@@ -286,7 +305,7 @@ namespace util
     }
 
     template <typename Output_t, typename Input_t>
-    sf::Vector2<Output_t>
+    const sf::Vector2<Output_t>
         makeVector2MultOf(const sf::Vector2<Input_t> & before, const sf::Vector2<Output_t> & mults)
     {
         static_assert(std::is_integral_v<Output_t>);
@@ -301,7 +320,7 @@ namespace util
         return ((left.x * right.x) + (left.y * right.y));
     }
 
-    [[nodiscard]] inline sf::Vector2f
+    [[nodiscard]] inline const sf::Vector2f
         difference(const sf::Vector2f & from, const sf::Vector2f & to) noexcept
     {
         return (to - from);
@@ -317,7 +336,7 @@ namespace util
         return magnitude(to - from);
     }
 
-    [[nodiscard]] inline sf::Vector2f normalize(
+    [[nodiscard]] inline const sf::Vector2f normalize(
         const sf::Vector2f & vec, const sf::Vector2f & returnOnError = { 0.0f, 0.0f }) noexcept
     {
         const float mag{ magnitude(vec) };
@@ -330,7 +349,7 @@ namespace util
         return (vec / mag);
     }
 
-    [[nodiscard]] inline sf::Vector2f diffNormal(
+    [[nodiscard]] inline const sf::Vector2f diffNormal(
         const sf::Vector2f & from,
         const sf::Vector2f & to,
         const sf::Vector2f & returnOnError = { 0.0f, 0.0f }) noexcept
@@ -414,7 +433,7 @@ namespace util
         rect.top -= (heightChange * 0.5f);
     }
 
-    [[nodiscard]] inline sf::FloatRect
+    [[nodiscard]] inline const sf::FloatRect
         scaleRectInPlaceCopy(const sf::FloatRect & before, const sf::Vector2f & scale) noexcept
     {
         sf::FloatRect after(before);
@@ -427,7 +446,7 @@ namespace util
         scaleRectInPlace(rect, { scale, scale });
     }
 
-    [[nodiscard]] inline sf::FloatRect
+    [[nodiscard]] inline const sf::FloatRect
         scaleRectInPlaceCopy(const sf::FloatRect & before, const float scale) noexcept
     {
         sf::FloatRect after(before);
@@ -443,7 +462,7 @@ namespace util
         rect.height -= (amount * 2.0f);
     }
 
-    [[nodiscard]] inline sf::FloatRect
+    [[nodiscard]] inline const sf::FloatRect
         adjRectInPlaceCopy(const sf::FloatRect & before, const float amount) noexcept
     {
         sf::FloatRect after(before);
@@ -651,7 +670,7 @@ namespace util
 
     // slow running but handy debugging shapes
 
-    [[nodiscard]] inline sf::VertexArray
+    [[nodiscard]] inline const sf::VertexArray
         makeRectangleVerts(const sf::FloatRect & rect, const sf::Color & color = sf::Color::White)
     {
         sf::VertexArray verts(sf::Quads, verts_per_quad);
@@ -670,7 +689,7 @@ namespace util
     [[nodiscard]] inline sf::RectangleShape makeRectangleShape(
         const sf::FloatRect & rect,
         const bool willColorFill = false,
-        const sf::Color & color  = sf::Color::White)
+        const sf::Color & color = sf::Color::White)
     {
         sf::RectangleShape rs;
 
@@ -695,15 +714,15 @@ namespace util
         sf::RenderTarget & target,
         const sf::FloatRect & rect,
         const bool willColorFill = false,
-        const sf::Color & color  = sf::Color::White)
+        const sf::Color & color = sf::Color::White)
     {
         target.draw(makeRectangleShape(rect, willColorFill, color));
     }
 
-    [[nodiscard]] inline sf::CircleShape makeCircleShape(
+    [[nodiscard]] inline const sf::CircleShape makeCircleShape(
         const sf::Vector2f & position,
         const float radius,
-        const sf::Color & color      = sf::Color::White,
+        const sf::Color & color = sf::Color::White,
         const std::size_t pointCount = 32)
     {
         sf::CircleShape cs;
@@ -719,15 +738,15 @@ namespace util
         sf::RenderTarget & target,
         const sf::Vector2f & position,
         const float radius,
-        const sf::Color & color      = sf::Color::White,
+        const sf::Color & color = sf::Color::White,
         const std::size_t pointCount = 32)
     {
         target.draw(makeCircleShape(position, radius, color, pointCount));
     }
 
-    [[nodiscard]] inline sf::CircleShape makeCircleShape(
+    [[nodiscard]] inline const sf::CircleShape makeCircleShape(
         const sf::FloatRect & rect,
-        const sf::Color & color      = sf::Color::White,
+        const sf::Color & color = sf::Color::White,
         const std::size_t pointCount = 32)
     {
         return makeCircleShape(
@@ -742,7 +761,7 @@ namespace util
         target.draw(makeCircleShape(rect, color));
     }
 
-    inline sf::VertexArray makeLines(
+    inline const sf::VertexArray makeLines(
         const std::vector<sf::Vector2f> & points, const sf::Color & color = sf::Color::White)
     {
         sf::VertexArray va(sf::Lines);
@@ -773,7 +792,7 @@ namespace util
 
     // more misc sfml
 
-    inline sf::Color colorBlend(
+    inline const sf::Color colorBlend(
         const float ratio,
         const sf::Color & fromColor,
         const sf::Color & toColor,
@@ -808,7 +827,7 @@ namespace util
         return color;
     }
 
-    inline sf::Color colorStepToward(
+    inline const sf::Color colorStepToward(
         const sf::Uint8 stepSize,
         const sf::Color & fromColor,
         const sf::Color & toColor,
@@ -896,7 +915,7 @@ namespace util
         return *videoModes.begin();
     }
 
-    [[nodiscard]] inline std::string makeSupportedVideoModesString(
+    [[nodiscard]] inline const std::string makeSupportedVideoModesString(
         const bool willSkipDiffBitsPerPixel = false, const std::string & separator = "\n")
     {
         const unsigned int desktopBitsPerPixel{ sf::VideoMode::getDesktopMode().bitsPerPixel };
