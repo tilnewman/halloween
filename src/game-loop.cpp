@@ -94,11 +94,10 @@ namespace halloween
         while (m_window.isOpen() && !m_context.will_quit)
         {
             frameClock.restart();
-            const float actualFrameTimeSec = actualClock.restart().asSeconds();
 
             handlePerSecondTasks();
             handleEvents();
-            update(actualFrameTimeSec);
+            update(actualClock.restart().asSeconds());
             draw();
             m_stateMachine.changeIfPending(m_context);
 
@@ -113,7 +112,7 @@ namespace halloween
         float timeRemainingSec = ((1.0f / m_settings.frame_rate) - elapsedTimeSec);
 
         std::size_t delayLoopCounter = 0;
-        while (timeRemainingSec > 0.0001f)
+        while (timeRemainingSec > 0.0f)
         {
             ++delayLoopCounter;
 
@@ -128,27 +127,28 @@ namespace halloween
     void GameLoop::handlePerSecondTasks()
     {
         const float elapsedTimeSec = m_perSecondClock.getElapsedTime().asSeconds();
-        if (elapsedTimeSec > 1.0f)
+        if (elapsedTimeSec < 1.0f)
         {
-            const auto fpsStats = util::makeStats(m_framesPerSecond);
-            const auto spinStats = util::makeStats(m_delayLoopCounts);
-
-            std::ostringstream ss;
-            ss << " FPS: " << fpsStats << "      Spins: " << spinStats;
-            m_media.fps_text.setString(ss.str());
-            util::setOriginToPosition(m_media.fps_text);
-            m_media.fps_text.setFillColor(sf::Color(195, 160, 126));
-
-            util::fitAndCenterInside(
-                m_media.fps_text,
-                util::scaleRectInPlaceCopy(m_layout.infoRegion(), { 1.0f, 0.375f }));
-
-            m_media.fps_text.setPosition(0.0f, (m_layout.wholeSize().y - 50.0f));
-
-            m_perSecondClock.restart();
-            m_delayLoopCounts.clear();
-            m_framesPerSecond.clear();
+            return;
         }
+
+        const auto fpsStats = util::makeStats(m_framesPerSecond);
+        const auto spinStats = util::makeStats(m_delayLoopCounts);
+
+        std::ostringstream ss;
+        ss << " FPS: " << fpsStats << "      Spins: " << spinStats;
+        m_media.fps_text.setString(ss.str());
+        util::setOriginToPosition(m_media.fps_text);
+        m_media.fps_text.setFillColor(sf::Color(195, 160, 126));
+
+        util::fitAndCenterInside(
+            m_media.fps_text, util::scaleRectInPlaceCopy(m_layout.infoRegion(), { 1.0f, 0.375f }));
+
+        m_media.fps_text.setPosition(0.0f, (m_layout.wholeSize().y - 50.0f));
+
+        m_perSecondClock.restart();
+        m_delayLoopCounts.clear();
+        m_framesPerSecond.clear();
     }
 
     void GameLoop::handleEvents()
