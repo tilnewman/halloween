@@ -135,8 +135,7 @@ namespace halloween
                 const int textureIndexOrig(layer.indexes[textureIndex++]);
                 if (textureIndexOrig == 0)
                 {
-                    // zero means no image at this location
-                    continue;
+                    continue; // zero means no image at this location
                 }
 
                 const int index(textureIndexOrig - texture.gid);
