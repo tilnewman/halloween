@@ -45,7 +45,10 @@ namespace halloween
             : image(TileImage::Ground) // any works here
             , indexes()
             , verts()
-        {}
+        {
+            indexes.reserve(10'000);
+            verts.reserve(10'000);
+        }
 
         TileImage image;
         std::vector<int> indexes;
@@ -60,7 +63,9 @@ namespace halloween
             : count()
             , size()
             , layers()
-        {}
+        {
+            layers.reserve(16);
+        }
 
         sf::Vector2i count;
         sf::Vector2i size;
