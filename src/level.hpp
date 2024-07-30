@@ -20,9 +20,9 @@ namespace halloween
     {
         Level();
 
-        void load(Context & context, const std::size_t LEVEL_NUMBER);
+        void load(Context & context, const std::size_t levelNumber);
 
-        bool move(const ScreenRegions & layout, const float MOVE);
+        bool move(const ScreenRegions & layout, const float move);
 
         TileSet tiles;
         sf::Vector2f map_position_offset;
@@ -41,10 +41,10 @@ namespace halloween
         void appendVertLayers(Context & context);
 
         void appendVertLayer(
-            const sf::Vector2i & COUNT,
-            const sf::Vector2i & SIZE,
-            const sf::Vector2f & SIZE_ON_SCREEN,
-            const TileTexture & TEXTURE,
+            const sf::Vector2i & count,
+            const sf::Vector2i & size,
+            const sf::Vector2f & sizeOnScreen,
+            const TileTexture & texture,
             TileLayer & layer) const;
     };
 

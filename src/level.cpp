@@ -30,41 +30,41 @@ namespace halloween
         , farthest_horiz_traveled(0.0f)
     {}
 
-    void Level::load(Context & context, const std::size_t LEVEL_NUMBER)
+    void Level::load(Context & context, const std::size_t levelNumber)
     {
-        context.loader.load(context, LEVEL_NUMBER);
+        context.loader.load(context, levelNumber);
         appendVertLayers(context);
         context.avatar.setPosition(enter_rect);
         findFarthestHorizMapPixel();
         farthest_horiz_traveled = 0.0f;
     }
 
-    bool Level::move(const ScreenRegions & layout, const float MOVE)
+    bool Level::move(const ScreenRegions & layout, const float move)
     {
-        farthest_horiz_traveled += std::abs(MOVE);
+        farthest_horiz_traveled += std::abs(move);
         if (farthest_horiz_traveled > (farthest_horiz_map_pixel - layout.mapRegion().width))
         {
             return false;
         }
 
-        enter_rect.left += MOVE;
-        exit_rect.left += MOVE;
+        enter_rect.left += move;
+        exit_rect.left += move;
 
         for (sf::FloatRect & rect : kill_collisions)
         {
-            rect.left += MOVE;
+            rect.left += move;
         }
 
         for (sf::FloatRect & rect : walk_collisions)
         {
-            rect.left += MOVE;
+            rect.left += move;
         }
 
         for (TileLayer & layer : tiles.layers)
         {
             for (sf::Vertex & vertex : layer.verts)
             {
-                vertex.position.x += MOVE;
+                vertex.position.x += move;
             }
         }
 
@@ -75,13 +75,13 @@ namespace halloween
     {
         farthest_horiz_map_pixel = 0.0f;
 
-        for (const TileLayer & LAYER : tiles.layers)
+        for (const TileLayer & layer : tiles.layers)
         {
-            for (const sf::Vertex & VERTEX : LAYER.verts)
+            for (const sf::Vertex & vertex : layer.verts)
             {
-                if (VERTEX.position.x > farthest_horiz_map_pixel)
+                if (vertex.position.x > farthest_horiz_map_pixel)
                 {
-                    farthest_horiz_map_pixel = VERTEX.position.x;
+                    farthest_horiz_map_pixel = vertex.position.x;
                 }
             }
         }
@@ -101,53 +101,53 @@ namespace halloween
     }
 
     void Level::appendVertLayer(
-        const sf::Vector2i & COUNT,
-        const sf::Vector2i & SIZE,
-        const sf::Vector2f & SIZE_ON_SCREEN,
+        const sf::Vector2i & count,
+        const sf::Vector2i & size,
+        const sf::Vector2f & sizeOnScreen,
         const TileTexture & TEXTURE,
         TileLayer & layer) const
     {
-        const std::size_t TOTAL_COUNT =
-            (static_cast<std::size_t>(COUNT.x) * static_cast<std::size_t>(COUNT.y));
+        const std::size_t totalCount =
+            (static_cast<std::size_t>(count.x) * static_cast<std::size_t>(count.y));
 
         M_CHECK(
-            (TOTAL_COUNT == layer.indexes.size()),
-            "index_count=" << layer.indexes.size() << " does not equal tile_count=" << TOTAL_COUNT);
+            (totalCount == layer.indexes.size()),
+            "index_count=" << layer.indexes.size() << " does not equal tile_count=" << totalCount);
 
-        sf::Vector2i SIZE_ON_SCREENI(SIZE_ON_SCREEN);
+        const sf::Vector2i sizeOnScreenI(sizeOnScreen);
 
         std::size_t textureIndex = 0;
-        for (int y(0); y < COUNT.y; ++y)
+        for (int y(0); y < count.y; ++y)
         {
-            const auto POS_Y = static_cast<float>(y * SIZE_ON_SCREENI.y);
+            const float posY = static_cast<float>(y * sizeOnScreenI.y);
 
-            for (int x(0); x < COUNT.x; ++x)
+            for (int x(0); x < count.x; ++x)
             {
                 // calc tile image on screen rect
-                const auto POS_X = static_cast<float>(x * SIZE_ON_SCREENI.x);
+                const float posX = static_cast<float>(x * sizeOnScreenI.x);
 
                 // calc tile image texture rect
-                const int TEXTURE_INDEX_ORIG = (layer.indexes.at(textureIndex++));
-                if (TEXTURE_INDEX_ORIG == 0)
+                const int textureIndexOrig = (layer.indexes.at(textureIndex++));
+                if (textureIndexOrig == 0)
                 {
                     // zero means no image at this location
                     continue;
                 }
 
-                const int TEXTURE_INDEX = (TEXTURE_INDEX_ORIG - TEXTURE.gid);
+                const int index = (textureIndexOrig - TEXTURE.gid);
 
-                const sf::Vector2i TEXTURE_TILE_COUNT = { (TEXTURE.size.x / SIZE.x),
-                                                          (TEXTURE.size.y / SIZE.y) };
+                const sf::Vector2i textureTileCount = { (TEXTURE.size.x / size.x),
+                                                        (TEXTURE.size.y / size.y) };
 
-                const int TEXTURE_POS_X = ((TEXTURE_INDEX % TEXTURE_TILE_COUNT.x) * SIZE.x);
-                const int TEXTURE_POS_Y = ((TEXTURE_INDEX / TEXTURE_TILE_COUNT.x) * SIZE.y);
-                const sf::Vector2i TEXTURE_POS = { TEXTURE_POS_X, TEXTURE_POS_Y };
-                const sf::IntRect TEXTURE_RECT = { TEXTURE_POS, SIZE };
+                const int texturePosX = ((index % textureTileCount.x) * size.x);
+                const int texturePosY = ((index / textureTileCount.x) * size.y);
+                const sf::Vector2i texturePos = { texturePosX, texturePosY };
+                const sf::IntRect textureRect = { texturePos, size };
 
-                const sf::Vector2f SCREEN_POS = (sf::Vector2f(POS_X, POS_Y) + map_position_offset);
-                const sf::FloatRect SCREEN_RECT = { SCREEN_POS, SIZE_ON_SCREEN };
+                const sf::Vector2f screenPos = (sf::Vector2f(posX, posY) + map_position_offset);
+                const sf::FloatRect screenRect = { screenPos, sizeOnScreen };
 
-                util::appendQuadVerts(SCREEN_RECT, TEXTURE_RECT, layer.verts);
+                util::appendQuadVerts(screenRect, textureRect, layer.verts);
             }
         }
     }
