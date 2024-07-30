@@ -3,7 +3,6 @@
 #include "game-loop.hpp"
 
 #include "check-macros.hpp"
-#include "resolution-picker.hpp"
 #include "sfml-util.hpp"
 
 #include <sstream>
@@ -69,7 +68,7 @@ namespace halloween
         m_audio.loadAll();
         m_audio.willLoop("walk", true);
 
-        const auto videoMode = ResolutionPicker::pickCloseTo(sf::VideoMode(
+        const auto videoMode = util::findVideoModeClosestTo(sf::VideoMode(
             m_settings.target_screen_res.x,
             m_settings.target_screen_res.y,
             sf::VideoMode::getDesktopMode().bitsPerPixel));
