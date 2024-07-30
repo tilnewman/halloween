@@ -58,9 +58,9 @@ namespace halloween
             m_text, util::scaleRectInPlaceCopy(context.layout.wholeRegion(), 0.25f));
     }
 
-    void StateBase::update(Context &, const float FRAME_TIME_SEC)
+    void StateBase::update(Context &, const float frameTimeSec)
     {
-        m_elapsedTimeSec += FRAME_TIME_SEC;
+        m_elapsedTimeSec += frameTimeSec;
     }
 
     bool StateBase::changeToNextState(const Context & context)
@@ -100,7 +100,6 @@ namespace halloween
     {
         if (sf::Event::Closed == event.type)
         {
-            M_LOG("Player closed the fullscreen window?  Okay.  Bail.");
             context.state.setChangePending(State::Quit);
             return true;
         }
@@ -110,6 +109,7 @@ namespace halloween
             context.state.setChangePending(State::Play);
             return true;
         }
+
         // all that remain are keystrokes
         if (sf::Event::KeyPressed != event.type)
         {
@@ -178,12 +178,12 @@ namespace halloween
 
     void PlayState::onEnter(Context &) {}
 
-    void PlayState::update(Context & context, const float FRAME_TIME_SEC)
+    void PlayState::update(Context & context, const float frameTimeSec)
     {
-        StateBase::update(context, FRAME_TIME_SEC);
-        context.avatar.update(context, FRAME_TIME_SEC);
-        context.missiles.update(context, FRAME_TIME_SEC);
-        context.coins.update(context, FRAME_TIME_SEC);
+        StateBase::update(context, frameTimeSec);
+        context.avatar.update(context, frameTimeSec);
+        context.missiles.update(context, frameTimeSec);
+        context.coins.update(context, frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)
@@ -219,10 +219,10 @@ namespace halloween
     {
         target.draw(context.media.bg_sprite, states);
 
-        for (const TileLayer & LAYER : context.level.tiles.layers)
+        for (const TileLayer & layer : context.level.tiles.layers)
         {
-            states.texture = &context.media.tileTexture(LAYER.image).texture;
-            target.draw(&LAYER.verts[0], LAYER.verts.size(), sf::Quads, states);
+            states.texture = &context.media.tileTexture(layer.image).texture;
+            target.draw(&layer.verts[0], layer.verts.size(), sf::Quads, states);
             states.texture = nullptr;
         }
 
@@ -274,9 +274,9 @@ namespace halloween
         return false;
     }
 
-    void TimedMessageState::update(Context & context, const float FRAME_TIME_SEC)
+    void TimedMessageState::update(Context & context, const float frameTimeSec)
     {
-        StateBase::update(context, FRAME_TIME_SEC);
+        StateBase::update(context, frameTimeSec);
 
         if (hasMinTimeElapsed() || m_hasMouseClickedOrKeyPressed)
         {
@@ -312,9 +312,9 @@ namespace halloween
 
     void PauseState::onExit(Context & context) { context.audio.play("pause"); }
 
-    void PauseState::update(Context & context, const float FRAME_TIME_SEC)
+    void PauseState::update(Context & context, const float frameTimeSec)
     {
-        m_elapsedTimeSec += FRAME_TIME_SEC;
+        m_elapsedTimeSec += frameTimeSec;
 
         if (m_hasMouseClickedOrKeyPressed)
         {

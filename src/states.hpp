@@ -28,13 +28,13 @@ namespace halloween
 
     enum class State
     {
-        Start = 0, // invisible placeholder performing all start-up tasks
+        Start = 0,
         Title,
         Play,
         Pause,
         Level,
         GameOver,
-        Quit // invisible placeholder performing all shutdown tasks
+        Quit
     };
 
     using StateOpt_t = std::optional<State>;
@@ -61,7 +61,6 @@ namespace halloween
         }
     } // namespace state
 
-    //
     inline std::ostream & operator<<(std::ostream & os, const State state)
     {
         os << state::toString(state);
@@ -69,13 +68,14 @@ namespace halloween
     }
 
     //
+
     struct IState
     {
         virtual ~IState() = default;
 
         virtual State state() const = 0;
         virtual State nextState() const = 0;
-        virtual void update(Context &, const float FRAME_TIME_SEC) = 0;
+        virtual void update(Context &, const float frameTimeSec) = 0;
         virtual bool handleEvent(Context & context, const sf::Event & event) = 0;
         virtual void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const = 0;
         virtual void onEnter(Context &) = 0;
@@ -85,13 +85,14 @@ namespace halloween
         virtual bool changeToNextState(const Context &) = 0;
         virtual bool willIgnoreEvent(const Context &, const sf::Event & event) const = 0;
 
-        // returns true if the event was a 'quit' event and a state changed is pneding
+        // returns true if the event was a 'quit' event and a state changed is pending
         virtual bool handleQuitEvents(Context & context, const sf::Event & event) = 0;
     };
 
     using IStateUPtr_t = std::unique_ptr<IState>;
 
     //
+
     class StateBase : public IState
     {
       protected:
@@ -144,7 +145,8 @@ namespace halloween
         static inline const float m_defaultMinDurationSec{ 1.5f };
     };
 
-    // the initial state that only  to State::Options
+    //
+
     struct StartState : public StateBase
     {
         StartState()
@@ -160,7 +162,8 @@ namespace halloween
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
     };
 
-    // the state that simply exits the application
+    //
+
     struct QuitState : public StateBase
     {
         QuitState()
@@ -176,6 +179,7 @@ namespace halloween
     };
 
     //
+
     class PlayState : public StateBase
     {
       public:
@@ -189,6 +193,7 @@ namespace halloween
     };
 
     //
+
     struct TimedMessageState : public StateBase
     {
         TimedMessageState(
@@ -208,6 +213,7 @@ namespace halloween
     };
 
     //
+
     struct TitleState : public TimedMessageState
     {
         explicit TitleState(const Context & context);
@@ -215,6 +221,7 @@ namespace halloween
     };
 
     //
+
     struct PauseState : public TimedMessageState
     {
         explicit PauseState(const Context & context);
@@ -227,6 +234,7 @@ namespace halloween
     };
 
     //
+
     struct GameOverState : public TimedMessageState
     {
         explicit GameOverState(const Context & context);
@@ -236,6 +244,7 @@ namespace halloween
     };
 
     //
+
     struct LevelCompleteState : public TimedMessageState
     {
         explicit LevelCompleteState(const Context & context);
@@ -247,6 +256,7 @@ namespace halloween
     };
 
     //
+
     struct IStatesPending
     {
         virtual ~IStatesPending() = default;
@@ -257,6 +267,7 @@ namespace halloween
     };
 
     //
+
     class StateMachine : public IStatesPending
     {
       public:
