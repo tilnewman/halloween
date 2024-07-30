@@ -34,13 +34,9 @@ namespace halloween
         , m_jumpTexture()
         , m_sprite()
         , m_velocity()
-        , m_acceleration(0.0f, 25.0f) // gravity only
         , m_action(Action::Idle)
         , m_hasLanded(false)
         , m_isFacingRight(true)
-        , m_jumpSpeed(15.0f)
-        , m_walkSpeed(15.0f)
-        , m_walkSpeedLimit(5.0f)
         , m_deadDelaySec(0.0f)
     {}
 
@@ -71,7 +67,7 @@ namespace halloween
         m_blood.draw(target, states);
     }
 
-    sf::FloatRect Avatar::collisionRect() const
+    const sf::FloatRect Avatar::collisionRect() const
     {
         // Avatar images for the various actions have different sizes and amounts of empty space
         // on the sides.  I know...free resources online suck.  So this function tweaks the
@@ -165,7 +161,7 @@ namespace halloween
         return rect;
     }
 
-    sf::FloatRect Avatar::attackCollisionRect() const
+    const sf::FloatRect Avatar::attackCollisionRect() const
     {
         sf::FloatRect rect{ 0.0f, 0.0f, 0.0f, 0.0f };
 
@@ -232,7 +228,7 @@ namespace halloween
             jumping(context);
         }
 
-        m_velocity += (m_acceleration * frameTimeSec);
+        m_velocity += (context.settings.gravity_acc * frameTimeSec);
         m_sprite.move(m_velocity);
 
         moveMap(context);
@@ -274,7 +270,7 @@ namespace halloween
             // This allows the player to see how they died.
 
             m_deadDelaySec += frameTimeSec;
-            if (m_deadDelaySec > 4.0f)
+            if (m_deadDelaySec > context.settings.death_delay_sec)
             {
                 context.state.setChangePending(State::GameOver);
             }
@@ -337,7 +333,7 @@ namespace halloween
         {
             context.audio.play("throw");
 
-            // attacking in any way slows walk speed looks right
+            // attacking in any way slowing walk speed looks right
             if (Action::Run == m_action)
             {
                 m_velocity.x *= 0.8f;
@@ -379,25 +375,26 @@ namespace halloween
     {
         if (Action::Jump == m_action)
         {
-            // Allow moving side-to-side while in the air.
+            // Allow moving side-to-side at a reduced rate while in the air.
             // It sounds wrong but feels so right.
             // What the hell, mario did it.
+            const float jumpMoveDivisor = 3.0f;
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             {
-                m_velocity.x += ((m_walkSpeed / 3.0f) * frameTimeSec);
-                if (m_velocity.x > m_walkSpeedLimit)
+                m_velocity.x += ((context.settings.walk_acc / jumpMoveDivisor) * frameTimeSec);
+                if (m_velocity.x > context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = m_walkSpeedLimit;
+                    m_velocity.x = context.settings.walk_speed_limit;
                 }
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             {
-                m_velocity.x -= ((m_walkSpeed / 3.0f) * frameTimeSec);
-                if (m_velocity.x < -m_walkSpeedLimit)
+                m_velocity.x -= ((context.settings.walk_acc / jumpMoveDivisor) * frameTimeSec);
+                if (m_velocity.x < -context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = -m_walkSpeedLimit;
+                    m_velocity.x = -context.settings.walk_speed_limit;
                 }
             }
         }
@@ -405,10 +402,10 @@ namespace halloween
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             {
-                m_velocity.x += (m_walkSpeed * frameTimeSec);
-                if (m_velocity.x > m_walkSpeedLimit)
+                m_velocity.x += (context.settings.walk_acc * frameTimeSec);
+                if (m_velocity.x > context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = m_walkSpeedLimit;
+                    m_velocity.x = context.settings.walk_speed_limit;
                 }
 
                 if (Action::Run != m_action)
@@ -428,10 +425,10 @@ namespace halloween
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             {
-                m_velocity.x -= (m_walkSpeed * frameTimeSec);
-                if (m_velocity.x < -m_walkSpeedLimit)
+                m_velocity.x -= (context.settings.walk_acc * frameTimeSec);
+                if (m_velocity.x < -context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = -m_walkSpeedLimit;
+                    m_velocity.x = -context.settings.walk_speed_limit;
                 }
 
                 if (Action::Run != m_action)
@@ -471,7 +468,7 @@ namespace halloween
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_hasLanded)
         {
             m_hasLanded = false;
-            m_velocity.y -= m_jumpSpeed;
+            m_velocity.y -= context.settings.jump_acc;
             context.audio.play("jump");
             context.audio.stop("walk");
             setAction(Action::Jump);

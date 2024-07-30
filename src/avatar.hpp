@@ -34,8 +34,8 @@ namespace halloween
         void setup(const Settings & settings);
 
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
-        sf::FloatRect collisionRect() const;
-        sf::FloatRect attackCollisionRect() const;
+        const sf::FloatRect collisionRect() const;
+        const sf::FloatRect attackCollisionRect() const;
         void setPosition(const sf::FloatRect & rect);
         void update(Context & context, const float frameTimeSec);
 
@@ -64,13 +64,9 @@ namespace halloween
         sf::Texture m_jumpTexture;
         sf::Sprite m_sprite;
         sf::Vector2f m_velocity;
-        sf::Vector2f m_acceleration;
         Action m_action;
         bool m_hasLanded;
         bool m_isFacingRight;
-        const float m_jumpSpeed;
-        const float m_walkSpeed;
-        const float m_walkSpeedLimit;
         float m_deadDelaySec;
     };
 

@@ -70,8 +70,8 @@ namespace halloween
         m_audio.willLoop("walk", true);
 
         const auto videoMode = ResolutionPicker::pickCloseTo(sf::VideoMode(
-            m_settings.target_res.x,
-            m_settings.target_res.y,
+            m_settings.target_screen_res.x,
+            m_settings.target_screen_res.y,
             sf::VideoMode::getDesktopMode().bitsPerPixel));
 
         m_window.create(videoMode, "Halloween", sf::Style::Fullscreen);
