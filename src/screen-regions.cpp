@@ -9,7 +9,7 @@
 #include "context.hpp"
 #include "resources.hpp"
 #include "settings.hpp"
-#include "util.hpp"
+#include "sfml-util.hpp"
 
 #include <SFML/Graphics/Rect.hpp>
 

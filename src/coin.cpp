@@ -10,8 +10,8 @@
 #include "level.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "sfml-util.hpp"
 #include "sound-player.hpp"
-#include "util.hpp"
 
 #include <algorithm>
 

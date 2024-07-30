@@ -16,14 +16,15 @@
 #include "random.hpp"
 #include "resources.hpp"
 #include "screen-regions.hpp"
+#include "sfml-util.hpp"
 #include "sound-player.hpp"
-#include "util.hpp"
 
 #include <sstream>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Window.hpp>
 
 namespace halloween
 {

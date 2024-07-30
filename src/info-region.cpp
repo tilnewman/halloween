@@ -10,7 +10,7 @@
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
-#include "util.hpp"
+#include "sfml-util.hpp"
 
 #include <sstream>
 

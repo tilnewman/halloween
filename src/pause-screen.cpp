@@ -4,6 +4,7 @@
 
 #include "check-macros.hpp"
 #include "color-range.hpp"
+#include "sfml-util.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Image.hpp>

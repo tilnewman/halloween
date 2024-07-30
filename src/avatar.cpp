@@ -11,6 +11,7 @@
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "sfml-util.hpp"
 #include "sound-player.hpp"
 #include "states.hpp"
 

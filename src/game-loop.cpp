@@ -2,10 +2,13 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "game-loop.hpp"
 
+#include "check-macros.hpp"
 #include "resolution-picker.hpp"
+#include "sfml-util.hpp"
 
 #include <sstream>
 
+#include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
 
 namespace halloween
