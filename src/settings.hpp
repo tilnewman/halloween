@@ -21,17 +21,19 @@ namespace halloween
         // display sizes
         const float tile_scale = 0.75f;
         const float avatar_scale = 0.2f;
+        const sf::Vector2f dart_scale = { 0.333f, 0.5f };
 
         // frames per second
         const std::size_t frame_rate = 60;
         const bool will_display_fps = true;
         const bool will_display_fps_graph = true;
 
-        // player movement speeds and accelerations
+        // movement speeds and accelerations
         const sf::Vector2f gravity_acc = { 0.0f, 25.0f };
         const float jump_acc = 15.0f;
         const float walk_acc = 15.0f;
         const float walk_speed_limit = 5.0f;
+        const float dart_speed = 1000.0f;
 
         // delay after dying so the player can see how they died
         const float death_delay_sec = 4.0f;

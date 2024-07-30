@@ -21,7 +21,8 @@ namespace halloween
 
     Missiles::Missiles()
         : m_texture()
-        , m_velocity(1000.0f, 0.0f)
+        , m_velocity()
+        , m_scale()
         , m_missiles()
     {
         // anything more than dozens will work here
@@ -30,6 +31,9 @@ namespace halloween
 
     void Missiles::setup(const Settings & settings)
     {
+        m_velocity.x = settings.dart_speed;
+        m_scale = settings.dart_scale;
+
         const std::string path = (settings.media_path / "image" / "kunai.png").string();
         m_texture.loadFromFile(path);
         m_texture.setSmooth(true);
@@ -59,13 +63,10 @@ namespace halloween
 
             if (missile.is_alive)
             {
-                if (missile.is_moving_right)
+                sprite.setScale(m_scale);
+                if (!missile.is_moving_right)
                 {
-                    sprite.setScale(0.333f, 0.5f);
-                }
-                else
-                {
-                    sprite.setScale(-0.333f, 0.5f);
+                    sprite.scale(-1.0f, 1.0f);
                 }
 
                 sprite.setPosition(missile.position);
@@ -94,16 +95,13 @@ namespace halloween
     void Missiles::draw(sf::RenderTarget & target, sf::RenderStates states) const
     {
         sf::Sprite sprite(m_texture);
+        sprite.setScale(m_scale);
 
         for (const Missile & missile : m_missiles)
         {
-            if (missile.is_moving_right)
+            if (!missile.is_moving_right)
             {
-                sprite.setScale(0.333f, 0.5f);
-            }
-            else
-            {
-                sprite.setScale(-0.333f, 0.5f);
+                sprite.scale(-1.0f, 1.0f);
             }
 
             sprite.setPosition(missile.position);

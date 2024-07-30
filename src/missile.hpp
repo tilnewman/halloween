@@ -44,7 +44,8 @@ namespace halloween
 
       private:
         sf::Texture m_texture;
-        const sf::Vector2f m_velocity;
+        sf::Vector2f m_velocity;
+        sf::Vector2f m_scale;
         std::vector<Missile> m_missiles;
     };
 
