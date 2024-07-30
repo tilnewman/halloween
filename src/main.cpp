@@ -7,19 +7,20 @@
 
 int main()
 {
-    halloween::GameLoop gameLoop;
-
     try
     {
+        halloween::GameLoop gameLoop;
         gameLoop.play();
     }
     catch (const std::exception & ex)
     {
         std::cerr << "Exception Error: \"" << ex.what() << "\"" << std::endl;
+        return EXIT_FAILURE;
     }
     catch (...)
     {
         std::cerr << "Non-Standard Exception Error" << std::endl;
+        return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
