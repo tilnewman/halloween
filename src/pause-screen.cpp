@@ -20,23 +20,23 @@ namespace halloween
         , m_text()
     {}
 
-    void PauseScreen::setup(const sf::Vector2u & WINDOW_SIZE, const Resources & MEDIA)
+    void PauseScreen::setup(const sf::Vector2u & windowSize, const Resources & media)
     {
-        m_isSupported = m_texture.create(WINDOW_SIZE.x, WINDOW_SIZE.y);
+        m_isSupported = m_texture.create(windowSize.x, windowSize.y);
 
         M_CHECK_LOG(
             m_isSupported, "Your video card sucks so the pause screen won't look very good.");
 
-        m_text.setFont(MEDIA.font);
+        m_text.setFont(media.font);
         m_text.setString("PAUSED");
         m_text.setCharacterSize(99);
 
-        const sf::Vector2f WINDOW_SIZEF{ WINDOW_SIZE };
+        const sf::Vector2f windowSizeF{ windowSize };
         sf::FloatRect textRect;
         textRect.left = 0.0f;
-        textRect.width = WINDOW_SIZEF.x;
-        textRect.height = (WINDOW_SIZEF.y / 8.0f);
-        textRect.top = ((WINDOW_SIZEF.y * 0.3f) - (textRect.height * 0.5f));
+        textRect.width = windowSizeF.x;
+        textRect.height = (windowSizeF.y / 8.0f);
+        textRect.top = ((windowSizeF.y * 0.3f) - (textRect.height * 0.5f));
         util::fitAndCenterInside(m_text, textRect);
     }
 
@@ -56,16 +56,16 @@ namespace halloween
             for (unsigned int x(0); x < image.getSize().x; ++x)
             {
                 // brighten all colors
-                const auto COLOR{ image.getPixel(x, y) + sf::Color(40, 40, 40) };
+                const auto color{ image.getPixel(x, y) + sf::Color(40, 40, 40) };
 
                 // convert to grayscale
-                const float LUMEN = colors::brightness::Hsl(COLOR);
+                const float lumen = colors::brightness::Hsl(color);
+                const auto grayValue = static_cast<sf::Uint8>(util::mapRatioTo(lumen, 0, 255));
 
                 // reduce the number of colors
-                const auto GRAY_VALUE = static_cast<sf::Uint8>(util::mapRatioTo(LUMEN, 0, 255));
-                const auto REDUCED_VALUE = static_cast<sf::Uint8>((GRAY_VALUE / 35) * 35);
+                const auto reducedValue = static_cast<sf::Uint8>((grayValue / 35) * 35);
 
-                image.setPixel(x, y, sf::Color(REDUCED_VALUE, REDUCED_VALUE, REDUCED_VALUE));
+                image.setPixel(x, y, sf::Color(reducedValue, reducedValue, reducedValue));
             }
         }
 
@@ -73,7 +73,7 @@ namespace halloween
         m_sprite.setTexture(m_texture);
 
         // other colors to try:
-        // paper/sepia-ish color: 235, 200, 140
+        // paper/sepia-ish: 235, 200, 140
         // dark purple: 88,30,157
         m_sprite.setColor(sf::Color(120, 110, 215));
     }

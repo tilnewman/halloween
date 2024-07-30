@@ -17,8 +17,8 @@ namespace halloween
       public:
         PauseScreen();
 
-        void setup(const sf::Vector2u & WINDOW_SIZE, const Resources & MEDIA);
-        void update(const sf::Window & WINDOW);
+        void setup(const sf::Vector2u & windowSize, const Resources & media);
+        void update(const sf::Window & window);
         void draw(sf::RenderTarget & target);
 
       private:
