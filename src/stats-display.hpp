@@ -127,7 +127,7 @@ namespace util
                     break;
                 }
 
-                const data_t b       = oldValues.at(oldIndex++);
+                const data_t b = oldValues.at(oldIndex++);
                 const data_t average = (a + b) / data_t(2);
                 newValues.push_back(average);
             }
@@ -169,10 +169,10 @@ namespace util
                 const float valueRatio = (static_cast<float>(value) / static_cast<float>(maxValue));
 
                 sf::FloatRect dataBarRect;
-                dataBarRect.left   = posLeft;
-                dataBarRect.width  = dataBarWidth;
+                dataBarRect.left = posLeft;
+                dataBarRect.width = dataBarWidth;
                 dataBarRect.height = (m_size.y * valueRatio);
-                dataBarRect.top    = (m_size.y - dataBarRect.height);
+                dataBarRect.top = (m_size.y - dataBarRect.height);
 
                 dataBarRects.push_back(dataBarRect);
 
@@ -298,7 +298,7 @@ namespace util
 
         const sf::Texture & texture() const { return m_renderTexture.getTexture(); }
         const GraphDisplay<data_t> & graph() const { return m_graphDisplay; }
-        const sf::Vector2u size() const { return m_size; }
+        const sf::Vector2f size() const { return m_size; }
         const std::vector<data_t> & data() const { return m_data; }
 
         void saveToFile(const std::string & filename) const
