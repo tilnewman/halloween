@@ -22,10 +22,10 @@ namespace halloween
         : m_path()
     {}
 
-    void LevelFileLoader::load(Context & context, const std::size_t LEVEL_NUMBER)
+    void LevelFileLoader::load(Context & context, const std::size_t levelNumber)
     {
         std::stringstream fileNameSS;
-        fileNameSS << "level-" << LEVEL_NUMBER << ".json";
+        fileNameSS << "level-" << levelNumber << ".json";
 
         m_path = (context.settings.media_path / "map" / fileNameSS.str()).string();
 
@@ -59,14 +59,14 @@ namespace halloween
         context.level.tile_size_screen.y = floorf(context.level.tile_size_screen.y);
 
         // calc map position offset
-        const sf::Vector2f TILE_COUNTF{ context.level.tiles.count };
-        const sf::Vector2f MAP_SIZE_ORIG{ context.level.tile_size_screen * TILE_COUNTF };
+        const sf::Vector2f tileCountF{ context.level.tiles.count };
+        const sf::Vector2f mapSizeOrig{ context.level.tile_size_screen * tileCountF };
 
-        const float HEIGHT_OFFSET{
-            (context.layout.mapRegion().top + context.layout.mapRegion().height) - MAP_SIZE_ORIG.y
+        const float heightOffset{
+            (context.layout.mapRegion().top + context.layout.mapRegion().height) - mapSizeOrig.y
         };
 
-        context.level.map_position_offset = { 0.0f, HEIGHT_OFFSET };
+        context.level.map_position_offset = { 0.0f, heightOffset };
     }
 
     void LevelFileLoader::parseLayers(Context & context, Json & jsonWholeFile)
@@ -75,33 +75,33 @@ namespace halloween
 
         for (Json & jsonLayer : jsonWholeFile["layers"])
         {
-            const std::string LAYER_NAME = jsonLayer["name"];
+            const std::string layerName = jsonLayer["name"];
 
-            if (LAYER_NAME == "ground")
+            if (layerName == "ground")
             {
                 parseTileLayer(context, TileImage::Ground, jsonLayer);
             }
-            else if (LAYER_NAME == "object-1")
+            else if (layerName == "object-1")
             {
                 parseTileLayer(context, TileImage::Object1, jsonLayer);
             }
-            else if (LAYER_NAME == "object-2")
+            else if (layerName == "object-2")
             {
                 parseTileLayer(context, TileImage::Object2, jsonLayer);
             }
-            else if (LAYER_NAME == "collision")
+            else if (layerName == "collision")
             {
                 parseRectLayer(context, jsonLayer, context.level.walk_collisions);
             }
-            else if (LAYER_NAME == "kill")
+            else if (layerName == "kill")
             {
                 parseRectLayer(context, jsonLayer, context.level.kill_collisions);
             }
-            else if (LAYER_NAME == "spawn")
+            else if (layerName == "spawn")
             {
                 parseSpawnLayer(context, jsonLayer);
             }
-            else if (LAYER_NAME == "coin")
+            else if (layerName == "coin")
             {
                 parseCoinLayer(context, jsonLayer);
             }
@@ -109,7 +109,7 @@ namespace halloween
             {
                 M_LOG(
                     "WARNING:  While parsing level file \""
-                    << m_path << "\".  Ignored unknown layer named \"" << LAYER_NAME << "\".");
+                    << m_path << "\".  Ignored unknown layer named \"" << layerName << "\".");
             }
         }
 
@@ -118,19 +118,19 @@ namespace halloween
             "Error Parsing Level File " << m_path << ":  Failed to read any tile image layers.");
     }
 
-    void LevelFileLoader::parseTileLayer(Context & context, const TileImage IMAGE, Json & json)
+    void LevelFileLoader::parseTileLayer(Context & context, const TileImage image, Json & json)
     {
         TileLayer layer;
 
-        layer.image = IMAGE;
+        layer.image = image;
 
-        const std::vector<int> INDEXES = json["data"];
-        layer.indexes = INDEXES;
+        const std::vector<int> indexes = json["data"];
+        layer.indexes = indexes;
 
         M_CHECK(
             !layer.indexes.empty(),
             "Error Parsing Level File "
-                << m_path << ":  Failed to read tileset layer indexes for image " << IMAGE << ".");
+                << m_path << ":  Failed to read tileset layer indexes for image " << image << ".");
 
         context.level.tiles.layers.push_back(layer);
     }
@@ -146,7 +146,7 @@ namespace halloween
         }
     }
 
-    sf::FloatRect LevelFileLoader::parseAndConvertRect(const Context & CONTEXT, Json & json)
+    const sf::FloatRect LevelFileLoader::parseAndConvertRect(const Context & context, Json & json)
     {
         sf::IntRect mapRect;
         mapRect.left = json["x"];
@@ -156,13 +156,13 @@ namespace halloween
 
         // convert from map to screen coordinates
         sf::FloatRect screenRect{ mapRect };
-        screenRect.left *= CONTEXT.settings.tile_scale;
-        screenRect.top *= CONTEXT.settings.tile_scale;
-        screenRect.width *= CONTEXT.settings.tile_scale;
-        screenRect.height *= CONTEXT.settings.tile_scale;
+        screenRect.left *= context.settings.tile_scale;
+        screenRect.top *= context.settings.tile_scale;
+        screenRect.width *= context.settings.tile_scale;
+        screenRect.height *= context.settings.tile_scale;
         //
-        screenRect.left += CONTEXT.level.map_position_offset.x;
-        screenRect.top += CONTEXT.level.map_position_offset.y;
+        screenRect.left += context.level.map_position_offset.x;
+        screenRect.top += context.level.map_position_offset.y;
 
         return screenRect;
     }
@@ -174,17 +174,17 @@ namespace halloween
 
         for (Json & spawnJson : json["objects"])
         {
-            const sf::FloatRect RECT = parseAndConvertRect(context, spawnJson);
-            const std::string NAME = spawnJson["name"];
+            const sf::FloatRect rect = parseAndConvertRect(context, spawnJson);
+            const std::string name = spawnJson["name"];
 
-            if (NAME == "enter")
+            if (name == "enter")
             {
-                context.level.enter_rect = RECT;
+                context.level.enter_rect = rect;
             }
 
-            if (NAME == "exit")
+            if (name == "exit")
             {
-                context.level.exit_rect = RECT;
+                context.level.exit_rect = rect;
             }
         }
 
@@ -203,8 +203,8 @@ namespace halloween
 
         for (Json & coinJson : json["objects"])
         {
-            const sf::FloatRect COIN_RECT = parseAndConvertRect(context, coinJson);
-            context.coins.add(util::center(COIN_RECT));
+            const sf::FloatRect rect = parseAndConvertRect(context, coinJson);
+            context.coins.add(util::center(rect));
         }
     }
 

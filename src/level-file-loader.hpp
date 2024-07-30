@@ -18,24 +18,25 @@ namespace halloween
     using Json = nlohmann::json;
 
     //
+
     class LevelFileLoader
     {
       public:
         LevelFileLoader();
 
-        void load(Context & context, const std::size_t LEVEL_NUMBER);
+        void load(Context & context, const std::size_t levelNumber);
 
       private:
         static void parseLevelDetails(Context & context, Json & json);
 
         void parseLayers(Context & context, Json & json);
 
-        void parseTileLayer(Context & context, const TileImage IMAGE, Json & json);
+        void parseTileLayer(Context & context, const TileImage image, Json & json);
 
         static void
             parseRectLayer(Context & context, Json & json, std::vector<sf::FloatRect> & rects);
 
-        static sf::FloatRect parseAndConvertRect(const Context & CONTEXT, Json & json);
+        static const sf::FloatRect parseAndConvertRect(const Context & context, Json & json);
 
         void parseSpawnLayer(Context & context, Json & json);
 
