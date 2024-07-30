@@ -24,26 +24,26 @@ namespace halloween
     {}
 
     void AvatarAnim::setup(
-        const std::filesystem::path & MEDIA_PATH,
-        const std::string & NAME,
-        const std::size_t FRAME_COUNT,
-        const float TIME_PER_FRAME_SEC,
-        const bool WILL_LOOP)
+        const std::filesystem::path & mediaPath,
+        const std::string & name,
+        const std::size_t frameCount,
+        const float timePerFrameSec,
+        const bool willLoop)
     {
-        m_timePerFrameSec = TIME_PER_FRAME_SEC;
-        m_willLoop = WILL_LOOP;
+        m_timePerFrameSec = timePerFrameSec;
+        m_willLoop = willLoop;
 
-        for (std::size_t i{ 0 }; i < FRAME_COUNT; ++i)
+        for (std::size_t i{ 0 }; i < frameCount; ++i)
         {
-            const std::string FILE_NAME = (NAME + "-" + std::to_string(i).append(".png"));
-            const std::string FILE_PATH = (MEDIA_PATH / "image/avatar" / FILE_NAME).string();
+            const std::string filename = (name + "-" + std::to_string(i).append(".png"));
+            const std::string filePath = (mediaPath / "image/avatar" / filename).string();
 
             sf::Texture & texture = m_textures.emplace_back();
-            texture.loadFromFile(FILE_PATH);
+            texture.loadFromFile(filePath);
             texture.setSmooth(true);
         }
 
-        m_frameCount = FRAME_COUNT;
+        m_frameCount = frameCount;
     }
 
     void AvatarAnim::restart()
@@ -53,9 +53,9 @@ namespace halloween
         m_isFinished = false;
     }
 
-    bool AvatarAnim::update(const float FRAME_TIME_SEC)
+    bool AvatarAnim::update(const float frameTimeSec)
     {
-        m_elapsedTimeSec += FRAME_TIME_SEC;
+        m_elapsedTimeSec += frameTimeSec;
         if (m_elapsedTimeSec < m_timePerFrameSec)
         {
             return false;
