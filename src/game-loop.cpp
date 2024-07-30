@@ -163,9 +163,9 @@ namespace halloween
         }
     }
 
-    void GameLoop::update(const float FRAME_TIME_SEC)
+    void GameLoop::update(const float frameTimeSec)
     {
-        m_stateMachine.state().update(m_context, FRAME_TIME_SEC);
+        m_stateMachine.state().update(m_context, frameTimeSec);
     }
 
     void GameLoop::draw()

@@ -36,10 +36,10 @@ namespace halloween
       private:
         void setup();
         void frameLoop();
-        void handleSleepUntilEndOfFrame(const float TIME_ELAPSED_SEC);
+        void handleSleepUntilEndOfFrame(const float elapsedTimeSec);
         void handlePerSecondTasks();
         void handleEvents();
-        void update(const float FRAME_TIME_SEC);
+        void update(const float frameTimeSec);
         void draw();
 
       private:
