@@ -15,10 +15,9 @@ namespace halloween
     struct Context;
     struct Settings;
 
-    //
     struct Coin
     {
-        Coin(const sf::Texture & TEXTURE, const sf::Vector2f & POSITION);
+        Coin(const sf::Texture & texture, const sf::Vector2f & position);
 
         bool is_alive;
         sf::Sprite sprite;
@@ -26,18 +25,19 @@ namespace halloween
     };
 
     //
+
     class Coins
     {
       public:
         Coins();
 
-        void setup(const Settings & SETTINGS);
-        void add(const sf::Vector2f & POSITION);
+        void setup(const Settings & settings);
+        void add(const sf::Vector2f & position);
         void clear();
-        void update(Context &, const float FRAME_TIME_SEC);
+        void update(Context &, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
-        void move(const sf::Vector2f & MOVE);
-        void collideWithAvatar(Context & context, const sf::FloatRect & AVATAR_RECT);
+        void move(const sf::Vector2f & move);
+        void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect);
 
       private:
         sf::Texture m_texture;

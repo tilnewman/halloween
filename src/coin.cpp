@@ -19,14 +19,14 @@
 
 namespace halloween
 {
-    Coin::Coin(const sf::Texture & TEXTURE, const sf::Vector2f & POSITION)
+    Coin::Coin(const sf::Texture & texture, const sf::Vector2f & position)
         : is_alive(true)
-        , sprite(TEXTURE, { 0, 0, 64, 64 })
+        , sprite(texture, { 0, 0, 64, 64 })
         , anim_index(0)
     {
         sprite.setScale(0.5f, 0.75f);
         util::setOriginToCenter(sprite);
-        sprite.setPosition(POSITION);
+        sprite.setPosition(position);
     }
 
     //
@@ -39,7 +39,7 @@ namespace halloween
         , m_elapsedTimeSec(0.0f)
         , m_textureIndex(0)
     {
-        // anything more than "dozens" will work here
+        // anything more than dozens will work here
         m_coins.reserve(100);
 
         // animation frames in order within the spritesheet
@@ -57,18 +57,18 @@ namespace halloween
 
     void Coins::setup(const Settings & settings)
     {
-        const std::string PATH = (settings.media_path / "image" / "coin.png").string();
-        m_texture.loadFromFile(PATH);
+        const std::string filePath = (settings.media_path / "image" / "coin.png").string();
+        m_texture.loadFromFile(filePath);
         m_texture.setSmooth(true);
     }
 
-    void Coins::add(const sf::Vector2f & POSITION) { m_coins.emplace_back(m_texture, POSITION); }
+    void Coins::add(const sf::Vector2f & position) { m_coins.emplace_back(m_texture, position); }
 
     void Coins::clear() { m_coins.clear(); }
 
-    void Coins::update(Context &, const float FRAME_TIME_SEC)
+    void Coins::update(Context &, const float frameTimeSec)
     {
-        m_elapsedTimeSec += FRAME_TIME_SEC;
+        m_elapsedTimeSec += frameTimeSec;
         if (m_elapsedTimeSec < m_timePerFrame)
         {
             return;
@@ -82,6 +82,7 @@ namespace halloween
             m_textureIndex = 0;
         }
 
+        // all coins spin at the same time and rate
         for (Coin & coin : m_coins)
         {
             coin.sprite.setTextureRect(m_textureCoords.at(m_textureIndex));
@@ -90,30 +91,30 @@ namespace halloween
 
     void Coins::draw(sf::RenderTarget & target, sf::RenderStates states) const
     {
-        for (const Coin & COIN : m_coins)
+        for (const Coin & coin : m_coins)
         {
-            if (!COIN.is_alive)
+            if (!coin.is_alive)
             {
                 continue;
             }
 
-            target.draw(COIN.sprite, states);
+            target.draw(coin.sprite, states);
         }
     }
 
-    void Coins::move(const sf::Vector2f & MOVE)
+    void Coins::move(const sf::Vector2f & move)
     {
         for (Coin & coin : m_coins)
         {
-            coin.sprite.move(MOVE);
+            coin.sprite.move(move);
         }
     }
 
-    void Coins::collideWithAvatar(Context & context, const sf::FloatRect & AVATAR_RECT)
+    void Coins::collideWithAvatar(Context & context, const sf::FloatRect & avatarRect)
     {
         for (Coin & coin : m_coins)
         {
-            if (AVATAR_RECT.intersects(coin.sprite.getGlobalBounds()))
+            if (avatarRect.intersects(coin.sprite.getGlobalBounds()))
             {
                 coin.is_alive = false;
                 context.audio.play("coin");
@@ -125,7 +126,7 @@ namespace halloween
             std::remove_if(
                 std::begin(m_coins),
                 std::end(m_coins),
-                [](const Coin & COIN) { return !COIN.is_alive; }),
+                [](const Coin & coin) { return !coin.is_alive; }),
             std::end(m_coins));
     }
 
