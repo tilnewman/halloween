@@ -54,15 +54,15 @@ namespace halloween
         target.draw(m_text, states);
     }
 
-    void InfoRegion::scoreAdjust(const int ADJ)
+    void InfoRegion::scoreAdjust(const int adj)
     {
-        m_score += ADJ;
+        m_score += adj;
         updateText();
     }
 
-    void InfoRegion::livesAdjust(const int ADJ)
+    void InfoRegion::livesAdjust(const int adj)
     {
-        m_lives += ADJ;
+        m_lives += adj;
         updateText();
     }
 

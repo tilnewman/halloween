@@ -24,10 +24,10 @@ namespace halloween
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
         inline int score() const { return m_score; }
-        void scoreAdjust(const int ADJ);
+        void scoreAdjust(const int adj);
 
         inline int lives() const { return m_lives; }
-        void livesAdjust(const int ADJ);
+        void livesAdjust(const int adj);
 
       private:
         void updateText();
