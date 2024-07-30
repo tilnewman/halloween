@@ -71,6 +71,8 @@ namespace halloween
             }
         }
 
+        populateVisibleVerts(layout);
+
         return true;
     }
 
@@ -101,6 +103,8 @@ namespace halloween
                 context.media.tileTexture(layer.image),
                 layer);
         }
+
+        populateVisibleVerts(context.layout);
     }
 
     void Level::appendVertLayer(
@@ -128,7 +132,7 @@ namespace halloween
             {
                 const float posX = static_cast<float>(x * sizeOnScreenI.x);
 
-                const int textureIndexOrig(layer.indexes.at(textureIndex++));
+                const int textureIndexOrig(layer.indexes[textureIndex++]);
                 if (textureIndexOrig == 0)
                 {
                     // zero means no image at this location
@@ -153,15 +157,47 @@ namespace halloween
         }
     }
 
+    void Level::populateVisibleVerts(const ScreenRegions & layout)
+    {
+        for (TileLayer & layer : tiles.layers)
+        {
+            M_CHECK(
+                ((layer.verts.size() % util::verts_per_quad) == 0),
+                "Error:  TileLayer.verts.size()=" << layer.verts.size()
+                                                  << " which is not a multiple of "
+                                                  << util::verts_per_quad);
+
+            layer.visibleVerts.clear();
+
+            std::size_t vertIndex = 0;
+            while (vertIndex < layer.verts.size())
+            {
+                const sf::Vertex topLeftVert = layer.verts[vertIndex++];
+                const sf::Vertex topRightVert = layer.verts[vertIndex++];
+                const sf::Vertex botLeftVert = layer.verts[vertIndex++];
+                const sf::Vertex botRightVert = layer.verts[vertIndex++];
+
+                if (layout.mapRegion().contains(topLeftVert.position) ||
+                    layout.mapRegion().contains(botRightVert.position))
+                {
+                    layer.visibleVerts.push_back(topLeftVert);
+                    layer.visibleVerts.push_back(topRightVert);
+                    layer.visibleVerts.push_back(botLeftVert);
+                    layer.visibleVerts.push_back(botRightVert);
+                }
+            }
+        }
+    }
+
     void Level::dumpInfo(const std::size_t levelNumber) const
     {
         std::cout << "Level " << levelNumber << " Graphics Info\n";
 
         for (const TileLayer & layer : tiles.layers)
         {
-            std::cout << "\tLayer:  " << layer.image
-                      << ", tiles_drawn=" << (layer.verts.size() / util::verts_per_quad)
-                      << ", tiles_total=" << layer.indexes.size() << "\n";
+            std::cout << "\tLayer Tiles:  " << layer.image << ", possible=" << layer.indexes.size()
+                      << ", actual=" << (layer.verts.size() / util::verts_per_quad)
+                      << ", visible=" << (layer.visibleVerts.size() / util::verts_per_quad) << "\n";
         }
 
         std::cout << std::endl;

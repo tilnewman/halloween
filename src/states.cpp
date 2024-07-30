@@ -222,7 +222,7 @@ namespace halloween
         for (const TileLayer & layer : context.level.tiles.layers)
         {
             states.texture = &context.media.tileTexture(layer.image).texture;
-            target.draw(&layer.verts[0], layer.verts.size(), sf::Quads, states);
+            target.draw(&layer.visibleVerts[0], layer.visibleVerts.size(), sf::Quads, states);
             states.texture = nullptr;
         }
 

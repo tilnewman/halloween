@@ -48,11 +48,13 @@ namespace halloween
         {
             indexes.reserve(10'000);
             verts.reserve(10'000);
+            visibleVerts.reserve(10'000);
         }
 
         TileImage image;
         std::vector<int> indexes;
         std::vector<sf::Vertex> verts;
+        std::vector<sf::Vertex> visibleVerts;
     };
 
     //

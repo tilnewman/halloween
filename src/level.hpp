@@ -47,6 +47,8 @@ namespace halloween
             const TileTexture & texture,
             TileLayer & layer) const;
 
+        void populateVisibleVerts(const ScreenRegions & layout);
+
         void dumpInfo(const std::size_t levelNumber) const;
     };
 
