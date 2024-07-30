@@ -32,6 +32,7 @@ namespace halloween
         , m_delayLoopCounts()
         , m_framesPerSecond()
         , m_perSecondClock()
+        , m_graphDisplayUPtr()
         , m_context(
               m_settings,
               m_window,
@@ -57,8 +58,8 @@ namespace halloween
 
     void GameLoop::setup()
     {
-        m_framesPerSecond.reserve(static_cast<std::size_t>(m_settings.frame_rate));
-        m_delayLoopCounts.reserve(static_cast<std::size_t>(m_settings.frame_rate));
+        m_framesPerSecond.reserve(m_settings.frame_rate * 2);
+        m_delayLoopCounts.reserve(m_settings.frame_rate * 2);
 
         M_CHECK(
             std::filesystem::exists(m_settings.media_path),
@@ -112,7 +113,8 @@ namespace halloween
     {
         m_framesPerSecond.push_back(static_cast<std::size_t>(std::round(1.0f / elapsedTimeSec)));
 
-        float timeRemainingSec = ((1.0f / m_settings.frame_rate) - elapsedTimeSec);
+        float timeRemainingSec =
+            ((1.0f / static_cast<float>(m_settings.frame_rate)) - elapsedTimeSec);
 
         std::size_t delayLoopCounter = 0;
         while (timeRemainingSec > 0.0f)
@@ -135,19 +137,29 @@ namespace halloween
             return;
         }
 
-        const auto fpsStats = util::makeStats(m_framesPerSecond);
-        const auto spinStats = util::makeStats(m_delayLoopCounts);
+        if (m_settings.will_display_fps)
+        {
+            std::ostringstream ss;
+            ss << " FPS: " << util::makeStats(m_framesPerSecond);
+            m_media.fps_text.setString(ss.str());
 
-        std::ostringstream ss;
-        ss << " FPS: " << fpsStats << "      Spins: " << spinStats;
-        m_media.fps_text.setString(ss.str());
-        util::setOriginToPosition(m_media.fps_text);
-        m_media.fps_text.setFillColor(sf::Color(195, 160, 126));
+            util::setOriginToPosition(m_media.fps_text);
+            m_media.fps_text.setFillColor(sf::Color(195, 160, 126));
 
-        util::fitAndCenterInside(
-            m_media.fps_text, util::scaleRectInPlaceCopy(m_layout.infoRegion(), { 1.0f, 0.375f }));
+            util::fitAndCenterInside(
+                m_media.fps_text,
+                util::scaleRectInPlaceCopy(m_layout.infoRegion(), { 1.0f, 0.375f }));
 
-        m_media.fps_text.setPosition(0.0f, (m_layout.wholeSize().y - 50.0f));
+            m_media.fps_text.setPosition(0.0f, (m_layout.wholeSize().y - 50.0f));
+        }
+
+        if (m_settings.will_display_fps_graph)
+        {
+            std::sort(std::begin(m_framesPerSecond), std::end(m_framesPerSecond));
+
+            m_graphDisplayUPtr = std::make_unique<util::GraphDisplay<std::size_t>>(
+                m_framesPerSecond, sf::Vector2u{ 500, 200 });
+        }
 
         m_perSecondClock.restart();
         m_delayLoopCounts.clear();
@@ -175,8 +187,15 @@ namespace halloween
         sf::RenderStates states;
         m_stateMachine.state().draw(m_context, m_window, states);
 
-        // TODO remove after testing
-        m_window.draw(m_media.fps_text);
+        if (m_settings.will_display_fps)
+        {
+            m_window.draw(m_media.fps_text);
+        }
+
+        if (m_settings.will_display_fps_graph && m_graphDisplayUPtr)
+        {
+            m_window.draw(*m_graphDisplayUPtr, states);
+        }
 
         m_window.display();
     }

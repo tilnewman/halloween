@@ -18,10 +18,13 @@
 #include "settings.hpp"
 #include "sound-player.hpp"
 #include "states.hpp"
+#include "stats-display.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Vector2.hpp>
+
+#include <memory>
 
 namespace halloween
 {
@@ -61,6 +64,7 @@ namespace halloween
         std::vector<std::size_t> m_delayLoopCounts;
         std::vector<std::size_t> m_framesPerSecond;
         sf::Clock m_perSecondClock;
+        std::unique_ptr<util::GraphDisplay<std::size_t>> m_graphDisplayUPtr;
 
         Context m_context;
     };
