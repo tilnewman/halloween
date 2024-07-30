@@ -126,10 +126,8 @@ namespace halloween
 
             for (int x(0); x < count.x; ++x)
             {
-                // calc tile image on screen rect
                 const float posX = static_cast<float>(x * sizeOnScreenI.x);
 
-                // calc tile image texture rect
                 const int textureIndexOrig(layer.indexes.at(textureIndex++));
                 if (textureIndexOrig == 0)
                 {
