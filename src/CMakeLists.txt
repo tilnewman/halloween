@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.8)
-project("Halloween" VERSION 0.5.0 LANGUAGES CXX)
+project("halloween" VERSION 0.5.0 LANGUAGES CXX)
 
 
 file(GLOB source_files *.?pp)
 add_executable(${PROJECT_NAME} ${source_files})
 
 
-find_package(SFML 2.5 COMPONENTS window graphics audio REQUIRED)
+find_package(SFML 2.6.1 COMPONENTS window graphics audio REQUIRED)
 target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
 
 
