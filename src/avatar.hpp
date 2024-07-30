@@ -36,16 +36,16 @@ namespace halloween
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         sf::FloatRect collisionRect() const;
         sf::FloatRect attackCollisionRect() const;
-        void setPosition(const sf::FloatRect & RECT);
-        void update(Context & context, const float FRAME_TIME_SEC);
+        void setPosition(const sf::FloatRect & rect);
+        void update(Context & context, const float frameTimeSec);
 
       private:
         void moveMap(Context & context);
-        void setAction(const Action ACTION);
-        bool handleDeath(Context & context, const float FRAME_TIME_SEC);
-        bool handleAttacking(Context & context, const float FRAME_TIME_SEC);
-        bool handleThrowing(Context & context, const float FRAME_TIME_SEC);
-        void sideToSideMotion(Context & context, const float FRAME_TIME_SEC);
+        void setAction(const Action action);
+        bool handleDeath(Context & context, const float frameTimeSec);
+        bool handleAttacking(Context & context, const float frameTimeSec);
+        bool handleThrowing(Context & context, const float frameTimeSec);
+        void sideToSideMotion(Context & context, const float frameTimeSec);
         void jumping(Context & context);
         void walkCollisions(Context & context);
         void killCollisions(Context & context);
