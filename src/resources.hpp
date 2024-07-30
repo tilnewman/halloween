@@ -39,8 +39,6 @@ namespace halloween
 
         void setup(const Settings & settings);
 
-        bool will_smooth_textures;
-
         sf::Font font;
         sf::Text fps_text;
 

@@ -13,8 +13,7 @@ namespace halloween
 {
 
     Resources::Resources()
-        : will_smooth_textures(true)
-        , font()
+        : font()
         , fps_text("", font, 60)
         , bg_texture()
         , bg_sprite()
@@ -32,29 +31,29 @@ namespace halloween
         const std::string imagePath = (settings.media_path / "image/map/").string();
 
         // background image
-        bg_texture.loadFromFile(imagePath + "/background.png");
+        bg_texture.loadFromFile(imagePath + "background.png");
         bg_texture.setSmooth(true);
 
         bg_sprite.setTexture(bg_texture);
 
         // ground map tile image
         ground_texture.which = TileImage::Ground;
-        ground_texture.texture.loadFromFile(imagePath + "/tile-ground.png");
-        ground_texture.texture.setSmooth(will_smooth_textures);
+        ground_texture.texture.loadFromFile(imagePath + "tile-ground.png");
+        ground_texture.texture.setSmooth(settings.will_smooth_tile_textures);
         ground_texture.size = sf::Vector2i(ground_texture.texture.getSize());
         ground_texture.gid = 1;
 
         // object-1 map tile image
-        object_texture1.texture.loadFromFile(imagePath + "/tile-object-1.png");
+        object_texture1.texture.loadFromFile(imagePath + "tile-object-1.png");
         object_texture1.which = TileImage::Object1;
-        object_texture1.texture.setSmooth(will_smooth_textures);
+        object_texture1.texture.setSmooth(settings.will_smooth_tile_textures);
         object_texture1.size = sf::Vector2i(object_texture1.texture.getSize());
         object_texture1.gid = 513;
 
         // object-2 map tile image
-        object_texture2.texture.loadFromFile(imagePath + "/tile-object-2.png");
+        object_texture2.texture.loadFromFile(imagePath + "tile-object-2.png");
         object_texture2.which = TileImage::Object2;
-        object_texture2.texture.setSmooth(will_smooth_textures);
+        object_texture2.texture.setSmooth(settings.will_smooth_tile_textures);
         object_texture2.size = sf::Vector2i(object_texture2.texture.getSize());
         object_texture2.gid = 257;
     }

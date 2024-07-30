@@ -37,6 +37,8 @@ namespace halloween
 
         // delay after dying so the player can see how they died
         const float death_delay_sec = 4.0f;
+
+        const bool will_smooth_tile_textures = true;
     };
 
 } // namespace halloween
