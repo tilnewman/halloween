@@ -17,6 +17,7 @@ namespace halloween
     struct Settings;
 
     //
+
     struct TileTexture
     {
         TileTexture()
@@ -50,10 +51,10 @@ namespace halloween
         TileTexture object_texture1;
         TileTexture object_texture2;
 
-        const TileTexture & tileTexture(const TileImage IMAGE)
+        const TileTexture & tileTexture(const TileImage image)
         {
             // clang-format off
-            switch (IMAGE)
+            switch (image)
             {
                 case TileImage::Ground:  { return ground_texture;  }
                 case TileImage::Object1: { return object_texture1; }
