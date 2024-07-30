@@ -25,6 +25,7 @@ namespace util
             , m_backgroundColor(22, 25, 28)
             , m_dataBarColor(38, 120, 254)
             , m_dataBarColorError(255, 32, 32)
+            , m_averageLineColor(255, 255, 255, 64)
             , m_wasDatasetChanged(false)
         {
             // reduce data set to fit in the size given
@@ -36,7 +37,7 @@ namespace util
             m_wasDatasetChanged = (data.size() != m_data.size());
 
             // find min/max/avg/std_dev
-            const auto stats = util::makeStats(m_data);
+            const util::Stats<data_t> stats = util::makeStats(m_data);
 
             // convert data values into data bar rects
             std::vector<sf::FloatRect> dataBarRects;
@@ -44,7 +45,6 @@ namespace util
 
             // create render texture of the correct size to fit the data -not the m_size.x
             const unsigned dataWidth = static_cast<unsigned>(util::right(dataBarRects.back()));
-
             if (!m_renderTexture.create(dataWidth, m_size.y))
             {
                 std::cout << "GraphDisplay's sf::RenderTexture::create failed for size="
@@ -65,6 +65,7 @@ namespace util
                     ((m_wasDatasetChanged) ? m_dataBarColorError : m_dataBarColor);
 
                 drawGraph(m_renderTexture, barColorToUse, m_backgroundColor, dataBarRects);
+                drawAverageLine(dataWidth, stats);
                 m_renderTexture.display();
             }
         }
@@ -211,6 +212,28 @@ namespace util
             }
         }
 
+        void drawAverageLine(const unsigned dataWidth, const util::Stats<data_t> & stats)
+        {
+            if ((stats.count == 0) || !(stats.max > data_t(0)))
+            {
+                return;
+            }
+
+            const float avgLineMagnitude = std::floor(
+                (static_cast<float>(stats.avg) * static_cast<float>(m_size.y)) /
+                static_cast<float>(stats.max));
+
+            const float avgLineHeight = (static_cast<float>(m_size.y) - avgLineMagnitude);
+
+            sf::RectangleShape rectangle;
+            rectangle.setSize({ static_cast<float>(dataWidth), 1.0f });
+            rectangle.setPosition({ 0.0f, avgLineHeight });
+            rectangle.setFillColor(m_averageLineColor);
+            rectangle.setOutlineColor(sf::Color::Transparent);
+            rectangle.setOutlineThickness(0.0f);
+            m_renderTexture.draw(rectangle);
+        }
+
       private:
         sf::Vector2u m_size;
         std::vector<data_t> m_data;
@@ -218,6 +241,7 @@ namespace util
         sf::Color m_backgroundColor;
         sf::Color m_dataBarColor;
         sf::Color m_dataBarColorError;
+        sf::Color m_averageLineColor;
         bool m_wasDatasetChanged;
     };
 
