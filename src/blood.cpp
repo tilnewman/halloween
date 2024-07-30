@@ -13,6 +13,8 @@
 #include "settings.hpp"
 #include "util.hpp"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace halloween
 {
     Blood::Blood()

@@ -14,6 +14,8 @@
 
 #include <algorithm>
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace halloween
 {
 

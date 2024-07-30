@@ -15,6 +15,8 @@
 
 #include <algorithm>
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace halloween
 {
     Coin::Coin(const sf::Texture & TEXTURE, const sf::Vector2f & POSITION)

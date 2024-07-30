@@ -6,7 +6,6 @@
 #include "resources.hpp"
 
 #include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
