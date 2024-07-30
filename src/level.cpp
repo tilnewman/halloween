@@ -14,6 +14,8 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 
+#include <iostream>
+
 namespace halloween
 {
 
@@ -37,6 +39,7 @@ namespace halloween
         context.avatar.setPosition(enter_rect);
         findFarthestHorizMapPixel();
         farthest_horiz_traveled = 0.0f;
+        dumpInfo(levelNumber);
     }
 
     bool Level::move(const ScreenRegions & layout, const float move)
@@ -151,4 +154,18 @@ namespace halloween
             }
         }
     }
+
+    void Level::dumpInfo(const std::size_t levelNumber) const
+    {
+        std::cout << "Level " << levelNumber << " Graphics Info\n";
+
+        for (const TileLayer & layer : tiles.layers)
+        {
+            std::cout << "\tLayer:  " << layer.image
+                      << ", tile_count=" << (layer.verts.size() / util::verts_per_quad) << "\n";
+        }
+
+        std::cout << std::endl;
+    }
+
 } // namespace halloween

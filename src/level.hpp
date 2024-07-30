@@ -46,6 +46,8 @@ namespace halloween
             const sf::Vector2f & sizeOnScreen,
             const TileTexture & texture,
             TileLayer & layer) const;
+
+        void dumpInfo(const std::size_t levelNumber) const;
     };
 
 } // namespace halloween
