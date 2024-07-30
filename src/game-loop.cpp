@@ -54,25 +54,23 @@ namespace halloween
 
     void GameLoop::setup()
     {
-        // anything over m_settings.frame_rate (60) works here
-        m_framesPerSecond.reserve(100);
-        m_delayLoopCounts.reserve(100);
+        m_framesPerSecond.reserve(static_cast<std::size_t>(m_settings.frame_rate));
+        m_delayLoopCounts.reserve(static_cast<std::size_t>(m_settings.frame_rate));
 
         M_CHECK(
             std::filesystem::exists(m_settings.media_path),
             "The media folder could not be found at \"" << m_settings.media_path << "\"");
 
-        // just load all the sfx files in the directory
         m_audio.mediaPath(m_settings.media_path / "audio");
         m_audio.loadAll();
         m_audio.willLoop("walk", true);
 
-        const auto VIDEO_MODE = ResolutionPicker::pickCloseTo(sf::VideoMode(
+        const auto videoMode = ResolutionPicker::pickCloseTo(sf::VideoMode(
             m_settings.target_res.x,
             m_settings.target_res.y,
             sf::VideoMode::getDesktopMode().bitsPerPixel));
 
-        m_window.create(VIDEO_MODE, "Whisper", sf::Style::Fullscreen);
+        m_window.create(videoMode, "Halloween", sf::Style::Fullscreen);
         M_CHECK(m_window.isOpen(), "Could not open graphics window.");
         M_LOG("resolution is " << m_window.getSize());
 
@@ -96,11 +94,11 @@ namespace halloween
         while (m_window.isOpen() && !m_context.will_quit)
         {
             frameClock.restart();
-            const float ACTUAL_FRAME_TIME_SEC = actualClock.restart().asSeconds();
+            const float actualFrameTimeSec = actualClock.restart().asSeconds();
 
             handlePerSecondTasks();
             handleEvents();
-            update(ACTUAL_FRAME_TIME_SEC);
+            update(actualFrameTimeSec);
             draw();
             m_stateMachine.changeIfPending(m_context);
 
@@ -108,11 +106,11 @@ namespace halloween
         }
     }
 
-    void GameLoop::handleSleepUntilEndOfFrame(const float TIME_ELAPSED_SEC)
+    void GameLoop::handleSleepUntilEndOfFrame(const float elapsedTimeSec)
     {
-        m_framesPerSecond.push_back(static_cast<std::size_t>(std::round(1.0f / TIME_ELAPSED_SEC)));
+        m_framesPerSecond.push_back(static_cast<std::size_t>(std::round(1.0f / elapsedTimeSec)));
 
-        float timeRemainingSec = ((1.0f / m_settings.frame_rate) - TIME_ELAPSED_SEC);
+        float timeRemainingSec = ((1.0f / m_settings.frame_rate) - elapsedTimeSec);
 
         std::size_t delayLoopCounter = 0;
         while (timeRemainingSec > 0.0001f)
@@ -129,14 +127,14 @@ namespace halloween
 
     void GameLoop::handlePerSecondTasks()
     {
-        const float TIME_ELAPSED_SEC = m_perSecondClock.getElapsedTime().asSeconds();
-        if (TIME_ELAPSED_SEC > 1.0f)
+        const float elapsedTimeSec = m_perSecondClock.getElapsedTime().asSeconds();
+        if (elapsedTimeSec > 1.0f)
         {
-            const auto FPS_STATS = util::makeStats(m_framesPerSecond);
-            const auto SPIN_STATS = util::makeStats(m_delayLoopCounts);
+            const auto fpsStats = util::makeStats(m_framesPerSecond);
+            const auto spinStats = util::makeStats(m_delayLoopCounts);
 
             std::ostringstream ss;
-            ss << " FPS: " << FPS_STATS << "      Spins: " << SPIN_STATS;
+            ss << " FPS: " << fpsStats << "      Spins: " << spinStats;
             m_media.fps_text.setString(ss.str());
             util::setOriginToPosition(m_media.fps_text);
             m_media.fps_text.setFillColor(sf::Color(195, 160, 126));
