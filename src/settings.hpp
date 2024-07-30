@@ -16,6 +16,8 @@ namespace halloween
 
         const std::filesystem::path media_path = "./media";
 
+        const int player_lives = 3;
+
         // display sizes
         const float tile_scale = 0.75f;
         const float avatar_scale = 0.2f;

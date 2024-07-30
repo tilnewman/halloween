@@ -27,10 +27,10 @@ namespace halloween
         , m_bgVerts()
     {}
 
-    void InfoRegion::reset()
+    void InfoRegion::reset(Context & context)
     {
         m_score = 0;
-        m_lives = 3;
+        m_lives = context.settings.player_lives;
         updateText();
     }
 
@@ -45,7 +45,7 @@ namespace halloween
         m_text.setFillColor(sf::Color(52, 64, 65));
         util::setOriginToPosition(m_text);
 
-        reset();
+        reset(context);
     }
 
     void InfoRegion::draw(sf::RenderTarget & target, sf::RenderStates states) const
@@ -74,6 +74,7 @@ namespace halloween
            << "      Score: " << std::setw(6) << std::setfill('0') << m_score;
 
         m_text.setString(ss.str());
+        util::setOriginToPosition(m_text);
 
         util::fitAndCenterInside(m_text, util::scaleRectInPlaceCopy(m_region, { 1.0f, 0.5f }));
     }

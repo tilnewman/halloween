@@ -20,7 +20,7 @@ namespace halloween
         InfoRegion();
 
         void setup(Context & context);
-        void reset();
+        void reset(Context & context);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
         inline int score() const { return m_score; }
