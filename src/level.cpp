@@ -140,12 +140,11 @@ namespace halloween
                 }
 
                 const int index(textureIndexOrig - texture.gid);
-
-                const sf::Vector2i textureTileCount{ (texture.size.x / size.x),
-                                                     (texture.size.y / size.y) };
+                const sf::Vector2i textureTileCount{ texture.size / size };
 
                 const int texturePosX((index % textureTileCount.x) * size.x);
                 const int texturePosY((index / textureTileCount.x) * size.y);
+
                 const sf::Vector2i texturePos{ texturePosX, texturePosY };
                 const sf::IntRect textureRect{ texturePos, size };
 
