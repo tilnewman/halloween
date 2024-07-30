@@ -16,12 +16,13 @@ namespace halloween
     struct Settings;
 
     //
+
     struct Missile
     {
-        Missile(const sf::Vector2f & POSITION, const bool IS_MOVING_RIGHT)
+        Missile(const sf::Vector2f & pos, const bool isMovingRight)
             : is_alive(true)
-            , is_moving_right(IS_MOVING_RIGHT)
-            , position(POSITION)
+            , is_moving_right(isMovingRight)
+            , position(pos)
         {}
 
         bool is_alive;
@@ -30,14 +31,15 @@ namespace halloween
     };
 
     //
+
     class Missiles
     {
       public:
         Missiles();
 
-        void setup(const Settings & SETTINGS);
-        void add(const sf::Vector2f & POSITION, const bool IS_MOVING_RIGHT);
-        void update(Context &, const float FRAME_TIME_SEC);
+        void setup(const Settings & settings);
+        void add(const sf::Vector2f & position, const bool isMovingRight);
+        void update(Context &, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
       private:

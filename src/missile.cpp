@@ -24,23 +24,23 @@ namespace halloween
         , m_velocity(1000.0f, 0.0f)
         , m_missiles()
     {
-        // anything more than "dozens" will work here
+        // anything more than dozens will work here
         m_missiles.reserve(100);
     }
 
     void Missiles::setup(const Settings & settings)
     {
-        const std::string PATH = (settings.media_path / "image" / "kunai.png").string();
-        m_texture.loadFromFile(PATH);
+        const std::string path = (settings.media_path / "image" / "kunai.png").string();
+        m_texture.loadFromFile(path);
         m_texture.setSmooth(true);
     }
 
-    void Missiles::add(const sf::Vector2f & POSITION, const bool IS_MOVING_RIGHT)
+    void Missiles::add(const sf::Vector2f & position, const bool isMovingRight)
     {
-        m_missiles.emplace_back(POSITION, IS_MOVING_RIGHT);
+        m_missiles.emplace_back(position, isMovingRight);
     }
 
-    void Missiles::update(Context & context, const float FRAME_TIME_SEC)
+    void Missiles::update(Context & context, const float frameTimeSec)
     {
         sf::Sprite sprite(m_texture);
 
@@ -48,11 +48,11 @@ namespace halloween
         {
             if (missile.is_moving_right)
             {
-                missile.position += (m_velocity * FRAME_TIME_SEC);
+                missile.position += (m_velocity * frameTimeSec);
             }
             else
             {
-                missile.position -= (m_velocity * FRAME_TIME_SEC);
+                missile.position -= (m_velocity * frameTimeSec);
             }
 
             missile.is_alive = context.layout.mapRegion().contains(missile.position);
@@ -70,10 +70,10 @@ namespace halloween
 
                 sprite.setPosition(missile.position);
 
-                const sf::FloatRect MISSILE_RECT = sprite.getGlobalBounds();
-                for (const sf::FloatRect & COLL_RECT : context.level.walk_collisions)
+                const sf::FloatRect missileRect = sprite.getGlobalBounds();
+                for (const sf::FloatRect & collRect : context.level.walk_collisions)
                 {
-                    if (MISSILE_RECT.intersects(COLL_RECT))
+                    if (missileRect.intersects(collRect))
                     {
                         missile.is_alive = false;
                         context.audio.play("metal-miss");
@@ -87,7 +87,7 @@ namespace halloween
             std::remove_if(
                 std::begin(m_missiles),
                 std::end(m_missiles),
-                [](const Missile & MISSILE) { return !MISSILE.is_alive; }),
+                [](const Missile & missile) { return !missile.is_alive; }),
             std::end(m_missiles));
     }
 
@@ -95,9 +95,9 @@ namespace halloween
     {
         sf::Sprite sprite(m_texture);
 
-        for (const Missile & MISSILE : m_missiles)
+        for (const Missile & missile : m_missiles)
         {
-            if (MISSILE.is_moving_right)
+            if (missile.is_moving_right)
             {
                 sprite.setScale(0.333f, 0.5f);
             }
@@ -106,7 +106,7 @@ namespace halloween
                 sprite.setScale(-0.333f, 0.5f);
             }
 
-            sprite.setPosition(MISSILE.position);
+            sprite.setPosition(missile.position);
 
             target.draw(sprite, states);
         }
