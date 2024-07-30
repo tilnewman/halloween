@@ -50,22 +50,21 @@ namespace halloween
 
     void Blood::setup(const Settings & settings)
     {
-        const std::string PATH = (settings.media_path / "image" / "blood.png").string();
+        const std::string filePath = (settings.media_path / "image" / "blood.png").string();
 
-        m_texture.loadFromFile(PATH);
+        m_texture.loadFromFile(filePath);
         m_texture.setSmooth(true);
 
         m_sprite.setTexture(m_texture);
     }
 
-    void
-        Blood::start(Context & context, const sf::Vector2f & POSITION, const bool WILL_SPLASH_RIGHT)
+    void Blood::start(Context & context, const sf::Vector2f & position, const bool willSplashRight)
     {
         m_isFinished = false;
         m_elapsedTimeSec = 0.0f;
         m_textureIndex = 0;
         m_isUsingFirstAnim = context.random.boolean();
-        m_sprite.setPosition(POSITION);
+        m_sprite.setPosition(position);
 
         if (m_isUsingFirstAnim)
         {
@@ -76,7 +75,7 @@ namespace halloween
             m_sprite.setTextureRect(m_textureCoords2.at(0));
         }
 
-        if (WILL_SPLASH_RIGHT)
+        if (willSplashRight)
         {
             m_sprite.setScale(1.0f, 1.0f);
         }
@@ -86,14 +85,14 @@ namespace halloween
         }
     }
 
-    void Blood::update(Context &, const float FRAME_TIME_SEC)
+    void Blood::update(Context &, const float frameTimeSec)
     {
         if (m_isFinished)
         {
             return;
         }
 
-        m_elapsedTimeSec += FRAME_TIME_SEC;
+        m_elapsedTimeSec += frameTimeSec;
         if (m_elapsedTimeSec < m_timePerFrame)
         {
             return;
