@@ -24,7 +24,7 @@ namespace halloween
         const sf::Vector2f dart_scale = { 0.333f, 0.5f };
 
         // frames per second
-        const std::size_t frame_rate = 60;
+        const float frame_rate = 60; // never change
         const bool will_display_fps = true;
         const bool will_display_fps_graph = true;
 
@@ -38,7 +38,8 @@ namespace halloween
         // delay after dying so the player can see how they died
         const float death_delay_sec = 4.0f;
 
-        const bool will_smooth_tile_textures = true;
+        // this will cause minor artifacts and I can't tell the diff in quality
+        const bool will_smooth_tile_textures = false;
     };
 
 } // namespace halloween
