@@ -39,7 +39,7 @@ namespace halloween
         context.avatar.setPosition(enter_rect);
         findFarthestHorizMapPixel();
         farthest_horiz_traveled = 0.0f;
-        dumpInfo(levelNumber);
+        // dumpInfo(levelNumber);
     }
 
     bool Level::move(const ScreenRegions & layout, const float move)
@@ -107,7 +107,7 @@ namespace halloween
         const sf::Vector2i & count,
         const sf::Vector2i & size,
         const sf::Vector2f & sizeOnScreen,
-        const TileTexture & TEXTURE,
+        const TileTexture & texture,
         TileLayer & layer) const
     {
         const std::size_t totalCount =
@@ -130,25 +130,25 @@ namespace halloween
                 const float posX = static_cast<float>(x * sizeOnScreenI.x);
 
                 // calc tile image texture rect
-                const int textureIndexOrig = (layer.indexes.at(textureIndex++));
+                const int textureIndexOrig(layer.indexes.at(textureIndex++));
                 if (textureIndexOrig == 0)
                 {
                     // zero means no image at this location
                     continue;
                 }
 
-                const int index = (textureIndexOrig - TEXTURE.gid);
+                const int index(textureIndexOrig - texture.gid);
 
-                const sf::Vector2i textureTileCount = { (TEXTURE.size.x / size.x),
-                                                        (TEXTURE.size.y / size.y) };
+                const sf::Vector2i textureTileCount{ (texture.size.x / size.x),
+                                                     (texture.size.y / size.y) };
 
-                const int texturePosX = ((index % textureTileCount.x) * size.x);
-                const int texturePosY = ((index / textureTileCount.x) * size.y);
-                const sf::Vector2i texturePos = { texturePosX, texturePosY };
-                const sf::IntRect textureRect = { texturePos, size };
+                const int texturePosX((index % textureTileCount.x) * size.x);
+                const int texturePosY((index / textureTileCount.x) * size.y);
+                const sf::Vector2i texturePos{ texturePosX, texturePosY };
+                const sf::IntRect textureRect{ texturePos, size };
 
-                const sf::Vector2f screenPos = (sf::Vector2f(posX, posY) + map_position_offset);
-                const sf::FloatRect screenRect = { screenPos, sizeOnScreen };
+                const sf::Vector2f screenPos(sf::Vector2f(posX, posY) + map_position_offset);
+                const sf::FloatRect screenRect{ screenPos, sizeOnScreen };
 
                 util::appendQuadVerts(screenRect, textureRect, layer.verts);
             }
@@ -162,7 +162,8 @@ namespace halloween
         for (const TileLayer & layer : tiles.layers)
         {
             std::cout << "\tLayer:  " << layer.image
-                      << ", tile_count=" << (layer.verts.size() / util::verts_per_quad) << "\n";
+                      << ", tiles_drawn=" << (layer.verts.size() / util::verts_per_quad)
+                      << ", tiles_total=" << layer.indexes.size() << "\n";
         }
 
         std::cout << std::endl;
