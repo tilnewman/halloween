@@ -225,7 +225,7 @@ namespace halloween
         if (!isAttacking && !isThrowing)
         {
             sideToSideMotion(context, frameTimeSec);
-            jumping(context);
+            jumping(context, frameTimeSec);
         }
 
         m_velocity += (context.settings.gravity_acc * frameTimeSec);
@@ -463,12 +463,12 @@ namespace halloween
         }
     }
 
-    void Avatar::jumping(Context & context)
+    void Avatar::jumping(Context & context, const float frameTimeSec)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_hasLanded)
         {
             m_hasLanded = false;
-            m_velocity.y -= context.settings.jump_acc;
+            m_velocity.y -= (context.settings.jump_acc * frameTimeSec);
             context.audio.play("jump");
             context.audio.stop("walk");
             setAction(Action::Jump);

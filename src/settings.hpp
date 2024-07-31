@@ -24,13 +24,13 @@ namespace halloween
         const sf::Vector2f dart_scale = { 0.333f, 0.5f };
 
         // frames per second
-        const float frame_rate = 60; // never change
+        const float frame_rate = 60;
         const bool will_display_fps = true;
         const bool will_display_fps_graph = true;
 
         // movement speeds and accelerations
         const sf::Vector2f gravity_acc = { 0.0f, 25.0f };
-        const float jump_acc = 15.0f;
+        const float jump_acc = 900.0f;
         const float walk_acc = 15.0f;
         const float walk_speed_limit = 5.0f;
         const float dart_speed = 1000.0f;

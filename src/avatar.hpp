@@ -46,7 +46,7 @@ namespace halloween
         bool handleAttacking(Context & context, const float frameTimeSec);
         bool handleThrowing(Context & context, const float frameTimeSec);
         void sideToSideMotion(Context & context, const float frameTimeSec);
-        void jumping(Context & context);
+        void jumping(Context & context, const float frameTimeSec);
         void walkCollisions(Context & context);
         void killCollisions(Context & context);
         void exitCollisions(Context & context) const;
