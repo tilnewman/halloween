@@ -13,8 +13,8 @@
 namespace halloween
 {
 
-    GameLoop::GameLoop()
-        : m_settings()
+    GameLoop::GameLoop(const Settings & settings)
+        : m_settings(settings)
         , m_random()
         , m_audio(m_random)
         , m_window()

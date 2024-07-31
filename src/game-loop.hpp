@@ -32,7 +32,7 @@ namespace halloween
     class GameLoop
     {
       public:
-        GameLoop();
+        GameLoop(const Settings & settings);
 
         void play();
 
