@@ -9,6 +9,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "ghost.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
 #include "missile.hpp"
@@ -184,6 +185,7 @@ namespace halloween
         context.avatar.update(context, frameTimeSec);
         context.missiles.update(context, frameTimeSec);
         context.coins.update(context, frameTimeSec);
+        context.ghosts.update(context, frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)

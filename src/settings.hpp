@@ -22,6 +22,7 @@ namespace halloween
         float tile_scale = 0.75f;
         float avatar_scale = 0.2f;
         sf::Vector2f dart_scale = { 0.333f, 0.5f };
+        sf::Vector2f ghost_scale = { 1.0f, 1.0f };
 
         // frames per second
         float frame_rate = 60;

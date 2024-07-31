@@ -19,6 +19,7 @@ namespace halloween
 {
     struct Level;
     class Coins;
+    class Ghosts;
     class Avatar;
     class Missiles;
     struct Settings;
@@ -32,7 +33,7 @@ namespace halloween
     struct Context
     {
         Context(
-            Settings & set,
+            const Settings & set,
             sf::Window & win,
             util::Random & ran,
             util::SoundPlayer & aud,
@@ -45,6 +46,7 @@ namespace halloween
             Level & lev,
             Missiles & mis,
             Coins & con,
+            Ghosts & gho,
             InfoRegion & inf)
             : settings(set)
             , window(win)
@@ -59,12 +61,13 @@ namespace halloween
             , level(lev)
             , missiles(mis)
             , coins(con)
+            , ghosts(gho)
             , info_region(inf)
             , is_paused(false)
             , will_quit(false)
         {}
 
-        Settings & settings;
+        const Settings & settings;
         sf::Window & window;
         util::Random & random;
         util::SoundPlayer & audio;
@@ -77,6 +80,7 @@ namespace halloween
         Level & level;
         Missiles & missiles;
         Coins & coins;
+        Ghosts & ghosts;
         InfoRegion & info_region;
 
         bool is_paused;

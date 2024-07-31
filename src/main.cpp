@@ -22,13 +22,13 @@ int main(const int argc, const char * const argv[])
             settings.media_path = std::filesystem::current_path() / "media";
         }
 
-        settings.media_path = std::filesystem::canonical(settings.media_path);
-
         M_CHECK(
             std::filesystem::exists(settings.media_path),
             "Error:  The media path does not exist:"
                 << settings.media_path
                 << "\nPut the media path on the command line or put the 'media' folder here.");
+
+        settings.media_path = std::filesystem::canonical(settings.media_path);
 
         std::cout << "Using media folder: " << settings.media_path.string() << std::endl;
 

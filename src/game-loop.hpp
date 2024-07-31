@@ -7,6 +7,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-file-loader.hpp"
 #include "level.hpp"
@@ -59,6 +60,7 @@ namespace halloween
         Level m_level;
         Missiles m_missiles;
         Coins m_coins;
+        Ghosts m_ghosts;
         InfoRegion m_infoRegion;
 
         std::vector<std::size_t> m_delayLoopCounts;

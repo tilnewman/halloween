@@ -27,6 +27,7 @@ namespace halloween
         , m_level()
         , m_missiles()
         , m_coins()
+        , m_ghosts()
         , m_infoRegion()
         , m_delayLoopCounts()
         , m_framesPerSecond()
@@ -46,6 +47,7 @@ namespace halloween
               m_level,
               m_missiles,
               m_coins,
+              m_ghosts,
               m_infoRegion)
     {}
 
@@ -135,7 +137,7 @@ namespace halloween
 
         if (m_settings.will_display_fps)
         {
-            static std::string str;
+            std::string str;
             str = " FPS: ";
             str += util::makeStats(m_framesPerSecond).toString();
             str += "     Spin: ";
