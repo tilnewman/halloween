@@ -42,6 +42,8 @@ namespace halloween
 
         static void parseCoinLayer(Context & context, Json & json);
 
+        static void parseGhostLayer(Context & context, Json & json);
+
       private:
         std::string m_path;
     };

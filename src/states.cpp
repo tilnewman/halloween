@@ -228,6 +228,7 @@ namespace halloween
             states.texture = nullptr;
         }
 
+        context.ghosts.draw(target, states);
         context.missiles.draw(target, states);
         context.coins.draw(target, states);
         context.avatar.draw(target, states);

@@ -5,6 +5,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "ghost.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -104,6 +105,10 @@ namespace halloween
             else if (layerName == "coin")
             {
                 parseCoinLayer(context, jsonLayer);
+            }
+            else if (layerName == "ghost")
+            {
+                parseGhostLayer(context, jsonLayer);
             }
             else
             {
@@ -205,6 +210,17 @@ namespace halloween
         {
             const sf::FloatRect rect = parseAndConvertRect(context, coinJson);
             context.coins.add(util::center(rect));
+        }
+    }
+
+    void LevelFileLoader::parseGhostLayer(Context & context, Json & json)
+    {
+        context.ghosts.clearSpawnPoints();
+
+        for (Json & ghostJson : json["objects"])
+        {
+            const sf::FloatRect rect = parseAndConvertRect(context, ghostJson);
+            context.ghosts.addSpawnPoint(context, util::center(rect));
         }
     }
 

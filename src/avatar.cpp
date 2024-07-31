@@ -5,6 +5,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "ghost.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
 #include "missile.hpp"
@@ -260,6 +261,7 @@ namespace halloween
 
         m_sprite.move(moveX, 0.0f);
         context.coins.move({ moveX, 0.0f });
+        context.ghosts.move({ moveX, 0.0f });
     }
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)

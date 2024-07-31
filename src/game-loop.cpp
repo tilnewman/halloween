@@ -80,6 +80,7 @@ namespace halloween
         m_layout.setup(m_context, m_window.getSize());
         m_missiles.setup(m_settings);
         m_coins.setup(m_settings);
+        m_ghosts.setup(m_settings);
         m_avatar.setup(m_settings);
         m_pauseScreen.setup(m_window.getSize(), m_media);
         m_infoRegion.setup(m_context);
