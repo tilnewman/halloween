@@ -25,8 +25,8 @@ namespace halloween
 
         // frames per second
         const float frame_rate = 60;
-        const bool will_display_fps = true;
-        const bool will_display_fps_graph = true;
+        const bool will_display_fps = false;
+        const bool will_display_fps_graph = false;
 
         // movement speeds and accelerations
         const sf::Vector2f gravity_acc = { 0.0f, 25.0f };
