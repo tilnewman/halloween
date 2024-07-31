@@ -19,6 +19,7 @@ namespace halloween
 {
     struct Level;
     class Coins;
+    class Slimes;
     class Ghosts;
     class Avatar;
     class Missiles;
@@ -46,6 +47,7 @@ namespace halloween
             Level & lev,
             Missiles & mis,
             Coins & con,
+            Slimes & sli,
             Ghosts & gho,
             InfoRegion & inf)
             : settings(set)
@@ -61,6 +63,7 @@ namespace halloween
             , level(lev)
             , missiles(mis)
             , coins(con)
+            , slimes(sli)
             , ghosts(gho)
             , info_region(inf)
             , is_paused(false)
@@ -80,6 +83,7 @@ namespace halloween
         Level & level;
         Missiles & missiles;
         Coins & coins;
+        Slimes & slimes;
         Ghosts & ghosts;
         InfoRegion & info_region;
 

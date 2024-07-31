@@ -18,6 +18,7 @@
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
+#include "slime.hpp"
 #include "sound-player.hpp"
 
 #include <sstream>
@@ -186,6 +187,7 @@ namespace halloween
         context.missiles.update(context, frameTimeSec);
         context.coins.update(context, frameTimeSec);
         context.ghosts.update(context, frameTimeSec);
+        context.slimes.update(context, frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)
@@ -232,6 +234,7 @@ namespace halloween
         context.missiles.draw(target, states);
         context.coins.draw(target, states);
         context.avatar.draw(target, states);
+        context.slimes.draw(target, states);
         context.info_region.draw(target, states);
     }
 

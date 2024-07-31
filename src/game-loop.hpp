@@ -17,6 +17,7 @@
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "slime.hpp"
 #include "sound-player.hpp"
 #include "states.hpp"
 #include "stats-display.hpp"
@@ -60,6 +61,7 @@ namespace halloween
         Level m_level;
         Missiles m_missiles;
         Coins m_coins;
+        Slimes m_slimes;
         Ghosts m_ghosts;
         InfoRegion m_infoRegion;
 

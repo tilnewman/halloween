@@ -27,6 +27,7 @@ namespace halloween
         , m_level()
         , m_missiles()
         , m_coins()
+        , m_slimes()
         , m_ghosts()
         , m_infoRegion()
         , m_delayLoopCounts()
@@ -47,6 +48,7 @@ namespace halloween
               m_level,
               m_missiles,
               m_coins,
+              m_slimes,
               m_ghosts,
               m_infoRegion)
     {}
@@ -80,6 +82,7 @@ namespace halloween
         m_layout.setup(m_context, m_window.getSize());
         m_missiles.setup(m_settings);
         m_coins.setup(m_settings);
+        m_slimes.setup(m_settings);
         m_ghosts.setup(m_settings);
         m_avatar.setup(m_settings);
         m_pauseScreen.setup(m_window.getSize(), m_media);
