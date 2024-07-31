@@ -22,7 +22,7 @@ namespace util
 
     //
     // Slides a value from zero to one using smooth sin() motion.
-    // Motion is fastest (bounce-like) when START_AT=0.5.
+    // Motion is fastest (bounce-like) when startAt=0.5.
     // Will not work with negative speeds or update(...).
     //
     template <typename T = float>
@@ -38,35 +38,35 @@ namespace util
             , radians_(0.0)
         {}
 
-        explicit SliderRatio(const T SPEED, const T START_AT = T(0))
+        explicit SliderRatio(const T speed, const T startAt = T(0))
             : isMoving_(true)
             , speed_(0.0)
             , value_(0.0)
             , radians_(0.0)
         {
-            restart(SPEED, START_AT);
+            restart(speed, startAt);
         }
 
         T radians() const { return radians_; }
         T value() const { return value_; }
         T speed() const { return speed_; }
-        void speed(const T NEW_SPEED) { speed_ = NEW_SPEED; }
+        void speed(const T newSpeed) { speed_ = newSpeed; }
         bool isMoving() const { return isMoving_; }
         void stop() { isMoving_ = false; }
 
-        void restart(const T SPEED, const T START_AT = T(0))
+        void restart(const T speed, const T startAt = T(0))
         {
-            speed_ = SPEED;
-            value_ = std::clamp(START_AT, T(0), T(1));
+            speed_ = speed;
+            value_ = std::clamp(startAt, T(0), T(1));
             radians_ = (radiansFrom_ + (T(3.1415926) * value_));
             update(T(0));
         }
 
-        T update(const T ADJUSTMENT)
+        T update(const T adjustment)
         {
             if (isMoving_)
             {
-                radians_ += (ADJUSTMENT * speed_);
+                radians_ += (adjustment * speed_);
                 value_ = static_cast<float>((T(2.0) - (sin(radians_) + T(1))) * T(0.5));
                 value_ = std::clamp(value_, T(0), T(1));
 
@@ -91,7 +91,7 @@ namespace util
     };
 
     //
-    // Slides Value() over [FROM, TO] smoothly using sine motion and then stops.
+    // Slides Value() over [from, to] smoothly using sine motion and then stops.
     //
     template <typename Value_t, typename Math_t = float>
     class SliderFromTo
@@ -110,14 +110,14 @@ namespace util
             , slider_()
         {}
 
-        SliderFromTo(const Value_t FROM, const Value_t TO, const Math_t SPEED)
-            : from_(FROM)
-            , to_(TO)
-            , max_(util::max(FROM, TO))
-            , min_(util::min(FROM, TO))
-            , diff_(TO - FROM)
-            , speed_(SPEED)
-            , value_(FROM)
+        SliderFromTo(const Value_t from, const Value_t to, const Math_t speed)
+            : from_(from)
+            , to_(to)
+            , max_(util::max(from, to))
+            , min_(util::min(from, to))
+            , diff_(to - from)
+            , speed_(speed)
+            , value_(from)
             , slider_(speed_)
         {}
 
@@ -130,10 +130,10 @@ namespace util
         void stop() { slider_.stop(); }
         Math_t ratio() const { return slider_.value(); }
 
-        Value_t update(const Math_t ADJUSTMENT)
+        Value_t update(const Math_t adjustment)
         {
-            const Math_t RATIO = slider_.update(ADJUSTMENT);
-            value_ = (from_ + static_cast<Value_t>(static_cast<Math_t>(diff_ * RATIO)));
+            const Math_t ratio = slider_.update(adjustment);
+            value_ = (from_ + static_cast<Value_t>(static_cast<Math_t>(diff_ * ratio)));
             value_ = std::clamp(value_, min_, max_);
             return value_;
         }
@@ -150,7 +150,7 @@ namespace util
     };
 
     //
-    // Slides Value() back and forth over [FROM, TO] smoothly using sine motion.
+    // Slides Value() back and forth over [from, to] smoothly using sine motion.
     //
     template <typename Value_t, typename Math_t = float>
     class SliderOscillator
@@ -162,39 +162,39 @@ namespace util
             , slider_()
         {}
 
-        // Use this constructor to start Value() at FROM.
-        SliderOscillator(const Value_t FROM, const Value_t TO, const Math_t SPEED)
+        // Use this constructor to start Value() at from.
+        SliderOscillator(const Value_t from, const Value_t to, const Math_t speed)
             : from_(Value_t(0))
             , to_(Value_t(0))
             , slider_()
         {
-            restart(FROM, TO, SPEED, FROM);
+            restart(from, to, speed, from);
         }
 
         // Use this constructor if you want to specify the starting value.
         SliderOscillator(
-            const Value_t FROM, const Value_t TO, const Math_t SPEED, const Value_t START_AT)
+            const Value_t from, const Value_t to, const Math_t speed, const Value_t startAt)
             : from_(Value_t(0))
             , to_(Value_t(0))
             , slider_()
         {
-            restart(FROM, TO, SPEED, START_AT);
+            restart(from, to, speed, startAt);
         }
 
         Math_t radians() const { return slider_.radians(); }
         Value_t from() const { return from_; }
         Value_t to() const { return to_; }
         Math_t speed() const { return slider_.speed(); }
-        void speed(const Math_t NEW_SPEED) { slider_.speed(NEW_SPEED); }
+        void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
         Value_t value() const { return slider_.value(); }
         bool isMoving() const { return slider_.isMoving(); }
         void stop() { slider_.stop(); }
 
-        Value_t update(const Math_t ADJUSTMENT)
+        Value_t update(const Math_t adjustment)
         {
             if (slider_.isMoving())
             {
-                slider_.update(ADJUSTMENT);
+                slider_.update(adjustment);
 
                 if (!slider_.isMoving())
                 {
@@ -212,20 +212,20 @@ namespace util
             return slider_.value();
         }
 
-        void restart(
-            const Value_t FROM, const Value_t TO, const Math_t SPEED, const Value_t START_AT)
+        void
+            restart(const Value_t from, const Value_t to, const Math_t speed, const Value_t startAt)
         {
-            from_ = FROM;
-            to_ = TO;
+            from_ = from;
+            to_ = to;
 
-            // If StartAtClamp() set value_ to TO then start reversed
-            if (isRealClose(START_AT, TO))
+            // If StartAtClamp() set value_ to to then start reversed
+            if (isRealClose(startAt, to))
             {
-                slider_ = SliderFromTo<Value_t, Math_t>(to_, from_, SPEED);
+                slider_ = SliderFromTo<Value_t, Math_t>(to_, from_, speed);
             }
             else
             {
-                slider_ = SliderFromTo<Value_t, Math_t>(START_AT, TO, SPEED);
+                slider_ = SliderFromTo<Value_t, Math_t>(startAt, to, speed);
             }
         }
 
@@ -235,7 +235,7 @@ namespace util
     };
 
     //
-    // Slides between random locations over [FROM, TO]
+    // Slides between random locations over [from, to]
     //
     template <typename Value_t, typename Math_t = float>
     class SliderDrift
@@ -249,19 +249,19 @@ namespace util
 
         SliderDrift(
             const Random & random,
-            const std::pair<Value_t, Value_t> & VALUE_RANGE,
-            const std::pair<Math_t, Math_t> & SPEED_RANGE)
-            : valueRange_(VALUE_RANGE)
-            , speedRange_(SPEED_RANGE)
+            const std::pair<Value_t, Value_t> & valueRange,
+            const std::pair<Math_t, Math_t> & speedRange)
+            : valueRange_(valueRange)
+            , speedRange_(speedRange)
             , slider_(
-                  random.fromTo(VALUE_RANGE.first, VALUE_RANGE.second),
-                  random.fromTo(VALUE_RANGE.first, VALUE_RANGE.second),
+                  random.fromTo(valueRange.first, valueRange.second),
+                  random.fromTo(valueRange.first, valueRange.second),
                   random.fromTo(speedRange_.first, speedRange_.second))
         {}
 
-        void update(const Random & random, const Math_t ADJUSTMENT)
+        void update(const Random & random, const Math_t adjustment)
         {
-            slider_.update(ADJUSTMENT);
+            slider_.update(adjustment);
 
             if (!slider_.isMoving())
             {
@@ -270,7 +270,7 @@ namespace util
         }
 
         Math_t speed() const { return slider_.speed(); }
-        void speed(const Math_t NEW_SPEED) { slider_.speed(NEW_SPEED); }
+        void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
         Value_t value() const { return slider_.value(); }
         bool isMoving() const { return slider_.isMoving(); }
         void stop() { slider_.stop(); }
