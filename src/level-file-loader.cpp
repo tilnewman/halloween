@@ -10,6 +10,7 @@
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
+#include "slime.hpp"
 
 #include <exception>
 #include <filesystem>
@@ -117,6 +118,14 @@ namespace halloween
             else if (layerName == "ghost")
             {
                 parseGhostLayer(context, jsonLayer);
+            }
+            else if (layerName == "slime-green")
+            {
+                parseSlimeGreenLayer(context, jsonLayer);
+            }
+            else if (layerName == "slime-orange")
+            {
+                parseSlimeOrangeLayer(context, jsonLayer);
             }
             else
             {
@@ -230,6 +239,28 @@ namespace halloween
         {
             const sf::FloatRect rect = parseAndConvertRect(context, ghostJson);
             context.ghosts.addSpawnPoint(context, util::center(rect));
+        }
+    }
+
+    void LevelFileLoader::parseSlimeGreenLayer(Context & context, Json & json)
+    {
+        context.slimes.clearGreenRects();
+
+        for (Json & slimeJson : json["objects"])
+        {
+            const sf::FloatRect rect = parseAndConvertRect(context, slimeJson);
+            context.slimes.addGreenRect(rect);
+        }
+    }
+
+    void LevelFileLoader::parseSlimeOrangeLayer(Context & context, Json & json)
+    {
+        context.slimes.clearOrangeRects();
+
+        for (Json & slimeJson : json["objects"])
+        {
+            const sf::FloatRect rect = parseAndConvertRect(context, slimeJson);
+            context.slimes.addOrangeRect(rect);
         }
     }
 

@@ -13,6 +13,7 @@
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
+#include "slime.hpp"
 #include "sound-player.hpp"
 #include "states.hpp"
 
@@ -262,6 +263,7 @@ namespace halloween
         m_sprite.move(moveX, 0.0f);
         context.coins.move({ moveX, 0.0f });
         context.ghosts.move({ moveX, 0.0f });
+        context.slimes.move({ moveX, 0.0f });
     }
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)

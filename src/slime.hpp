@@ -17,11 +17,17 @@ namespace halloween
 
     struct Slime
     {
-        Slime(const bool isOrange)
+        Slime(
+            const bool isOrange,
+            const bool isMovingLeft,
+            const sf::FloatRect & range,
+            const float spd)
             : is_alive(true)
             , is_orange(isOrange)
-            , is_moving_left(true)
+            , is_moving_left(isMovingLeft)
             , texture_index(0)
+            , rect(range)
+            , speed(spd)
             , sprite()
         {}
 
@@ -29,6 +35,8 @@ namespace halloween
         bool is_orange;
         bool is_moving_left;
         std::size_t texture_index;
+        sf::FloatRect rect;
+        float speed;
         sf::Sprite sprite;
     };
 
@@ -45,10 +53,11 @@ namespace halloween
         void clearOrangeRects() { m_orangeSpawnRects.clear(); }
         void clear() { m_slimes.clear(); }
 
+        void addAll(const Context & context);
         void addGreenRect(const sf::FloatRect & rect) { m_greenSpawnRects.push_back(rect); }
         void addOrangeRect(const sf::FloatRect & rect) { m_orangeSpawnRects.push_back(rect); }
 
-        void update(const Context &, const float frameTimeSec);
+        void update(const Context & context, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         void move(const sf::Vector2f & move);
 

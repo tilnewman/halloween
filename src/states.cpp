@@ -186,6 +186,8 @@ namespace halloween
             {
                 context.state.setChangePending(State::GameOver);
             }
+
+            context.slimes.addAll(context);
         }
     }
 

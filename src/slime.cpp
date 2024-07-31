@@ -65,6 +65,39 @@ namespace halloween
         }
     }
 
+    void Slimes::addAll(const Context & context)
+    {
+        const float speed{ 50.0f };
+
+        for (const sf::FloatRect & rect : m_greenSpawnRects)
+        {
+            Slime slime(false, context.random.boolean(), rect, speed);
+
+            slime.sprite.setTexture(m_greenTextures.at(0));
+            slime.sprite.setScale({ 0.35f, 0.35f });
+
+            const float posX{ rect.left + (rect.width / 2.0f) };
+            const float posY{ (rect.top + rect.height) - slime.sprite.getGlobalBounds().height };
+            slime.sprite.setPosition(posX, posY);
+
+            m_slimes.push_back(slime);
+        }
+
+        for (const sf::FloatRect & rect : m_orangeSpawnRects)
+        {
+            Slime slime(true, context.random.boolean(), rect, speed);
+
+            slime.sprite.setTexture(m_orangeTextures.at(0));
+            slime.sprite.setScale({ 0.5f, 0.5f });
+
+            const float posX{ rect.left + (rect.width / 2.0f) };
+            const float posY{ (rect.top + rect.height) - slime.sprite.getGlobalBounds().height };
+            slime.sprite.setPosition(posX, posY);
+
+            m_slimes.push_back(slime);
+        }
+    }
+
     void Slimes::update(const Context &, const float)
     {
         // TODO
@@ -79,7 +112,7 @@ namespace halloween
 
     void Slimes::draw(sf::RenderTarget & target, sf::RenderStates states) const
     {
-        states.blendMode = sf::BlendAdd;
+        // states.blendMode = sf::BlendAdd;
 
         for (const Slime & slime : m_slimes)
         {

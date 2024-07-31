@@ -27,22 +27,16 @@ namespace halloween
         bool load(Context & context);
 
       private:
-        static void parseLevelDetails(Context & context, Json & json);
-
-        void parseLayers(Context & context, Json & json);
-
-        void parseTileLayer(Context & context, const TileImage image, Json & json);
-
-        static void
-            parseRectLayer(Context & context, Json & json, std::vector<sf::FloatRect> & rects);
-
-        static const sf::FloatRect parseAndConvertRect(const Context & context, Json & json);
-
-        void parseSpawnLayer(Context & context, Json & json);
-
-        static void parseCoinLayer(Context & context, Json & json);
-
-        static void parseGhostLayer(Context & context, Json & json);
+        void parseLevelDetails(Context & c, Json & json);
+        void parseLayers(Context & c, Json & json);
+        void parseTileLayer(Context & c, const TileImage image, Json & json);
+        void parseRectLayer(Context & c, Json & json, std::vector<sf::FloatRect> & rects);
+        const sf::FloatRect parseAndConvertRect(const Context & c, Json & json);
+        void parseSpawnLayer(Context & c, Json & json);
+        void parseCoinLayer(Context & c, Json & json);
+        void parseGhostLayer(Context & c, Json & json);
+        void parseSlimeGreenLayer(Context & c, Json & json);
+        void parseSlimeOrangeLayer(Context & c, Json & json);
 
       private:
         std::string m_pathStr;
