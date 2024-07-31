@@ -47,12 +47,12 @@ namespace util
             restart(speed, startAt);
         }
 
-        T radians() const { return radians_; }
-        T value() const { return value_; }
-        T speed() const { return speed_; }
-        void speed(const T newSpeed) { speed_ = newSpeed; }
-        bool isMoving() const { return isMoving_; }
-        void stop() { isMoving_ = false; }
+        inline T radians() const { return radians_; }
+        inline T value() const { return value_; }
+        inline T speed() const { return speed_; }
+        inline void speed(const T newSpeed) { speed_ = newSpeed; }
+        inline bool isMoving() const { return isMoving_; }
+        inline void stop() { isMoving_ = false; }
 
         void restart(const T speed, const T startAt = T(0))
         {
@@ -67,7 +67,7 @@ namespace util
             if (isMoving_)
             {
                 radians_ += (adjustment * speed_);
-                value_ = static_cast<float>((T(2.0) - (sin(radians_) + T(1))) * T(0.5));
+                value_ = static_cast<T>((T(2.0) - (sin(radians_) + T(1))) * T(0.5));
                 value_ = std::clamp(value_, T(0), T(1));
 
                 if ((radians_ > radiansTo_) || isRealClose(radians_, radiansTo_))
@@ -86,8 +86,8 @@ namespace util
         T speed_;
         T value_;
         T radians_;
-        inline static constexpr T radiansFrom_ = (T(3.1415926) * T(0.5));
-        inline static constexpr T radiansTo_ = (T(3.1415926) * T(1.5));
+        inline static constexpr T radiansFrom_{ T(3.1415926) * T(0.5) };
+        inline static constexpr T radiansTo_{ T(3.1415926) * T(1.5) };
     };
 
     //
@@ -110,7 +110,7 @@ namespace util
             , slider_()
         {}
 
-        SliderFromTo(const Value_t from, const Value_t to, const Math_t speed)
+        explicit SliderFromTo(const Value_t from, const Value_t to, const Math_t speed)
             : from_(from)
             , to_(to)
             , max_(util::max(from, to))
@@ -121,14 +121,14 @@ namespace util
             , slider_(speed_)
         {}
 
-        Math_t radians() const { return slider_.radians(); }
-        Value_t from() const { return from_; }
-        Value_t to() const { return to_; }
-        Value_t value() const { return value_; }
-        Math_t speed() const { return speed_; }
-        bool isMoving() const { return slider_.isMoving(); }
-        void stop() { slider_.stop(); }
-        Math_t ratio() const { return slider_.value(); }
+        inline Math_t radians() const { return slider_.radians(); }
+        inline Value_t from() const { return from_; }
+        inline Value_t to() const { return to_; }
+        inline Value_t value() const { return value_; }
+        inline Math_t speed() const { return speed_; }
+        inline bool isMoving() const { return slider_.isMoving(); }
+        inline void stop() { slider_.stop(); }
+        inline Math_t ratio() const { return slider_.value(); }
 
         Value_t update(const Math_t adjustment)
         {
@@ -163,7 +163,7 @@ namespace util
         {}
 
         // Use this constructor to start Value() at from.
-        SliderOscillator(const Value_t from, const Value_t to, const Math_t speed)
+        explicit SliderOscillator(const Value_t from, const Value_t to, const Math_t speed)
             : from_(Value_t(0))
             , to_(Value_t(0))
             , slider_()
@@ -172,7 +172,7 @@ namespace util
         }
 
         // Use this constructor if you want to specify the starting value.
-        SliderOscillator(
+        explicit SliderOscillator(
             const Value_t from, const Value_t to, const Math_t speed, const Value_t startAt)
             : from_(Value_t(0))
             , to_(Value_t(0))
@@ -242,8 +242,8 @@ namespace util
     {
       public:
         SliderDrift()
-            : valueRange_(0.0f, 0.0f)
-            , speedRange_(0.0f, 0.0f)
+            : valueRange_(Value_t(0), Value_t(0))
+            , speedRange_(Math_t(0), Math_t(0))
             , slider_()
         {}
 
@@ -269,13 +269,13 @@ namespace util
             }
         }
 
-        Math_t speed() const { return slider_.speed(); }
-        void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
-        Value_t value() const { return slider_.value(); }
-        bool isMoving() const { return slider_.isMoving(); }
-        void stop() { slider_.stop(); }
+        inline Math_t speed() const { return slider_.speed(); }
+        inline void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
+        inline Value_t value() const { return slider_.value(); }
+        inline bool isMoving() const { return slider_.isMoving(); }
+        inline void stop() { slider_.stop(); }
 
-        float ratio() const
+        inline float ratio() const
         {
             return util::mapToRatio(slider_.value(), valueRange_.first, valueRange_.second);
         }
