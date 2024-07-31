@@ -34,6 +34,8 @@ namespace halloween
         const float walk_acc = 15.0f;
         const float walk_speed_limit = 5.0f;
         const float dart_speed = 1000.0f;
+        const float walk_speed_attack_reduction_ratio = 0.8f;
+        const float walk_speed_throw_reduction_ratio = 0.8f;
 
         // delay after dying so the player can see how they died
         const float death_delay_sec = 4.0f;

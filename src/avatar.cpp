@@ -297,7 +297,7 @@ namespace halloween
             // attacking in any way slows walk speed looks right
             if (Action::Run == m_action)
             {
-                m_velocity.x *= 0.8f;
+                m_velocity.x *= context.settings.walk_speed_attack_reduction_ratio;
             }
 
             setAction(Action::Attack);
@@ -336,7 +336,7 @@ namespace halloween
             // attacking in any way slowing walk speed looks right
             if (Action::Run == m_action)
             {
-                m_velocity.x *= 0.8f;
+                m_velocity.x *= context.settings.walk_speed_throw_reduction_ratio;
             }
 
             setAction(Action::Throw);
