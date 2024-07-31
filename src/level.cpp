@@ -114,6 +114,8 @@ namespace halloween
         const TileTexture & texture,
         TileLayer & layer) const
     {
+        const sf::Vector2i textureTileCount{ texture.size / size };
+
         const std::size_t totalCount =
             (static_cast<std::size_t>(count.x) * static_cast<std::size_t>(count.y));
 
@@ -139,7 +141,6 @@ namespace halloween
                 }
 
                 const int index(textureIndexOrig - texture.gid);
-                const sf::Vector2i textureTileCount{ texture.size / size };
 
                 const int texturePosX((index % textureTileCount.x) * size.x);
                 const int texturePosY((index / textureTileCount.x) * size.y);
