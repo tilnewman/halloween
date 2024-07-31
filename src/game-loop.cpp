@@ -87,8 +87,6 @@ namespace halloween
         m_avatar.setup(m_settings);
         m_pauseScreen.setup(m_window.getSize(), m_media);
         m_infoRegion.setup(m_context);
-
-        m_level.load(m_context, 1);
     }
 
     void GameLoop::frameLoop()

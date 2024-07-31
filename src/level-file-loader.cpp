@@ -20,19 +20,25 @@ namespace halloween
 {
 
     LevelFileLoader::LevelFileLoader()
-        : m_path()
+        : m_pathStr()
     {}
 
-    void LevelFileLoader::load(Context & context, const std::size_t levelNumber)
+    bool LevelFileLoader::load(Context & context)
     {
         std::stringstream fileNameSS;
-        fileNameSS << "level-" << levelNumber << ".json";
+        fileNameSS << "level-" << context.level_number << ".json";
 
-        m_path = (context.settings.media_path / "map" / fileNameSS.str()).string();
+        const std::filesystem::path path = (context.settings.media_path / "map" / fileNameSS.str());
+        if (!std::filesystem::exists(path))
+        {
+            return false;
+        }
+
+        m_pathStr = path.string();
 
         // open file
-        std::ifstream iStream(m_path);
-        M_CHECK(iStream, "Failed to open level file: \"" << m_path << "\"");
+        std::ifstream iStream(m_pathStr);
+        M_CHECK(iStream, "Failed to open level file: \"" << m_pathStr << "\"");
 
         // stream file into json parser
         Json json;
@@ -43,6 +49,8 @@ namespace halloween
         // everything else in the level file is saved in "layers"
         // which are parsed in order from back to front here, one at a time
         parseLayers(context, json);
+
+        return true;
     }
 
     void LevelFileLoader::parseLevelDetails(Context & context, Json & json)
@@ -114,13 +122,13 @@ namespace halloween
             {
                 M_LOG(
                     "WARNING:  While parsing level file \""
-                    << m_path << "\".  Ignored unknown layer named \"" << layerName << "\".");
+                    << m_pathStr << "\".  Ignored unknown layer named \"" << layerName << "\".");
             }
         }
 
         M_CHECK(
             !context.level.tiles.layers.empty(),
-            "Error Parsing Level File " << m_path << ":  Failed to read any tile image layers.");
+            "Error Parsing Level File " << m_pathStr << ":  Failed to read any tile image layers.");
     }
 
     void LevelFileLoader::parseTileLayer(Context & context, const TileImage image, Json & json)
@@ -135,7 +143,8 @@ namespace halloween
         M_CHECK(
             !layer.indexes.empty(),
             "Error Parsing Level File "
-                << m_path << ":  Failed to read tileset layer indexes for image " << image << ".");
+                << m_pathStr << ":  Failed to read tileset layer indexes for image " << image
+                << ".");
 
         context.level.tiles.layers.push_back(layer);
     }
@@ -195,11 +204,11 @@ namespace halloween
 
         M_CHECK(
             (context.level.enter_rect.width > 0.0f),
-            "Error Parsing Level File " << m_path << ":  Failed to find enter location.");
+            "Error Parsing Level File " << m_pathStr << ":  Failed to find enter location.");
 
         M_CHECK(
             (context.level.exit_rect.width > 0.0f),
-            "Error Parsing Level File " << m_path << ":  Failed to find exit location.");
+            "Error Parsing Level File " << m_pathStr << ":  Failed to find exit location.");
     }
 
     void LevelFileLoader::parseCoinLayer(Context & context, Json & json)

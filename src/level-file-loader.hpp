@@ -24,7 +24,7 @@ namespace halloween
       public:
         LevelFileLoader();
 
-        void load(Context & context, const std::size_t levelNumber);
+        bool load(Context & context);
 
       private:
         static void parseLevelDetails(Context & context, Json & json);
@@ -45,7 +45,7 @@ namespace halloween
         static void parseGhostLayer(Context & context, Json & json);
 
       private:
-        std::string m_path;
+        std::string m_pathStr;
     };
 
 } // namespace halloween

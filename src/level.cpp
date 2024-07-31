@@ -30,16 +30,28 @@ namespace halloween
         , exit_rect()
         , farthest_horiz_map_pixel(0.0f)
         , farthest_horiz_traveled(0.0f)
+        , number(0)
     {}
 
-    void Level::load(Context & context, const std::size_t levelNumber)
+    bool Level::load(Context & context)
     {
-        context.loader.load(context, levelNumber);
-        appendVertLayers(context);
-        context.avatar.setPosition(enter_rect);
-        findFarthestHorizMapPixel();
-        farthest_horiz_traveled = 0.0f;
-        // dumpInfo(levelNumber);
+        if (context.loader.load(context))
+        {
+            appendVertLayers(context);
+            context.avatar.setPosition(enter_rect);
+            findFarthestHorizMapPixel();
+            farthest_horiz_traveled = 0.0f;
+            number = context.level_number;
+            // dumpInfo(levelNumber);
+            return true;
+        }
+        else
+        {
+            tiles.reset();
+            walk_collisions.clear();
+            kill_collisions.clear();
+            return false;
+        }
     }
 
     bool Level::move(const ScreenRegions & layout, const float move)

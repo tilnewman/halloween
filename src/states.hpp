@@ -117,7 +117,7 @@ namespace halloween
 
         inline State state() const final { return m_state; }
         inline State nextState() const final { return m_nextState; }
-        void update(Context &, const float FRAME_TIME_SEC) override;
+        void update(Context &, const float frameTimeSec) override;
         bool handleEvent(Context &, const sf::Event &) override;
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
         void onEnter(Context &) override {}

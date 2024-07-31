@@ -50,6 +50,7 @@ namespace halloween
 
         void setup(const Settings & settings);
         void clearSpawnPoints();
+        void clear() { m_ghosts.clear(); }
         void addSpawnPoint(const Context & context, const sf::Vector2f & position);
         void update(const Context &, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;

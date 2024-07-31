@@ -68,6 +68,7 @@ namespace halloween
             , info_region(inf)
             , is_paused(false)
             , will_quit(false)
+            , level_number(1)
         {}
 
         const Settings & settings;
@@ -89,6 +90,7 @@ namespace halloween
 
         bool is_paused;
         bool will_quit;
+        std::size_t level_number;
     };
 
 } // namespace halloween

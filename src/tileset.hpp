@@ -69,6 +69,13 @@ namespace halloween
             layers.reserve(16);
         }
 
+        void reset()
+        {
+            layers.clear();
+            count = { 0, 0 };
+            size = { 0, 0 };
+        }
+
         sf::Vector2i count;
         sf::Vector2i size;
         std::vector<TileLayer> layers;

@@ -178,10 +178,24 @@ namespace halloween
         : StateBase(context, State::Play, State::Play)
     {}
 
-    void PlayState::onEnter(Context &) {}
+    void PlayState::onEnter(Context & context)
+    {
+        if (context.level.number != context.level_number)
+        {
+            if (!context.level.load(context))
+            {
+                context.state.setChangePending(State::GameOver);
+            }
+        }
+    }
 
     void PlayState::update(Context & context, const float frameTimeSec)
     {
+        if (context.level_number != context.level.number)
+        {
+            return;
+        }
+
         StateBase::update(context, frameTimeSec);
         context.avatar.update(context, frameTimeSec);
         context.missiles.update(context, frameTimeSec);
@@ -221,6 +235,11 @@ namespace halloween
     void PlayState::draw(
         const Context & context, sf::RenderTarget & target, sf::RenderStates & states) const
     {
+        if (context.level_number != context.level.number)
+        {
+            return;
+        }
+
         target.draw(context.media.bg_sprite, states);
 
         for (const TileLayer & layer : context.level.tiles.layers)
@@ -351,7 +370,14 @@ namespace halloween
 
     void LevelCompleteState::onEnter(Context & context) { context.audio.play("level-complete"); }
 
-    void LevelCompleteState::onExit(Context & context) { context.level.load(context, 1); }
+    void LevelCompleteState::onExit(Context & context)
+    {
+        ++context.level_number;
+        context.ghosts.clear();
+        context.slimes.clear();
+        context.missiles.clear();
+        context.coins.clear();
+    }
 
     bool LevelCompleteState::handleEvent(Context &, const sf::Event &) { return false; }
 

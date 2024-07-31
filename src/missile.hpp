@@ -41,6 +41,7 @@ namespace halloween
         void add(const sf::Vector2f & position, const bool isMovingRight);
         void update(Context &, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
+        void clear() { m_missiles.clear(); }
 
       private:
         sf::Texture m_texture;

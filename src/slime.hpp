@@ -43,7 +43,7 @@ namespace halloween
 
         void clearGreenRects() { m_greenSpawnRects.clear(); }
         void clearOrangeRects() { m_orangeSpawnRects.clear(); }
-        void clearSlimes() { m_slimes.clear(); }
+        void clear() { m_slimes.clear(); }
 
         void addGreenRect(const sf::FloatRect & rect) { m_greenSpawnRects.push_back(rect); }
         void addOrangeRect(const sf::FloatRect & rect) { m_orangeSpawnRects.push_back(rect); }

@@ -20,7 +20,7 @@ namespace halloween
     {
         Level();
 
-        void load(Context & context, const std::size_t levelNumber);
+        bool load(Context & context);
 
         bool move(const ScreenRegions & layout, const float move);
 
@@ -34,6 +34,7 @@ namespace halloween
         sf::FloatRect exit_rect;
         float farthest_horiz_map_pixel;
         float farthest_horiz_traveled;
+        std::size_t number;
 
       private:
         void findFarthestHorizMapPixel();
