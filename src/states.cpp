@@ -319,6 +319,10 @@ namespace halloween
     TitleState::TitleState(const Context & context)
         : TimedMessageState(
               context, State::Title, State::Play, "", (m_defaultMinDurationSec * 2.0f))
+        , m_text1()
+        , m_text2()
+        , m_text3()
+        , m_text4()
     {}
 
     void TitleState::onEnter(Context & context)

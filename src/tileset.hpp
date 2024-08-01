@@ -45,6 +45,7 @@ namespace halloween
             : image(TileImage::Ground) // any works here
             , indexes()
             , verts()
+            , visibleVerts()
         {
             indexes.reserve(10'000);
             verts.reserve(10'000);

@@ -14,7 +14,8 @@ namespace halloween
     {
         int player_lives = 3;
 
-        std::filesystem::path media_path;
+        // see main.cpp for where this is really set
+        std::filesystem::path media_path = { "./media" };
 
         sf::Vector2u target_screen_res = { 1920, 1080 };
 

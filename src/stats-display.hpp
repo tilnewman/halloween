@@ -172,8 +172,8 @@ namespace util
                 sf::FloatRect dataBarRect;
                 dataBarRect.left = posLeft;
                 dataBarRect.width = dataBarWidth;
-                dataBarRect.height = (m_size.y * valueRatio);
-                dataBarRect.top = (m_size.y - dataBarRect.height);
+                dataBarRect.height = (static_cast<float>(m_size.y) * valueRatio);
+                dataBarRect.top = (static_cast<float>(m_size.y) - dataBarRect.height);
 
                 dataBarRects.push_back(dataBarRect);
 
