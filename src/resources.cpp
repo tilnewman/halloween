@@ -31,7 +31,7 @@ namespace halloween
         const std::string imagePath = (settings.media_path / "image/map/").string();
 
         // background image
-        bg_texture.loadFromFile(imagePath + "background.png");
+        bg_texture.loadFromFile((settings.media_path / "image/").string() + "background.png");
         bg_texture.setSmooth(true);
 
         bg_sprite.setTexture(bg_texture);

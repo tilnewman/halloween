@@ -7,6 +7,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "floating-spirit.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-file-loader.hpp"
@@ -63,6 +64,7 @@ namespace halloween
         Coins m_coins;
         Slimes m_slimes;
         Ghosts m_ghosts;
+        FloatingSpirit m_spirit;
         InfoRegion m_infoRegion;
 
         std::vector<std::size_t> m_delayLoopCounts;

@@ -28,6 +28,7 @@ namespace halloween
     class InfoRegion;
     class PauseScreen;
     class ScreenRegions;
+    class FloatingSpirit;
     class LevelFileLoader;
     struct IStatesPending;
 
@@ -49,6 +50,7 @@ namespace halloween
             Coins & con,
             Slimes & sli,
             Ghosts & gho,
+            FloatingSpirit & flo,
             InfoRegion & inf)
             : settings(set)
             , window(win)
@@ -65,6 +67,7 @@ namespace halloween
             , coins(con)
             , slimes(sli)
             , ghosts(gho)
+            , spirit(flo)
             , info_region(inf)
             , is_paused(false)
             , will_quit(false)
@@ -86,6 +89,7 @@ namespace halloween
         Coins & coins;
         Slimes & slimes;
         Ghosts & ghosts;
+        FloatingSpirit & spirit;
         InfoRegion & info_region;
 
         bool is_paused;

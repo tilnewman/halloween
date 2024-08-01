@@ -9,6 +9,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "floating-spirit.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
@@ -199,6 +200,7 @@ namespace halloween
         }
 
         StateBase::update(context, frameTimeSec);
+        context.spirit.update(context, frameTimeSec);
         context.avatar.update(context, frameTimeSec);
         context.missiles.update(context, frameTimeSec);
         context.coins.update(context, frameTimeSec);
@@ -243,6 +245,7 @@ namespace halloween
         }
 
         target.draw(context.media.bg_sprite, states);
+        context.spirit.draw(target, states);
 
         for (const TileLayer & layer : context.level.tiles.layers)
         {

@@ -29,6 +29,7 @@ namespace halloween
         , m_coins()
         , m_slimes()
         , m_ghosts()
+        , m_spirit()
         , m_infoRegion()
         , m_delayLoopCounts()
         , m_framesPerSecond()
@@ -50,6 +51,7 @@ namespace halloween
               m_coins,
               m_slimes,
               m_ghosts,
+              m_spirit,
               m_infoRegion)
     {}
 
@@ -87,6 +89,7 @@ namespace halloween
         m_avatar.setup(m_settings);
         m_pauseScreen.setup(m_window.getSize(), m_media);
         m_infoRegion.setup(m_context);
+        m_spirit.setup(m_context);
     }
 
     void GameLoop::frameLoop()
