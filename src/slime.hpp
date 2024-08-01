@@ -36,6 +36,19 @@ namespace halloween
 
     //
 
+    struct SlimeDeathAnim
+    {
+        SlimeDeathAnim(const sf::Sprite & spr)
+            : is_visible(true)
+            , sprite(spr)
+        {}
+
+        bool is_visible;
+        sf::Sprite sprite;
+    };
+
+    //
+
     class Slimes
     {
       public:
@@ -63,6 +76,7 @@ namespace halloween
         float m_timePerTextureSec;
         float m_elapsedTimeSec;
         std::size_t m_textureCount;
+        std::vector<SlimeDeathAnim> m_deathAnims;
     };
 
 } // namespace halloween

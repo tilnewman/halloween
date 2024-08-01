@@ -29,10 +29,12 @@ namespace halloween
         , m_timePerTextureSec(0.0333f)
         , m_elapsedTimeSec(0.0f)
         , m_textureCount(30)
+        , m_deathAnims()
     {
         // probably never more than one dozen of each in a level
         m_rects.reserve(100);
         m_slimes.reserve(100);
+        m_deathAnims.reserve(100);
     }
 
     void Slimes::setup(const Settings & settings)
@@ -114,15 +116,41 @@ namespace halloween
                 }
             }
         }
+
+        // death animations
+        bool areAnyDeathAnimsFinished = false;
+        for (SlimeDeathAnim & anim : m_deathAnims)
+        {
+            anim.sprite.scale(0.8f, 0.8f);
+
+            if (anim.sprite.getScale().x < 0.01f)
+            {
+                anim.is_visible = false;
+                areAnyDeathAnimsFinished = true;
+            }
+        }
+
+        if (areAnyDeathAnimsFinished)
+        {
+            m_deathAnims.erase(
+                std::remove_if(
+                    std::begin(m_deathAnims),
+                    std::end(m_deathAnims),
+                    [](const SlimeDeathAnim & anim) { return !anim.is_visible; }),
+                std::end(m_deathAnims));
+        }
     }
 
     void Slimes::draw(sf::RenderTarget & target, sf::RenderStates states) const
     {
-        // states.blendMode = sf::BlendAdd;
-
         for (const Slime & slime : m_slimes)
         {
             target.draw(slime.sprite, states);
+        }
+
+        for (const SlimeDeathAnim & anim : m_deathAnims)
+        {
+            target.draw(anim.sprite, states);
         }
     }
 
@@ -162,6 +190,7 @@ namespace halloween
             {
                 slime.is_alive = false;
                 wereAnyKilled = true;
+                m_deathAnims.emplace_back(slime.sprite);
             }
         }
 
