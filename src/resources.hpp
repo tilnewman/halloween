@@ -39,6 +39,9 @@ namespace halloween
 
         void setup(const Settings & settings);
 
+        const sf::Text
+            makeText(unsigned int charSize, const std::string & str, const sf::Color & color) const;
+
         sf::Font font;
         sf::Text fps_text;
 

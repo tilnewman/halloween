@@ -21,6 +21,7 @@
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "state-credits.hpp"
 
 #include <sstream>
 
@@ -413,7 +414,7 @@ namespace halloween
     //
 
     GameOverState::GameOverState(const Context & context)
-        : TimedMessageState(context, State::GameOver, State::Quit, "Game Over\n\n", 4.5f)
+        : TimedMessageState(context, State::GameOver, State::Credits, "Game Over\n\n", 4.5f)
     {}
 
     void GameOverState::onEnter(Context & context) { context.audio.play("game-over"); }
@@ -480,6 +481,7 @@ namespace halloween
             case State::Pause:    { return std::make_unique<PauseState>(context);         }
             case State::Level:    { return std::make_unique<LevelCompleteState>(context); }
             case State::GameOver: { return std::make_unique<GameOverState>(context);      }
+            case State::Credits:  { return std::make_unique<StateCredits>();              }
             case State::Quit:     { return std::make_unique<QuitState>();                 }
             default:
             {

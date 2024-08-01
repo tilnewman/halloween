@@ -34,6 +34,7 @@ namespace halloween
         Pause,
         Level,
         GameOver,
+        Credits,
         Quit
     };
 
@@ -54,6 +55,7 @@ namespace halloween
                 case State::Pause:     { return "Pause";           }
                 case State::Level:     { return "Level";           }
                 case State::GameOver:  { return "GameOver";        }
+                case State::Credits:   { return "Credits";         }
                 case State::Quit:      { return "Quit";            }
                 default:               { assert(false); return ""; }
             }

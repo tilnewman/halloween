@@ -7,7 +7,7 @@
 
 #include "check-macros.hpp"
 #include "settings.hpp"
-#include "util.hpp"
+#include "sfml-util.hpp"
 
 namespace halloween
 {
@@ -56,6 +56,15 @@ namespace halloween
         object_texture2.texture.setSmooth(settings.will_smooth_tile_textures);
         object_texture2.size = sf::Vector2i(object_texture2.texture.getSize());
         object_texture2.gid = 257;
+    }
+
+    const sf::Text Resources::makeText(
+        unsigned int charSize, const std::string & str, const sf::Color & color) const
+    {
+        sf::Text text(str, font, charSize);
+        text.setFillColor(color);
+        util::setOriginToPosition(text);
+        return text;
     }
 
 } // namespace halloween
