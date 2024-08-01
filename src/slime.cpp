@@ -67,10 +67,10 @@ namespace halloween
 
     void Slimes::addAll(const Context & context)
     {
-        const float speed{ 50.0f };
-
         for (const sf::FloatRect & rect : m_greenSpawnRects)
         {
+            const float speed{ context.random.fromTo(20.0f, 50.0f) };
+
             Slime slime(true, context.random.boolean(), rect, speed);
 
             slime.texture_index = context.random.index(m_greenTextures);
@@ -86,6 +86,8 @@ namespace halloween
 
         for (const sf::FloatRect & rect : m_orangeSpawnRects)
         {
+            const float speed{ context.random.fromTo(20.0f, 50.0f) };
+
             Slime slime(false, context.random.boolean(), rect, speed);
 
             slime.texture_index = context.random.index(m_orangeTextures);
@@ -102,6 +104,15 @@ namespace halloween
 
     void Slimes::update(const Context &, const float frameTimeSec)
     {
+        // remove any dead
+        m_slimes.erase(
+            std::remove_if(
+                std::begin(m_slimes),
+                std::end(m_slimes),
+                [](const Slime & slime) { return !slime.is_alive; }),
+            std::end(m_slimes));
+
+        // animate
         m_elapsedTimeSec += frameTimeSec;
         if (m_elapsedTimeSec > m_timePerTextureSec)
         {
@@ -126,12 +137,30 @@ namespace halloween
             m_elapsedTimeSec -= m_timePerTextureSec;
         }
 
-        m_slimes.erase(
-            std::remove_if(
-                std::begin(m_slimes),
-                std::end(m_slimes),
-                [](const Slime & slime) { return !slime.is_alive; }),
-            std::end(m_slimes));
+        // move
+        for (Slime & slime : m_slimes)
+        {
+            const float stride{ slime.speed * frameTimeSec };
+
+            if (slime.is_moving_left)
+            {
+                slime.sprite.move(-stride, 0.0f);
+
+                if (slime.sprite.getGlobalBounds().left < slime.rect.left)
+                {
+                    slime.is_moving_left = !slime.is_moving_left;
+                }
+            }
+            else
+            {
+                slime.sprite.move(stride, 0.0f);
+
+                if (util::right(slime.sprite.getGlobalBounds()) > util::right(slime.rect))
+                {
+                    slime.is_moving_left = !slime.is_moving_left;
+                }
+            }
+        }
     }
 
     void Slimes::draw(sf::RenderTarget & target, sf::RenderStates states) const
@@ -159,6 +188,7 @@ namespace halloween
         for (Slime & slime : m_slimes)
         {
             slime.sprite.move(move);
+            slime.rect.left += move.x;
         }
     }
 
