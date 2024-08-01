@@ -45,7 +45,7 @@ namespace halloween
         // this will cause minor artifacts and I can't tell the diff in quality anyway
         bool will_smooth_tile_textures = false;
 
-        bool will_show_coin_animations = false;
+        bool will_show_coin_animations = true;
         bool will_show_floating_spirit = false;
     };
 
