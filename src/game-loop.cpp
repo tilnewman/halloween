@@ -5,6 +5,7 @@
 #include "check-macros.hpp"
 #include "sfml-util.hpp"
 
+#include <iostream>
 #include <sstream>
 
 #include <SFML/Window/Event.hpp>
@@ -74,7 +75,7 @@ namespace halloween
 
         m_window.create(videoMode, "Halloween", sf::Style::Fullscreen);
         M_CHECK(m_window.isOpen(), "Could not open graphics window.");
-        M_LOG("resolution is " << m_window.getSize());
+        std::cout << "resolution is " << m_window.getSize() << std::endl;
 
         m_audio.mediaPath(m_settings.media_path / "audio");
         m_audio.loadAll();
