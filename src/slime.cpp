@@ -23,75 +23,43 @@ namespace halloween
 {
 
     Slimes::Slimes()
-        : m_greenTextures()
-        , m_orangeTextures()
-        , m_greenSpawnRects()
-        , m_orangeSpawnRects()
+        : m_textures()
+        , m_rects()
         , m_slimes()
         , m_timePerTextureSec(0.0333f)
         , m_elapsedTimeSec(0.0f)
         , m_textureCount(30)
     {
         // probably never more than one dozen of each in a level
-        m_greenSpawnRects.reserve(100);
-        m_orangeSpawnRects.reserve(100);
+        m_rects.reserve(100);
         m_slimes.reserve(100);
     }
 
     void Slimes::setup(const Settings & settings)
     {
-        m_greenTextures.resize(m_textureCount);
+        m_textures.resize(m_textureCount);
         for (std::size_t i(0); i < m_textureCount; ++i)
         {
             std::string str;
-            str = (settings.media_path / "image/slime-green" / "slime-green-").string();
+            str = (settings.media_path / "image/slime" / "slime-").string();
             str += std::to_string(i);
             str += ".png";
 
-            m_greenTextures.at(i).loadFromFile(str);
-            m_greenTextures.at(i).setSmooth(true);
-        }
-
-        m_orangeTextures.resize(m_textureCount);
-        for (std::size_t i(0); i < m_textureCount; ++i)
-        {
-            std::string str;
-            str = (settings.media_path / "image/slime-orange" / "slime-orange-").string();
-            str += std::to_string(i);
-            str += ".png";
-
-            m_orangeTextures.at(i).loadFromFile(str);
-            m_orangeTextures.at(i).setSmooth(true);
+            m_textures.at(i).loadFromFile(str);
+            m_textures.at(i).setSmooth(true);
         }
     }
 
-    void Slimes::addAll(const Context & context)
+    void Slimes::spawnAll(const Context & context)
     {
-        for (const sf::FloatRect & rect : m_greenSpawnRects)
+        for (const sf::FloatRect & rect : m_rects)
         {
             const float speed{ context.random.fromTo(20.0f, 50.0f) };
 
-            Slime slime(true, context.random.boolean(), rect, speed);
+            Slime slime(context.random.boolean(), rect, speed);
 
-            slime.texture_index = context.random.index(m_greenTextures);
-            slime.sprite.setTexture(m_greenTextures.at(slime.texture_index));
-            slime.sprite.setScale({ 0.35f, 0.35f });
-
-            const float posX{ rect.left + (rect.width / 2.0f) };
-            const float posY{ (rect.top + rect.height) - slime.sprite.getGlobalBounds().height };
-            slime.sprite.setPosition(posX, posY);
-
-            m_slimes.push_back(slime);
-        }
-
-        for (const sf::FloatRect & rect : m_orangeSpawnRects)
-        {
-            const float speed{ context.random.fromTo(20.0f, 50.0f) };
-
-            Slime slime(false, context.random.boolean(), rect, speed);
-
-            slime.texture_index = context.random.index(m_orangeTextures);
-            slime.sprite.setTexture(m_orangeTextures.at(slime.texture_index));
+            slime.texture_index = context.random.index(m_textures);
+            slime.sprite.setTexture(m_textures.at(slime.texture_index));
             slime.sprite.setScale({ 0.5f, 0.5f });
 
             const float posX{ rect.left + (rect.width / 2.0f) };
@@ -124,14 +92,7 @@ namespace halloween
                     slime.texture_index = 0;
                 }
 
-                if (slime.is_green)
-                {
-                    slime.sprite.setTexture(m_greenTextures.at(slime.texture_index));
-                }
-                else
-                {
-                    slime.sprite.setTexture(m_orangeTextures.at(slime.texture_index));
-                }
+                slime.sprite.setTexture(m_textures.at(slime.texture_index));
             }
 
             m_elapsedTimeSec -= m_timePerTextureSec;
@@ -175,12 +136,7 @@ namespace halloween
 
     void Slimes::move(const sf::Vector2f & move)
     {
-        for (sf::FloatRect & rect : m_greenSpawnRects)
-        {
-            rect.left += move.x;
-        }
-
-        for (sf::FloatRect & rect : m_orangeSpawnRects)
+        for (sf::FloatRect & rect : m_rects)
         {
             rect.left += move.x;
         }

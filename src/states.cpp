@@ -187,7 +187,7 @@ namespace halloween
                 context.state.setChangePending(State::GameOver);
             }
 
-            context.slimes.addAll(context);
+            context.slimes.spawnAll(context);
         }
     }
 

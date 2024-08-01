@@ -35,8 +35,7 @@ namespace halloween
         void parseSpawnLayer(Context & c, Json & json);
         void parseCoinLayer(Context & c, Json & json);
         void parseGhostLayer(Context & c, Json & json);
-        void parseSlimeGreenLayer(Context & c, Json & json);
-        void parseSlimeOrangeLayer(Context & c, Json & json);
+        void parseSlimeLayer(Context & c, Json & json);
 
       private:
         std::string m_pathStr;

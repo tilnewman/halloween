@@ -119,13 +119,9 @@ namespace halloween
             {
                 parseGhostLayer(context, jsonLayer);
             }
-            else if (layerName == "slime-green")
+            else if (layerName == "slime")
             {
-                parseSlimeGreenLayer(context, jsonLayer);
-            }
-            else if (layerName == "slime-orange")
-            {
-                parseSlimeOrangeLayer(context, jsonLayer);
+                parseSlimeLayer(context, jsonLayer);
             }
             else
             {
@@ -242,25 +238,14 @@ namespace halloween
         }
     }
 
-    void LevelFileLoader::parseSlimeGreenLayer(Context & context, Json & json)
+    void LevelFileLoader::parseSlimeLayer(Context & context, Json & json)
     {
-        context.slimes.clearGreenRects();
+        context.slimes.clearRects();
 
         for (Json & slimeJson : json["objects"])
         {
             const sf::FloatRect rect = parseAndConvertRect(context, slimeJson);
-            context.slimes.addGreenRect(rect);
-        }
-    }
-
-    void LevelFileLoader::parseSlimeOrangeLayer(Context & context, Json & json)
-    {
-        context.slimes.clearOrangeRects();
-
-        for (Json & slimeJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, slimeJson);
-            context.slimes.addOrangeRect(rect);
+            context.slimes.addRect(rect);
         }
     }
 
