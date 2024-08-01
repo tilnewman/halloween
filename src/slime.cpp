@@ -28,7 +28,9 @@ namespace halloween
         , m_greenSpawnRects()
         , m_orangeSpawnRects()
         , m_slimes()
-        , m_timePerTextureSec(0.1f)
+        , m_timePerTextureSec(0.0333f)
+        , m_elapsedTimeSec(0.0f)
+        , m_textureCount(30)
     {
         // probably never more than one dozen of each in a level
         m_greenSpawnRects.reserve(100);
@@ -38,10 +40,8 @@ namespace halloween
 
     void Slimes::setup(const Settings & settings)
     {
-        const std::size_t textureCount = 30;
-
-        m_greenTextures.resize(textureCount);
-        for (std::size_t i(0); i < textureCount; ++i)
+        m_greenTextures.resize(m_textureCount);
+        for (std::size_t i(0); i < m_textureCount; ++i)
         {
             std::string str;
             str = (settings.media_path / "image/slime-green" / "slime-green-").string();
@@ -52,8 +52,8 @@ namespace halloween
             m_greenTextures.at(i).setSmooth(true);
         }
 
-        m_orangeTextures.resize(textureCount);
-        for (std::size_t i(0); i < textureCount; ++i)
+        m_orangeTextures.resize(m_textureCount);
+        for (std::size_t i(0); i < m_textureCount; ++i)
         {
             std::string str;
             str = (settings.media_path / "image/slime-orange" / "slime-orange-").string();
@@ -71,9 +71,10 @@ namespace halloween
 
         for (const sf::FloatRect & rect : m_greenSpawnRects)
         {
-            Slime slime(false, context.random.boolean(), rect, speed);
+            Slime slime(true, context.random.boolean(), rect, speed);
 
-            slime.sprite.setTexture(m_greenTextures.at(0));
+            slime.texture_index = context.random.index(m_greenTextures);
+            slime.sprite.setTexture(m_greenTextures.at(slime.texture_index));
             slime.sprite.setScale({ 0.35f, 0.35f });
 
             const float posX{ rect.left + (rect.width / 2.0f) };
@@ -85,9 +86,10 @@ namespace halloween
 
         for (const sf::FloatRect & rect : m_orangeSpawnRects)
         {
-            Slime slime(true, context.random.boolean(), rect, speed);
+            Slime slime(false, context.random.boolean(), rect, speed);
 
-            slime.sprite.setTexture(m_orangeTextures.at(0));
+            slime.texture_index = context.random.index(m_orangeTextures);
+            slime.sprite.setTexture(m_orangeTextures.at(slime.texture_index));
             slime.sprite.setScale({ 0.5f, 0.5f });
 
             const float posX{ rect.left + (rect.width / 2.0f) };
@@ -98,9 +100,31 @@ namespace halloween
         }
     }
 
-    void Slimes::update(const Context &, const float)
+    void Slimes::update(const Context &, const float frameTimeSec)
     {
-        // TODO
+        m_elapsedTimeSec += frameTimeSec;
+        if (m_elapsedTimeSec > m_timePerTextureSec)
+        {
+            for (Slime & slime : m_slimes)
+            {
+                ++slime.texture_index;
+                if (slime.texture_index >= m_textureCount)
+                {
+                    slime.texture_index = 0;
+                }
+
+                if (slime.is_green)
+                {
+                    slime.sprite.setTexture(m_greenTextures.at(slime.texture_index));
+                }
+                else
+                {
+                    slime.sprite.setTexture(m_orangeTextures.at(slime.texture_index));
+                }
+            }
+
+            m_elapsedTimeSec -= m_timePerTextureSec;
+        }
 
         m_slimes.erase(
             std::remove_if(

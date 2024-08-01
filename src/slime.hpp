@@ -18,12 +18,12 @@ namespace halloween
     struct Slime
     {
         Slime(
-            const bool isOrange,
+            const bool isGreen,
             const bool isMovingLeft,
             const sf::FloatRect & range,
             const float spd)
             : is_alive(true)
-            , is_orange(isOrange)
+            , is_green(isGreen)
             , is_moving_left(isMovingLeft)
             , texture_index(0)
             , rect(range)
@@ -32,7 +32,7 @@ namespace halloween
         {}
 
         bool is_alive;
-        bool is_orange;
+        bool is_green;
         bool is_moving_left;
         std::size_t texture_index;
         sf::FloatRect rect;
@@ -68,6 +68,8 @@ namespace halloween
         std::vector<sf::FloatRect> m_orangeSpawnRects;
         std::vector<Slime> m_slimes;
         float m_timePerTextureSec;
+        float m_elapsedTimeSec;
+        std::size_t m_textureCount;
     };
 
 } // namespace halloween
