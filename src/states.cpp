@@ -318,12 +318,59 @@ namespace halloween
 
     TitleState::TitleState(const Context & context)
         : TimedMessageState(
-              context,
-              State::Title,
-              State::Play,
-              "Super Lucky\nNinja Girl\nHalloween\nNightmare!",
-              (m_defaultMinDurationSec * 2.0f))
+              context, State::Title, State::Play, "", (m_defaultMinDurationSec * 2.0f))
     {}
+
+    void TitleState::onEnter(Context & context)
+    {
+        m_text1.setFont(context.media.font);
+        m_text1.setFillColor(sf::Color::White);
+        m_text1.setCharacterSize(99);
+        m_text1.setString("Super Lucky");
+
+        const sf::FloatRect wholeRect = context.layout.wholeRegion();
+
+        util::fitAndCenterInside(m_text1, util::scaleRectInPlaceCopy(wholeRect, 0.25f));
+
+        m_text2 = m_text1;
+        m_text2.setString("Ninja Girl");
+        util::setOriginToPosition(m_text2);
+
+        m_text3 = m_text1;
+        m_text3.setString("Halloween");
+        util::setOriginToPosition(m_text3);
+
+        m_text4 = m_text1;
+        m_text4.setString("Nightmare");
+        util::setOriginToPosition(m_text4);
+
+        const float vertPad{ wholeRect.height * 0.005f };
+
+        m_text1.setPosition(
+            (wholeRect.width * 0.5f) - (m_text1.getGlobalBounds().width * 0.5f),
+            (wholeRect.height * 0.25f));
+
+        m_text2.setPosition(
+            (wholeRect.width * 0.5f) - (m_text2.getGlobalBounds().width * 0.5f),
+            (util::bottom(m_text1) + vertPad));
+
+        m_text3.setPosition(
+            (wholeRect.width * 0.5f) - (m_text3.getGlobalBounds().width * 0.5f),
+            (util::bottom(m_text2) + vertPad));
+
+        m_text4.setPosition(
+            (wholeRect.width * 0.5f) - (m_text4.getGlobalBounds().width * 0.5f),
+            (util::bottom(m_text3) + vertPad));
+    }
+
+    void TitleState::draw(
+        const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+    {
+        target.draw(m_text1, states);
+        target.draw(m_text2, states);
+        target.draw(m_text3, states);
+        target.draw(m_text4, states);
+    }
 
     //
 

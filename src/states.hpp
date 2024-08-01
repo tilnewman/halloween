@@ -218,6 +218,15 @@ namespace halloween
     {
         explicit TitleState(const Context & context);
         ~TitleState() override = default;
+
+        void onEnter(Context & context) override;
+        void draw(const Context & con, sf::RenderTarget & rt, sf::RenderStates & st) const override;
+
+      private:
+        sf::Text m_text1;
+        sf::Text m_text2;
+        sf::Text m_text3;
+        sf::Text m_text4;
     };
 
     //
