@@ -26,6 +26,16 @@ namespace halloween
 
     //
 
+    struct CoinAnim
+    {
+        CoinAnim();
+
+        bool is_alive;
+        sf::Sprite sprite;
+    };
+
+    //
+
     class Coins
     {
       public:
@@ -34,10 +44,15 @@ namespace halloween
         void setup(const Settings & settings);
         void add(const sf::Vector2f & position);
         void clear();
-        void update(Context &, const float frameTimeSec);
+        void update(Context & context, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         void move(const sf::Vector2f & move);
         void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect);
+
+      private:
+        void addAnimation(const sf::Vector2f & position);
+        void updateTextures(const float frameTimeSec);
+        void updateAnimations(Context & context, const float frameTimeSec);
 
       private:
         sf::Texture m_texture;
@@ -46,6 +61,7 @@ namespace halloween
         std::vector<Coin> m_coins;
         float m_elapsedTimeSec;
         std::size_t m_textureIndex;
+        std::vector<CoinAnim> m_animations;
     };
 
 } // namespace halloween
