@@ -12,11 +12,11 @@ namespace halloween
 
     struct Settings
     {
-        sf::Vector2u target_screen_res = { 1920, 1080 };
+        int player_lives = 3;
 
         std::filesystem::path media_path;
 
-        int player_lives = 3;
+        sf::Vector2u target_screen_res = { 1920, 1080 };
 
         // display sizes
         float tile_scale = 0.75f;
@@ -41,8 +41,11 @@ namespace halloween
         // delay after dying so the player can see how they died
         float death_delay_sec = 4.0f;
 
-        // this will cause minor artifacts and I can't tell the diff in quality
+        // this will cause minor artifacts and I can't tell the diff in quality anyway
         bool will_smooth_tile_textures = false;
+
+        bool will_show_coin_animations = false;
+        bool will_show_floating_spirit = false;
     };
 
 } // namespace halloween

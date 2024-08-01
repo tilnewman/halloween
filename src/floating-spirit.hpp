@@ -24,7 +24,7 @@ namespace halloween
         void setup(const Context & context);
         inline const sf::FloatRect globalBounds() const { return m_sprite.getGlobalBounds(); }
         void update(const Context & context, const float frameTimeSec);
-        void draw(sf::RenderTarget & target, sf::RenderStates states) const;
+        void draw(const Context & con, sf::RenderTarget & target, sf::RenderStates states) const;
 
       private:
         sf::Texture m_texture;

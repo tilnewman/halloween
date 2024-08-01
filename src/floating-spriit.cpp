@@ -46,10 +46,14 @@ namespace halloween
         m_sprite.setPosition(m_drifter.position());
     }
 
-    void FloatingSpirit::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void FloatingSpirit::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
-        states.blendMode = sf::BlendAdd;
-        target.draw(m_sprite, states);
+        if (context.settings.will_show_floating_spirit)
+        {
+            states.blendMode = sf::BlendAdd;
+            target.draw(m_sprite, states);
+        }
     }
 
 } // namespace halloween

@@ -183,7 +183,7 @@ namespace halloween
                 coin.is_alive = false;
                 context.audio.play("coin");
                 context.info_region.scoreAdjust(1);
-                addAnimation(util::center(coinRect));
+                addAnimation(context, util::center(coinRect));
             }
         }
 
@@ -198,8 +198,13 @@ namespace halloween
         }
     }
 
-    void Coins::addAnimation(const sf::Vector2f & position)
+    void Coins::addAnimation(const Context & context, const sf::Vector2f & position)
     {
+        if (!context.settings.will_show_coin_animations)
+        {
+            return;
+        }
+
         CoinAnim & anim = m_animations.emplace_back();
         anim.sprite.setTexture(m_texture);
         anim.sprite.setTextureRect(m_textureCoords.at(0));

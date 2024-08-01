@@ -245,7 +245,7 @@ namespace halloween
         }
 
         target.draw(context.media.bg_sprite, states);
-        context.spirit.draw(target, states);
+        context.spirit.draw(context, target, states);
 
         for (const TileLayer & layer : context.level.tiles.layers)
         {

@@ -50,7 +50,7 @@ namespace halloween
         void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect);
 
       private:
-        void addAnimation(const sf::Vector2f & position);
+        void addAnimation(const Context & context, const sf::Vector2f & position);
         void updateTextures(const float frameTimeSec);
         void updateAnimations(Context & context, const float frameTimeSec);
 
