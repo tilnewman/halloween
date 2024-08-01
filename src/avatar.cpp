@@ -240,6 +240,7 @@ namespace halloween
         killCollisions(context);
         exitCollisions(context);
         coinCollisions(context);
+        slimeCollisions(context, isAttacking);
         respawnIfOutOfBounds(context);
     }
 
@@ -552,22 +553,13 @@ namespace halloween
     {
         const sf::FloatRect avatarRect = collisionRect();
 
-        sf::FloatRect intersection;
         for (const sf::FloatRect & coll : context.level.kill_collisions)
         {
-            if (!avatarRect.intersects(coll, intersection))
+            if (avatarRect.intersects(coll))
             {
-                continue;
+                handleDeath(context);
+                return;
             }
-
-            m_blood.start(context, m_sprite.getPosition(), m_isFacingRight);
-            setAction(Action::Dead);
-            context.audio.play("scream");
-            context.audio.stop("walk");
-            m_velocity = { 0.0f, 0.0f };
-            m_deathAnim.restart();
-            context.info_region.livesAdjust(-1);
-            return;
         }
     }
 
@@ -603,6 +595,23 @@ namespace halloween
         context.coins.collideWithAvatar(context, rect);
     }
 
+    void Avatar::slimeCollisions(Context & context, const bool isAttacking)
+    {
+        if (isAttacking)
+        {
+            if (context.slimes.attack(attackCollisionRect()))
+            {
+                context.audio.play("squish");
+                context.info_region.scoreAdjust(10);
+            }
+        }
+
+        if (context.slimes.doesCollideWithAny(collisionRect()))
+        {
+            handleDeath(context);
+        }
+    }
+
     void Avatar::respawnIfOutOfBounds(Context & context)
     {
         if (context.layout.mapRegion().intersects(collisionRect()))
@@ -612,6 +621,17 @@ namespace halloween
 
         m_velocity = { 0.0f, 0.0f };
         m_sprite.setPosition(m_sprite.getPosition().x, 0.0f);
+    }
+
+    void Avatar::handleDeath(Context & context)
+    {
+        m_blood.start(context, m_sprite.getPosition(), m_isFacingRight);
+        setAction(Action::Dead);
+        context.audio.play("scream");
+        context.audio.stop("walk");
+        m_velocity = { 0.0f, 0.0f };
+        m_deathAnim.restart();
+        context.info_region.livesAdjust(-1);
     }
 
 } // namespace halloween

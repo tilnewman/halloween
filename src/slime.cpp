@@ -72,14 +72,6 @@ namespace halloween
 
     void Slimes::update(const Context &, const float frameTimeSec)
     {
-        // remove any dead
-        m_slimes.erase(
-            std::remove_if(
-                std::begin(m_slimes),
-                std::end(m_slimes),
-                [](const Slime & slime) { return !slime.is_alive; }),
-            std::end(m_slimes));
-
         // animate
         m_elapsedTimeSec += frameTimeSec;
         if (m_elapsedTimeSec > m_timePerTextureSec)
@@ -146,6 +138,45 @@ namespace halloween
             slime.sprite.move(move);
             slime.rect.left += move.x;
         }
+    }
+
+    bool Slimes::doesCollideWithAny(const sf::FloatRect & rect) const
+    {
+        for (const Slime & slime : m_slimes)
+        {
+            if (slime.sprite.getGlobalBounds().intersects(rect))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool Slimes::attack(const sf::FloatRect & attackRect)
+    {
+        bool wereAnyKilled = false;
+        for (Slime & slime : m_slimes)
+        {
+            if (slime.sprite.getGlobalBounds().intersects(attackRect))
+            {
+                slime.is_alive = false;
+                wereAnyKilled = true;
+            }
+        }
+
+        // remove any dead
+        if (wereAnyKilled)
+        {
+            m_slimes.erase(
+                std::remove_if(
+                    std::begin(m_slimes),
+                    std::end(m_slimes),
+                    [](const Slime & slime) { return !slime.is_alive; }),
+                std::end(m_slimes));
+        }
+
+        return wereAnyKilled;
     }
 
 } // namespace halloween

@@ -32,7 +32,6 @@ namespace halloween
         Avatar();
 
         void setup(const Settings & settings);
-
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         const sf::FloatRect collisionRect() const;
         const sf::FloatRect attackCollisionRect() const;
@@ -51,8 +50,10 @@ namespace halloween
         void killCollisions(Context & context);
         void exitCollisions(Context & context) const;
         void coinCollisions(Context & context) const;
+        void slimeCollisions(Context & context, const bool isAttacking);
         void preventBacktracking(const Context & context);
         void respawnIfOutOfBounds(Context & context);
+        void handleDeath(Context & context);
 
       private:
         Blood m_blood;
