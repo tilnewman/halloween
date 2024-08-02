@@ -8,6 +8,7 @@
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "info-region.hpp"
+#include "music-player.hpp"
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
@@ -37,7 +38,7 @@ namespace halloween
 
         const sf::Color textColor(220, 220, 220);
 
-        m_nameText = context.media.makeText(70, name, textColor);
+        m_nameText = context.media.makeText(55, name, textColor);
 
         m_nameText.setPosition(
             ((screenRect.width * 0.5f) - (m_nameText.getGlobalBounds().width * 0.5f)),
@@ -104,6 +105,8 @@ namespace halloween
 
     void StateCredits::onEnter(Context & context)
     {
+        context.music.start("music.ogg", 20.0f);
+
         const sf::FloatRect screenRect = context.layout.wholeRegion();
 
         Credit & softwareCredit = m_credits.emplace_back(context, "Ziesche Til Newman", "Software");
@@ -118,6 +121,8 @@ namespace halloween
         const float vertSpacer = (screenRect.height * 0.125f);
         fontCredit.vertPosition(softwareCredit.bottom() + vertSpacer);
     }
+
+    void StateCredits::onExit(Context & context) { context.music.stop("music.ogg"); }
 
     void StateCredits::update(Context & context, const float frameTimeSec)
     {

@@ -51,6 +51,7 @@ namespace halloween
         virtual ~StateCredits() final {}
 
         void onEnter(Context & context) final;
+        void onExit(Context & context) final;
         void update(Context & context, const float frameTimeSec) final;
         void draw(const Context & con, sf::RenderTarget & tar, sf::RenderStates & sta) const final;
         bool handleEvent(Context & context, const sf::Event & event) final;

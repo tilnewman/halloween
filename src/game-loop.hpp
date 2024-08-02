@@ -13,6 +13,7 @@
 #include "level-file-loader.hpp"
 #include "level.hpp"
 #include "missile.hpp"
+#include "music-player.hpp"
 #include "pause-screen.hpp"
 #include "random.hpp"
 #include "resources.hpp"
@@ -52,6 +53,7 @@ namespace halloween
         Settings m_settings;
         util::Random m_random;
         util::SoundPlayer m_audio;
+        util::MusicPlayer m_music;
         sf::RenderWindow m_window;
         LevelFileLoader m_loader;
         Resources m_media;

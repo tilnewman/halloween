@@ -12,6 +12,7 @@ namespace sf
 namespace util
 {
     class Random;
+    class MusicPlayer;
     class SoundPlayer;
 } // namespace util
 
@@ -39,6 +40,7 @@ namespace halloween
             sf::Window & win,
             util::Random & ran,
             util::SoundPlayer & aud,
+            util::MusicPlayer & mus,
             LevelFileLoader & loa,
             Resources & res,
             ScreenRegions & scr,
@@ -56,6 +58,7 @@ namespace halloween
             , window(win)
             , random(ran)
             , audio(aud)
+            , music(mus)
             , loader(loa)
             , media(res)
             , layout(scr)
@@ -78,6 +81,7 @@ namespace halloween
         sf::Window & window;
         util::Random & random;
         util::SoundPlayer & audio;
+        util::MusicPlayer & music;
         LevelFileLoader & loader;
         Resources & media;
         ScreenRegions & layout;

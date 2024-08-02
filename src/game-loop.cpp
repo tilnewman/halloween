@@ -18,6 +18,7 @@ namespace halloween
         : m_settings(settings)
         , m_random()
         , m_audio(m_random)
+        , m_music()
         , m_window()
         , m_loader()
         , m_media()
@@ -41,6 +42,7 @@ namespace halloween
               m_window,
               m_random,
               m_audio,
+              m_music,
               m_loader,
               m_media,
               m_layout,
@@ -80,6 +82,8 @@ namespace halloween
         m_audio.mediaPath(m_settings.media_path / "audio");
         m_audio.loadAll();
         m_audio.willLoop("walk", true);
+
+        m_music.setup(m_settings.media_path / "audio");
 
         m_media.setup(m_settings);
         m_layout.setup(m_context, m_window.getSize());
