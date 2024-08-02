@@ -253,7 +253,7 @@ namespace halloween
         m_text4.setString("Nightmare");
         util::setOriginToPosition(m_text4);
 
-        const float vertPad{ wholeRect.height * 0.005f };
+        const float vertPad{ wholeRect.height * 0.015f };
 
         m_text1.setPosition(
             (wholeRect.width * 0.5f) - (m_text1.getGlobalBounds().width * 0.5f),
