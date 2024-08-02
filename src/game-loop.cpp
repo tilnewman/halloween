@@ -81,6 +81,8 @@ namespace halloween
         M_CHECK(m_window.isOpen(), "Could not open graphics window.");
         std::cout << "resolution is " << m_window.getSize() << std::endl;
 
+        m_window.setMouseCursorVisible(false);
+
         m_audio.mediaPath(m_settings.media_path / "sfx");
         m_audio.loadAll();
         m_audio.willLoop("walk", true);
