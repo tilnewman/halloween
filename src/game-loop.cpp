@@ -104,14 +104,13 @@ namespace halloween
         m_perSecondClock.restart();
 
         sf::Clock frameClock;
-        sf::Clock actualClock;
         while (m_window.isOpen() && !m_context.will_quit)
         {
             frameClock.restart();
 
             handlePerSecondTasks();
             handleEvents();
-            update(actualClock.restart().asSeconds());
+            update(1.0f / static_cast<float>(m_settings.frame_rate));
             m_stateMachine.changeIfPending(m_context);
             draw();
 
