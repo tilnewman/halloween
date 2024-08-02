@@ -185,16 +185,18 @@ namespace halloween
             {
                 const sf::Vertex topLeftVert = layer.verts[vertIndex++];
                 const sf::Vertex topRightVert = layer.verts[vertIndex++];
-                const sf::Vertex botLeftVert = layer.verts[vertIndex++];
                 const sf::Vertex botRightVert = layer.verts[vertIndex++];
+                const sf::Vertex botLeftVert = layer.verts[vertIndex++];
 
                 if (layout.mapRegion().contains(topLeftVert.position) ||
-                    layout.mapRegion().contains(botRightVert.position))
+                    layout.mapRegion().contains(topRightVert.position) ||
+                    layout.mapRegion().contains(botRightVert.position) ||
+                    layout.mapRegion().contains(botLeftVert.position))
                 {
                     layer.visibleVerts.push_back(topLeftVert);
                     layer.visibleVerts.push_back(topRightVert);
-                    layer.visibleVerts.push_back(botLeftVert);
                     layer.visibleVerts.push_back(botRightVert);
+                    layer.visibleVerts.push_back(botLeftVert);
                 }
             }
         }
