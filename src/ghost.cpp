@@ -28,8 +28,8 @@ namespace halloween
         , m_texture3()
         , m_spawnPoints()
         , m_ghosts()
-        , m_spawnMinTimeSec(3.0f)
-        , m_spawnMaxTimeSec(6.0f)
+        , m_spawnMinTimeSec(6.0f)
+        , m_spawnMaxTimeSec(12.0f)
         , m_floatSpeedMin(50.0f)
         , m_floatSpeedMax(100.0f)
     {
