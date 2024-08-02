@@ -320,7 +320,30 @@ namespace halloween
         : TimedMessageState(context, State::GameOver, State::Credits, "Game Over\n\n", 4.5f)
     {}
 
-    void GameOverState::onEnter(Context & context) { context.audio.play("game-over"); }
+    void GameOverState::onEnter(Context & context)
+    {
+        context.audio.play("game-over");
+
+        m_scoreText = m_text;
+        m_scoreText.scale(0.5f, 0.5f);
+
+        std::string str("Your Score: ");
+        str += std::to_string(context.info_region.score());
+        m_scoreText.setString(str);
+
+        util::setOriginToPosition(m_scoreText);
+
+        m_scoreText.setPosition(
+            ((context.layout.wholeSize().x * 0.5f) - (m_scoreText.getGlobalBounds().width * 0.5f)),
+            util::bottom(m_text));
+    }
+
+    void GameOverState::draw(
+        const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+    {
+        target.draw(m_text, states);
+        target.draw(m_scoreText, states);
+    }
 
     void GameOverState::onExit(Context & context) { context.audio.stopAll(); }
 

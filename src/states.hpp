@@ -239,8 +239,12 @@ namespace halloween
         explicit GameOverState(const Context & context);
         ~GameOverState() override = default;
 
-        void onEnter(Context &) override;
-        void onExit(Context &) override;
+        void onEnter(Context & context) override;
+        void onExit(Context & context) override;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const override;
+
+      private:
+        sf::Text m_scoreText;
     };
 
     //
