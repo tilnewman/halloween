@@ -3,9 +3,7 @@
 //
 // states.hpp
 //
-#include "check-macros.hpp"
-#include "context.hpp"
-
+#include <cassert>
 #include <memory>
 #include <optional>
 #include <string>
@@ -13,12 +11,16 @@
 
 #include <SFML/Graphics/Text.hpp>
 
+//
+
 namespace sf
 {
     class Event;
     class RenderTarget;
     class RenderStates;
 } // namespace sf
+
+//
 
 namespace halloween
 {
@@ -117,8 +119,8 @@ namespace halloween
         StateBase & operator=(const StateBase &) = delete;
         StateBase & operator=(StateBase &&) = delete;
 
-        inline State state() const final { return m_state; }
-        inline State nextState() const final { return m_nextState; }
+        State state() const final { return m_state; }
+        State nextState() const final { return m_nextState; }
         void update(Context &, const float frameTimeSec) override;
         bool handleEvent(Context &, const sf::Event &) override;
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
@@ -143,7 +145,7 @@ namespace halloween
         float m_minDurationSec; // any negative means this value is ignored
         sf::Text m_text;
 
-        static inline const sf::Color m_textColorDefault{ sf::Color(200, 200, 200) };
+        static inline const sf::Color m_textColorDefault{ sf::Color(220, 220, 220) };
         static inline const float m_defaultMinDurationSec{ 1.5f };
     };
 
@@ -191,7 +193,7 @@ namespace halloween
         void onEnter(Context &) override;
         void onExit(Context &) override;
         bool handleEvent(Context &, const sf::Event &) override;
-        void update(Context &, const float FRAME_TIME_SEC) override;
+        void update(Context &, const float frameTimeSec) override;
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
     };
 
@@ -208,7 +210,7 @@ namespace halloween
 
         ~TimedMessageState() override = default;
 
-        void update(Context &, const float FRAME_TIME_SEC) override;
+        void update(Context &, const float frameTimeSec) override;
         bool handleEvent(Context &, const sf::Event & event) override;
 
       protected:
@@ -241,7 +243,7 @@ namespace halloween
 
         void onEnter(Context &) override;
         void onExit(Context &) override;
-        void update(Context &, const float FRAME_TIME_SEC) override;
+        void update(Context &, const float frameTimeSec) override;
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
     };
 
@@ -266,52 +268,6 @@ namespace halloween
         void onEnter(Context &) override;
         void onExit(Context &) override;
         bool handleEvent(Context &, const sf::Event & event) override;
-    };
-
-    //
-
-    struct IStatesPending
-    {
-        virtual ~IStatesPending() = default;
-
-        virtual bool isChangePending() const = 0;
-        virtual StateOpt_t getChangePending() const = 0;
-        virtual void setChangePending(const State state) = 0;
-    };
-
-    //
-
-    class StateMachine : public IStatesPending
-    {
-      public:
-        StateMachine();
-        ~StateMachine() override = default;
-
-        // prevent all copy and assignment
-        StateMachine(const StateMachine &) = delete;
-        StateMachine(StateMachine &&) = delete;
-        //
-        StateMachine & operator=(const StateMachine &) = delete;
-        StateMachine & operator=(StateMachine &&) = delete;
-
-        void reset();
-
-        inline State stateEnum() const { return m_stateUPtr->state(); }
-
-        inline IState & state() { return *m_stateUPtr; }
-        inline const IState & state() const { return *m_stateUPtr; }
-
-        inline bool isChangePending() const override { return m_changePendingOpt.has_value(); }
-        inline StateOpt_t getChangePending() const override { return m_changePendingOpt; }
-        void setChangePending(const State state) override;
-        void changeIfPending(Context & context);
-
-      private:
-        static IStateUPtr_t makeState(Context & context, const State state);
-
-      private:
-        IStateUPtr_t m_stateUPtr;
-        StateOpt_t m_changePendingOpt;
     };
 
 } // namespace halloween

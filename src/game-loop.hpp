@@ -22,6 +22,7 @@
 #include "settings.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "state-machine.hpp"
 #include "states.hpp"
 #include "stats-display.hpp"
 

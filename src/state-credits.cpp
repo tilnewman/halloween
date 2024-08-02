@@ -13,6 +13,7 @@
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "state-machine.hpp"
 
 #include <string>
 
