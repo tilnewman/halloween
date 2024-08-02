@@ -491,9 +491,10 @@ namespace halloween
         const sf::FloatRect avatarRect = collisionRect();
         const sf::Vector2f avatarCenter = util::center(avatarRect);
 
+        const float footRectHeightAdj{ avatarRect.height * 0.8f };
         sf::FloatRect footRect = avatarRect;
-        footRect.top += (avatarRect.height * 0.8f);
-        footRect.height -= (avatarRect.height * 0.8f);
+        footRect.top += footRectHeightAdj;
+        footRect.height -= footRectHeightAdj;
 
         bool hasHitSomething{ false };
         sf::FloatRect intersection;
@@ -534,14 +535,18 @@ namespace halloween
                 continue;
             }
 
+            // at this point we hit something from the side
+
             if (intersection.width < tolerance)
             {
                 if (m_velocity.x > 0.0f)
                 {
+                    m_velocity.x = 0.0f;
                     m_sprite.move(-intersection.width, 0.0f);
                 }
                 else if (m_velocity.x < 0.0f)
                 {
+                    m_velocity.x = 0.0f;
                     m_sprite.move(intersection.width, 0.0f);
                 }
             }
