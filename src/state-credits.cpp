@@ -130,6 +130,15 @@ namespace halloween
             "www.sfml-dev.org");
 
         sfmlCredit.vertPosition(fontCredit.bottom() + vertSpacer);
+
+        Credit & tiledCredit = m_credits.emplace_back(
+            context,
+            "Tiled",
+            "An amazing 2D level editor that is easy and intuitive.",
+            "www.mapeditor.org",
+            "");
+
+        tiledCredit.vertPosition(sfmlCredit.bottom() + vertSpacer);
     }
 
     void StateCredits::onExit(Context & context) { context.music.stop("credits.ogg"); }
