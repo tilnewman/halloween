@@ -147,7 +147,6 @@ namespace halloween
             }
         }
 
-        states.blendMode = sf::BlendAdd;
         for (const CoinAnim & coinAnim : m_animations)
         {
             if (coinAnim.is_alive)
