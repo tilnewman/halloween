@@ -105,7 +105,7 @@ namespace halloween
 
     void StateCredits::onEnter(Context & context)
     {
-        context.music.start("music.ogg", 20.0f);
+        context.music.start("credits.ogg", 20.0f);
 
         const sf::FloatRect screenRect = context.layout.wholeRegion();
 
@@ -122,7 +122,7 @@ namespace halloween
         fontCredit.vertPosition(softwareCredit.bottom() + vertSpacer);
     }
 
-    void StateCredits::onExit(Context & context) { context.music.stop("music.ogg"); }
+    void StateCredits::onExit(Context & context) { context.music.stop("credits.ogg"); }
 
     void StateCredits::update(Context & context, const float frameTimeSec)
     {

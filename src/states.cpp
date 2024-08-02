@@ -14,6 +14,7 @@
 #include "info-region.hpp"
 #include "level.hpp"
 #include "missile.hpp"
+#include "music-player.hpp"
 #include "owl-calls.hpp"
 #include "pause-screen.hpp"
 #include "random.hpp"
@@ -191,11 +192,18 @@ namespace halloween
             }
 
             context.slimes.spawnAll(context);
-            context.owl_calls.start(context);
         }
+
+        context.owl_calls.start(context);
+        context.music.start("crickets.ogg");
     }
 
-    void PlayState::onExit(Context & context) { context.owl_calls.stop(); }
+    void PlayState::onExit(Context & context)
+    {
+        context.audio.stopAll();
+        context.owl_calls.stop();
+        context.music.stop("crickets.ogg");
+    }
 
     void PlayState::update(Context & context, const float frameTimeSec)
     {
@@ -390,7 +398,6 @@ namespace halloween
 
     void PauseState::onEnter(Context & context)
     {
-        context.audio.stopAllLooped();
         context.audio.play("pause");
 
         // update pause screen texture
@@ -424,6 +431,7 @@ namespace halloween
 
     void GameOverState::onEnter(Context & context) { context.audio.play("game-over"); }
 
+    void GameOverState::onExit(Context & context) { context.audio.stopAll(); }
     //
 
     LevelCompleteState::LevelCompleteState(const Context & context)

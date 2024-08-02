@@ -81,11 +81,11 @@ namespace halloween
         M_CHECK(m_window.isOpen(), "Could not open graphics window.");
         std::cout << "resolution is " << m_window.getSize() << std::endl;
 
-        m_audio.mediaPath(m_settings.media_path / "audio");
+        m_audio.mediaPath(m_settings.media_path / "sfx");
         m_audio.loadAll();
         m_audio.willLoop("walk", true);
 
-        m_music.setup(m_settings.media_path / "audio");
+        m_music.setup(m_settings.media_path / "music");
 
         m_media.setup(m_settings);
         m_layout.setup(m_context, m_window.getSize());

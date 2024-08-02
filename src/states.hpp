@@ -253,6 +253,7 @@ namespace halloween
         ~GameOverState() override = default;
 
         void onEnter(Context &) override;
+        void onExit(Context &) override;
     };
 
     //
