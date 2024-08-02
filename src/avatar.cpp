@@ -619,8 +619,7 @@ namespace halloween
             return;
         }
 
-        m_velocity = { 0.0f, 0.0f };
-        m_sprite.setPosition(m_sprite.getPosition().x, 0.0f);
+        handleDeath(context);
     }
 
     void Avatar::handleDeath(Context & context)
