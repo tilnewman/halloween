@@ -14,6 +14,7 @@
 #include "info-region.hpp"
 #include "level.hpp"
 #include "missile.hpp"
+#include "owl-calls.hpp"
 #include "pause-screen.hpp"
 #include "random.hpp"
 #include "resources.hpp"
@@ -190,8 +191,11 @@ namespace halloween
             }
 
             context.slimes.spawnAll(context);
+            context.owl_calls.start(context);
         }
     }
+
+    void PlayState::onExit(Context & context) { context.owl_calls.stop(); }
 
     void PlayState::update(Context & context, const float frameTimeSec)
     {
@@ -207,6 +211,7 @@ namespace halloween
         context.coins.update(context, frameTimeSec);
         context.ghosts.update(context, frameTimeSec);
         context.slimes.update(context, frameTimeSec);
+        context.owl_calls.update(context, frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)

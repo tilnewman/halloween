@@ -24,6 +24,7 @@ namespace halloween
     class Ghosts;
     class Avatar;
     class Missiles;
+    class OwlCalls;
     struct Settings;
     struct Resources;
     class InfoRegion;
@@ -41,6 +42,7 @@ namespace halloween
             util::Random & ran,
             util::SoundPlayer & aud,
             util::MusicPlayer & mus,
+            OwlCalls & owl,
             LevelFileLoader & loa,
             Resources & res,
             ScreenRegions & scr,
@@ -59,6 +61,7 @@ namespace halloween
             , random(ran)
             , audio(aud)
             , music(mus)
+            , owl_calls(owl)
             , loader(loa)
             , media(res)
             , layout(scr)
@@ -82,6 +85,7 @@ namespace halloween
         util::Random & random;
         util::SoundPlayer & audio;
         util::MusicPlayer & music;
+        OwlCalls & owl_calls;
         LevelFileLoader & loader;
         Resources & media;
         ScreenRegions & layout;

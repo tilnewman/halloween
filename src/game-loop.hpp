@@ -14,6 +14,7 @@
 #include "level.hpp"
 #include "missile.hpp"
 #include "music-player.hpp"
+#include "owl-calls.hpp"
 #include "pause-screen.hpp"
 #include "random.hpp"
 #include "resources.hpp"
@@ -54,6 +55,7 @@ namespace halloween
         util::Random m_random;
         util::SoundPlayer m_audio;
         util::MusicPlayer m_music;
+        OwlCalls m_owlCalls;
         sf::RenderWindow m_window;
         LevelFileLoader m_loader;
         Resources m_media;

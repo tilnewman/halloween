@@ -19,6 +19,7 @@ namespace halloween
         , m_random()
         , m_audio(m_random)
         , m_music()
+        , m_owlCalls()
         , m_window()
         , m_loader()
         , m_media()
@@ -43,6 +44,7 @@ namespace halloween
               m_random,
               m_audio,
               m_music,
+              m_owlCalls,
               m_loader,
               m_media,
               m_layout,
