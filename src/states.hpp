@@ -79,15 +79,15 @@ namespace halloween
 
         virtual State state() const = 0;
         virtual State nextState() const = 0;
-        virtual void update(Context &, const float frameTimeSec) = 0;
+        virtual void update(Context & context, const float frameTimeSec) = 0;
         virtual bool handleEvent(Context & context, const sf::Event & event) = 0;
-        virtual void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const = 0;
-        virtual void onEnter(Context &) = 0;
-        virtual void onExit(Context &) = 0;
+        virtual void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const = 0;
+        virtual void onEnter(Context & context) = 0;
+        virtual void onExit(Context & context) = 0;
 
       protected:
-        virtual bool changeToNextState(const Context &) = 0;
-        virtual bool willIgnoreEvent(const Context &, const sf::Event & event) const = 0;
+        virtual bool changeToNextState(const Context & context) = 0;
+        virtual bool willIgnoreEvent(const Context & context, const sf::Event & event) const = 0;
 
         // returns true if the event was a 'quit' event and a state changed is pending
         virtual bool handleQuitEvents(Context & context, const sf::Event & event) = 0;
@@ -121,9 +121,9 @@ namespace halloween
 
         State state() const final { return m_state; }
         State nextState() const final { return m_nextState; }
-        void update(Context &, const float frameTimeSec) override;
-        bool handleEvent(Context &, const sf::Event &) override;
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
+        void update(Context & context, const float frameTimeSec) override;
+        bool handleEvent(Context & context, const sf::Event & event) override;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const override;
         void onEnter(Context &) override {}
         void onExit(Context &) override {}
 
@@ -133,10 +133,10 @@ namespace halloween
             return (!(m_minDurationSec > 0.0f) || (m_elapsedTimeSec > m_minDurationSec));
         }
 
-        bool changeToNextState(const Context &) override;
-        bool willIgnoreEvent(const Context &, const sf::Event &) const override;
-        bool handleQuitEvents(Context &, const sf::Event &) override;
-        void setupText(const Context &, const std::string &);
+        bool changeToNextState(const Context & context) override;
+        bool willIgnoreEvent(const Context & context, const sf::Event & event) const override;
+        bool handleQuitEvents(Context & context, const sf::Event & event) override;
+        void setupText(const Context & context, const std::string & text);
 
       protected:
         State m_state;
@@ -159,8 +159,8 @@ namespace halloween
 
         ~StartState() override = default;
 
-        void onEnter(Context &) override;
-        void onExit(Context &) override;
+        void onEnter(Context & context) override;
+        void onExit(Context & context) override;
         void update(Context &, const float) final {}
         bool handleEvent(Context &, const sf::Event &) final { return false; }
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
@@ -176,7 +176,7 @@ namespace halloween
 
         ~QuitState() override = default;
 
-        void onEnter(Context &) override;
+        void onEnter(Context & context) override;
         void update(Context &, const float) final {}
         bool handleEvent(Context &, const sf::Event &) final { return false; }
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
@@ -195,8 +195,8 @@ namespace halloween
 
         ~TimedMessageState() override = default;
 
-        void update(Context &, const float frameTimeSec) override;
-        bool handleEvent(Context &, const sf::Event & event) override;
+        void update(Context & context, const float frameTimeSec) override;
+        bool handleEvent(Context & context, const sf::Event & event) override;
 
       protected:
         bool m_hasMouseClickedOrKeyPressed{ false };
@@ -210,7 +210,7 @@ namespace halloween
         ~TitleState() override = default;
 
         void onEnter(Context & context) override;
-        void draw(const Context & con, sf::RenderTarget & rt, sf::RenderStates & st) const override;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const override;
 
       private:
         sf::Text m_text1;
@@ -226,10 +226,10 @@ namespace halloween
         explicit PauseState(const Context & context);
         ~PauseState() override = default;
 
-        void onEnter(Context &) override;
-        void onExit(Context &) override;
-        void update(Context &, const float frameTimeSec) override;
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
+        void onEnter(Context & context) override;
+        void onExit(Context & context) override;
+        void update(Context & context, const float frameTimeSec) override;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const override;
     };
 
     //
@@ -254,9 +254,9 @@ namespace halloween
         explicit LevelCompleteState(const Context & context);
         ~LevelCompleteState() override = default;
 
-        void onEnter(Context &) override;
-        void onExit(Context &) override;
-        bool handleEvent(Context &, const sf::Event & event) override;
+        void onEnter(Context & context) override;
+        void onExit(Context & context) override;
+        bool handleEvent(Context & context, const sf::Event & event) override;
     };
 
 } // namespace halloween
