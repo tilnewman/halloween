@@ -6,7 +6,6 @@
 #include "sfml-util.hpp"
 
 #include <iostream>
-#include <sstream>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
