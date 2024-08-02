@@ -120,6 +120,15 @@ namespace halloween
 
         const float vertSpacer = (screenRect.height * 0.125f);
         fontCredit.vertPosition(softwareCredit.bottom() + vertSpacer);
+
+        Credit & sfmlCredit = m_credits.emplace_back(
+            context,
+            "SFML",
+            "Simple Fast Multimedia Library",
+            "Special thanks to Laurent Gomila for this excellent library!",
+            "www.sfml-dev.org");
+
+        sfmlCredit.vertPosition(fontCredit.bottom() + vertSpacer);
     }
 
     void StateCredits::onExit(Context & context) { context.music.stop("credits.ogg"); }
