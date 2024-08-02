@@ -33,7 +33,7 @@ namespace util
 
     void SoundPlayer::play(const std::string & NAME, const float PITCH)
     {
-        if (NAME.empty() ||  (m_volume < 1.0f))
+        if (NAME.empty() || (m_volume < 1.0f))
         {
             return;
         }
@@ -144,7 +144,10 @@ namespace util
         // check if already loaded
         if (!findCacheIndexesByName(NAME).empty())
         {
-            M_LOG("WARNING:  That sfx is already loaded.  Fix your code to only load an sfx once.");
+            M_LOG(
+                "WARNING:  That sfx \""
+                << NAME << "\" is already loaded.  Fix your code to only load an sfx once.");
+
             return true;
         }
 
@@ -156,6 +159,12 @@ namespace util
     std::vector<std::size_t> SoundPlayer::findCacheIndexesByName(const std::string & NAME) const
     {
         std::vector<std::size_t> indexes;
+
+        if (NAME.empty())
+        {
+            return indexes;
+        }
+
         indexes.reserve(m_soundEffects.size());
 
         for (std::size_t i(0); i < m_soundEffects.size(); ++i)
