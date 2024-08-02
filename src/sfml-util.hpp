@@ -28,7 +28,7 @@ namespace util
 
     constexpr std::size_t verts_per_quad{ 4 };
 
-    [[nodiscard]] inline const std::string colorToString(const sf::Color & C)
+    [[nodiscard]] inline std::string colorToString(const sf::Color & C)
     {
         std::string str;
         str.reserve(16);
@@ -915,7 +915,7 @@ namespace util
         return *videoModes.begin();
     }
 
-    [[nodiscard]] inline const std::string makeSupportedVideoModesString(
+    [[nodiscard]] inline std::string makeSupportedVideoModesString(
         const bool willSkipDiffBitsPerPixel = false, const std::string & separator = "\n")
     {
         const unsigned int desktopBitsPerPixel{ sf::VideoMode::getDesktopMode().bitsPerPixel };

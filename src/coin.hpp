@@ -44,7 +44,7 @@ namespace halloween
         void setup(const Settings & settings);
         void add(const sf::Vector2f & position);
         void clear();
-        void update(Context & context, const float frameTimeSec);
+        void update(const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         void move(const sf::Vector2f & move);
         void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect);
@@ -52,7 +52,7 @@ namespace halloween
       private:
         void addAnimation(const Context & context, const sf::Vector2f & position);
         void updateTextures(const float frameTimeSec);
-        void updateAnimations(Context & context, const float frameTimeSec);
+        void updateAnimations(const float frameTimeSec);
 
       private:
         sf::Texture m_texture;

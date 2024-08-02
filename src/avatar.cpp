@@ -289,7 +289,7 @@ namespace halloween
                 m_sprite.setTexture(m_deathAnim.texture(), true);
             }
 
-            m_blood.update(context, frameTimeSec);
+            m_blood.update(frameTimeSec);
             return true;
         }
 

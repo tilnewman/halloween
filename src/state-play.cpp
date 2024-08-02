@@ -69,9 +69,9 @@ namespace halloween
         context.spirit.update(context, frameTimeSec);
         context.avatar.update(context, frameTimeSec);
         context.missiles.update(context, frameTimeSec);
-        context.coins.update(context, frameTimeSec);
+        context.coins.update(frameTimeSec);
         context.ghosts.update(context, frameTimeSec);
-        context.slimes.update(context, frameTimeSec);
+        context.slimes.update(frameTimeSec);
         context.owl_calls.update(context, frameTimeSec);
     }
 

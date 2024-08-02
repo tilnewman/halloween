@@ -112,7 +112,7 @@ namespace util
         const std::vector<data_t> & data() const { return m_data; }
 
       private:
-        const std::vector<data_t> makeHalfSizeDataSet(const std::vector<data_t> & oldValues) const
+        std::vector<data_t> makeHalfSizeDataSet(const std::vector<data_t> & oldValues) const
         {
             std::vector<data_t> newValues;
             newValues.reserve((oldValues.size() / 2) + 1);

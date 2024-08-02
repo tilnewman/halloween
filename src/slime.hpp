@@ -62,7 +62,7 @@ namespace halloween
         void spawnAll(const Context & context);
         void addRect(const sf::FloatRect & rect) { m_rects.push_back(rect); }
 
-        void update(const Context & context, const float frameTimeSec);
+        void update(const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         void move(const sf::Vector2f & move);
 

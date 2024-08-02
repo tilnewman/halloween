@@ -181,14 +181,14 @@ namespace util
             restart(from, to, speed, startAt);
         }
 
-        Math_t radians() const { return slider_.radians(); }
-        Value_t from() const { return from_; }
-        Value_t to() const { return to_; }
-        Math_t speed() const { return slider_.speed(); }
-        void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
-        Value_t value() const { return slider_.value(); }
-        bool isMoving() const { return slider_.isMoving(); }
-        void stop() { slider_.stop(); }
+        inline Math_t radians() const { return slider_.radians(); }
+        inline Value_t from() const { return from_; }
+        inline Value_t to() const { return to_; }
+        inline Math_t speed() const { return slider_.speed(); }
+        inline void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
+        inline Value_t value() const { return slider_.value(); }
+        inline bool isMoving() const { return slider_.isMoving(); }
+        inline void stop() { slider_.stop(); }
 
         Value_t update(const Math_t adjustment)
         {

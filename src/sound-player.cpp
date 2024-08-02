@@ -33,12 +33,10 @@ namespace util
 
     void SoundPlayer::play(const std::string & NAME, const float PITCH)
     {
-        if (m_volume < 1.0f)
+        if (NAME.empty() ||  (m_volume < 1.0f))
         {
             return;
         }
-
-        M_CHECK(!NAME.empty(), "Name string is empty.");
 
         std::vector<std::size_t> nameMatchingIndexes(findCacheIndexesByName(NAME));
         if (nameMatchingIndexes.empty())

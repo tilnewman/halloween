@@ -72,7 +72,7 @@ namespace halloween
         }
     }
 
-    void Slimes::update(const Context &, const float frameTimeSec)
+    void Slimes::update(const float frameTimeSec)
     {
         // animate
         m_elapsedTimeSec += frameTimeSec;
@@ -103,7 +103,7 @@ namespace halloween
 
                 if (slime.sprite.getGlobalBounds().left < slime.rect.left)
                 {
-                    slime.is_moving_left = !slime.is_moving_left;
+                    slime.is_moving_left = false;
                 }
             }
             else
@@ -112,7 +112,7 @@ namespace halloween
 
                 if (util::right(slime.sprite.getGlobalBounds()) > util::right(slime.rect))
                 {
-                    slime.is_moving_left = !slime.is_moving_left;
+                    slime.is_moving_left = true;
                 }
             }
         }

@@ -87,7 +87,7 @@ namespace halloween
         }
     }
 
-    void Blood::update(Context &, const float frameTimeSec)
+    void Blood::update(const float frameTimeSec)
     {
         if (m_isFinished)
         {

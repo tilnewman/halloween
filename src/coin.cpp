@@ -52,16 +52,16 @@ namespace halloween
         m_animations.reserve(100);
 
         // animation frames in order within the spritesheet
-        m_textureCoords.push_back({ 0, 0, 64, 64 });
-        m_textureCoords.push_back({ 64, 0, 64, 64 });
-        m_textureCoords.push_back({ 128, 0, 64, 64 });
-        m_textureCoords.push_back({ 192, 0, 64, 64 });
-        m_textureCoords.push_back({ 256, 0, 64, 64 });
-        m_textureCoords.push_back({ 0, 64, 64, 64 });
-        m_textureCoords.push_back({ 64, 64, 64, 64 });
-        m_textureCoords.push_back({ 128, 64, 64, 64 });
-        m_textureCoords.push_back({ 192, 64, 64, 64 });
-        m_textureCoords.push_back({ 256, 64, 64, 64 });
+        m_textureCoords.emplace_back(0, 0, 64, 64);
+        m_textureCoords.emplace_back(64, 0, 64, 64);
+        m_textureCoords.emplace_back(128, 0, 64, 64);
+        m_textureCoords.emplace_back(192, 0, 64, 64);
+        m_textureCoords.emplace_back(256, 0, 64, 64);
+        m_textureCoords.emplace_back(0, 64, 64, 64);
+        m_textureCoords.emplace_back(64, 64, 64, 64);
+        m_textureCoords.emplace_back(128, 64, 64, 64);
+        m_textureCoords.emplace_back(192, 64, 64, 64);
+        m_textureCoords.emplace_back(256, 64, 64, 64);
     }
 
     void Coins::setup(const Settings & settings)
@@ -75,13 +75,13 @@ namespace halloween
 
     void Coins::clear() { m_coins.clear(); }
 
-    void Coins::update(Context & context, const float frameTimeSec)
+    void Coins::update(const float frameTimeSec)
     {
         updateTextures(frameTimeSec);
-        updateAnimations(context, frameTimeSec);
+        updateAnimations(frameTimeSec);
     }
 
-    void Coins::updateAnimations(Context &, const float frameTimeSec)
+    void Coins::updateAnimations(const float frameTimeSec)
     {
         bool wereAnyKilled = false;
         for (CoinAnim & anim : m_animations)

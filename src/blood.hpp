@@ -22,8 +22,8 @@ namespace halloween
         Blood();
 
         void setup(const Settings & settings);
-        void start(Context &, const sf::Vector2f & position, const bool willSplashRight);
-        void update(Context &, const float frameTimeSec);
+        void start(Context & context, const sf::Vector2f & position, const bool willSplashRight);
+        void update(const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
       private:
