@@ -26,12 +26,28 @@ namespace halloween
         , tile_size_texture()
         , walk_collisions()
         , kill_collisions()
+        , acid_collisions()
+        , water_collisions()
         , enter_rect()
         , exit_rect()
         , farthest_horiz_map_pixel(0.0f)
         , farthest_horiz_traveled(0.0f)
         , number(0)
-    {}
+    {
+        walk_collisions.reserve(1000);
+        kill_collisions.reserve(100);
+        acid_collisions.reserve(100);
+        water_collisions.reserve(100);
+    }
+
+    void Level::reset()
+    {
+        tiles.reset();
+        walk_collisions.clear();
+        kill_collisions.clear();
+        acid_collisions.clear();
+        water_collisions.clear();
+    }
 
     bool Level::load(Context & context)
     {
@@ -47,9 +63,7 @@ namespace halloween
         }
         else
         {
-            tiles.reset();
-            walk_collisions.clear();
-            kill_collisions.clear();
+            reset();
             return false;
         }
     }
@@ -71,6 +85,16 @@ namespace halloween
         }
 
         for (sf::FloatRect & rect : walk_collisions)
+        {
+            rect.left += move;
+        }
+
+        for (sf::FloatRect & rect : acid_collisions)
+        {
+            rect.left += move;
+        }
+
+        for (sf::FloatRect & rect : water_collisions)
         {
             rect.left += move;
         }

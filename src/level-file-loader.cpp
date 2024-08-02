@@ -107,6 +107,14 @@ namespace halloween
             {
                 parseRectLayer(context, jsonLayer, context.level.kill_collisions);
             }
+            else if (layerName == "acid")
+            {
+                parseRectLayer(context, jsonLayer, context.level.acid_collisions);
+            }
+            else if (layerName == "water")
+            {
+                parseRectLayer(context, jsonLayer, context.level.water_collisions);
+            }
             else if (layerName == "spawn")
             {
                 parseSpawnLayer(context, jsonLayer);

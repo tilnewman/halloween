@@ -40,6 +40,7 @@ namespace halloween
         , m_hasLanded(false)
         , m_isFacingRight(true)
         , m_deadDelaySec(0.0f)
+        , m_willDie(false)
     {}
 
     void Avatar::setup(const Settings & settings)
@@ -238,6 +239,8 @@ namespace halloween
         preventBacktracking(context);
         walkCollisions(context);
         killCollisions(context);
+        acidCollisions(context);
+        waterCollisions(context);
         exitCollisions(context);
         coinCollisions(context);
         slimeCollisions(context, isAttacking);
@@ -609,6 +612,49 @@ namespace halloween
         if (context.slimes.doesCollideWithAny(collisionRect()))
         {
             handleDeath(context);
+        }
+    }
+
+    void Avatar::acidCollisions(Context & context)
+    {
+        // this check prevents playing the sfx repeatedly while the player falls
+        if (m_willDie)
+        {
+            return;
+        }
+
+        const sf::FloatRect avatarRect = collisionRect();
+
+        for (const sf::FloatRect & coll : context.level.acid_collisions)
+        {
+            if (avatarRect.intersects(coll))
+            {
+                m_willDie = true;
+                context.audio.play("acid.ogg");
+                return;
+            }
+        }
+    }
+
+    void Avatar::waterCollisions(Context & context)
+    {
+        // this check prevents playing the sfx repeatedly while the player falls
+        if (m_willDie)
+        {
+            return;
+        }
+
+        const sf::FloatRect avatarRect = collisionRect();
+
+        for (const sf::FloatRect & coll : context.level.water_collisions)
+        {
+            if (avatarRect.intersects(coll))
+            {
+                m_willDie = true;
+                context.audio.play("dunk.ogg");
+                context.audio.play("dunk-bubble.ogg");
+                return;
+            }
         }
     }
 

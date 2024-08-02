@@ -21,7 +21,7 @@ namespace halloween
         Level();
 
         bool load(Context & context);
-
+        void reset();
         bool move(const ScreenRegions & layout, const float move);
 
         TileSet tiles;
@@ -30,6 +30,8 @@ namespace halloween
         sf::Vector2f tile_size_texture;
         std::vector<sf::FloatRect> walk_collisions;
         std::vector<sf::FloatRect> kill_collisions;
+        std::vector<sf::FloatRect> acid_collisions;
+        std::vector<sf::FloatRect> water_collisions;
         sf::FloatRect enter_rect;
         sf::FloatRect exit_rect;
         float farthest_horiz_map_pixel;

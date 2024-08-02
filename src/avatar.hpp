@@ -51,6 +51,8 @@ namespace halloween
         void exitCollisions(Context & context) const;
         void coinCollisions(Context & context) const;
         void slimeCollisions(Context & context, const bool isAttacking);
+        void acidCollisions(Context & context);
+        void waterCollisions(Context & context);
         void preventBacktracking(const Context & context);
         void respawnIfOutOfBounds(Context & context);
         void handleDeath(Context & context);
@@ -69,6 +71,7 @@ namespace halloween
         bool m_hasLanded;
         bool m_isFacingRight;
         float m_deadDelaySec;
+        bool m_willDie;
     };
 
 } // namespace halloween
