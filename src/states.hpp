@@ -184,21 +184,6 @@ namespace halloween
 
     //
 
-    class PlayState : public StateBase
-    {
-      public:
-        explicit PlayState(const Context & context);
-        ~PlayState() override = default;
-
-        void onEnter(Context &) override;
-        void onExit(Context &) override;
-        bool handleEvent(Context &, const sf::Event &) override;
-        void update(Context &, const float frameTimeSec) override;
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
-    };
-
-    //
-
     struct TimedMessageState : public StateBase
     {
         TimedMessageState(

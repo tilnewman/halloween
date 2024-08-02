@@ -1,7 +1,7 @@
 #ifndef STATESMACHINE_HPP_INCLUDED
 #define STATESMACHINE_HPP_INCLUDED
 //
-// states.hpp
+// state-machine.hpp
 //
 #include "states.hpp"
 
