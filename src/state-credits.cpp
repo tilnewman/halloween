@@ -158,16 +158,10 @@ namespace halloween
 
     bool StateCredits::handleEvent(Context & context, const sf::Event & event)
     {
-        // all other handlers are key released events
-        if (event.type != sf::Event::KeyPressed)
-        {
-            return false;
-        }
-
-        if (event.key.code == sf::Keyboard::Escape)
+        // any keypress or mouse click will exit
+        if ((event.type == sf::Event::MouseButtonPressed) || (event.type == sf::Event::KeyPressed))
         {
             context.state.setChangePending(State::Quit);
-            return true;
         }
 
         return false;

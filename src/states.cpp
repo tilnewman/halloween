@@ -432,6 +432,7 @@ namespace halloween
     void GameOverState::onEnter(Context & context) { context.audio.play("game-over"); }
 
     void GameOverState::onExit(Context & context) { context.audio.stopAll(); }
+
     //
 
     LevelCompleteState::LevelCompleteState(const Context & context)
@@ -449,7 +450,11 @@ namespace halloween
         context.coins.clear();
     }
 
-    bool LevelCompleteState::handleEvent(Context &, const sf::Event &) { return false; }
+    bool LevelCompleteState::handleEvent(Context &, const sf::Event &)
+    {
+        // always returning false prevents the player from quiting the state early
+        return false;
+    }
 
     //
 
