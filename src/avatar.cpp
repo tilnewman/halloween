@@ -543,13 +543,17 @@ namespace halloween
                 {
                     m_velocity.x = 0.0f;
                     m_sprite.move(-intersection.width, 0.0f);
+                    continue;
                 }
                 else if (m_velocity.x < 0.0f)
                 {
                     m_velocity.x = 0.0f;
                     m_sprite.move(intersection.width, 0.0f);
+                    continue;
                 }
             }
+
+            hasHitSomething = false;
         }
 
         if (!hasHitSomething)
