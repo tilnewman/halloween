@@ -235,7 +235,7 @@ namespace halloween
             {
                 context.state.setChangePending(State::Pause);
             }
-            else if (event.key.code == sf::Keyboard::F1)
+            else if (event.key.code == sf::Keyboard::S)
             {
                 sf::Texture texture;
                 if (texture.create(context.window.getSize().x, context.window.getSize().y))
