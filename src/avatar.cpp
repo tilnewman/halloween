@@ -277,7 +277,7 @@ namespace halloween
         exitCollisions(context);
         coinCollisions(context);
         slimeCollisions(context, isAttacking);
-        respawnIfOutOfBounds(context);
+        killIfOutOfBounds(context);
     }
 
     void Avatar::moveMap(Context & context)
@@ -747,7 +747,7 @@ namespace halloween
         }
     }
 
-    void Avatar::respawnIfOutOfBounds(Context & context)
+    void Avatar::killIfOutOfBounds(Context & context)
     {
         if (context.layout.mapRegion().intersects(collisionRect()))
         {
@@ -761,8 +761,8 @@ namespace halloween
     {
         m_blood.start(context, m_sprite.getPosition(), m_isFacingRight);
         setAction(Action::Dead);
-        context.audio.play("scream");
         context.audio.stop("walk");
+        context.audio.play("scream");
         m_velocity = { 0.0f, 0.0f };
         m_deathAnim.restart();
         context.info_region.livesAdjust(-1);

@@ -56,7 +56,7 @@ namespace halloween
         void acidCollisions(Context & context);
         void waterCollisions(Context & context);
         void preventBacktracking(const Context & context);
-        void respawnIfOutOfBounds(Context & context);
+        void killIfOutOfBounds(Context & context);
         void handleDeath(Context & context);
 
       private:
