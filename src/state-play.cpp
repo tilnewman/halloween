@@ -39,12 +39,19 @@ namespace halloween
     {
         if (context.level.number != context.level_number)
         {
-            if (!context.level.load(context))
+            context.ghosts.clear();
+            context.ghosts.clearSpawnPoints();
+            context.slimes.clear();
+            context.slimes.clearRects();
+
+            if (context.level.load(context))
+            {
+                context.slimes.spawnAll(context);
+            }
+            else
             {
                 context.state.setChangePending(State::GameOver);
             }
-
-            context.slimes.spawnAll(context);
         }
 
         context.owl_calls.start(context);

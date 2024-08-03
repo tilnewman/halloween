@@ -305,6 +305,7 @@ namespace halloween
             if (context.info_region.lives() > 0)
             {
                 context.info_region.livesAdjust(-1);
+                context.ghosts.clear();
                 context.slimes.clear();
                 context.level.reset();
                 context.level.load(context);
