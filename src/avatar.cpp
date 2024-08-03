@@ -221,17 +221,6 @@ namespace halloween
         m_sprite.setPosition(position);
     }
 
-    void Avatar::setAction(const Action action)
-    {
-        m_action = action;
-
-        // set image if not animated
-        if (Action::Jump == action)
-        {
-            m_sprite.setTexture(m_jumpTexture, true);
-        }
-    }
-
     void Avatar::update(Context & context, const float frameTimeSec)
     {
         if (handleDeath(context, frameTimeSec))
@@ -339,7 +328,7 @@ namespace halloween
                 m_velocity.x *= context.settings.walk_speed_attack_reduction_ratio;
             }
 
-            setAction(Action::Attack);
+            m_action = Action::Attack;
 
             m_attackAnim.restart();
             m_sprite.setTexture(m_attackAnim.texture(), true);
@@ -356,7 +345,7 @@ namespace halloween
 
                 if (m_attackAnim.isFinished())
                 {
-                    setAction(Action::Idle);
+                    m_action = Action::Idle;
                     return false;
                 }
             }
@@ -381,7 +370,7 @@ namespace halloween
                 m_velocity.x *= context.settings.walk_speed_throw_reduction_ratio;
             }
 
-            setAction(Action::Throw);
+            m_action = Action::Throw;
 
             m_throwAnim.restart();
             m_sprite.setTexture(m_throwAnim.texture(), true);
@@ -404,7 +393,7 @@ namespace halloween
 
                 if (m_throwAnim.isFinished())
                 {
-                    setAction(Action::Idle);
+                    m_action = Action::Idle;
                     return false;
                 }
             }
@@ -422,7 +411,7 @@ namespace halloween
             (m_velocity.y > -1.0f))
         {
             context.audio.play("parachute", 0.5f);
-            setAction(Action::Glide);
+            m_action = Action::Glide;
             m_glideAnim.restart();
             m_sprite.setTexture(m_glideAnim.texture(), true);
 
@@ -449,7 +438,7 @@ namespace halloween
             }
             else
             {
-                setAction(Action::Idle);
+                m_action = Action::Idle;
                 return false;
             }
         }
@@ -516,7 +505,7 @@ namespace halloween
                     m_runAnim.restart();
                 }
 
-                setAction(Action::Run);
+                m_action = Action::Run;
                 context.audio.play("walk");
 
                 if (!m_isFacingRight)
@@ -539,7 +528,7 @@ namespace halloween
                     m_runAnim.restart();
                 }
 
-                setAction(Action::Run);
+                m_action = Action::Run;
                 context.audio.play("walk");
 
                 if (m_isFacingRight)
@@ -552,7 +541,7 @@ namespace halloween
             else
             {
                 m_velocity.x = 0.0f;
-                setAction(Action::Idle);
+                m_action = Action::Idle;
                 context.audio.stop("walk");
             }
         }
@@ -574,7 +563,8 @@ namespace halloween
             m_velocity.y -= (context.settings.jump_acc * frameTimeSec);
             context.audio.play("jump");
             context.audio.stop("walk");
-            setAction(Action::Jump);
+            m_action = Action::Jump;
+            m_sprite.setTexture(m_jumpTexture, true);
         }
     }
 
@@ -620,7 +610,7 @@ namespace halloween
                 if (!m_hasLanded)
                 {
                     context.audio.play("land");
-                    setAction(Action::Idle);
+                    m_action = Action::Idle;
                 }
 
                 m_hasLanded = true;
@@ -776,7 +766,7 @@ namespace halloween
     void Avatar::handleDeath(Context & context)
     {
         m_blood.start(context, m_sprite.getPosition(), m_isFacingRight);
-        setAction(Action::Dead);
+        m_action = Action::Dead;
         context.audio.stop("walk");
         context.audio.play("scream");
         m_velocity = { 0.0f, 0.0f };

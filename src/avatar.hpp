@@ -41,7 +41,6 @@ namespace halloween
 
       private:
         void moveMap(Context & context);
-        void setAction(const Action action);
         bool handleDeath(Context & context, const float frameTimeSec);
         bool handleAttacking(Context & context, const float frameTimeSec);
         bool handleThrowing(Context & context, const float frameTimeSec);
