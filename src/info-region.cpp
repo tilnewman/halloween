@@ -11,6 +11,7 @@
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
+#include "sound-player.hpp"
 
 #include <sstream>
 
@@ -21,15 +22,47 @@ namespace halloween
 
     InfoRegion::InfoRegion()
         : m_score(0)
+        , m_visibleScore(0)
+        , m_elapsedTimeSec(0.0f)
+        , m_timePerScoreUpdate(0.1f)
         , m_lives(0)
         , m_text()
         , m_region()
         , m_bgVerts()
     {}
 
+    void InfoRegion::update(Context & context, const float frameTimeSec)
+    {
+        if (m_score == m_visibleScore)
+        {
+            return;
+        }
+
+        m_elapsedTimeSec += frameTimeSec;
+        if (m_elapsedTimeSec > m_timePerScoreUpdate)
+        {
+            m_elapsedTimeSec -= m_timePerScoreUpdate;
+
+            if ((m_score - m_visibleScore) >= 10)
+            {
+                m_visibleScore = m_score;
+                context.audio.play("bell", 0.5f);
+            }
+            else
+            {
+                ++m_visibleScore;
+                context.audio.play("bell");
+            }
+
+            updateText();
+        }
+    }
+
     void InfoRegion::reset(Context & context)
     {
+        m_elapsedTimeSec = 0.0f;
         m_score = 0;
+        m_visibleScore = 0;
         m_lives = context.settings.player_lives;
         updateText();
     }
@@ -57,7 +90,7 @@ namespace halloween
     void InfoRegion::scoreAdjust(const int adj)
     {
         m_score += adj;
-        updateText();
+        // updateText();
     }
 
     void InfoRegion::livesAdjust(const int adj)
@@ -71,11 +104,10 @@ namespace halloween
         std::ostringstream ss;
 
         ss << "Lives: " << std::setw(2) << std::setfill('0') << m_lives
-           << "      Score: " << std::setw(6) << std::setfill('0') << m_score;
+           << "      Score: " << std::setw(6) << std::setfill('0') << m_visibleScore;
 
         m_text.setString(ss.str());
         util::setOriginToPosition(m_text);
-
         util::fitAndCenterInside(m_text, util::scaleRectInPlaceCopy(m_region, { 1.0f, 0.5f }));
     }
 

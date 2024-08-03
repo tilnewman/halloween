@@ -21,6 +21,7 @@ namespace halloween
 
         void setup(Context & context);
         void reset(Context & context);
+        void update(Context & context, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
         inline int score() const { return m_score; }
@@ -34,6 +35,9 @@ namespace halloween
 
       private:
         int m_score;
+        int m_visibleScore;
+        float m_elapsedTimeSec;
+        float m_timePerScoreUpdate;
         int m_lives;
         sf::Text m_text;
         sf::FloatRect m_region;

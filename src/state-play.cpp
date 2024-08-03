@@ -66,6 +66,7 @@ namespace halloween
         }
 
         StateBase::update(context, frameTimeSec);
+        context.info_region.update(context, frameTimeSec);
         context.spirit.update(context, frameTimeSec);
         context.avatar.update(context, frameTimeSec);
         context.missiles.update(context, frameTimeSec);
