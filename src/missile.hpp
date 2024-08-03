@@ -19,15 +19,15 @@ namespace halloween
 
     struct Missile
     {
-        Missile(const sf::Vector2f & pos, const bool isMovingRight)
+        Missile(const bool isMovingRight)
             : is_alive(true)
             , is_moving_right(isMovingRight)
-            , position(pos)
+            , sprite()
         {}
 
         bool is_alive;
         bool is_moving_right;
-        sf::Vector2f position;
+        sf::Sprite sprite;
     };
 
     //

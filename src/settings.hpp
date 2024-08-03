@@ -49,6 +49,8 @@ namespace halloween
         bool will_show_floating_spirit = false;
 
         int starting_dart_count = 3;
+
+        int kill_slime_score = 10;
     };
 
 } // namespace halloween

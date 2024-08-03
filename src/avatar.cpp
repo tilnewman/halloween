@@ -728,7 +728,7 @@ namespace halloween
             if (context.slimes.attack(attackCollisionRect()))
             {
                 context.audio.play("squish");
-                context.info_region.scoreAdjust(10);
+                context.info_region.scoreAdjust(context.settings.kill_slime_score);
             }
         }
 
