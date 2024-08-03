@@ -56,7 +56,8 @@ namespace halloween
             case State::Play:     { return std::make_unique<PlayState>(context);          }
             case State::Pause:    { return std::make_unique<PauseState>(context);         }
             case State::Level:    { return std::make_unique<LevelCompleteState>(context); }
-            case State::GameOver: { return std::make_unique<GameOverState>(context);      }
+            case State::Lose:     { return std::make_unique<LoseState>(context);          }
+            case State::Win:      { return std::make_unique<WinState>(context);           }
             case State::Credits:  { return std::make_unique<StateCredits>();              }
             case State::Quit:     { return std::make_unique<QuitState>();                 }
             default:

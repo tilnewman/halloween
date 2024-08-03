@@ -117,7 +117,7 @@ namespace halloween
         {
             if (state() == State::Play)
             {
-                context.state.setChangePending(State::GameOver);
+                context.state.setChangePending(State::Lose);
             }
             else
             {
@@ -316,11 +316,11 @@ namespace halloween
 
     //
 
-    GameOverState::GameOverState(const Context & context)
-        : TimedMessageState(context, State::GameOver, State::Credits, "Game Over\n\n", 4.5f)
+    LoseState::LoseState(const Context & context)
+        : TimedMessageState(context, State::Lose, State::Credits, "You Lose\n\n", 4.5f)
     {}
 
-    void GameOverState::onEnter(Context & context)
+    void LoseState::onEnter(Context & context)
     {
         context.audio.play("game-over");
 
@@ -338,14 +338,46 @@ namespace halloween
             util::bottom(m_text));
     }
 
-    void GameOverState::draw(
-        const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+    void
+        LoseState::draw(const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
     {
         target.draw(m_text, states);
         target.draw(m_scoreText, states);
     }
 
-    void GameOverState::onExit(Context & context) { context.audio.stopAll(); }
+    void LoseState::onExit(Context & context) { context.audio.stopAll(); }
+
+    //
+
+    WinState::WinState(const Context & context)
+        : TimedMessageState(context, State::Win, State::Credits, "You Win\n\n", 4.5f)
+    {}
+
+    void WinState::onEnter(Context & context)
+    {
+        context.audio.play("winner");
+
+        m_scoreText = m_text;
+        m_scoreText.scale(0.5f, 0.5f);
+
+        std::string str("Your Score: ");
+        str += std::to_string(context.info_region.score());
+        m_scoreText.setString(str);
+
+        util::setOriginToPosition(m_scoreText);
+
+        m_scoreText.setPosition(
+            ((context.layout.wholeSize().x * 0.5f) - (m_scoreText.getGlobalBounds().width * 0.5f)),
+            util::bottom(m_text));
+    }
+
+    void WinState::draw(const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+    {
+        target.draw(m_text, states);
+        target.draw(m_scoreText, states);
+    }
+
+    void WinState::onExit(Context & context) { context.audio.stopAll(); }
 
     //
 

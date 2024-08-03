@@ -50,7 +50,8 @@ namespace halloween
             }
             else
             {
-                context.state.setChangePending(State::GameOver);
+                // if we fail to load it is because there are no more levels to play
+                context.state.setChangePending(State::Win);
             }
         }
 

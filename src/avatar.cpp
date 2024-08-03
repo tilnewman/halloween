@@ -326,7 +326,7 @@ namespace halloween
             }
             else
             {
-                context.state.setChangePending(State::GameOver);
+                context.state.setChangePending(State::Lose);
             }
         }
 

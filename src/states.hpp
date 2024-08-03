@@ -35,7 +35,8 @@ namespace halloween
         Play,
         Pause,
         Level,
-        GameOver,
+        Lose,
+        Win,
         Credits,
         Quit
     };
@@ -56,7 +57,8 @@ namespace halloween
                 case State::Play:      { return "Play";            }
                 case State::Pause:     { return "Pause";           }
                 case State::Level:     { return "Level";           }
-                case State::GameOver:  { return "GameOver";        }
+                case State::Lose:      { return "Lose";            }
+                case State::Win:       { return "Win";             }
                 case State::Credits:   { return "Credits";         }
                 case State::Quit:      { return "Quit";            }
                 default:               { assert(false); return ""; }
@@ -234,10 +236,25 @@ namespace halloween
 
     //
 
-    struct GameOverState : public TimedMessageState
+    struct LoseState : public TimedMessageState
     {
-        explicit GameOverState(const Context & context);
-        ~GameOverState() override = default;
+        explicit LoseState(const Context & context);
+        ~LoseState() override = default;
+
+        void onEnter(Context & context) override;
+        void onExit(Context & context) override;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const override;
+
+      private:
+        sf::Text m_scoreText;
+    };
+
+    //
+
+    struct WinState : public TimedMessageState
+    {
+        explicit WinState(const Context & context);
+        ~WinState() override = default;
 
         void onEnter(Context & context) override;
         void onExit(Context & context) override;
