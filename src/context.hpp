@@ -20,6 +20,7 @@ namespace halloween
 {
     struct Level;
     class Coins;
+    class Darts;
     class Slimes;
     class Ghosts;
     class Avatar;
@@ -52,6 +53,7 @@ namespace halloween
             Level & lev,
             Missiles & mis,
             Coins & con,
+            Darts & dar,
             Slimes & sli,
             Ghosts & gho,
             FloatingSpirit & flo,
@@ -71,6 +73,7 @@ namespace halloween
             , level(lev)
             , missiles(mis)
             , coins(con)
+            , darts(dar)
             , slimes(sli)
             , ghosts(gho)
             , spirit(flo)
@@ -95,6 +98,7 @@ namespace halloween
         Level & level;
         Missiles & missiles;
         Coins & coins;
+        Darts & darts;
         Slimes & slimes;
         Ghosts & ghosts;
         FloatingSpirit & spirit;

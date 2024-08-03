@@ -647,39 +647,6 @@
                 }, 
                 {
                  "height":96,
-                 "id":57,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":3744,
-                 "y":384
-                }, 
-                {
-                 "height":96,
-                 "id":58,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":3840,
-                 "y":384
-                }, 
-                {
-                 "height":96,
-                 "id":59,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":3936,
-                 "y":384
-                }, 
-                {
-                 "height":96,
                  "id":60,
                  "name":"",
                  "rotation":0,
@@ -731,7 +698,7 @@
                  "visible":true,
                  "width":64,
                  "x":5408,
-                 "y":960
+                 "y":864
                 }, 
                 {
                  "height":96,
@@ -742,7 +709,7 @@
                  "visible":true,
                  "width":96,
                  "x":5472,
-                 "y":928
+                 "y":832
                 }, 
                 {
                  "height":96,
@@ -753,7 +720,40 @@
                  "visible":true,
                  "width":64,
                  "x":5568,
-                 "y":960
+                 "y":864
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":14,
+         "name":"dart",
+         "objects":[
+                {
+                 "height":32,
+                 "id":77,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":3840,
+                 "y":480
+                }, 
+                {
+                 "height":32,
+                 "id":78,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":2144,
+                 "y":640
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -959,8 +959,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":14,
- "nextobjectid":77,
+ "nextlayerid":15,
+ "nextobjectid":79,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

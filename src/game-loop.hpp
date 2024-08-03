@@ -7,6 +7,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "dart.hpp"
 #include "floating-spirit.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
@@ -67,6 +68,7 @@ namespace halloween
         Level m_level;
         Missiles m_missiles;
         Coins m_coins;
+        Darts m_darts;
         Slimes m_slimes;
         Ghosts m_ghosts;
         FloatingSpirit m_spirit;

@@ -8,6 +8,7 @@
 #include "avatar.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "dart.hpp"
 #include "floating-spirit.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
@@ -39,6 +40,7 @@ namespace halloween
     {
         if (context.level.number != context.level_number)
         {
+            context.darts.clear();
             context.ghosts.clear();
             context.ghosts.clearSpawnPoints();
             context.slimes.clear();
@@ -79,6 +81,7 @@ namespace halloween
         context.avatar.update(context, frameTimeSec);
         context.missiles.update(context, frameTimeSec);
         context.coins.update(frameTimeSec);
+        context.darts.update(frameTimeSec);
         context.ghosts.update(context, frameTimeSec);
         context.slimes.update(frameTimeSec);
         context.owl_calls.update(context, frameTimeSec);
@@ -133,6 +136,7 @@ namespace halloween
         context.ghosts.draw(target, states);
         context.missiles.draw(target, states);
         context.coins.draw(target, states);
+        context.darts.draw(target, states);
         context.avatar.draw(target, states);
         context.slimes.draw(target, states);
         context.info_region.draw(target, states);

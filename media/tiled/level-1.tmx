@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="192" height="44" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="77">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="192" height="44" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="79">
  <editorsettings>
   <export target="../../../src/halloween/media/map/level-1.json" format="json"/>
  </editorsettings>
@@ -238,16 +238,17 @@
   <object id="43" x="1152" y="1120" width="64" height="96"/>
   <object id="44" x="1248" y="1120" width="64" height="96"/>
   <object id="45" x="1344" y="1120" width="64" height="96"/>
-  <object id="57" x="3744" y="384" width="64" height="96"/>
-  <object id="58" x="3840" y="384" width="64" height="96"/>
-  <object id="59" x="3936" y="384" width="64" height="96"/>
   <object id="60" x="4576" y="576" width="64" height="96"/>
   <object id="61" x="4672" y="576" width="64" height="96"/>
   <object id="62" x="4352" y="256" width="64" height="96"/>
   <object id="63" x="4448" y="256" width="64" height="96"/>
-  <object id="71" x="5408" y="960" width="64" height="96"/>
-  <object id="72" x="5472" y="928" width="96" height="96"/>
-  <object id="73" x="5568" y="960" width="64" height="96"/>
+  <object id="71" x="5408" y="864" width="64" height="96"/>
+  <object id="72" x="5472" y="832" width="96" height="96"/>
+  <object id="73" x="5568" y="864" width="64" height="96"/>
+ </objectgroup>
+ <objectgroup id="14" name="dart">
+  <object id="77" x="3840" y="480" width="64" height="32"/>
+  <object id="78" x="2144" y="640" width="64" height="32"/>
  </objectgroup>
  <objectgroup id="12" name="water">
   <object id="74" x="5344" y="1312" width="352" height="96"/>

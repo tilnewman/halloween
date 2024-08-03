@@ -5,6 +5,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "dart.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
@@ -259,6 +260,7 @@ namespace halloween
         waterCollisions(context);
         exitCollisions(context);
         coinCollisions(context);
+        context.darts.collideWithAvatar(context, collisionRect());
         slimeCollisions(context, isAttacking);
         killIfOutOfBounds(context);
 
@@ -287,6 +289,7 @@ namespace halloween
         context.coins.move({ moveX, 0.0f });
         context.ghosts.move({ moveX, 0.0f });
         context.slimes.move({ moveX, 0.0f });
+        context.darts.move({ moveX, 0.0f });
     }
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)

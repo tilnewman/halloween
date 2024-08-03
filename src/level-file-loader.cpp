@@ -5,6 +5,7 @@
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
+#include "dart.hpp"
 #include "ghost.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
@@ -131,6 +132,10 @@ namespace halloween
             {
                 parseSlimeLayer(context, jsonLayer);
             }
+            else if (layerName == "dart")
+            {
+                parseDartLayer(context, jsonLayer);
+            }
             else
             {
                 M_LOG(
@@ -254,6 +259,17 @@ namespace halloween
         {
             const sf::FloatRect rect = parseAndConvertRect(context, slimeJson);
             context.slimes.addRect(rect);
+        }
+    }
+
+    void LevelFileLoader::parseDartLayer(Context & context, Json & json)
+    {
+        context.darts.clear();
+
+        for (Json & dartJson : json["objects"])
+        {
+            const sf::FloatRect rect = parseAndConvertRect(context, dartJson);
+            context.darts.add(util::center(rect));
         }
     }
 
