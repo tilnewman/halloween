@@ -968,15 +968,15 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/..\/Documents\/halloween\/map\/ground.tsx"
+         "source":"..\/tiled\/ground.tsx"
         }, 
         {
          "firstgid":257,
-         "source":"..\/..\/..\/..\/Documents\/halloween\/map\/object-2.tsx"
+         "source":"..\/tiled\/object-2.tsx"
         }, 
         {
          "firstgid":513,
-         "source":"..\/..\/..\/..\/Documents\/halloween\/map\/object-1.tsx"
+         "source":"..\/tiled\/object-1.tsx"
         }],
  "tilewidth":32,
  "type":"map",
