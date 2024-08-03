@@ -21,7 +21,7 @@ namespace halloween
 
         // display sizes
         float tile_scale = 0.75f;
-        float avatar_scale = 0.2f;
+        float avatar_scale = 0.8f;
         sf::Vector2f dart_scale = { 0.333f, 0.5f };
         sf::Vector2f ghost_scale = { 0.5f, 0.5f };
 
