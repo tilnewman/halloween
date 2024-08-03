@@ -33,6 +33,7 @@ namespace halloween
         , m_attackAnim()
         , m_deathAnim()
         , m_throwAnim()
+        , m_glideAnim()
         , m_idleTexture()
         , m_jumpTexture()
         , m_sprite()
@@ -52,6 +53,7 @@ namespace halloween
         m_attackAnim.setup(settings.media_path, "Attack", 10, 0.03f, false);
         m_deathAnim.setup(settings.media_path, "Dead", 10, 0.05f, false);
         m_throwAnim.setup(settings.media_path, "Throw", 10, 0.02f, false);
+        m_glideAnim.setup(settings.media_path, "Glide", 10, 0.33f, true);
 
         const std::string imagePath = (settings.media_path / "image/avatar/").string();
 
@@ -161,6 +163,22 @@ namespace halloween
                 rect.left += (m_sprite.getGlobalBounds().width * 0.33f);
             }
         }
+        else if (Action::Glide == m_action)
+        {
+            const float hairVertAdj = 0.18f;
+            rect.top += (rect.height * hairVertAdj);
+            rect.height -= (rect.height * hairVertAdj);
+
+            rect.width *= 0.8f;
+            if (m_isFacingRight)
+            {
+                rect.left += (m_sprite.getGlobalBounds().width * 0.15f);
+            }
+            else
+            {
+                rect.left += (m_sprite.getGlobalBounds().width * 0.25f);
+            }
+        }
 
         return rect;
     }
@@ -202,18 +220,15 @@ namespace halloween
     {
         m_action = action;
 
-        // clang-format off
-        switch (action)
+        // set image if not animated
+        if (Action::Idle == action)
         {
-            case Action::Idle:   { m_sprite.setTexture(m_idleTexture, true);  break; }
-            case Action::Jump:   { m_sprite.setTexture(m_jumpTexture, true);  break; }
-            case Action::Dead:
-            case Action::Throw:
-            case Action::Attack:
-            case Action::Run:    { break; }
-            default:             { assert(false); break; }
+            m_sprite.setTexture(m_idleTexture, true);
         }
-        // clang-format on
+        else if (Action::Jump == action)
+        {
+            m_sprite.setTexture(m_jumpTexture, true);
+        }
     }
 
     void Avatar::update(Context & context, const float frameTimeSec)
@@ -225,14 +240,24 @@ namespace halloween
 
         const bool isAttacking = handleAttacking(context, frameTimeSec);
         const bool isThrowing = handleThrowing(context, frameTimeSec);
+        const bool isGliding = handleGliding(context, frameTimeSec);
 
-        if (!isAttacking && !isThrowing)
+        if (!isAttacking && !isThrowing && !isGliding)
         {
             sideToSideMotion(context, frameTimeSec);
             jumping(context, frameTimeSec);
         }
 
-        m_velocity += (context.settings.gravity_acc * frameTimeSec);
+        if (isGliding)
+        {
+            m_velocity +=
+                ((context.settings.gravity_acc * sf::Vector2f(1.0f, 0.1f)) * frameTimeSec);
+        }
+        else
+        {
+            m_velocity += (context.settings.gravity_acc * frameTimeSec);
+        }
+
         m_sprite.move(m_velocity);
 
         moveMap(context);
@@ -298,6 +323,7 @@ namespace halloween
 
     bool Avatar::handleAttacking(Context & context, const float frameTimeSec)
     {
+        // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && (Action::Attack != m_action) &&
             (Action::Throw != m_action))
         {
@@ -317,6 +343,7 @@ namespace halloween
             return true;
         }
 
+        // all other frames
         if (Action::Attack == m_action)
         {
             if (m_attackAnim.update(frameTimeSec))
@@ -337,6 +364,7 @@ namespace halloween
 
     bool Avatar::handleThrowing(Context & context, const float frameTimeSec)
     {
+        // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && (Action::Attack != m_action) &&
             (Action::Throw != m_action))
         {
@@ -362,6 +390,7 @@ namespace halloween
             return true;
         }
 
+        // all other frames
         if (Action::Throw == m_action)
         {
             if (m_throwAnim.update(frameTimeSec))
@@ -375,6 +404,48 @@ namespace halloween
             }
 
             return true;
+        }
+
+        return false;
+    }
+
+    bool Avatar::handleGliding(Context & context, const float frameTimeSec)
+    {
+        // first frame
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (Action::Jump == m_action) &&
+            (m_velocity.y > -1.0f))
+        {
+            context.audio.play("parachute", 0.5f);
+            setAction(Action::Glide);
+            m_glideAnim.restart();
+            m_sprite.setTexture(m_glideAnim.texture(), true);
+
+            const float maxGlideVertVelocity = 1.0f;
+            if (m_velocity.y > maxGlideVertVelocity)
+            {
+                m_velocity.y = maxGlideVertVelocity;
+            }
+
+            return true;
+        }
+
+        // all other frames
+        if (Action::Glide == m_action)
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            {
+                if (m_glideAnim.update(frameTimeSec))
+                {
+                    m_sprite.setTexture(m_glideAnim.texture(), true);
+                }
+
+                return true;
+            }
+            else
+            {
+                setAction(Action::Idle);
+                return false;
+            }
         }
 
         return false;
