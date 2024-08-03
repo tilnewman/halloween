@@ -47,6 +47,8 @@ namespace halloween
         kill_collisions.clear();
         acid_collisions.clear();
         water_collisions.clear();
+        farthest_horiz_map_pixel = 0.0f;
+        farthest_horiz_traveled = 0.0f;
     }
 
     bool Level::load(Context & context)

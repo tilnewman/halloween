@@ -291,27 +291,52 @@ namespace halloween
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)
     {
-        if (Action::Dead == m_action)
+        if (Action::Dead != m_action)
         {
-            // Delay a few seconds after death before changing states.
-            // This allows the player to see how they died.
+            return false;
+        }
 
-            m_deadDelaySec += frameTimeSec;
-            if (m_deadDelaySec > context.settings.death_delay_sec)
+        // Delay a few seconds after death before changing states.
+        // This allows the player to see how they died, and for all
+        // the various sound effects to finish playing.
+        m_deadDelaySec += frameTimeSec;
+        if (m_deadDelaySec > context.settings.death_delay_sec)
+        {
+            if (context.info_region.lives() > 0)
+            {
+                context.info_region.livesAdjust(-1);
+                context.slimes.clear();
+                context.level.reset();
+                context.level.load(context);
+                context.slimes.spawnAll(context);
+
+                m_action = Action::Idle;
+                m_hasLanded = true;
+                m_deadDelaySec = 0.0f;
+                m_velocity = { 0.0f, 0.0f };
+
+                if (!m_isFacingRight)
+                {
+                    m_isFacingRight = true;
+                    m_sprite.scale(-1.0f, 1.0f); // sfml trick to flip image
+                }
+
+                context.audio.play("respawn");
+            }
+            else
             {
                 context.state.setChangePending(State::GameOver);
             }
-
-            if (m_deathAnim.update(frameTimeSec))
-            {
-                m_sprite.setTexture(m_deathAnim.texture(), true);
-            }
-
-            m_blood.update(frameTimeSec);
-            return true;
         }
 
-        return false;
+        if (m_deathAnim.update(frameTimeSec))
+        {
+            m_sprite.setTexture(m_deathAnim.texture(), true);
+        }
+
+        m_blood.update(frameTimeSec);
+
+        return true;
     }
 
     bool Avatar::handleAttacking(Context & context, const float frameTimeSec)
@@ -654,7 +679,7 @@ namespace halloween
         {
             if (avatarRect.intersects(coll))
             {
-                handleDeath(context);
+                triggerDeath(context);
                 return;
             }
         }
@@ -706,7 +731,7 @@ namespace halloween
 
         if (context.slimes.doesCollideWithAny(collisionRect()))
         {
-            handleDeath(context);
+            triggerDeath(context);
         }
     }
 
@@ -755,15 +780,13 @@ namespace halloween
 
     void Avatar::killIfOutOfBounds(Context & context)
     {
-        if (context.layout.mapRegion().intersects(collisionRect()))
+        if (!context.layout.mapRegion().intersects(collisionRect()))
         {
-            return;
+            triggerDeath(context);
         }
-
-        handleDeath(context);
     }
 
-    void Avatar::handleDeath(Context & context)
+    void Avatar::triggerDeath(Context & context)
     {
         m_blood.start(context, m_sprite.getPosition(), m_isFacingRight);
         m_action = Action::Dead;
@@ -771,7 +794,6 @@ namespace halloween
         context.audio.play("scream");
         m_velocity = { 0.0f, 0.0f };
         m_deathAnim.restart();
-        context.info_region.livesAdjust(-1);
     }
 
 } // namespace halloween
