@@ -139,6 +139,16 @@ namespace halloween
             "");
 
         tiledCredit.vertPosition(sfmlCredit.bottom() + vertSpacer);
+
+        Credit & tilesetCredit =
+            m_credits.emplace_back(context, "Free Graveyard Tileset", "www.gameart2d.com", "", "");
+
+        tilesetCredit.vertPosition(tiledCredit.bottom() + vertSpacer);
+
+        Credit & spritesheetCredit =
+            m_credits.emplace_back(context, "Ninja Girl Free Sprites", "www.gameart2d.com", "", "");
+
+        spritesheetCredit.vertPosition(tilesetCredit.bottom() + vertSpacer);
     }
 
     void StateCredits::onExit(Context & context) { context.music.stop("credits.ogg"); }
