@@ -85,11 +85,12 @@ namespace halloween
 
         if (Action::Idle == m_action)
         {
-            const float hairVertAdj = 0.15f;
-            rect.top += (rect.height * hairVertAdj);
-            rect.height -= (rect.height * hairVertAdj);
+            const float hairVertAdj{ rect.height * 0.15f };
+            rect.top += hairVertAdj;
+            rect.height -= hairVertAdj;
 
             rect.width *= 0.7f;
+
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.2f);
@@ -101,11 +102,12 @@ namespace halloween
         }
         else if (Action::Attack == m_action)
         {
-            const float hairVertAdj = 0.165f;
-            rect.top += (rect.height * hairVertAdj);
-            rect.height -= (rect.height * (1.5f * hairVertAdj));
+            const float hairVertAdj{ rect.height * 0.165f };
+            rect.top += hairVertAdj;
+            rect.height -= (1.5f * hairVertAdj);
 
             rect.width *= 0.4f;
+
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
@@ -117,11 +119,12 @@ namespace halloween
         }
         else if (Action::Run == m_action)
         {
-            const float hairVertAdj = 0.18f;
-            rect.top += (rect.height * hairVertAdj);
-            rect.height -= (rect.height * hairVertAdj);
+            const float hairVertAdj{ rect.height * 0.18f };
+            rect.top += hairVertAdj;
+            rect.height -= hairVertAdj;
 
             rect.width *= 0.5f;
+
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.2f);
@@ -133,11 +136,12 @@ namespace halloween
         }
         else if (Action::Jump == m_action)
         {
-            const float hairVertAdj = 0.18f;
-            rect.top += (rect.height * hairVertAdj);
-            rect.height -= (rect.height * (1.5f * hairVertAdj));
+            const float hairVertAdj{ rect.height * 0.18f };
+            rect.top += hairVertAdj;
+            rect.height -= (1.5f * hairVertAdj);
 
             rect.width *= 0.5f;
+
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.2f);
@@ -149,11 +153,12 @@ namespace halloween
         }
         else if (Action::Throw == m_action)
         {
-            const float hairVertAdj = 0.18f;
-            rect.top += (rect.height * hairVertAdj);
-            rect.height -= (rect.height * hairVertAdj);
+            const float hairVertAdj{ rect.height * 0.18f };
+            rect.top += hairVertAdj;
+            rect.height -= hairVertAdj;
 
             rect.width *= 0.5f;
+
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.17f);
@@ -165,11 +170,12 @@ namespace halloween
         }
         else if (Action::Glide == m_action)
         {
-            const float hairVertAdj = 0.18f;
-            rect.top += (rect.height * hairVertAdj);
-            rect.height -= (rect.height * hairVertAdj);
+            const float hairVertAdj{ rect.height * 0.18f };
+            rect.top += hairVertAdj;
+            rect.height -= hairVertAdj;
 
             rect.width *= 0.8f;
+
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.15f);
@@ -191,11 +197,12 @@ namespace halloween
         {
             rect = m_sprite.getGlobalBounds();
 
-            const float hairVertAdj = 0.165f;
-            rect.top += (rect.height * hairVertAdj);
-            rect.height -= (rect.height * (1.5f * hairVertAdj));
+            const float hairVertAdj{ rect.height * 0.165f };
+            rect.top += hairVertAdj;
+            rect.height -= (1.5f * hairVertAdj);
 
             rect.width *= 0.4f;
+
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.5f);
@@ -653,6 +660,7 @@ namespace halloween
         {
             context.audio.stopAllLooped();
             context.state.setChangePending(State::Level);
+            return;
         }
     }
 
