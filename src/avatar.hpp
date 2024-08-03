@@ -46,6 +46,7 @@ namespace halloween
         bool handleAttacking(Context & context, const float frameTimeSec);
         bool handleThrowing(Context & context, const float frameTimeSec);
         bool handleGliding(Context & context, const float frameTimeSec);
+        bool handleIdle(Context & context, const float frameTimeSec);
         void sideToSideMotion(Context & context, const float frameTimeSec);
         void jumping(Context & context, const float frameTimeSec);
         void walkCollisions(Context & context);
@@ -66,7 +67,7 @@ namespace halloween
         AvatarAnim m_deathAnim;
         AvatarAnim m_throwAnim;
         AvatarAnim m_glideAnim;
-        sf::Texture m_idleTexture;
+        AvatarAnim m_idleAnim;
         sf::Texture m_jumpTexture;
         sf::Sprite m_sprite;
         sf::Vector2f m_velocity;

@@ -34,7 +34,7 @@ namespace halloween
         , m_deathAnim()
         , m_throwAnim()
         , m_glideAnim()
-        , m_idleTexture()
+        , m_idleAnim()
         , m_jumpTexture()
         , m_sprite()
         , m_velocity()
@@ -54,16 +54,13 @@ namespace halloween
         m_deathAnim.setup(settings.media_path, "Dead", 10, 0.05f, false);
         m_throwAnim.setup(settings.media_path, "Throw", 10, 0.02f, false);
         m_glideAnim.setup(settings.media_path, "Glide", 10, 0.33f, true);
+        m_idleAnim.setup(settings.media_path, "Idle", 10, 0.1f, true);
 
-        const std::string imagePath = (settings.media_path / "image/avatar/").string();
-
-        m_idleTexture.loadFromFile(imagePath + "Idle-0.png");
-        m_jumpTexture.loadFromFile(imagePath + "Jump-6.png");
-
-        m_idleTexture.setSmooth(true);
+        m_jumpTexture.loadFromFile((settings.media_path / "image/avatar/Jump-6.png").string());
         m_jumpTexture.setSmooth(true);
 
-        m_sprite.setTexture(m_idleTexture);
+        m_idleAnim.restart();
+        m_sprite.setTexture(m_idleAnim.texture(), true);
         m_sprite.setScale(settings.avatar_scale, settings.avatar_scale);
     }
 
@@ -186,6 +183,7 @@ namespace halloween
             }
         }
 
+        // should never get here
         return rect;
     }
 
@@ -228,11 +226,7 @@ namespace halloween
         m_action = action;
 
         // set image if not animated
-        if (Action::Idle == action)
-        {
-            m_sprite.setTexture(m_idleTexture, true);
-        }
-        else if (Action::Jump == action)
+        if (Action::Jump == action)
         {
             m_sprite.setTexture(m_jumpTexture, true);
         }
@@ -278,6 +272,9 @@ namespace halloween
         coinCollisions(context);
         slimeCollisions(context, isAttacking);
         killIfOutOfBounds(context);
+
+        // this one must come last, after all possible sets to m_action
+        handleIdle(context, frameTimeSec);
     }
 
     void Avatar::moveMap(Context & context)
@@ -360,6 +357,7 @@ namespace halloween
                 if (m_attackAnim.isFinished())
                 {
                     setAction(Action::Idle);
+                    return false;
                 }
             }
 
@@ -407,6 +405,7 @@ namespace halloween
                 if (m_throwAnim.isFinished())
                 {
                     setAction(Action::Idle);
+                    return false;
                 }
             }
 
@@ -456,6 +455,23 @@ namespace halloween
         }
 
         return false;
+    }
+
+    bool Avatar::handleIdle(Context &, const float frameTimeSec)
+    {
+        if (Action::Idle == m_action)
+        {
+            if (m_idleAnim.update(frameTimeSec))
+            {
+                m_sprite.setTexture(m_idleAnim.texture(), true);
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void Avatar::sideToSideMotion(Context & context, const float frameTimeSec)
