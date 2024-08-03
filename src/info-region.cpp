@@ -43,7 +43,7 @@ namespace halloween
         {
             m_elapsedTimeSec -= m_timePerScoreUpdate;
 
-            if ((m_score - m_visibleScore) >= 10)
+            if ((m_score - m_visibleScore) > 10)
             {
                 m_visibleScore = m_score;
                 context.audio.play("bell", 0.5f);
