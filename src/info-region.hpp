@@ -30,6 +30,9 @@ namespace halloween
         inline int lives() const { return m_lives; }
         void livesAdjust(const int adj);
 
+        inline int darts() const { return m_dartCount; }
+        void dartsAdjust(const int adj);
+
       private:
         void updateText();
 
@@ -39,6 +42,7 @@ namespace halloween
         float m_elapsedTimeSec;
         float m_timePerScoreUpdate;
         int m_lives;
+        int m_dartCount;
         sf::Text m_text;
         sf::FloatRect m_region;
         std::vector<sf::Vertex> m_bgVerts;

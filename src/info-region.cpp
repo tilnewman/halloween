@@ -26,6 +26,7 @@ namespace halloween
         , m_elapsedTimeSec(0.0f)
         , m_timePerScoreUpdate(0.1f)
         , m_lives(0)
+        , m_dartCount(0)
         , m_text()
         , m_region()
         , m_bgVerts()
@@ -64,6 +65,8 @@ namespace halloween
         m_score = 0;
         m_visibleScore = 0;
         m_lives = context.settings.player_lives;
+        m_dartCount = context.settings.starting_dart_count;
+
         updateText();
     }
 
@@ -87,15 +90,17 @@ namespace halloween
         target.draw(m_text, states);
     }
 
-    void InfoRegion::scoreAdjust(const int adj)
-    {
-        m_score += adj;
-        // updateText();
-    }
+    void InfoRegion::scoreAdjust(const int adj) { m_score += adj; }
 
     void InfoRegion::livesAdjust(const int adj)
     {
         m_lives += adj;
+        updateText();
+    }
+
+    void InfoRegion::dartsAdjust(int adj)
+    {
+        m_dartCount += adj;
         updateText();
     }
 
@@ -104,7 +109,8 @@ namespace halloween
         std::ostringstream ss;
 
         ss << "Lives: " << std::setw(2) << std::setfill('0') << m_lives
-           << "      Score: " << std::setw(6) << std::setfill('0') << m_visibleScore;
+           << "    Darts: " << std::setw(2) << std::setfill('0') << m_dartCount
+           << "    Score: " << std::setw(6) << std::setfill('0') << m_visibleScore;
 
         m_text.setString(ss.str());
         util::setOriginToPosition(m_text);

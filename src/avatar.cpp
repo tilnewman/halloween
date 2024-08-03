@@ -386,7 +386,7 @@ namespace halloween
     {
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && (Action::Attack != m_action) &&
-            (Action::Throw != m_action))
+            (Action::Throw != m_action) && (context.info_region.darts() > 0))
         {
             context.audio.play("throw");
 
@@ -406,6 +406,8 @@ namespace halloween
             missilePosition.x = util::center(avatarRect).x;
             missilePosition.y = (avatarRect.top + (avatarRect.height * 0.4f));
             context.missiles.add(missilePosition, m_isFacingRight);
+
+            context.info_region.dartsAdjust(-1);
 
             return true;
         }
