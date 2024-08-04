@@ -257,12 +257,12 @@ namespace halloween
 
     void LevelFileLoader::parseSlimeLayer(Context & context, Json & json)
     {
-        context.slimes.clearRects();
+        context.slimes.clear();
 
         for (Json & slimeJson : json["objects"])
         {
             const sf::FloatRect rect = parseAndConvertRect(context, slimeJson);
-            context.slimes.addRect(rect);
+            context.slimes.add(context, rect);
         }
     }
 

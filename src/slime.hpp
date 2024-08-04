@@ -55,13 +55,8 @@ namespace halloween
         Slimes();
 
         void setup(const Settings & settings);
-
-        void clearRects() { m_rects.clear(); }
-        void clear() { m_slimes.clear(); }
-
-        void spawnAll(const Context & context);
-        void addRect(const sf::FloatRect & rect) { m_rects.push_back(rect); }
-
+        void add(const Context & context, const sf::FloatRect & rect);
+        void clear();
         void update(const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         void move(const sf::Vector2f & move);

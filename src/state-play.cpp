@@ -45,13 +45,8 @@ namespace halloween
             context.ghosts.clear();
             context.ghosts.clearSpawnPoints();
             context.slimes.clear();
-            context.slimes.clearRects();
 
-            if (context.level.load(context))
-            {
-                context.slimes.spawnAll(context);
-            }
-            else
+            if (!context.level.load(context))
             {
                 // if we fail to load it is because there are no more levels to play
                 context.state.setChangePending(State::Win);

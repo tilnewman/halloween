@@ -320,7 +320,6 @@ namespace halloween
                 context.slimes.clear();
                 context.level.reset();
                 context.level.load(context);
-                context.slimes.spawnAll(context);
 
                 m_action = Action::Idle;
                 m_hasLanded = true;

@@ -52,24 +52,29 @@ namespace halloween
         }
     }
 
-    void Slimes::spawnAll(const Context & context)
+    void Slimes::clear()
     {
-        for (const sf::FloatRect & rect : m_rects)
-        {
-            const float speed{ context.random.fromTo(20.0f, 50.0f) };
+        m_slimes.clear();
+        m_rects.clear();
+    }
 
-            Slime slime(context.random.boolean(), rect, speed);
+    void Slimes::add(const Context & context, const sf::FloatRect & rect)
+    {
+        m_rects.push_back(rect);
 
-            slime.texture_index = context.random.index(m_textures);
-            slime.sprite.setTexture(m_textures.at(slime.texture_index));
-            slime.sprite.setScale({ 0.5f, 0.5f });
+        const float speed{ context.random.fromTo(20.0f, 50.0f) };
 
-            const float posX{ rect.left + (rect.width / 2.0f) };
-            const float posY{ (rect.top + rect.height) - slime.sprite.getGlobalBounds().height };
-            slime.sprite.setPosition(posX, posY);
+        Slime slime(context.random.boolean(), rect, speed);
 
-            m_slimes.push_back(slime);
-        }
+        slime.texture_index = context.random.index(m_textures);
+        slime.sprite.setTexture(m_textures.at(slime.texture_index));
+        slime.sprite.setScale({ 0.5f, 0.5f });
+
+        const float posX{ rect.left + (rect.width / 2.0f) };
+        const float posY{ (rect.top + rect.height) - slime.sprite.getGlobalBounds().height };
+        slime.sprite.setPosition(posX, posY);
+
+        m_slimes.push_back(slime);
     }
 
     void Slimes::update(const float frameTimeSec)
