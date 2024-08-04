@@ -42,6 +42,8 @@ namespace halloween
         const sf::Text
             makeText(unsigned int charSize, const std::string & str, const sf::Color & color) const;
 
+        const TileTexture & tileTexture(const TileImage image) const;
+
         sf::Font font;
         sf::Text fps_text;
 
@@ -53,19 +55,7 @@ namespace halloween
         TileTexture ground_texture;
         TileTexture object_texture1;
         TileTexture object_texture2;
-
-        const TileTexture & tileTexture(const TileImage image)
-        {
-            // clang-format off
-            switch (image)
-            {
-                case TileImage::Ground:  { return ground_texture;  }
-                case TileImage::Object1: { return object_texture1; }
-                case TileImage::Object2: 
-                default:                 { return object_texture2; }
-            }
-            // clang-format on
-        }
+        TileTexture object_texture3;
     };
 
 } // namespace halloween

@@ -155,6 +155,10 @@ namespace halloween
             {
                 parseTileLayer(context, TileImage::Object2, jsonLayer);
             }
+            else if (layerName == "object-3")
+            {
+                parseTileLayer(context, TileImage::Object3, jsonLayer);
+            }
             else if (layerName == "collision")
             {
                 parseRectLayer(context, jsonLayer, context.level.walk_collisions);

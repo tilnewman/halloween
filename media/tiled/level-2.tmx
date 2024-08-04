@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="600" height="44" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="39">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="600" height="44" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="40">
  <editorsettings>
   <export target="../map/level-2.json" format="json"/>
  </editorsettings>
@@ -125,6 +125,7 @@
   <object id="34" x="2688" y="320" width="64" height="96"/>
   <object id="35" x="2784" y="320" width="64" height="96"/>
   <object id="36" x="2880" y="320" width="64" height="96"/>
+  <object id="39" x="3456" y="-288"/>
  </objectgroup>
  <objectgroup id="2" name="collision">
   <object id="1" x="-96" y="1280" width="2176" height="128"/>

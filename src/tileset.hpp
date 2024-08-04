@@ -19,7 +19,8 @@ namespace halloween
     {
         Ground = 0,
         Object1,
-        Object2
+        Object2,
+        Object3
     };
 
     inline std::ostream & operator<<(std::ostream & os, const TileImage image)
@@ -30,6 +31,7 @@ namespace halloween
             case TileImage::Ground:  { os << "ground";   break; }
             case TileImage::Object1: { os << "object-1"; break; }
             case TileImage::Object2: { os << "object-2"; break; }
+            case TileImage::Object3: { os << "object-3"; break; }
             default:                 { assert(false);    break; }
         }
         // clang-format on
