@@ -21,7 +21,6 @@ namespace halloween
     FireSpouts::FireSpouts()
         : m_spoutTexture()
         , m_timePerFrame(0.1f)
-        , m_timeBetweenSpurtsSec(2.5f)
         , m_elapsedTimeSec(0.0f)
         , m_fireSpouts()
         , m_fireTextures()

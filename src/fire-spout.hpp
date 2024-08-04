@@ -47,7 +47,6 @@ namespace halloween
       private:
         sf::Texture m_spoutTexture;
         float m_timePerFrame;
-        float m_timeBetweenSpurtsSec;
         float m_elapsedTimeSec;
         std::vector<FireSpout> m_fireSpouts;
         std::vector<sf::Texture> m_fireTextures;
