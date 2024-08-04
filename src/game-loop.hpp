@@ -8,7 +8,6 @@
 #include "coin.hpp"
 #include "context.hpp"
 #include "dart.hpp"
-#include "floating-spirit.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-file-loader.hpp"
@@ -73,7 +72,6 @@ namespace halloween
         SpikedBalls m_spikedBalls;
         Slimes m_slimes;
         Ghosts m_ghosts;
-        FloatingSpirit m_spirit;
         InfoRegion m_infoRegion;
 
         std::vector<std::size_t> m_delayLoopCounts;
