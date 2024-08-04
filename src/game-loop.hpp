@@ -8,6 +8,7 @@
 #include "coin.hpp"
 #include "context.hpp"
 #include "dart.hpp"
+#include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-file-loader.hpp"
@@ -70,6 +71,7 @@ namespace halloween
         Coins m_coins;
         Darts m_darts;
         SpikedBalls m_spikedBalls;
+        FireSpouts m_fireSpouts;
         Slimes m_slimes;
         Ghosts m_ghosts;
         InfoRegion m_infoRegion;

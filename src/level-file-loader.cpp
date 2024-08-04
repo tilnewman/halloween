@@ -6,6 +6,7 @@
 #include "coin.hpp"
 #include "context.hpp"
 #include "dart.hpp"
+#include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
@@ -140,6 +141,10 @@ namespace halloween
             else if (layerName == "spiked-ball")
             {
                 parseSpikedBallLayer(context, jsonLayer);
+            }
+            else if (layerName == "fire-spout")
+            {
+                parseFireSpoutLayer(context, jsonLayer);
             }
             else
             {
@@ -285,6 +290,17 @@ namespace halloween
         {
             const sf::FloatRect rect = parseAndConvertRect(context, ballJson);
             context.balls.add(rect);
+        }
+    }
+
+    void LevelFileLoader::parseFireSpoutLayer(Context & context, Json & json)
+    {
+        context.spouts.clear();
+
+        for (Json & spoutJson : json["objects"])
+        {
+            const sf::FloatRect rect = parseAndConvertRect(context, spoutJson);
+            context.spouts.add(context, rect);
         }
     }
 

@@ -9,6 +9,7 @@
 #include "coin.hpp"
 #include "context.hpp"
 #include "dart.hpp"
+#include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
@@ -40,6 +41,7 @@ namespace halloween
     {
         if (context.level.number != context.level_number)
         {
+            context.spouts.clear();
             context.balls.clear();
             context.darts.clear();
             context.ghosts.clear();
@@ -81,6 +83,7 @@ namespace halloween
         context.slimes.update(frameTimeSec);
         context.owl_calls.update(context, frameTimeSec);
         context.balls.update(frameTimeSec);
+        context.spouts.update(frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)
@@ -132,6 +135,7 @@ namespace halloween
         context.missiles.draw(target, states);
         context.coins.draw(target, states);
         context.darts.draw(target, states);
+        context.spouts.draw(target, states);
         context.avatar.draw(target, states);
         context.slimes.draw(target, states);
         context.info_region.draw(target, states);

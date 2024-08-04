@@ -31,6 +31,7 @@ namespace halloween
         , m_coins()
         , m_darts()
         , m_spikedBalls()
+        , m_fireSpouts()
         , m_slimes()
         , m_ghosts()
         , m_infoRegion()
@@ -56,6 +57,7 @@ namespace halloween
               m_coins,
               m_darts,
               m_spikedBalls,
+              m_fireSpouts,
               m_slimes,
               m_ghosts,
               m_infoRegion)
@@ -96,6 +98,7 @@ namespace halloween
         m_coins.setup(m_settings);
         m_darts.setup(m_settings);
         m_spikedBalls.setup(m_settings);
+        m_fireSpouts.setup(m_settings);
         m_slimes.setup(m_settings);
         m_ghosts.setup(m_settings);
         m_avatar.setup(m_settings);

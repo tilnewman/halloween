@@ -29,6 +29,7 @@ namespace halloween
     struct Settings;
     struct Resources;
     class InfoRegion;
+    class FireSpouts;
     class SpikedBalls;
     class PauseScreen;
     class ScreenRegions;
@@ -55,6 +56,7 @@ namespace halloween
             Coins & con,
             Darts & dar,
             SpikedBalls & spi,
+            FireSpouts & fir,
             Slimes & sli,
             Ghosts & gho,
             InfoRegion & inf)
@@ -75,6 +77,7 @@ namespace halloween
             , coins(con)
             , darts(dar)
             , balls(spi)
+            , spouts(fir)
             , slimes(sli)
             , ghosts(gho)
             , info_region(inf)
@@ -100,6 +103,7 @@ namespace halloween
         Coins & coins;
         Darts & darts;
         SpikedBalls & balls;
+        FireSpouts & spouts;
         Slimes & slimes;
         Ghosts & ghosts;
         InfoRegion & info_region;

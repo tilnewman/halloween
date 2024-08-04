@@ -6,6 +6,7 @@
 #include "coin.hpp"
 #include "context.hpp"
 #include "dart.hpp"
+#include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
@@ -298,6 +299,7 @@ namespace halloween
         context.slimes.move(move);
         context.darts.move(move);
         context.balls.move(move);
+        context.spouts.move(move);
     }
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)
@@ -316,9 +318,15 @@ namespace halloween
             if (context.info_region.lives() > 0)
             {
                 context.info_region.livesAdjust(-1);
+
+                context.spouts.clear();
+                context.balls.clear();
+                context.coins.clear();
+                context.darts.clear();
                 context.ghosts.clear();
                 context.slimes.clear();
                 context.level.reset();
+
                 context.level.load(context);
 
                 m_action = Action::Idle;
