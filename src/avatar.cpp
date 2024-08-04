@@ -320,7 +320,7 @@ namespace halloween
         m_deadDelaySec += frameTimeSec;
         if (m_deadDelaySec > context.settings.death_delay_sec)
         {
-            if (context.info_region.lives() > 0)
+            if (context.info_region.lives() > 1)
             {
                 context.info_region.livesAdjust(-1);
 
