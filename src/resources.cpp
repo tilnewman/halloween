@@ -15,7 +15,9 @@ namespace halloween
     Resources::Resources()
         : font()
         , fps_text("", font, 60)
-        , bg_texture()
+        , bg_texture1()
+        , bg_texture2()
+        , bg_texture3()
         , bg_sprite()
         , ground_texture()
         , object_texture1()
@@ -28,13 +30,19 @@ namespace halloween
         font.loadFromFile((settings.media_path / "font/mops-antiqua.ttf").string());
         fps_text.setFont(font);
 
-        const std::string imagePath = (settings.media_path / "image/map/").string();
-
         // background image
-        bg_texture.loadFromFile((settings.media_path / "image/").string() + "background.png");
-        bg_texture.setSmooth(true);
+        bg_texture1.loadFromFile((settings.media_path / "image/").string() + "background-1.png");
+        bg_texture1.setSmooth(true);
 
-        bg_sprite.setTexture(bg_texture);
+        bg_texture2.loadFromFile((settings.media_path / "image/").string() + "background-2.png");
+        bg_texture2.setSmooth(true);
+
+        bg_texture3.loadFromFile((settings.media_path / "image/").string() + "background-3.png");
+        bg_texture3.setSmooth(true);
+
+        bg_sprite.setTexture(bg_texture1);
+
+        const std::string imagePath = (settings.media_path / "image/map/").string();
 
         // ground map tile image
         ground_texture.which = TileImage::Ground;
