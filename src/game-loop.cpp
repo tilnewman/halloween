@@ -92,8 +92,8 @@ namespace halloween
 
         m_music.setup(m_settings.media_path / "music");
 
+        m_layout.setup(m_window.getSize());
         m_media.setup(m_settings);
-        m_layout.setup(m_context, m_window.getSize());
         m_missiles.setup(m_settings);
         m_coins.setup(m_settings);
         m_darts.setup(m_settings);

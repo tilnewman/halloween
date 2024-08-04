@@ -28,6 +28,7 @@ namespace halloween
 
       private:
         void parseLevelDetails(Context & context, Json & json);
+        void parseBackgroundImageNumber(Context & context, Json & json);
         void parseLayers(Context & context, Json & json);
         void parseTileLayer(Context & context, const TileImage image, Json & json);
         void parseRectLayer(Context & context, Json & json, std::vector<sf::FloatRect> & rects);

@@ -9,6 +9,7 @@
 #include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "level.hpp"
+#include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
@@ -40,13 +41,13 @@ namespace halloween
 
         m_pathStr = path.string();
 
-        // open file
-        std::ifstream iStream(m_pathStr);
-        M_CHECK(iStream, "Failed to open level file: \"" << m_pathStr << "\"");
-
-        // stream file into json parser
         Json json;
-        iStream >> json;
+
+        {
+            std::ifstream iStream(m_pathStr);
+            M_CHECK(iStream, "Failed to open level file: \"" << m_pathStr << "\"");
+            iStream >> json;
+        }
 
         parseLevelDetails(context, json);
 
@@ -80,6 +81,58 @@ namespace halloween
         };
 
         context.level.map_position_offset = { 0.0f, heightOffset };
+
+        parseBackgroundImageNumber(context, json);
+    }
+
+    void LevelFileLoader::parseBackgroundImageNumber(Context & context, Json & json)
+    {
+        int backgroundImageNumber = 0;
+        for (Json & propJson : json["properties"])
+        {
+            const std::string propName = propJson["name"];
+            if ("background" == propName)
+            {
+                backgroundImageNumber = propJson["value"];
+                break;
+            }
+            else
+            {
+                std::cout << "Warning: While parsing \"" << m_pathStr
+                          << "\": Ignored custom property named \"" << propName << "\"\n";
+            }
+        }
+
+        if (0 == backgroundImageNumber)
+        {
+            std::cout << "Error: While parsing \"" << m_pathStr
+                      << "\": This map file is missing the custom int property named "
+                         "\"background\", so the default background image #1 will be used.\n";
+
+            backgroundImageNumber = 1;
+        }
+
+        if (1 == backgroundImageNumber)
+        {
+            context.media.bg_sprite.setTexture(context.media.bg_texture1);
+        }
+        else if (2 == backgroundImageNumber)
+        {
+            context.media.bg_sprite.setTexture(context.media.bg_texture2);
+        }
+        else if (3 == backgroundImageNumber)
+        {
+            context.media.bg_sprite.setTexture(context.media.bg_texture3);
+        }
+        else
+        {
+            std::cout << "Error: While parsing \"" << m_pathStr
+                      << "\": This map file has an invalid custom background property value="
+                      << backgroundImageNumber
+                      << ", so the default background image #1 will be used.\n";
+        }
+
+        util::growAndCenterInside(context.media.bg_sprite, context.layout.wholeRegion());
     }
 
     void LevelFileLoader::parseLayers(Context & context, Json & jsonWholeFile)

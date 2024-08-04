@@ -3,6 +3,9 @@
  <editorsettings>
   <export target="../map/level-1.json" format="json"/>
  </editorsettings>
+ <properties>
+  <property name="background" type="int" value="1"/>
+ </properties>
  <tileset firstgid="1" source="ground.tsx"/>
  <tileset firstgid="257" source="object-2.tsx"/>
  <tileset firstgid="513" source="object-1.tsx"/>

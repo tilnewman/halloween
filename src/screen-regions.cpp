@@ -23,7 +23,7 @@ namespace halloween
         , m_infoRegion()
     {}
 
-    void ScreenRegions::setup(Context & context, const sf::Vector2u & windowSize)
+    void ScreenRegions::setup(const sf::Vector2u & windowSize)
     {
         m_wholeSize = { static_cast<float>(windowSize.x), static_cast<float>(windowSize.y) };
         m_wholeRegion = { { 0.0f, 0.0f }, m_wholeSize };
@@ -39,9 +39,6 @@ namespace halloween
         m_mapRegion.width = m_wholeRegion.width;
         m_mapRegion.height = (m_wholeRegion.height - m_mapRegion.top);
         util::floor(m_mapRegion);
-
-        // TODO move to place where level loading happens and background image is selected
-        util::growAndCenterInside(context.media.bg_sprite, m_wholeRegion);
     }
 
 } // namespace halloween

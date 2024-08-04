@@ -3,6 +3,9 @@
  <editorsettings>
   <export target="../map/level-2.json" format="json"/>
  </editorsettings>
+ <properties>
+  <property name="background" type="int" value="3"/>
+ </properties>
  <tileset firstgid="1" source="ground.tsx"/>
  <tileset firstgid="257" source="object-2.tsx"/>
  <layer id="1" name="ground" width="600" height="44">

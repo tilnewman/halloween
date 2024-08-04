@@ -1017,6 +1017,12 @@
  "nextlayerid":17,
  "nextobjectid":84,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"background",
+         "type":"int",
+         "value":1
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.11.0",
  "tileheight":32,
