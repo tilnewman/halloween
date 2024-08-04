@@ -10,6 +10,7 @@
 #include "ghost.hpp"
 #include "level.hpp"
 #include "resources.hpp"
+#include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
@@ -203,6 +204,10 @@ namespace halloween
             {
                 parseFireSpoutLayer(context, jsonLayer);
             }
+            else if (layerName == "saw")
+            {
+                parseSawLayer(context, jsonLayer);
+            }
             else
             {
                 M_LOG(
@@ -358,6 +363,17 @@ namespace halloween
         {
             const sf::FloatRect rect = parseAndConvertRect(context, spoutJson);
             context.spouts.add(context, rect);
+        }
+    }
+
+    void LevelFileLoader::parseSawLayer(Context & context, Json & json)
+    {
+        context.saws.clear();
+
+        for (Json & sawJson : json["objects"])
+        {
+            const sf::FloatRect rect = parseAndConvertRect(context, sawJson);
+            context.saws.add(context, rect);
         }
     }
 

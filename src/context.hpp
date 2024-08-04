@@ -18,6 +18,7 @@ namespace util
 
 namespace halloween
 {
+    class Saws;
     struct Level;
     class Coins;
     class Darts;
@@ -57,6 +58,7 @@ namespace halloween
             Darts & dar,
             SpikedBalls & spi,
             FireSpouts & fir,
+            Saws & saw,
             Slimes & sli,
             Ghosts & gho,
             InfoRegion & inf)
@@ -78,6 +80,7 @@ namespace halloween
             , darts(dar)
             , balls(spi)
             , spouts(fir)
+            , saws(saw)
             , slimes(sli)
             , ghosts(gho)
             , info_region(inf)
@@ -104,6 +107,7 @@ namespace halloween
         Darts & darts;
         SpikedBalls & balls;
         FireSpouts & spouts;
+        Saws & saws;
         Slimes & slimes;
         Ghosts & ghosts;
         InfoRegion & info_region;

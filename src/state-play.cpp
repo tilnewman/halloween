@@ -18,6 +18,7 @@
 #include "owl-calls.hpp"
 #include "pause-screen.hpp"
 #include "resources.hpp"
+#include "saw.hpp"
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
 #include "slime.hpp"
@@ -41,6 +42,7 @@ namespace halloween
     {
         if (context.level.number != context.level_number)
         {
+            context.saws.clear();
             context.spouts.clear();
             context.balls.clear();
             context.darts.clear();
@@ -74,6 +76,7 @@ namespace halloween
         }
 
         StateBase::update(context, frameTimeSec);
+
         context.info_region.update(context, frameTimeSec);
         context.avatar.update(context, frameTimeSec);
         context.missiles.update(context, frameTimeSec);
@@ -84,6 +87,7 @@ namespace halloween
         context.owl_calls.update(context, frameTimeSec);
         context.balls.update(frameTimeSec);
         context.spouts.update(frameTimeSec);
+        context.saws.update(frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)
@@ -123,6 +127,8 @@ namespace halloween
         }
 
         target.draw(context.media.bg_sprite, states);
+
+        context.saws.draw(target, states);
 
         for (const TileLayer & layer : context.level.tiles.layers)
         {

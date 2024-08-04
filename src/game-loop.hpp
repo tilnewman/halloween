@@ -19,6 +19,7 @@
 #include "pause-screen.hpp"
 #include "random.hpp"
 #include "resources.hpp"
+#include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "slime.hpp"
@@ -72,6 +73,7 @@ namespace halloween
         Darts m_darts;
         SpikedBalls m_spikedBalls;
         FireSpouts m_fireSpouts;
+        Saws m_saws;
         Slimes m_slimes;
         Ghosts m_ghosts;
         InfoRegion m_infoRegion;

@@ -279,6 +279,28 @@
         }, 
         {
          "draworder":"topdown",
+         "id":18,
+         "name":"saw",
+         "objects":[
+                {
+                 "height":32,
+                 "id":84,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":4448,
+                 "y":1152
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":4,
          "name":"collision",
          "objects":[
@@ -1069,8 +1091,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":18,
- "nextobjectid":84,
+ "nextlayerid":19,
+ "nextobjectid":85,
  "orientation":"orthogonal",
  "properties":[
         {

@@ -12,6 +12,7 @@
 #include "level.hpp"
 #include "missile.hpp"
 #include "resources.hpp"
+#include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
@@ -276,6 +277,11 @@ namespace halloween
             triggerDeath(context);
         }
 
+        if (context.saws.doesCollideWithAny(collisionRect()))
+        {
+            triggerDeath(context);
+        }
+
         // this one must come last, after all possible sets to m_action
         handleIdle(context, frameTimeSec);
     }
@@ -305,6 +311,7 @@ namespace halloween
         context.darts.move(move);
         context.balls.move(move);
         context.spouts.move(move);
+        context.saws.move(move);
     }
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)
@@ -324,6 +331,7 @@ namespace halloween
             {
                 context.info_region.livesAdjust(-1);
 
+                context.saws.clear();
                 context.spouts.clear();
                 context.balls.clear();
                 context.coins.clear();

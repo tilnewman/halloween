@@ -40,6 +40,7 @@ namespace halloween
         void parseDartLayer(Context & context, Json & json);
         void parseSpikedBallLayer(Context & context, Json & json);
         void parseFireSpoutLayer(Context & context, Json & json);
+        void parseSawLayer(Context & context, Json & json);
 
       private:
         std::string m_pathStr;
