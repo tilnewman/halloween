@@ -28,18 +28,20 @@ namespace halloween
         m_wholeSize = { static_cast<float>(windowSize.x), static_cast<float>(windowSize.y) };
         m_wholeRegion = { { 0.0f, 0.0f }, m_wholeSize };
 
-        util::fitAndCenterInside(context.media.bg_sprite, m_wholeRegion);
-
-        context.media.bg_sprite.setPosition(
-            0.0f, std::floor(m_wholeSize.y - context.media.bg_sprite.getGlobalBounds().height));
-
-        m_mapRegion = context.media.bg_sprite.getGlobalBounds();
-        util::floor(m_mapRegion);
-
         m_infoRegion.left = 0.0f;
         m_infoRegion.top = 0.0f;
-        m_infoRegion.width = m_wholeSize.x;
-        m_infoRegion.height = std::floor(context.media.bg_sprite.getPosition().y);
+        m_infoRegion.width = m_wholeRegion.width;
+        m_infoRegion.height = (m_wholeRegion.height * 0.075f);
+        util::floor(m_infoRegion);
+
+        m_mapRegion.left = 0.0f;
+        m_mapRegion.top = (m_infoRegion.height + 1.0f);
+        m_mapRegion.width = m_wholeRegion.width;
+        m_mapRegion.height = (m_wholeRegion.height - m_mapRegion.top);
+        util::floor(m_mapRegion);
+
+        // TODO move to place where level loading happens and background image is selected
+        util::growAndCenterInside(context.media.bg_sprite, m_wholeRegion);
     }
 
 } // namespace halloween
