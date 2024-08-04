@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="192" height="44" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="79">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="192" height="44" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="83">
  <editorsettings>
-  <export target="../../../src/halloween/media/map/level-1.json" format="json"/>
+  <export target="../map/level-1.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="ground.tsx"/>
  <tileset firstgid="257" source="object-2.tsx"/>
@@ -273,5 +273,9 @@
  <objectgroup id="11" name="slime">
   <object id="65" x="4096" y="960" width="384" height="64"/>
   <object id="66" x="3168" y="736" width="768" height="64"/>
+ </objectgroup>
+ <objectgroup id="15" name="spiked-ball">
+  <object id="79" x="5376" y="1152" width="288" height="32"/>
+  <object id="81" x="5504" y="992" width="32" height="256"/>
  </objectgroup>
 </map>

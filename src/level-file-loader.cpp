@@ -12,6 +12,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "slime.hpp"
+#include "spiked-ball.hpp"
 
 #include <exception>
 #include <filesystem>
@@ -135,6 +136,10 @@ namespace halloween
             else if (layerName == "dart")
             {
                 parseDartLayer(context, jsonLayer);
+            }
+            else if (layerName == "spiked-ball")
+            {
+                parseSpikedBallLayer(context, jsonLayer);
             }
             else
             {
@@ -269,6 +274,17 @@ namespace halloween
         {
             const sf::FloatRect rect = parseAndConvertRect(context, dartJson);
             context.darts.add(util::center(rect));
+        }
+    }
+
+    void LevelFileLoader::parseSpikedBallLayer(Context & context, Json & json)
+    {
+        context.balls.clear();
+
+        for (Json & ballJson : json["objects"])
+        {
+            const sf::FloatRect rect = parseAndConvertRect(context, ballJson);
+            context.balls.add(rect);
         }
     }
 

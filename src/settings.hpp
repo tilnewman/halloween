@@ -24,6 +24,7 @@ namespace halloween
         float avatar_scale = 0.8f;
         sf::Vector2f dart_scale = { 0.333f, 0.5f };
         sf::Vector2f ghost_scale = { 0.5f, 0.5f };
+        sf::Vector2f spiked_ball_scale = { 2.0f, 2.0f };
 
         // frames per second
         float frame_rate = 60;
@@ -51,6 +52,8 @@ namespace halloween
         int starting_dart_count = 3;
 
         int kill_slime_score = 10;
+
+        float spiked_ball_speed = 2.0f;
     };
 
 } // namespace halloween

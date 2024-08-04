@@ -16,6 +16,7 @@
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "spiked-ball.hpp"
 #include "state-machine.hpp"
 #include "states.hpp"
 
@@ -264,6 +265,11 @@ namespace halloween
         slimeCollisions(context, isAttacking);
         killIfOutOfBounds(context);
 
+        if (context.balls.doesCollideWithAny(collisionRect()))
+        {
+            triggerDeath(context);
+        }
+
         // this one must come last, after all possible sets to m_action
         handleIdle(context, frameTimeSec);
     }
@@ -285,11 +291,13 @@ namespace halloween
             return;
         }
 
-        m_sprite.move(moveX, 0.0f);
-        context.coins.move({ moveX, 0.0f });
-        context.ghosts.move({ moveX, 0.0f });
-        context.slimes.move({ moveX, 0.0f });
-        context.darts.move({ moveX, 0.0f });
+        const sf::Vector2f move{ moveX, 0.0f };
+        m_sprite.move(move);
+        context.coins.move(move);
+        context.ghosts.move(move);
+        context.slimes.move(move);
+        context.darts.move(move);
+        context.balls.move(move);
     }
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)

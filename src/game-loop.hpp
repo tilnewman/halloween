@@ -23,6 +23,7 @@
 #include "settings.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "spiked-ball.hpp"
 #include "state-machine.hpp"
 #include "states.hpp"
 #include "stats-display.hpp"
@@ -69,6 +70,7 @@ namespace halloween
         Missiles m_missiles;
         Coins m_coins;
         Darts m_darts;
+        SpikedBalls m_spikedBalls;
         Slimes m_slimes;
         Ghosts m_ghosts;
         FloatingSpirit m_spirit;

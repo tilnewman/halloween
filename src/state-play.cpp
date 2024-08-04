@@ -22,6 +22,7 @@
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "spiked-ball.hpp"
 #include "state-machine.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
@@ -40,6 +41,7 @@ namespace halloween
     {
         if (context.level.number != context.level_number)
         {
+            context.balls.clear();
             context.darts.clear();
             context.ghosts.clear();
             context.ghosts.clearSpawnPoints();
@@ -85,6 +87,7 @@ namespace halloween
         context.ghosts.update(context, frameTimeSec);
         context.slimes.update(frameTimeSec);
         context.owl_calls.update(context, frameTimeSec);
+        context.balls.update(frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)
@@ -140,6 +143,7 @@ namespace halloween
         context.avatar.draw(target, states);
         context.slimes.draw(target, states);
         context.info_region.draw(target, states);
+        context.balls.draw(target, states);
     }
 
 } // namespace halloween
