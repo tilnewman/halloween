@@ -206,15 +206,14 @@ namespace halloween
 
         for (Json & spawnJson : json["objects"])
         {
-            const sf::FloatRect rect = parseAndConvertRect(context, spawnJson);
             const std::string name = spawnJson["name"];
+            const sf::FloatRect rect = parseAndConvertRect(context, spawnJson);
 
             if (name == "enter")
             {
                 context.level.enter_rect = rect;
             }
-
-            if (name == "exit")
+            else if (name == "exit")
             {
                 context.level.exit_rect = rect;
             }
