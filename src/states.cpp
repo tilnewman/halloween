@@ -317,7 +317,7 @@ namespace halloween
     //
 
     LoseState::LoseState(const Context & context)
-        : TimedMessageState(context, State::Lose, State::Credits, "You Lose\n\n", 4.5f)
+        : TimedMessageState(context, State::Lose, State::Credits, "You Lose\n", 4.5f)
     {}
 
     void LoseState::onEnter(Context & context)
@@ -325,11 +325,12 @@ namespace halloween
         context.audio.play("game-over");
 
         m_scoreText = m_text;
-        m_scoreText.scale(0.5f, 0.5f);
+        m_scoreText.scale(0.35f, 0.35f);
 
-        std::string str("Your Score: ");
+        std::string str("Score: ");
         str += std::to_string(context.info_region.score());
         m_scoreText.setString(str);
+        m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
         util::setOriginToPosition(m_scoreText);
 
@@ -350,7 +351,7 @@ namespace halloween
     //
 
     WinState::WinState(const Context & context)
-        : TimedMessageState(context, State::Win, State::Credits, "You Win\n\n", 4.5f)
+        : TimedMessageState(context, State::Win, State::Credits, "You Win\n", 4.5f)
     {}
 
     void WinState::onEnter(Context & context)
@@ -358,11 +359,12 @@ namespace halloween
         context.audio.play("winner");
 
         m_scoreText = m_text;
-        m_scoreText.scale(0.5f, 0.5f);
+        m_scoreText.scale(0.35f, 0.35f);
 
-        std::string str("Your Score: ");
+        std::string str("Score: ");
         str += std::to_string(context.info_region.score());
         m_scoreText.setString(str);
+        m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
         util::setOriginToPosition(m_scoreText);
 
