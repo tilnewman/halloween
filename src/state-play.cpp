@@ -47,7 +47,7 @@ namespace halloween
             context.balls.clear();
             context.darts.clear();
             context.ghosts.clear();
-            context.ghosts.clearSpawnPoints();
+            context.ghosts.clear();
             context.slimes.clear();
 
             if (!context.level.load(context))

@@ -42,7 +42,7 @@ namespace halloween
         Coins();
 
         void setup(const Settings & settings);
-        void add(const sf::Vector2f & position);
+        void add(Context & context, const sf::FloatRect & region);
         void clear();
         void update(const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;

@@ -40,7 +40,7 @@ namespace halloween
         SpikedBalls();
 
         void setup(const Settings & settings);
-        void add(const sf::FloatRect & region);
+        void add(Context & context, const sf::FloatRect & region);
         void clear();
         void update(const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;

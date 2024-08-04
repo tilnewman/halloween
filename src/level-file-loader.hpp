@@ -34,13 +34,17 @@ namespace halloween
         void parseRectLayer(Context & context, Json & json, std::vector<sf::FloatRect> & rects);
         const sf::FloatRect parseAndConvertRect(const Context & context, Json & json);
         void parseSpawnLayer(Context & context, Json & json);
-        void parseCoinLayer(Context & context, Json & json);
-        void parseGhostLayer(Context & context, Json & json);
-        void parseSlimeLayer(Context & context, Json & json);
-        void parseDartLayer(Context & context, Json & json);
-        void parseSpikedBallLayer(Context & context, Json & json);
-        void parseFireSpoutLayer(Context & context, Json & json);
-        void parseSawLayer(Context & context, Json & json);
+
+        template <typename T>
+        void parseObjectLayerRects(T & manager, Context & context, Json & json)
+        {
+            manager.clear();
+
+            for (Json & j : json["objects"])
+            {
+                manager.add(context, parseAndConvertRect(context, j));
+            }
+        }
 
       private:
         std::string m_pathStr;

@@ -36,13 +36,13 @@ namespace halloween
         m_texture.setSmooth(true);
     }
 
-    void Darts::add(const sf::Vector2f & position)
+    void Darts::add(Context &, const sf::FloatRect & region)
     {
         Dart & dart = m_darts.emplace_back();
         dart.sprite.setTexture(m_texture);
         dart.sprite.setScale(m_scale);
         util::setOriginToCenter(dart.sprite);
-        dart.sprite.setPosition(position);
+        dart.sprite.setPosition(util::center(region));
     }
 
     void Darts::clear() { m_darts.clear(); }

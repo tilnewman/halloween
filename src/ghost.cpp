@@ -59,12 +59,16 @@ namespace halloween
             "Ghosts::m_floatSpeedMax was not less than Ghosts::m_floatSpeedMin.");
     }
 
-    void Ghosts::clearSpawnPoints() { m_spawnPoints.clear(); }
+    void Ghosts::clear()
+    {
+        m_spawnPoints.clear();
+        m_ghosts.clear();
+    }
 
-    void Ghosts::addSpawnPoint(const Context & context, const sf::Vector2f & position)
+    void Ghosts::add(const Context & context, const sf::FloatRect & region)
     {
         m_spawnPoints.emplace_back(
-            position, context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec));
+            util::center(region), context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec));
     }
 
     void Ghosts::update(const Context & context, const float frameTimeSec)

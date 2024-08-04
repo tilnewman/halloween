@@ -182,37 +182,36 @@ namespace halloween
             }
             else if (layerName == "coin")
             {
-                parseCoinLayer(context, jsonLayer);
+                parseObjectLayerRects(context.coins, context, jsonLayer);
             }
             else if (layerName == "ghost")
             {
-                parseGhostLayer(context, jsonLayer);
+                parseObjectLayerRects(context.ghosts, context, jsonLayer);
             }
             else if (layerName == "slime")
             {
-                parseSlimeLayer(context, jsonLayer);
+                parseObjectLayerRects(context.slimes, context, jsonLayer);
             }
             else if (layerName == "dart")
             {
-                parseDartLayer(context, jsonLayer);
+                parseObjectLayerRects(context.darts, context, jsonLayer);
             }
             else if (layerName == "spiked-ball")
             {
-                parseSpikedBallLayer(context, jsonLayer);
+                parseObjectLayerRects(context.balls, context, jsonLayer);
             }
             else if (layerName == "fire-spout")
             {
-                parseFireSpoutLayer(context, jsonLayer);
+                parseObjectLayerRects(context.spouts, context, jsonLayer);
             }
             else if (layerName == "saw")
             {
-                parseSawLayer(context, jsonLayer);
+                parseObjectLayerRects(context.saws, context, jsonLayer);
             }
             else
             {
-                M_LOG(
-                    "WARNING:  While parsing level file \""
-                    << m_pathStr << "\".  Ignored unknown layer named \"" << layerName << "\".");
+                std::cout << "WARNING:  While parsing level file \"" << m_pathStr
+                          << "\".  Ignored unknown layer named \"" << layerName << "\".\n";
             }
         }
 
@@ -289,6 +288,11 @@ namespace halloween
             {
                 context.level.exit_rect = rect;
             }
+            else
+            {
+                std::cout << "WARNING:  While parsing level file \"" << m_pathStr
+                          << "\".  Ignored unknown spawn rect named \"" << name << "\".\n";
+            }
         }
 
         M_CHECK(
@@ -298,83 +302,6 @@ namespace halloween
         M_CHECK(
             (context.level.exit_rect.width > 0.0f),
             "Error Parsing Level File " << m_pathStr << ":  Failed to find exit location.");
-    }
-
-    void LevelFileLoader::parseCoinLayer(Context & context, Json & json)
-    {
-        context.coins.clear();
-
-        for (Json & coinJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, coinJson);
-            context.coins.add(util::center(rect));
-        }
-    }
-
-    void LevelFileLoader::parseGhostLayer(Context & context, Json & json)
-    {
-        context.ghosts.clearSpawnPoints();
-
-        for (Json & ghostJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, ghostJson);
-            context.ghosts.addSpawnPoint(context, util::center(rect));
-        }
-    }
-
-    void LevelFileLoader::parseSlimeLayer(Context & context, Json & json)
-    {
-        context.slimes.clear();
-
-        for (Json & slimeJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, slimeJson);
-            context.slimes.add(context, rect);
-        }
-    }
-
-    void LevelFileLoader::parseDartLayer(Context & context, Json & json)
-    {
-        context.darts.clear();
-
-        for (Json & dartJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, dartJson);
-            context.darts.add(util::center(rect));
-        }
-    }
-
-    void LevelFileLoader::parseSpikedBallLayer(Context & context, Json & json)
-    {
-        context.balls.clear();
-
-        for (Json & ballJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, ballJson);
-            context.balls.add(rect);
-        }
-    }
-
-    void LevelFileLoader::parseFireSpoutLayer(Context & context, Json & json)
-    {
-        context.spouts.clear();
-
-        for (Json & spoutJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, spoutJson);
-            context.spouts.add(context, rect);
-        }
-    }
-
-    void LevelFileLoader::parseSawLayer(Context & context, Json & json)
-    {
-        context.saws.clear();
-
-        for (Json & sawJson : json["objects"])
-        {
-            const sf::FloatRect rect = parseAndConvertRect(context, sawJson);
-            context.saws.add(context, rect);
-        }
     }
 
 } // namespace halloween

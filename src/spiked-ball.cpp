@@ -39,7 +39,7 @@ namespace halloween
         m_texture.setSmooth(true);
     }
 
-    void SpikedBalls::add(const sf::FloatRect & region)
+    void SpikedBalls::add(Context &, const sf::FloatRect & region)
     {
         SpikedBall & ball = m_balls.emplace_back();
 

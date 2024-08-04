@@ -71,7 +71,10 @@ namespace halloween
         m_texture.setSmooth(true);
     }
 
-    void Coins::add(const sf::Vector2f & position) { m_coins.emplace_back(m_texture, position); }
+    void Coins::add(Context &, const sf::FloatRect & region)
+    {
+        m_coins.emplace_back(m_texture, util::center(region));
+    }
 
     void Coins::clear() { m_coins.clear(); }
 
