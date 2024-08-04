@@ -42,6 +42,7 @@ namespace halloween
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         void move(const sf::Vector2f & move);
         bool doesCollideWithAny(const sf::FloatRect & avatarRect) const;
+        const std::vector<sf::FloatRect> collisions() const;
 
       private:
         sf::Texture m_spoutTexture;

@@ -144,4 +144,17 @@ namespace halloween
         return false;
     }
 
+    const std::vector<sf::FloatRect> FireSpouts::collisions() const
+    {
+        std::vector<sf::FloatRect> rects;
+        rects.reserve(m_fireSpouts.size());
+
+        for (const FireSpout & spout : m_fireSpouts)
+        {
+            rects.push_back(spout.spout_sprite.getGlobalBounds());
+        }
+
+        return rects;
+    }
+
 } // namespace halloween

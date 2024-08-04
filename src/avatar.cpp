@@ -256,7 +256,7 @@ namespace halloween
         moveMap(context);
 
         preventBacktracking(context);
-        walkCollisions(context);
+        collisions(context);
         killCollisions(context);
         acidCollisions(context);
         waterCollisions(context);
@@ -267,6 +267,11 @@ namespace halloween
         killIfOutOfBounds(context);
 
         if (context.balls.doesCollideWithAny(collisionRect()))
+        {
+            triggerDeath(context);
+        }
+
+        if (context.spouts.doesCollideWithAny(collisionRect()))
         {
             triggerDeath(context);
         }
@@ -614,7 +619,7 @@ namespace halloween
         }
     }
 
-    void Avatar::walkCollisions(Context & context)
+    void Avatar::collisions(Context & context)
     {
         const float tolerance = 25.0f; // this magic number brought to you by zTn 2021-8-2
 
@@ -626,9 +631,15 @@ namespace halloween
         footRect.top += footRectHeightAdj;
         footRect.height -= footRectHeightAdj;
 
+        std::vector<sf::FloatRect> rects = context.level.walk_collisions;
+        for (const sf::FloatRect & rect : context.spouts.collisions())
+        {
+            rects.push_back(rect);
+        }
+
         bool hasHitSomething{ false };
         sf::FloatRect intersection;
-        for (const sf::FloatRect & collRect : context.level.walk_collisions)
+        for (const sf::FloatRect & collRect : rects)
         {
             if (!avatarRect.intersects(collRect, intersection))
             {
