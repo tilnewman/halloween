@@ -74,11 +74,11 @@ namespace halloween
     {
         m_region = context.layout.infoRegion();
 
-        util::appendQuadVerts(context.layout.infoRegion(), m_bgVerts, sf::Color(29, 30, 30));
+        util::appendQuadVerts(context.layout.infoRegion(), m_bgVerts, sf::Color(255, 255, 255, 32));
 
         m_text.setFont(context.media.font);
         m_text.setCharacterSize(99);
-        m_text.setFillColor(sf::Color(52, 64, 65));
+        m_text.setFillColor(sf::Color(72, 84, 85, 127));
         util::setOriginToPosition(m_text);
 
         reset(context);
