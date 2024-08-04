@@ -3,8 +3,6 @@
 //
 // screen-regions.hpp
 //
-#include <vector>
-
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 
