@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "avatar.hpp"
 
+#include "bat.hpp"
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
@@ -84,7 +85,7 @@ namespace halloween
 
         auto rect = m_sprite.getGlobalBounds();
 
-        if (Action::Idle == m_action)
+        if ((Action::Idle == m_action) || (Action::Attack == m_action))
         {
             const float hairVertAdj{ rect.height * 0.15f };
             rect.top += hairVertAdj;
@@ -95,23 +96,6 @@ namespace halloween
             if (m_isFacingRight)
             {
                 rect.left += (m_sprite.getGlobalBounds().width * 0.2f);
-            }
-            else
-            {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
-            }
-        }
-        else if (Action::Attack == m_action)
-        {
-            const float hairVertAdj{ rect.height * 0.165f };
-            rect.top += hairVertAdj;
-            rect.height -= (1.5f * hairVertAdj);
-
-            rect.width *= 0.4f;
-
-            if (m_isFacingRight)
-            {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.5f);
             }
             else
             {
@@ -191,6 +175,28 @@ namespace halloween
         return rect;
     }
 
+    const sf::FloatRect Avatar::attackCollisionRect() const
+    {
+        auto rect = m_sprite.getGlobalBounds();
+
+        const float hairVertAdj{ rect.height * 0.165f };
+        rect.top += hairVertAdj;
+        rect.height -= (1.5f * hairVertAdj);
+
+        rect.width *= 0.4f;
+
+        if (m_isFacingRight)
+        {
+            rect.left += (m_sprite.getGlobalBounds().width * 0.5f);
+        }
+        else
+        {
+            rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
+        }
+
+        return rect;
+    }
+
     void Avatar::setPosition(const sf::FloatRect & rect)
     {
         sf::Vector2f position = util::center(rect);
@@ -235,7 +241,7 @@ namespace halloween
         acidCollisions(context);
         waterCollisions(context);
         exitCollisions(context);
-        handleAttackingSlimes(context);
+        handleAttackingEnemies(context);
 
         context.managers.collideAllWithAvatar(context, collisionRect());
 
@@ -703,15 +709,18 @@ namespace halloween
         }
     }
 
-    void Avatar::handleAttackingSlimes(Context & context)
+    void Avatar::handleAttackingEnemies(Context & context)
     {
-        if (Action::Attack == m_action)
+        if (Action::Attack != m_action)
         {
-            if (context.slimes.attack(collisionRect()))
-            {
-                context.audio.play("squish");
-                context.info_region.scoreAdjust(context.settings.kill_slime_score);
-            }
+            return;
+        }
+
+        const auto attackRect = attackCollisionRect();
+        if (context.slimes.attack(attackRect) || context.bats.attack(attackRect))
+        {
+            context.audio.play("squish");
+            context.info_region.scoreAdjust(context.settings.kill_slime_score);
         }
     }
 

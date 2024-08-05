@@ -5,6 +5,7 @@
 //
 #include "missile.hpp"
 
+#include "bat.hpp"
 #include "context.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
@@ -79,7 +80,7 @@ namespace halloween
                 continue;
             }
 
-            if (context.slimes.attack(missileRect))
+            if (context.slimes.attack(missileRect) || context.bats.attack(missileRect))
             {
                 wereAnyKilled = true;
                 missile.is_alive = false;

@@ -39,6 +39,7 @@ namespace halloween
 
       private:
         const sf::FloatRect collisionRect() const;
+        const sf::FloatRect attackCollisionRect() const;
         void moveMap(Context & context);
         bool handleDeath(Context & context, const float frameTimeSec);
         bool handleAttacking(Context & context, const float frameTimeSec);
@@ -50,7 +51,7 @@ namespace halloween
         void collisions(Context & context);
         void killCollisions(Context & context);
         void exitCollisions(Context & context) const;
-        void handleAttackingSlimes(Context & context);
+        void handleAttackingEnemies(Context & context);
         void acidCollisions(Context & context);
         void waterCollisions(Context & context);
         void preventBacktracking(const Context & context);

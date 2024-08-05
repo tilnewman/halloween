@@ -196,11 +196,12 @@ namespace halloween
 
     bool Bats::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
     {
-        // TODO reduce the collision rect so the wings don't kill the player
-
         for (const Bat & bat : m_bats)
         {
-            if (bat.sprite.getGlobalBounds().intersects(avatarRect))
+            const sf::FloatRect batCollRect =
+                util::scaleRectInPlaceCopy(bat.sprite.getGlobalBounds(), { 0.45f, 0.7f });
+
+            if (batCollRect.intersects(avatarRect))
             {
                 return true;
             }
