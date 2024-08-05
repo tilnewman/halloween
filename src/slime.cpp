@@ -24,7 +24,6 @@ namespace halloween
 
     Slimes::Slimes()
         : m_textures()
-        , m_rects()
         , m_slimes()
         , m_timePerTextureSec(0.0333f)
         , m_elapsedTimeSec(0.0f)
@@ -32,7 +31,6 @@ namespace halloween
         , m_deathAnims()
     {
         // probably never more than one dozen of each in a level
-        m_rects.reserve(100);
         m_slimes.reserve(100);
         m_deathAnims.reserve(100);
     }
@@ -52,16 +50,10 @@ namespace halloween
         }
     }
 
-    void Slimes::clear()
-    {
-        m_slimes.clear();
-        m_rects.clear();
-    }
+    void Slimes::clear() { m_slimes.clear(); }
 
     void Slimes::add(const Context & context, const sf::FloatRect & rect)
     {
-        m_rects.push_back(rect);
-
         const float speed{ context.random.fromTo(20.0f, 50.0f) };
 
         Slime slime(context.random.boolean(), rect, speed);
@@ -161,11 +153,6 @@ namespace halloween
 
     void Slimes::move(const sf::Vector2f & move)
     {
-        for (sf::FloatRect & rect : m_rects)
-        {
-            rect.left += move.x;
-        }
-
         for (Slime & slime : m_slimes)
         {
             slime.sprite.move(move);

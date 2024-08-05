@@ -65,7 +65,6 @@ namespace halloween
 
       private:
         std::vector<sf::Texture> m_textures;
-        std::vector<sf::FloatRect> m_rects;
         std::vector<Slime> m_slimes;
         float m_timePerTextureSec;
         float m_elapsedTimeSec;
