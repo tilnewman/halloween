@@ -47,7 +47,6 @@ namespace halloween
         bool will_smooth_tile_textures = false;
 
         bool will_show_coin_animations = true;
-        bool will_show_floating_spirit = false;
 
         int starting_dart_count = 3;
 
