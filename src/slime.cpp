@@ -54,16 +54,17 @@ namespace halloween
 
     void Slimes::add(const Context & context, const sf::FloatRect & rect)
     {
-        const float speed{ context.random.fromTo(20.0f, 50.0f) };
+        const float speed{ context.random.fromTo(20.0f, 75.0f) };
 
         Slime slime(context.random.boolean(), rect, speed);
 
         slime.texture_index = context.random.index(m_textures);
         slime.sprite.setTexture(m_textures.at(slime.texture_index));
         slime.sprite.setScale({ 0.5f, 0.5f });
+        util::setOriginToCenter(slime.sprite);
 
         const float posX{ rect.left + (rect.width / 2.0f) };
-        const float posY{ (rect.top + rect.height) - slime.sprite.getGlobalBounds().height };
+        const float posY{ util::bottom(rect) - (slime.sprite.getGlobalBounds().height * 0.5f) };
         slime.sprite.setPosition(posX, posY);
 
         m_slimes.push_back(slime);
@@ -118,7 +119,7 @@ namespace halloween
         bool areAnyDeathAnimsFinished = false;
         for (SlimeDeathAnim & anim : m_deathAnims)
         {
-            anim.sprite.scale(0.8f, 0.8f);
+            anim.sprite.scale(0.85f, 0.85f);
 
             if (anim.sprite.getScale().x < 0.01f)
             {
