@@ -40,8 +40,17 @@ namespace halloween
         void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const final;
 
       private:
+        void updateScoreText(const Context & context);
+
+      private:
         sf::Text m_levelCompleteText;
         sf::Text m_scoreText;
+        sf::Text m_bonusText;
+
+        float m_elapsedScoreTimeSec;
+        const float m_timeBetweenScoreUpdateSec;
+        int m_scoreDisplayed;
+        bool m_hasScoreFinishedUpdating;
     };
 
 } // namespace halloween

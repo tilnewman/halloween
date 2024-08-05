@@ -27,43 +27,96 @@ namespace halloween
         : StateBase(context, State::Level, State::Play)
         , m_levelCompleteText()
         , m_scoreText()
+        , m_elapsedScoreTimeSec(0.0f)
+        , m_timeBetweenScoreUpdateSec(0.05f)
+        , m_scoreDisplayed(0)
+        , m_hasScoreFinishedUpdating(false)
     {}
 
     void LevelCompleteState::onEnter(Context & context)
     {
         context.audio.play("level-complete");
 
-        m_levelCompleteText.setString("Level Complete!\n\n");
-        m_levelCompleteText.setCharacterSize(99);
-        m_levelCompleteText.setFont(context.media.font);
-        m_levelCompleteText.setFillColor(m_textColorDefault);
+        m_levelCompleteText = context.media.makeText(99, "Level Complete!\n\n", m_textColorDefault);
 
         util::fitAndCenterInside(
             m_levelCompleteText, util::scaleRectInPlaceCopy(context.layout.wholeRegion(), 0.25f));
 
+        m_scoreDisplayed = context.info_region.score();
+
+        m_scoreText = context.media.makeText(50, "", sf::Color(160, 160, 160));
+
+        updateScoreText(context);
+
+        m_bonusText = context.media.makeText(70, "", sf::Color(255, 255, 153));
+
+        std::string bonusStr;
+
+        const bool collectedAllCoins = (context.stats.coin_total == context.stats.coin_collected);
+        if (collectedAllCoins)
+        {
+            context.info_region.scoreAdjust(100);
+
+            bonusStr += "All Coins Found Bonus!";
+        }
+
+        const bool killedAllEnemies = (context.stats.enemy_total == context.stats.enemy_killed);
+        if (killedAllEnemies)
+        {
+            context.info_region.scoreAdjust(100);
+
+            if (!bonusStr.empty())
+            {
+                bonusStr += '\n';
+            }
+
+            bonusStr += "All Enemies Killed Bonus!";
+        }
+
+        const bool stayedAlive = !context.stats.has_player_died;
+        if (stayedAlive)
+        {
+            context.info_region.scoreAdjust(100);
+
+            if (!bonusStr.empty())
+            {
+                bonusStr += '\n';
+            }
+
+            bonusStr += "You Didn't Die Bonus!";
+        }
+
+        if (collectedAllCoins && killedAllEnemies && stayedAlive)
+        {
+            context.info_region.scoreAdjust(1000);
+
+            if (!bonusStr.empty())
+            {
+                bonusStr += '\n';
+            }
+
+            bonusStr += "PERFECT!!!";
+        }
+
+        if (bonusStr.empty())
+        {
+            bonusStr = "No bonuses, lame.";
+        }
+
+        m_bonusText.setString(bonusStr);
+        util::centerInside(m_bonusText, context.layout.mapRegion());
+        util::setOriginToPosition(m_bonusText);
+
+        m_bonusText.setPosition(
+            m_bonusText.getPosition().x,
+            (util::bottom(context.layout.mapRegion()) - m_bonusText.getGlobalBounds().height));
+    }
+
+    void LevelCompleteState::updateScoreText(const Context & context)
+    {
         std::string scoreStr{ "Score: " };
-        scoreStr += std::to_string(context.info_region.score());
-
-        // if (context.stats.coin_total == context.stats.coin_collected)
-        //{
-        //    scoreStr += "\ncoins_total=";
-        //    scoreStr += std::to_string(context.stats.coin_total);
-        //    scoreStr += ", collected=";
-        //    scoreStr += std::to_string(context.stats.coin_collected);
-        //}
-
-        // if (context.stats.enemy_total == context.stats.enemy_killed)
-        //{
-        //    scoreStr += "\nenemy_total=";
-        //    scoreStr += std::to_string(context.stats.enemy_total);
-        //    scoreStr += ", killed=";
-        //    scoreStr += std::to_string(context.stats.enemy_killed);
-        //}
-
-        m_scoreText = m_levelCompleteText;
-        m_scoreText.setCharacterSize(50);
+        scoreStr += std::to_string(m_scoreDisplayed);
         m_scoreText.setString(scoreStr);
-        m_scoreText.setFillColor(sf::Color(127, 127, 127));
         util::centerInside(m_scoreText, context.layout.wholeRegion());
     }
 
@@ -81,10 +134,29 @@ namespace halloween
 
     void LevelCompleteState::update(Context & context, const float frameTimeSec)
     {
+        m_hasScoreFinishedUpdating = (m_scoreDisplayed == context.info_region.score());
+
         m_elapsedTimeSec += frameTimeSec;
-        if (m_elapsedTimeSec > 12.0f)
+        if (m_hasScoreFinishedUpdating && (m_elapsedTimeSec > 6.0f))
         {
             context.state.setChangePending(State::Play);
+        }
+
+        m_elapsedScoreTimeSec += frameTimeSec;
+        if ((m_scoreDisplayed != context.info_region.score()) &&
+            (m_elapsedScoreTimeSec > m_timeBetweenScoreUpdateSec))
+        {
+            m_elapsedScoreTimeSec -= m_timeBetweenScoreUpdateSec;
+
+            ++m_scoreDisplayed;
+            updateScoreText(context);
+            context.audio.play("bell");
+
+            m_hasScoreFinishedUpdating = (m_scoreDisplayed == context.info_region.score());
+            if (m_hasScoreFinishedUpdating)
+            {
+                m_elapsedTimeSec = 0.0f;
+            }
         }
     }
 
@@ -93,6 +165,7 @@ namespace halloween
     {
         target.draw(m_levelCompleteText, states);
         target.draw(m_scoreText, states);
+        target.draw(m_bonusText, states);
     }
 
 } // namespace halloween
