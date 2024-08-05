@@ -20,12 +20,20 @@ namespace halloween
     struct FireSpout
     {
         FireSpout()
-            : spout_sprite()
+            : is_spurting(false)
+            , spout_sprite()
             , fire_sprite()
+            , texture_index(0)
+            , elapsed_time_sec(0.0f)
+            , time_between_spurts_sec(0.0f)
         {}
 
+        bool is_spurting;
         sf::Sprite spout_sprite;
         sf::Sprite fire_sprite;
+        std::size_t texture_index;
+        float elapsed_time_sec;
+        float time_between_spurts_sec;
     };
 
     //
@@ -47,11 +55,10 @@ namespace halloween
       private:
         sf::Texture m_spoutTexture;
         float m_timePerFrame;
-        float m_elapsedTimeSec;
         std::vector<FireSpout> m_fireSpouts;
         std::vector<sf::Texture> m_fireTextures;
-        std::size_t m_fireTextureIndex;
-        bool is_spurting;
+        float m_timebetweenSpurtsMinSec;
+        float m_timebetweenSpurtsMaxSec;
     };
 
 } // namespace halloween

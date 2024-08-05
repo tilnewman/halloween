@@ -21,11 +21,10 @@ namespace halloween
     FireSpouts::FireSpouts()
         : m_spoutTexture()
         , m_timePerFrame(0.1f)
-        , m_elapsedTimeSec(0.0f)
         , m_fireSpouts()
         , m_fireTextures()
-        , m_fireTextureIndex(0)
-        , is_spurting(true)
+        , m_timebetweenSpurtsMinSec(0.5f)
+        , m_timebetweenSpurtsMaxSec(3.5f)
     {
         // probably no more than a dozen in any given map
         m_fireSpouts.reserve(100);
@@ -50,7 +49,7 @@ namespace halloween
         }
     }
 
-    void FireSpouts::add(const Context &, const sf::FloatRect & region)
+    void FireSpouts::add(const Context & context, const sf::FloatRect & region)
     {
         FireSpout & spout = m_fireSpouts.emplace_back();
 
@@ -72,36 +71,59 @@ namespace halloween
         spout.fire_sprite.setPosition(
             (util::center(spoutBounds).x - (fireBounds.width * 0.5f)),
             (spout.spout_sprite.getPosition().y - fireBounds.height));
+
+        spout.is_spurting = false;
+        spout.texture_index = 0;
+
+        spout.time_between_spurts_sec =
+            context.random.fromTo(m_timebetweenSpurtsMinSec, m_timebetweenSpurtsMaxSec);
     }
 
     void FireSpouts::clear() { m_fireSpouts.clear(); }
 
     void FireSpouts::update(const float frameTimeSec)
     {
-        // all spouts burst fire at the same time and rate
-        m_elapsedTimeSec += frameTimeSec;
-        if (m_elapsedTimeSec < m_timePerFrame)
-        {
-            return;
-        }
-
-        m_elapsedTimeSec -= m_timePerFrame;
-
-        ++m_fireTextureIndex;
-        if (m_fireTextureIndex >= m_fireTextures.size())
-        {
-            m_fireTextureIndex = 0;
-        }
-
         for (FireSpout & spout : m_fireSpouts)
         {
-            spout.fire_sprite.setTexture(m_fireTextures.at(m_fireTextureIndex), true);
+            if (spout.is_spurting)
+            {
+                spout.elapsed_time_sec += frameTimeSec;
+                if (spout.elapsed_time_sec < m_timePerFrame)
+                {
+                    continue;
+                }
 
-            const sf::FloatRect fireBounds = spout.fire_sprite.getGlobalBounds();
+                spout.elapsed_time_sec -= m_timePerFrame;
 
-            spout.fire_sprite.setPosition(
-                (util::center(spout.spout_sprite.getGlobalBounds()).x - (fireBounds.width * 0.5f)),
-                (spout.spout_sprite.getPosition().y - fireBounds.height));
+                ++spout.texture_index;
+                if (spout.texture_index >= m_fireTextures.size())
+                {
+                    spout.texture_index = 0;
+                    spout.elapsed_time_sec = 0.0f;
+                    spout.is_spurting = false;
+                }
+
+                // not all the fire spurting textures are the same size, so reposition every frame
+                spout.fire_sprite.setTexture(m_fireTextures.at(spout.texture_index), true);
+
+                const sf::FloatRect fireBounds = spout.fire_sprite.getGlobalBounds();
+
+                spout.fire_sprite.setPosition(
+                    (util::center(spout.spout_sprite.getGlobalBounds()).x -
+                     (fireBounds.width * 0.5f)),
+                    (spout.spout_sprite.getPosition().y - fireBounds.height));
+            }
+            else
+            {
+                spout.elapsed_time_sec += frameTimeSec;
+                if (spout.elapsed_time_sec < spout.time_between_spurts_sec)
+                {
+                    continue;
+                }
+
+                spout.elapsed_time_sec = 0.0f;
+                spout.is_spurting = true;
+            }
         }
     }
 
@@ -110,7 +132,11 @@ namespace halloween
         for (const FireSpout & spout : m_fireSpouts)
         {
             target.draw(spout.spout_sprite, states);
-            target.draw(spout.fire_sprite, states);
+
+            if (spout.is_spurting)
+            {
+                target.draw(spout.fire_sprite, states);
+            }
         }
     }
 
@@ -125,15 +151,14 @@ namespace halloween
 
     bool FireSpouts::doesCollideWithAny(const sf::FloatRect & avatarRect) const
     {
-        if (!is_spurting)
-        {
-            return false;
-        }
-
         for (const FireSpout & spout : m_fireSpouts)
         {
-            const sf::FloatRect spoutRect = spout.fire_sprite.getGlobalBounds();
+            if (!spout.is_spurting)
+            {
+                continue;
+            }
 
+            const sf::FloatRect spoutRect = spout.fire_sprite.getGlobalBounds();
             if (avatarRect.intersects(spoutRect))
             {
                 return true;
