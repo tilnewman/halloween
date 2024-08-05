@@ -119,9 +119,9 @@ namespace halloween
         bool areAnyDeathAnimsFinished = false;
         for (SlimeDeathAnim & anim : m_deathAnims)
         {
-            anim.sprite.scale(0.85f, 0.85f);
+            anim.sprite.scale(0.975f, 0.975f);
 
-            if (anim.sprite.getScale().x < 0.01f)
+            if (anim.sprite.getScale().x < 0.1f)
             {
                 anim.is_visible = false;
                 areAnyDeathAnimsFinished = true;
@@ -183,7 +183,8 @@ namespace halloween
             {
                 slime.is_alive = false;
                 wereAnyKilled = true;
-                m_deathAnims.emplace_back(slime.sprite);
+                auto & anim = m_deathAnims.emplace_back(slime.sprite);
+                anim.sprite.setColor(sf::Color::Red);
             }
         }
 

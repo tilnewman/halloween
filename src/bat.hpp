@@ -55,12 +55,18 @@ namespace halloween
 
     struct BatDeathAnim
     {
-        BatDeathAnim(const sf::Sprite & spr)
+        BatDeathAnim(const std::size_t batIndex, const sf::Sprite & spr)
             : is_visible(true)
+            , bat_index(batIndex)
+            , texture_index(0)
+            , elapsed_time_sec(0.0f)
             , sprite(spr)
         {}
 
         bool is_visible;
+        std::size_t bat_index;
+        std::size_t texture_index;
+        float elapsed_time_sec;
         sf::Sprite sprite;
     };
 

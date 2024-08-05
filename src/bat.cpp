@@ -152,9 +152,22 @@ namespace halloween
         bool areAnyDeathAnimsFinished = false;
         for (BatDeathAnim & anim : m_deathAnims)
         {
-            anim.sprite.scale(0.85f, 0.85f);
+            anim.elapsed_time_sec += (frameTimeSec * 0.5f);
+            if (anim.elapsed_time_sec > m_timePerTextureSec)
+            {
+                anim.elapsed_time_sec -= m_timePerTextureSec;
 
-            if (anim.sprite.getScale().x < 0.01f)
+                ++anim.texture_index;
+                if (anim.texture_index < m_textures.at(anim.bat_index).dying.size())
+                {
+                    anim.sprite.setTexture(
+                        m_textures.at(anim.bat_index).dying.at(anim.texture_index));
+                }
+            }
+
+            anim.sprite.scale(0.975f, 0.975f);
+
+            if (anim.sprite.getScale().x < 0.1f)
             {
                 anim.is_visible = false;
                 areAnyDeathAnimsFinished = true;
@@ -219,7 +232,7 @@ namespace halloween
             {
                 bat.is_alive = false;
                 wereAnyKilled = true;
-                m_deathAnims.emplace_back(bat.sprite);
+                m_deathAnims.emplace_back(bat.bat_index, bat.sprite);
             }
         }
 
