@@ -70,7 +70,7 @@ namespace halloween
         }
     }
 
-    bool Saws::doesCollideWithAny(const sf::FloatRect & avatarRect) const
+    bool Saws::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
     {
         // TODO use distance from center instead of square global bounds
 

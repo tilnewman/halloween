@@ -267,17 +267,17 @@ namespace halloween
         slimeCollisions(context, isAttacking);
         killIfOutOfBounds(context);
 
-        if (context.balls.doesCollideWithAny(collisionRect()))
+        if (context.balls.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }
 
-        if (context.spouts.doesCollideWithAny(collisionRect()))
+        if (context.spouts.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }
 
-        if (context.saws.doesCollideWithAny(collisionRect()))
+        if (context.saws.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }
@@ -769,7 +769,7 @@ namespace halloween
             }
         }
 
-        if (context.slimes.doesCollideWithAny(collisionRect()))
+        if (context.slimes.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }

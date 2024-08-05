@@ -105,13 +105,11 @@ namespace halloween
         }
     }
 
-    bool SpikedBalls::doesCollideWithAny(const sf::FloatRect & rect) const
+    bool SpikedBalls::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
     {
         for (const SpikedBall & ball : m_balls)
         {
-            const sf::FloatRect ballRect = ball.sprite.getGlobalBounds();
-
-            if (rect.intersects(ballRect))
+            if (avatarRect.intersects(ball.sprite.getGlobalBounds()))
             {
                 return true;
             }

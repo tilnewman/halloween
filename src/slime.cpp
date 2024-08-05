@@ -173,11 +173,11 @@ namespace halloween
         }
     }
 
-    bool Slimes::doesCollideWithAny(const sf::FloatRect & rect) const
+    bool Slimes::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
     {
         for (const Slime & slime : m_slimes)
         {
-            if (slime.sprite.getGlobalBounds().intersects(rect))
+            if (slime.sprite.getGlobalBounds().intersects(avatarRect))
             {
                 return true;
             }

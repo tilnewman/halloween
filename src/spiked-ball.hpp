@@ -45,7 +45,7 @@ namespace halloween
         void update(const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
         void move(const sf::Vector2f & move);
-        bool doesCollideWithAny(const sf::FloatRect & rect) const;
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const;
 
       private:
         sf::Texture m_texture;
