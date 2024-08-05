@@ -34,12 +34,11 @@ namespace halloween
 
         void setup(const Settings & settings);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
-        const sf::FloatRect collisionRect() const;
-        const sf::FloatRect attackCollisionRect() const;
         void setPosition(const sf::FloatRect & rect);
         void update(Context & context, const float frameTimeSec);
 
       private:
+        const sf::FloatRect collisionRect() const;
         void moveMap(Context & context);
         bool handleDeath(Context & context, const float frameTimeSec);
         bool handleAttacking(Context & context, const float frameTimeSec);
@@ -52,7 +51,7 @@ namespace halloween
         void killCollisions(Context & context);
         void exitCollisions(Context & context) const;
         void coinCollisions(Context & context) const;
-        void slimeCollisions(Context & context, const bool isAttacking);
+        void slimeCollisions(Context & context);
         void acidCollisions(Context & context);
         void waterCollisions(Context & context);
         void preventBacktracking(const Context & context);

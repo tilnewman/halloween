@@ -111,11 +111,11 @@ namespace halloween
 
             if (m_isFacingRight)
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
+                rect.left += (m_sprite.getGlobalBounds().width * 0.5f);
             }
             else
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.5f);
+                rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
             }
         }
         else if (Action::Run == m_action)
@@ -187,34 +187,7 @@ namespace halloween
             }
         }
 
-        // should never get here
-        return rect;
-    }
-
-    const sf::FloatRect Avatar::attackCollisionRect() const
-    {
-        sf::FloatRect rect{ 0.0f, 0.0f, 0.0f, 0.0f };
-
-        if (Action::Attack == m_action)
-        {
-            rect = m_sprite.getGlobalBounds();
-
-            const float hairVertAdj{ rect.height * 0.165f };
-            rect.top += hairVertAdj;
-            rect.height -= (1.5f * hairVertAdj);
-
-            rect.width *= 0.4f;
-
-            if (m_isFacingRight)
-            {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.5f);
-            }
-            else
-            {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
-            }
-        }
-
+        // should only get here if Action is Dead
         return rect;
     }
 
@@ -264,7 +237,7 @@ namespace halloween
         exitCollisions(context);
         coinCollisions(context);
         context.darts.collideWithAvatar(context, collisionRect());
-        slimeCollisions(context, isAttacking);
+        slimeCollisions(context);
         killIfOutOfBounds(context);
 
         if (context.balls.doesAvatarCollideWithAnyAndDie(collisionRect()))
@@ -758,11 +731,11 @@ namespace halloween
         context.coins.collideWithAvatar(context, rect);
     }
 
-    void Avatar::slimeCollisions(Context & context, const bool isAttacking)
+    void Avatar::slimeCollisions(Context & context)
     {
-        if (isAttacking)
+        if (Action::Attack == m_action)
         {
-            if (context.slimes.attack(attackCollisionRect()))
+            if (context.slimes.attack(collisionRect()))
             {
                 context.audio.play("squish");
                 context.info_region.scoreAdjust(context.settings.kill_slime_score);
