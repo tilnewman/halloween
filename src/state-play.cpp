@@ -6,19 +6,17 @@
 #include "state-play.hpp"
 
 #include "avatar.hpp"
+#include "bat.hpp"
 #include "coin.hpp"
 #include "context.hpp"
-#include "dart.hpp"
-#include "fire-spout.hpp"
-#include "ghost.hpp"
 #include "info-region.hpp"
+#include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
 #include "music-player.hpp"
 #include "owl-calls.hpp"
 #include "pause-screen.hpp"
 #include "resources.hpp"
-#include "saw.hpp"
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
 #include "slime.hpp"
@@ -44,7 +42,13 @@ namespace halloween
         {
             context.managers.clearAll();
 
-            if (!context.level.load(context))
+            if (context.level.load(context))
+            {
+                context.stats = LevelStats();
+                context.stats.coin_total = context.coins.count();
+                context.stats.enemy_total = (context.slimes.count() + context.bats.count());
+            }
+            else
             {
                 // if we fail to load it is because there are no more levels to play
                 context.state.setChangePending(State::Win);

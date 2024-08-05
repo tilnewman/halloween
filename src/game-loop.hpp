@@ -13,6 +13,7 @@
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-file-loader.hpp"
+#include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
 #include "music-player.hpp"
@@ -81,6 +82,7 @@ namespace halloween
         Ghosts m_ghosts;
         InfoRegion m_infoRegion;
         ObjectManagerList m_managers;
+        LevelStats m_stats;
 
         std::vector<std::size_t> m_delayLoopCounts;
         std::vector<std::size_t> m_framesPerSecond;

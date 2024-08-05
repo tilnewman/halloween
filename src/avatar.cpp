@@ -10,6 +10,7 @@
 #include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
+#include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
 #include "resources.hpp"
@@ -303,7 +304,6 @@ namespace halloween
                 context.info_region.livesAdjust(-1);
 
                 context.managers.clearAll();
-
                 context.level.reset();
                 context.level.load(context);
 
@@ -720,6 +720,7 @@ namespace halloween
         if (context.slimes.attack(attackRect) || context.bats.attack(attackRect))
         {
             context.audio.play("squish");
+            ++context.stats.enemy_killed;
             context.info_region.scoreAdjust(context.settings.kill_slime_score);
         }
     }
@@ -783,6 +784,9 @@ namespace halloween
         context.audio.play("scream");
         m_velocity = { 0.0f, 0.0f };
         m_deathAnim.restart();
+        context.stats.has_player_died = true;
+        context.stats.enemy_killed = 0;
+        context.stats.coin_collected = 0;
     }
 
 } // namespace halloween

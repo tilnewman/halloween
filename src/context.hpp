@@ -32,6 +32,7 @@ namespace halloween
     struct Resources;
     class InfoRegion;
     class FireSpouts;
+    struct LevelStats;
     class SpikedBalls;
     class PauseScreen;
     class ScreenRegions;
@@ -65,7 +66,8 @@ namespace halloween
             Slimes & sli,
             Ghosts & gho,
             InfoRegion & inf,
-            ObjectManagerList & man)
+            ObjectManagerList & man,
+            LevelStats & ls)
             : settings(set)
             , window(win)
             , random(ran)
@@ -90,6 +92,7 @@ namespace halloween
             , ghosts(gho)
             , info_region(inf)
             , managers(man)
+            , stats(ls)
             , is_paused(false)
             , will_quit(false)
             , level_number(1)
@@ -119,6 +122,7 @@ namespace halloween
         Ghosts & ghosts;
         InfoRegion & info_region;
         ObjectManagerList & managers;
+        LevelStats & stats;
 
         bool is_paused;
         bool will_quit;

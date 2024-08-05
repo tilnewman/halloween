@@ -8,6 +8,7 @@
 #include "bat.hpp"
 #include "context.hpp"
 #include "info-region.hpp"
+#include "level-stats.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -85,6 +86,7 @@ namespace halloween
                 wereAnyKilled = true;
                 missile.is_alive = false;
                 context.audio.play("squish");
+                ++context.stats.enemy_killed;
                 context.info_region.scoreAdjust(context.settings.kill_slime_score);
                 continue;
             }

@@ -7,6 +7,7 @@
 
 #include "context.hpp"
 #include "info-region.hpp"
+#include "level-stats.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -186,6 +187,7 @@ namespace halloween
                 coin.is_alive = false;
                 context.audio.play("coin");
                 context.info_region.scoreAdjust(1);
+                ++context.stats.coin_collected;
                 addAnimation(context, util::center(coinRect));
             }
         }

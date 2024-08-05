@@ -37,6 +37,7 @@ namespace halloween
         , m_ghosts()
         , m_infoRegion()
         , m_managers()
+        , m_stats()
         , m_delayLoopCounts()
         , m_framesPerSecond()
         , m_perSecondClock()
@@ -65,7 +66,8 @@ namespace halloween
               m_slimes,
               m_ghosts,
               m_infoRegion,
-              m_managers)
+              m_managers,
+              m_stats)
     {}
 
     void GameLoop::play()

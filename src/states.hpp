@@ -264,18 +264,6 @@ namespace halloween
         sf::Text m_scoreText;
     };
 
-    //
-
-    struct LevelCompleteState : public TimedMessageState
-    {
-        explicit LevelCompleteState(const Context & context);
-        ~LevelCompleteState() override = default;
-
-        void onEnter(Context & context) override;
-        void onExit(Context & context) override;
-        bool handleEvent(Context & context, const sf::Event & event) override;
-    };
-
 } // namespace halloween
 
 #endif // STATES_HPP_INCLUDED

@@ -8,6 +8,7 @@
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "state-credits.hpp"
+#include "state-level-complete.hpp"
 #include "state-play.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>

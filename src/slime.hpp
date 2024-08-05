@@ -71,6 +71,7 @@ namespace halloween
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
         bool attack(const sf::FloatRect & attackRect);
+        std::size_t count() const { return m_slimes.size(); }
 
       private:
         std::vector<sf::Texture> m_textures;

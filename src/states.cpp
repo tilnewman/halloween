@@ -381,27 +381,4 @@ namespace halloween
 
     void WinState::onExit(Context & context) { context.audio.stopAll(); }
 
-    //
-
-    LevelCompleteState::LevelCompleteState(const Context & context)
-        : TimedMessageState(context, State::Level, State::Play, "Level Complete!\n\n", 3.0f)
-    {}
-
-    void LevelCompleteState::onEnter(Context & context) { context.audio.play("level-complete"); }
-
-    void LevelCompleteState::onExit(Context & context)
-    {
-        ++context.level_number;
-        context.ghosts.clear();
-        context.slimes.clear();
-        context.missiles.clear();
-        context.coins.clear();
-    }
-
-    bool LevelCompleteState::handleEvent(Context &, const sf::Event &)
-    {
-        // always returning false prevents the player from quiting the state early
-        return false;
-    }
-
 } // namespace halloween

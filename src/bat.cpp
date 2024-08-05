@@ -99,8 +99,6 @@ namespace halloween
         const float posX{ rect.left + (rect.width / 2.0f) };
         const float posY{ util::bottom(rect) - (bat.sprite.getGlobalBounds().height * 0.5f) };
         bat.sprite.setPosition(posX, posY);
-
-        m_bats.push_back(bat);
     }
 
     void Bats::update(Context &, const float frameTimeSec)
@@ -237,6 +235,7 @@ namespace halloween
                 bat.is_alive = false;
                 wereAnyKilled = true;
                 m_deathAnims.emplace_back(bat.bat_index, bat.sprite);
+                break;
             }
         }
 
