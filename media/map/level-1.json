@@ -1073,18 +1073,7 @@
          "draworder":"topdown",
          "id":16,
          "name":"fire-spout",
-         "objects":[
-                {
-                 "height":32,
-                 "id":83,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":960,
-                 "y":1248
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -1092,7 +1081,7 @@
          "y":0
         }],
  "nextlayerid":19,
- "nextobjectid":85,
+ "nextobjectid":88,
  "orientation":"orthogonal",
  "properties":[
         {
