@@ -78,7 +78,7 @@ namespace halloween
 
     void Coins::clear() { m_coins.clear(); }
 
-    void Coins::update(const float frameTimeSec)
+    void Coins::update(Context &, const float frameTimeSec)
     {
         updateTextures(frameTimeSec);
         updateAnimations(frameTimeSec);
@@ -140,7 +140,7 @@ namespace halloween
         }
     }
 
-    void Coins::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Coins::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Coin & coin : m_coins)
         {
@@ -153,7 +153,7 @@ namespace halloween
         }
     }
 
-    void Coins::move(const sf::Vector2f & move)
+    void Coins::moveWithMap(const sf::Vector2f & move)
     {
         for (Coin & coin : m_coins)
         {

@@ -50,7 +50,6 @@ namespace halloween
         void collisions(Context & context);
         void killCollisions(Context & context);
         void exitCollisions(Context & context) const;
-        void coinCollisions(Context & context) const;
         void slimeCollisions(Context & context);
         void acidCollisions(Context & context);
         void waterCollisions(Context & context);

@@ -15,6 +15,7 @@
 #include "level.hpp"
 #include "missile.hpp"
 #include "music-player.hpp"
+#include "object-manager.hpp"
 #include "owl-calls.hpp"
 #include "pause-screen.hpp"
 #include "random.hpp"
@@ -77,6 +78,7 @@ namespace halloween
         Slimes m_slimes;
         Ghosts m_ghosts;
         InfoRegion m_infoRegion;
+        ObjectManagerList m_managers;
 
         std::vector<std::size_t> m_delayLoopCounts;
         std::vector<std::size_t> m_framesPerSecond;

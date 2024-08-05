@@ -42,6 +42,8 @@ namespace halloween
     {
         if (context.level.number != context.level_number)
         {
+            context.managers.clearAll();
+            //
             context.saws.clear();
             context.spouts.clear();
             context.balls.clear();
@@ -78,16 +80,20 @@ namespace halloween
         StateBase::update(context, frameTimeSec);
 
         context.info_region.update(context, frameTimeSec);
-        context.avatar.update(context, frameTimeSec);
+
         context.missiles.update(context, frameTimeSec);
-        context.coins.update(frameTimeSec);
+        context.owl_calls.update(context, frameTimeSec);
+
+        context.managers.updateAll(context, frameTimeSec);
+        //
         context.darts.update(frameTimeSec);
         context.ghosts.update(context, frameTimeSec);
         context.slimes.update(frameTimeSec);
-        context.owl_calls.update(context, frameTimeSec);
         context.balls.update(frameTimeSec);
         context.spouts.update(frameTimeSec);
         context.saws.update(frameTimeSec);
+
+        context.avatar.update(context, frameTimeSec);
     }
 
     bool PlayState::handleEvent(Context & context, const sf::Event & event)
@@ -137,15 +143,17 @@ namespace halloween
             states.texture = nullptr;
         }
 
+        context.managers.drawAll(context, target, states);
+        //
         context.ghosts.draw(target, states);
-        context.missiles.draw(target, states);
-        context.coins.draw(target, states);
         context.darts.draw(target, states);
         context.spouts.draw(target, states);
-        context.avatar.draw(target, states);
         context.slimes.draw(target, states);
-        context.info_region.draw(target, states);
         context.balls.draw(target, states);
+
+        context.missiles.draw(target, states);
+        context.info_region.draw(target, states);
+        context.avatar.draw(target, states);
     }
 
 } // namespace halloween

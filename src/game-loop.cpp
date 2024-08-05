@@ -36,6 +36,7 @@ namespace halloween
         , m_slimes()
         , m_ghosts()
         , m_infoRegion()
+        , m_managers()
         , m_delayLoopCounts()
         , m_framesPerSecond()
         , m_perSecondClock()
@@ -62,7 +63,8 @@ namespace halloween
               m_saws,
               m_slimes,
               m_ghosts,
-              m_infoRegion)
+              m_infoRegion,
+              m_managers)
     {}
 
     void GameLoop::play()
@@ -97,7 +99,11 @@ namespace halloween
         m_layout.setup(m_window.getSize());
         m_media.setup(m_settings);
         m_missiles.setup(m_settings);
-        m_coins.setup(m_settings);
+
+        m_managers.add(m_coins);
+
+        m_managers.setupAll(m_settings);
+
         m_darts.setup(m_settings);
         m_spikedBalls.setup(m_settings);
         m_fireSpouts.setup(m_settings);

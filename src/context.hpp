@@ -36,6 +36,7 @@ namespace halloween
     class ScreenRegions;
     class LevelFileLoader;
     struct IStatesPending;
+    class ObjectManagerList;
 
     struct Context
     {
@@ -61,7 +62,8 @@ namespace halloween
             Saws & saw,
             Slimes & sli,
             Ghosts & gho,
-            InfoRegion & inf)
+            InfoRegion & inf,
+            ObjectManagerList & man)
             : settings(set)
             , window(win)
             , random(ran)
@@ -84,6 +86,7 @@ namespace halloween
             , slimes(sli)
             , ghosts(gho)
             , info_region(inf)
+            , managers(man)
             , is_paused(false)
             , will_quit(false)
             , level_number(1)
@@ -111,6 +114,7 @@ namespace halloween
         Slimes & slimes;
         Ghosts & ghosts;
         InfoRegion & info_region;
+        ObjectManagerList & managers;
 
         bool is_paused;
         bool will_quit;

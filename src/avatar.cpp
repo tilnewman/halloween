@@ -235,25 +235,41 @@ namespace halloween
         acidCollisions(context);
         waterCollisions(context);
         exitCollisions(context);
-        coinCollisions(context);
+
+        context.managers.collideAllWithAvatar(context, collisionRect());
+        //
         context.darts.collideWithAvatar(context, collisionRect());
         slimeCollisions(context);
-        killIfOutOfBounds(context);
+        //
+        // The normal collision rect is small, and makes gathering coins unfair.
+        // This will increase it so that any slight near touch can gather a coin.
+        // So check coin collisions all over again with this new rect.
+        context.coins.collideWithAvatar(
+            context, util::scaleRectInPlaceCopy(collisionRect(), { 1.3f, 1.75f }));
 
+        if (context.managers.doesAvatarCollideWithAnyAndDie(collisionRect()))
+        {
+            triggerDeath(context);
+        }
+        //
+        if (context.slimes.doesAvatarCollideWithAnyAndDie(collisionRect()))
+        {
+            triggerDeath(context);
+        }
         if (context.balls.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }
-
         if (context.spouts.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }
-
         if (context.saws.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }
+
+        killIfOutOfBounds(context);
 
         // this one must come last, after all possible sets to m_action
         handleIdle(context, frameTimeSec);
@@ -278,7 +294,8 @@ namespace halloween
 
         const sf::Vector2f move{ moveX, 0.0f };
         m_sprite.move(move);
-        context.coins.move(move);
+        context.managers.moveAllWithMap(move);
+        //
         context.ghosts.move(move);
         context.slimes.move(move);
         context.darts.move(move);
@@ -304,10 +321,11 @@ namespace halloween
             {
                 context.info_region.livesAdjust(-1);
 
+                context.managers.clearAll();
+                //
                 context.saws.clear();
                 context.spouts.clear();
                 context.balls.clear();
-                context.coins.clear();
                 context.darts.clear();
                 context.ghosts.clear();
                 context.slimes.clear();
@@ -720,17 +738,6 @@ namespace halloween
         }
     }
 
-    void Avatar::coinCollisions(Context & context) const
-    {
-        sf::FloatRect rect = collisionRect();
-
-        // The normal collision rect is very small, and makes gathering coins unfair.
-        // This will increase it so that any slight touch can gather coins.
-        util::scaleRectInPlace(rect, { 1.2f, 1.75f });
-
-        context.coins.collideWithAvatar(context, rect);
-    }
-
     void Avatar::slimeCollisions(Context & context)
     {
         if (Action::Attack == m_action)
@@ -740,11 +747,6 @@ namespace halloween
                 context.audio.play("squish");
                 context.info_region.scoreAdjust(context.settings.kill_slime_score);
             }
-        }
-
-        if (context.slimes.doesAvatarCollideWithAnyAndDie(collisionRect()))
-        {
-            triggerDeath(context);
         }
     }
 

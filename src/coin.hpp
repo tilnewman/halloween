@@ -3,6 +3,8 @@
 //
 // coin.hpp
 //
+#include "object-manager.hpp"
+
 #include <vector>
 
 #include <SFML/Graphics/Rect.hpp>
@@ -36,18 +38,20 @@ namespace halloween
 
     //
 
-    class Coins
+    class Coins : public IObjectManager
     {
       public:
         Coins();
+        virtual ~Coins() override = default;
 
-        void setup(const Settings & settings);
-        void add(Context & context, const sf::FloatRect & region);
-        void clear();
-        void update(const float frameTimeSec);
-        void draw(sf::RenderTarget & target, sf::RenderStates states) const;
-        void move(const sf::Vector2f & move);
-        void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect);
+        void setup(const Settings & settings) final;
+        void add(Context & context, const sf::FloatRect & region) final;
+        void clear() final;
+        void update(Context & context, const float frameTimeSec) final;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
+        void moveWithMap(const sf::Vector2f & move) final;
+        void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) final;
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
 
       private:
         void addAnimation(const Context & context, const sf::Vector2f & position);
