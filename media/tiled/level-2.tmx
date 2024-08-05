@@ -105,8 +105,8 @@
 </data>
  </layer>
  <objectgroup id="8" name="kill">
-  <object id="42" x="4192" y="1024" width="128" height="64"/>
-  <object id="43" x="4640" y="1024" width="512" height="64"/>
+  <object id="42" x="4192" y="1056" width="128" height="32"/>
+  <object id="43" x="4640" y="1056" width="512" height="32"/>
  </objectgroup>
  <objectgroup id="7" name="coin">
   <object id="17" x="3456" y="1088" width="64" height="96"/>
