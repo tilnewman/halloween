@@ -72,11 +72,16 @@ namespace halloween
 
     bool Saws::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
     {
-        // TODO use distance from center instead of square global bounds
+        const sf::Vector2f avatarCenterPos = util::center(avatarRect);
 
         for (const Saw & saw : m_saws)
         {
-            if (avatarRect.intersects(saw.sprite.getGlobalBounds()))
+            const sf::FloatRect sawBounds = saw.sprite.getGlobalBounds();
+            const sf::Vector2f sawCenterPos = util::center(sawBounds);
+
+            const float distance = util::distance(avatarCenterPos, sawCenterPos);
+
+            if (distance < (sawBounds.width * 0.5f))
             {
                 return true;
             }
