@@ -127,7 +127,8 @@ namespace halloween
         }
     }
 
-    void FireSpouts::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void FireSpouts::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const FireSpout & spout : m_fireSpouts)
         {
@@ -135,7 +136,10 @@ namespace halloween
 
             if (spout.is_spurting)
             {
-                target.draw(spout.fire_sprite, states);
+                if (context.layout.mapRegion().intersects(spout.fire_sprite.getGlobalBounds()))
+                {
+                    target.draw(spout.fire_sprite, states);
+                }
             }
         }
     }

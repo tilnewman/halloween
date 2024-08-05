@@ -54,11 +54,15 @@ namespace halloween
         }
     }
 
-    void Saws::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void Saws::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Saw & saw : m_saws)
         {
-            target.draw(saw.sprite, states);
+            if (context.layout.mapRegion().intersects(saw.sprite.getGlobalBounds()))
+            {
+                target.draw(saw.sprite, states);
+            }
         }
     }
 

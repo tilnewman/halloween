@@ -7,6 +7,7 @@
 
 #include "context.hpp"
 #include "info-region.hpp"
+#include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
@@ -81,11 +82,15 @@ namespace halloween
         }
     }
 
-    void Darts::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void Darts::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Dart & dart : m_darts)
         {
-            target.draw(dart.sprite, states);
+            if (context.layout.mapRegion().intersects(dart.sprite.getGlobalBounds()))
+            {
+                target.draw(dart.sprite, states);
+            }
         }
 
         for (const DartAnim & dartAnim : m_dartAnims)

@@ -139,11 +139,15 @@ namespace halloween
         }
     }
 
-    void Slimes::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void Slimes::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Slime & slime : m_slimes)
         {
-            target.draw(slime.sprite, states);
+            if (context.layout.mapRegion().intersects(slime.sprite.getGlobalBounds()))
+            {
+                target.draw(slime.sprite, states);
+            }
         }
 
         for (const SlimeDeathAnim & anim : m_deathAnims)

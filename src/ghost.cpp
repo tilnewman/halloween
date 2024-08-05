@@ -149,13 +149,17 @@ namespace halloween
             std::end(m_ghosts));
     }
 
-    void Ghosts::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void Ghosts::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         states.blendMode = sf::BlendAdd;
 
         for (const Ghost & ghost : m_ghosts)
         {
-            target.draw(ghost.sprite, states);
+            if (context.layout.mapRegion().intersects(ghost.sprite.getGlobalBounds()))
+            {
+                target.draw(ghost.sprite, states);
+            }
         }
     }
 

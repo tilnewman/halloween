@@ -140,16 +140,23 @@ namespace halloween
         }
     }
 
-    void Coins::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void Coins::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Coin & coin : m_coins)
         {
-            target.draw(coin.sprite, states);
+            if (context.layout.mapRegion().intersects(coin.sprite.getGlobalBounds()))
+            {
+                target.draw(coin.sprite, states);
+            }
         }
 
         for (const CoinAnim & coinAnim : m_animations)
         {
-            target.draw(coinAnim.sprite, states);
+            if (context.layout.mapRegion().intersects(coinAnim.sprite.getGlobalBounds()))
+            {
+                target.draw(coinAnim.sprite, states);
+            }
         }
     }
 

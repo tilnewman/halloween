@@ -80,12 +80,15 @@ namespace halloween
         }
     }
 
-    void
-        SpikedBalls::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void SpikedBalls::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const SpikedBall & ball : m_balls)
         {
-            target.draw(ball.sprite, states);
+            if (context.layout.mapRegion().intersects(ball.sprite.getGlobalBounds()))
+            {
+                target.draw(ball.sprite, states);
+            }
         }
     }
 

@@ -185,11 +185,15 @@ namespace halloween
         }
     }
 
-    void Bats::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
+    void Bats::draw(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Bat & bat : m_bats)
         {
-            target.draw(bat.sprite, states);
+            if (context.layout.mapRegion().intersects(bat.sprite.getGlobalBounds()))
+            {
+                target.draw(bat.sprite, states);
+            }
         }
 
         for (const BatDeathAnim & anim : m_deathAnims)
