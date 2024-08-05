@@ -101,15 +101,14 @@ namespace halloween
         m_missiles.setup(m_settings);
 
         m_managers.add(m_coins);
-
+        m_managers.add(m_spikedBalls);
+        m_managers.add(m_fireSpouts);
+        m_managers.add(m_saws);
+        m_managers.add(m_darts);
+        m_managers.add(m_ghosts);
+        m_managers.add(m_slimes);
         m_managers.setupAll(m_settings);
 
-        m_darts.setup(m_settings);
-        m_spikedBalls.setup(m_settings);
-        m_fireSpouts.setup(m_settings);
-        m_saws.setup(m_settings);
-        m_slimes.setup(m_settings);
-        m_ghosts.setup(m_settings);
         m_avatar.setup(m_settings);
         m_pauseScreen.setup(m_window.getSize(), m_media);
         m_infoRegion.setup(m_context);

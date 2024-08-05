@@ -23,6 +23,7 @@ namespace halloween
       public:
         virtual ~IObjectManager() = default;
 
+        virtual bool willDrawBeforeMap() const = 0;
         virtual void clear() = 0;
         virtual void setup(const Settings & settings) = 0;
         virtual void add(Context & context, const sf::FloatRect & region) = 0;
@@ -31,6 +32,7 @@ namespace halloween
         virtual void moveWithMap(const sf::Vector2f & move) = 0;
         virtual void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) = 0;
         virtual bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const = 0;
+        virtual void appendCollisions(std::vector<sf::FloatRect> & rects) const = 0;
     };
 
     //
@@ -45,10 +47,12 @@ namespace halloween
         void clearAll();
         void setupAll(const Settings & settings);
         void updateAll(Context & context, const float frameTimeSec);
-        void drawAll(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const;
+        void drawAllBeforeMap(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const;
+        void drawAllAfterMap(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const;
         void moveAllWithMap(const sf::Vector2f & move);
         void collideAllWithAvatar(Context & context, const sf::FloatRect & avatarRect);
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const;
+        void appendAllCollisions(std::vector<sf::FloatRect> & rects) const;
 
       private:
         std::vector<std::reference_wrapper<IObjectManager>> m_managers;

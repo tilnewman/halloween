@@ -63,7 +63,7 @@ namespace halloween
 
     void SpikedBalls::clear() { m_balls.clear(); }
 
-    void SpikedBalls::update(const float frameTimeSec)
+    void SpikedBalls::update(Context &, const float frameTimeSec)
     {
         for (SpikedBall & ball : m_balls)
         {
@@ -80,7 +80,8 @@ namespace halloween
         }
     }
 
-    void SpikedBalls::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void
+        SpikedBalls::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const SpikedBall & ball : m_balls)
         {
@@ -88,7 +89,7 @@ namespace halloween
         }
     }
 
-    void SpikedBalls::move(const sf::Vector2f & move)
+    void SpikedBalls::moveWithMap(const sf::Vector2f & move)
     {
         for (SpikedBall & ball : m_balls)
         {

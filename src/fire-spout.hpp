@@ -3,6 +3,8 @@
 //
 // fire-spout.hpp
 //
+#include "object-manager.hpp"
+
 #include <vector>
 
 #include <SFML/Graphics/Rect.hpp>
@@ -38,19 +40,22 @@ namespace halloween
 
     //
 
-    class FireSpouts
+    class FireSpouts : public IObjectManager
     {
       public:
         FireSpouts();
+        virtual ~FireSpouts() override = default;
 
-        void setup(const Settings & settings);
-        void add(const Context & context, const sf::FloatRect & region);
-        void clear();
-        void update(const float frameTimeSec);
-        void draw(sf::RenderTarget & target, sf::RenderStates states) const;
-        void move(const sf::Vector2f & move);
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const;
-        const std::vector<sf::FloatRect> collisions() const;
+        bool willDrawBeforeMap() const final { return false; }
+        void setup(const Settings & settings) final;
+        void add(Context & context, const sf::FloatRect & region) final;
+        void clear() final;
+        void update(Context & context, const float frameTimeSec) final;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
+        void moveWithMap(const sf::Vector2f & move) final;
+        void collideWithAvatar(Context &, const sf::FloatRect &) final {}
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const final;
+        void appendCollisions(std::vector<sf::FloatRect> &) const final;
 
       private:
         sf::Texture m_spoutTexture;

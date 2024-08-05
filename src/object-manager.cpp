@@ -44,12 +44,27 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::drawAll(
+    void ObjectManagerList::drawAllBeforeMap(
         const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (auto & manager : m_managers)
         {
-            manager.get().draw(context, target, states);
+            if (manager.get().willDrawBeforeMap())
+            {
+                manager.get().draw(context, target, states);
+            }
+        }
+    }
+
+    void ObjectManagerList::drawAllAfterMap(
+        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+    {
+        for (auto & manager : m_managers)
+        {
+            if (!manager.get().willDrawBeforeMap())
+            {
+                manager.get().draw(context, target, states);
+            }
         }
     }
 
@@ -82,6 +97,14 @@ namespace halloween
         }
 
         return didAnyCollideAndCauseDeath;
+    }
+
+    void ObjectManagerList::appendAllCollisions(std::vector<sf::FloatRect> & rects) const
+    {
+        for (auto & manager : m_managers)
+        {
+            manager.get().appendCollisions(rects);
+        }
     }
 
 } // namespace halloween

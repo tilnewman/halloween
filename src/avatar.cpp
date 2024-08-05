@@ -235,11 +235,10 @@ namespace halloween
         acidCollisions(context);
         waterCollisions(context);
         exitCollisions(context);
+        handleAttackingSlimes(context);
 
         context.managers.collideAllWithAvatar(context, collisionRect());
-        //
-        context.darts.collideWithAvatar(context, collisionRect());
-        slimeCollisions(context);
+
         //
         // The normal collision rect is small, and makes gathering coins unfair.
         // This will increase it so that any slight near touch can gather a coin.
@@ -248,23 +247,6 @@ namespace halloween
             context, util::scaleRectInPlaceCopy(collisionRect(), { 1.3f, 1.75f }));
 
         if (context.managers.doesAvatarCollideWithAnyAndDie(collisionRect()))
-        {
-            triggerDeath(context);
-        }
-        //
-        if (context.slimes.doesAvatarCollideWithAnyAndDie(collisionRect()))
-        {
-            triggerDeath(context);
-        }
-        if (context.balls.doesAvatarCollideWithAnyAndDie(collisionRect()))
-        {
-            triggerDeath(context);
-        }
-        if (context.spouts.doesAvatarCollideWithAnyAndDie(collisionRect()))
-        {
-            triggerDeath(context);
-        }
-        if (context.saws.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
             triggerDeath(context);
         }
@@ -295,13 +277,6 @@ namespace halloween
         const sf::Vector2f move{ moveX, 0.0f };
         m_sprite.move(move);
         context.managers.moveAllWithMap(move);
-        //
-        context.ghosts.move(move);
-        context.slimes.move(move);
-        context.darts.move(move);
-        context.balls.move(move);
-        context.spouts.move(move);
-        context.saws.move(move);
     }
 
     bool Avatar::handleDeath(Context & context, const float frameTimeSec)
@@ -322,15 +297,8 @@ namespace halloween
                 context.info_region.livesAdjust(-1);
 
                 context.managers.clearAll();
-                //
-                context.saws.clear();
-                context.spouts.clear();
-                context.balls.clear();
-                context.darts.clear();
-                context.ghosts.clear();
-                context.slimes.clear();
-                context.level.reset();
 
+                context.level.reset();
                 context.level.load(context);
 
                 m_action = Action::Idle;
@@ -631,10 +599,7 @@ namespace halloween
         footRect.height -= footRectHeightAdj;
 
         std::vector<sf::FloatRect> rects = context.level.walk_collisions;
-        for (const sf::FloatRect & rect : context.spouts.collisions())
-        {
-            rects.push_back(rect);
-        }
+        context.managers.appendAllCollisions(rects);
 
         bool hasHitSomething{ false };
         sf::FloatRect intersection;
@@ -738,7 +703,7 @@ namespace halloween
         }
     }
 
-    void Avatar::slimeCollisions(Context & context)
+    void Avatar::handleAttackingSlimes(Context & context)
     {
         if (Action::Attack == m_action)
         {

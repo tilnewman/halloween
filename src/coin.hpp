@@ -44,6 +44,7 @@ namespace halloween
         Coins();
         virtual ~Coins() override = default;
 
+        bool willDrawBeforeMap() const final { return false; }
         void setup(const Settings & settings) final;
         void add(Context & context, const sf::FloatRect & region) final;
         void clear() final;
@@ -52,6 +53,7 @@ namespace halloween
         void moveWithMap(const sf::Vector2f & move) final;
         void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) final;
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
+        void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
       private:
         void addAnimation(const Context & context, const sf::Vector2f & position);

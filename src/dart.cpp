@@ -47,7 +47,7 @@ namespace halloween
 
     void Darts::clear() { m_darts.clear(); }
 
-    void Darts::update(const float frameTimeSec)
+    void Darts::update(Context &, const float frameTimeSec)
     {
         bool wereAnyKilled = false;
         for (DartAnim & anim : m_dartAnims)
@@ -81,7 +81,7 @@ namespace halloween
         }
     }
 
-    void Darts::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Darts::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Dart & dart : m_darts)
         {
@@ -94,7 +94,7 @@ namespace halloween
         }
     }
 
-    void Darts::move(const sf::Vector2f & move)
+    void Darts::moveWithMap(const sf::Vector2f & move)
     {
         for (Dart & dart : m_darts)
         {

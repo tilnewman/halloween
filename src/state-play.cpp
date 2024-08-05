@@ -43,14 +43,6 @@ namespace halloween
         if (context.level.number != context.level_number)
         {
             context.managers.clearAll();
-            //
-            context.saws.clear();
-            context.spouts.clear();
-            context.balls.clear();
-            context.darts.clear();
-            context.ghosts.clear();
-            context.ghosts.clear();
-            context.slimes.clear();
 
             if (!context.level.load(context))
             {
@@ -85,13 +77,6 @@ namespace halloween
         context.owl_calls.update(context, frameTimeSec);
 
         context.managers.updateAll(context, frameTimeSec);
-        //
-        context.darts.update(frameTimeSec);
-        context.ghosts.update(context, frameTimeSec);
-        context.slimes.update(frameTimeSec);
-        context.balls.update(frameTimeSec);
-        context.spouts.update(frameTimeSec);
-        context.saws.update(frameTimeSec);
 
         context.avatar.update(context, frameTimeSec);
     }
@@ -134,7 +119,7 @@ namespace halloween
 
         target.draw(context.media.bg_sprite, states);
 
-        context.saws.draw(target, states);
+        context.managers.drawAllBeforeMap(context, target, states);
 
         for (const TileLayer & layer : context.level.tiles.layers)
         {
@@ -143,13 +128,7 @@ namespace halloween
             states.texture = nullptr;
         }
 
-        context.managers.drawAll(context, target, states);
-        //
-        context.ghosts.draw(target, states);
-        context.darts.draw(target, states);
-        context.spouts.draw(target, states);
-        context.slimes.draw(target, states);
-        context.balls.draw(target, states);
+        context.managers.drawAllAfterMap(context, target, states);
 
         context.missiles.draw(target, states);
         context.info_region.draw(target, states);

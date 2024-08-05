@@ -49,7 +49,7 @@ namespace halloween
         }
     }
 
-    void FireSpouts::add(const Context & context, const sf::FloatRect & region)
+    void FireSpouts::add(Context & context, const sf::FloatRect & region)
     {
         FireSpout & spout = m_fireSpouts.emplace_back();
 
@@ -81,7 +81,7 @@ namespace halloween
 
     void FireSpouts::clear() { m_fireSpouts.clear(); }
 
-    void FireSpouts::update(const float frameTimeSec)
+    void FireSpouts::update(Context &, const float frameTimeSec)
     {
         for (FireSpout & spout : m_fireSpouts)
         {
@@ -127,7 +127,7 @@ namespace halloween
         }
     }
 
-    void FireSpouts::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void FireSpouts::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const FireSpout & spout : m_fireSpouts)
         {
@@ -140,7 +140,7 @@ namespace halloween
         }
     }
 
-    void FireSpouts::move(const sf::Vector2f & move)
+    void FireSpouts::moveWithMap(const sf::Vector2f & move)
     {
         for (FireSpout & spout : m_fireSpouts)
         {
@@ -168,17 +168,12 @@ namespace halloween
         return false;
     }
 
-    const std::vector<sf::FloatRect> FireSpouts::collisions() const
+    void FireSpouts::appendCollisions(std::vector<sf::FloatRect> & rects) const
     {
-        std::vector<sf::FloatRect> rects;
-        rects.reserve(m_fireSpouts.size());
-
         for (const FireSpout & spout : m_fireSpouts)
         {
             rects.push_back(spout.spout_sprite.getGlobalBounds());
         }
-
-        return rects;
     }
 
 } // namespace halloween

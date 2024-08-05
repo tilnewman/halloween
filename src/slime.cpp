@@ -52,7 +52,7 @@ namespace halloween
 
     void Slimes::clear() { m_slimes.clear(); }
 
-    void Slimes::add(const Context & context, const sf::FloatRect & rect)
+    void Slimes::add(Context & context, const sf::FloatRect & rect)
     {
         const float speed{ context.random.fromTo(20.0f, 75.0f) };
 
@@ -70,7 +70,7 @@ namespace halloween
         m_slimes.push_back(slime);
     }
 
-    void Slimes::update(const float frameTimeSec)
+    void Slimes::update(Context &, const float frameTimeSec)
     {
         // animate
         m_elapsedTimeSec += frameTimeSec;
@@ -139,7 +139,7 @@ namespace halloween
         }
     }
 
-    void Slimes::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Slimes::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Slime & slime : m_slimes)
         {
@@ -152,7 +152,7 @@ namespace halloween
         }
     }
 
-    void Slimes::move(const sf::Vector2f & move)
+    void Slimes::moveWithMap(const sf::Vector2f & move)
     {
         for (Slime & slime : m_slimes)
         {

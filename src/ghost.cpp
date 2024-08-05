@@ -65,13 +65,13 @@ namespace halloween
         m_ghosts.clear();
     }
 
-    void Ghosts::add(const Context & context, const sf::FloatRect & region)
+    void Ghosts::add(Context & context, const sf::FloatRect & region)
     {
         m_spawnPoints.emplace_back(
             util::center(region), context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec));
     }
 
-    void Ghosts::update(const Context & context, const float frameTimeSec)
+    void Ghosts::update(Context & context, const float frameTimeSec)
     {
         for (GhostSpawnPoint & spawnPoint : m_spawnPoints)
         {
@@ -149,7 +149,7 @@ namespace halloween
             std::end(m_ghosts));
     }
 
-    void Ghosts::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Ghosts::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
     {
         states.blendMode = sf::BlendAdd;
 
@@ -159,7 +159,7 @@ namespace halloween
         }
     }
 
-    void Ghosts::move(const sf::Vector2f & move)
+    void Ghosts::moveWithMap(const sf::Vector2f & move)
     {
         for (GhostSpawnPoint & spawnPoint : m_spawnPoints)
         {

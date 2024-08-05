@@ -34,7 +34,7 @@ namespace halloween
         m_texture.setSmooth(true);
     }
 
-    void Saws::add(const Context &, const sf::FloatRect & region)
+    void Saws::add(Context &, const sf::FloatRect & region)
     {
         Saw & saw = m_saws.emplace_back();
 
@@ -46,7 +46,7 @@ namespace halloween
 
     void Saws::clear() { m_saws.clear(); }
 
-    void Saws::update(const float frameTimeSec)
+    void Saws::update(Context &, const float frameTimeSec)
     {
         for (Saw & saw : m_saws)
         {
@@ -54,7 +54,7 @@ namespace halloween
         }
     }
 
-    void Saws::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Saws::draw(const Context &, sf::RenderTarget & target, sf::RenderStates states) const
     {
         for (const Saw & saw : m_saws)
         {
@@ -62,7 +62,7 @@ namespace halloween
         }
     }
 
-    void Saws::move(const sf::Vector2f & move)
+    void Saws::moveWithMap(const sf::Vector2f & move)
     {
         for (Saw & saw : m_saws)
         {
@@ -78,9 +78,7 @@ namespace halloween
         {
             const sf::FloatRect sawBounds = saw.sprite.getGlobalBounds();
             const sf::Vector2f sawCenterPos = util::center(sawBounds);
-
             const float distance = util::distance(avatarCenterPos, sawCenterPos);
-
             if (distance < (sawBounds.width * 0.5f))
             {
                 return true;

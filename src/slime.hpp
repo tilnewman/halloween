@@ -3,6 +3,8 @@
 //
 // slime.hpp
 //
+#include "object-manager.hpp"
+
 #include <vector>
 
 #include <SFML/Graphics/Rect.hpp>
@@ -14,6 +16,8 @@ namespace halloween
 {
     struct Context;
     struct Settings;
+
+    //
 
     struct Slime
     {
@@ -49,18 +53,23 @@ namespace halloween
 
     //
 
-    class Slimes
+    class Slimes : public IObjectManager
     {
       public:
         Slimes();
+        virtual ~Slimes() override = default;
 
-        void setup(const Settings & settings);
-        void add(const Context & context, const sf::FloatRect & rect);
-        void clear();
-        void update(const float frameTimeSec);
-        void draw(sf::RenderTarget & target, sf::RenderStates states) const;
-        void move(const sf::Vector2f & move);
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const;
+        bool willDrawBeforeMap() const final { return false; }
+        void setup(const Settings & settings) final;
+        void add(Context & context, const sf::FloatRect & rect) final;
+        void clear() final;
+        void update(Context & context, const float frameTimeSec) final;
+        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
+        void moveWithMap(const sf::Vector2f & move) final;
+        void collideWithAvatar(Context &, const sf::FloatRect &) final {}
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const final;
+        void appendCollisions(std::vector<sf::FloatRect> &) const final {}
+
         bool attack(const sf::FloatRect & attackRect);
 
       private:
