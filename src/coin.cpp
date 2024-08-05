@@ -144,18 +144,12 @@ namespace halloween
     {
         for (const Coin & coin : m_coins)
         {
-            if (coin.is_alive)
-            {
-                target.draw(coin.sprite, states);
-            }
+            target.draw(coin.sprite, states);
         }
 
         for (const CoinAnim & coinAnim : m_animations)
         {
-            if (coinAnim.is_alive)
-            {
-                target.draw(coinAnim.sprite, states);
-            }
+            target.draw(coinAnim.sprite, states);
         }
     }
 
