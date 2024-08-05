@@ -4,6 +4,7 @@
 // game-loop.hpp
 //
 #include "avatar.hpp"
+#include "bat.hpp"
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
@@ -60,6 +61,7 @@ namespace halloween
         util::Random m_random;
         util::SoundPlayer m_audio;
         util::MusicPlayer m_music;
+        Bats m_bats;
         OwlCalls m_owlCalls;
         sf::RenderWindow m_window;
         LevelFileLoader m_loader;

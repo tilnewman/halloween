@@ -47,6 +47,7 @@ namespace halloween
               m_random,
               m_audio,
               m_music,
+              m_bats,
               m_owlCalls,
               m_loader,
               m_media,
@@ -107,6 +108,7 @@ namespace halloween
         m_managers.add(m_darts);
         m_managers.add(m_ghosts);
         m_managers.add(m_slimes);
+        m_managers.add(m_bats);
         m_managers.setupAll(m_settings);
 
         m_avatar.setup(m_settings);

@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "level-file-loader.hpp"
 
+#include "bat.hpp"
 #include "check-macros.hpp"
 #include "coin.hpp"
 #include "context.hpp"
@@ -207,6 +208,10 @@ namespace halloween
             else if (layerName == "saw")
             {
                 parseObjectLayerRects(context.saws, context, jsonLayer);
+            }
+            else if (layerName == "bat")
+            {
+                parseObjectLayerRects(context.bats, context, jsonLayer);
             }
             else
             {

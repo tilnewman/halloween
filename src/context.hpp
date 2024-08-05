@@ -18,6 +18,7 @@ namespace util
 
 namespace halloween
 {
+    class Bats;
     class Saws;
     struct Level;
     class Coins;
@@ -46,6 +47,7 @@ namespace halloween
             util::Random & ran,
             util::SoundPlayer & aud,
             util::MusicPlayer & mus,
+            Bats & bat,
             OwlCalls & owl,
             LevelFileLoader & loa,
             Resources & res,
@@ -69,6 +71,7 @@ namespace halloween
             , random(ran)
             , audio(aud)
             , music(mus)
+            , bats(bat)
             , owl_calls(owl)
             , loader(loa)
             , media(res)
@@ -97,6 +100,7 @@ namespace halloween
         util::Random & random;
         util::SoundPlayer & audio;
         util::MusicPlayer & music;
+        Bats & bats;
         OwlCalls & owl_calls;
         LevelFileLoader & loader;
         Resources & media;
