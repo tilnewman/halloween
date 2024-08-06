@@ -27,6 +27,24 @@ namespace halloween
 
     //
 
+    struct Bonus
+    {
+        Bonus()
+            : score(0)
+            , text()
+        {}
+
+        Bonus(const int s, const sf::Text & t)
+            : score(s)
+            , text(t)
+        {}
+
+        int score;
+        sf::Text text;
+    };
+
+    //
+
     class LevelCompleteState : public StateBase
     {
       public:
@@ -40,17 +58,21 @@ namespace halloween
         void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const final;
 
       private:
+        bool popAndDisplayNextBonus(Context & context);
         void updateScoreText(const Context & context);
 
       private:
         sf::Text m_levelCompleteText;
         sf::Text m_scoreText;
         sf::Text m_bonusText;
+        std::vector<Bonus> m_bonuses;
+        sf::FloatRect m_bonusTextRegion;
 
-        float m_elapsedScoreTimeSec;
+        bool m_isPreWaiting;
+        bool m_isShowingBonuses;
+        bool m_isPostWaiting;
         const float m_timeBetweenScoreUpdateSec;
         int m_scoreDisplayed;
-        bool m_hasScoreFinishedUpdating;
     };
 
 } // namespace halloween

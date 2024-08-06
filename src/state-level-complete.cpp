@@ -27,10 +27,13 @@ namespace halloween
         : StateBase(context, State::Level, State::Play)
         , m_levelCompleteText()
         , m_scoreText()
-        , m_elapsedScoreTimeSec(0.0f)
+        , m_bonusText()
+        , m_bonuses()
+        , m_isPreWaiting(true)
+        , m_isShowingBonuses(false)
+        , m_isPostWaiting(false)
         , m_timeBetweenScoreUpdateSec(0.05f)
         , m_scoreDisplayed(0)
-        , m_hasScoreFinishedUpdating(false)
     {}
 
     void LevelCompleteState::onEnter(Context & context)
@@ -48,68 +51,56 @@ namespace halloween
 
         updateScoreText(context);
 
-        m_bonusText = context.media.makeText(70, "", sf::Color(255, 255, 153));
+        m_bonusTextRegion.left = 0.0f;
+        m_bonusTextRegion.top = util::bottom(m_scoreText);
+        m_bonusTextRegion.width = context.layout.wholeRegion().width;
 
-        std::string bonusStr;
+        m_bonusTextRegion.height =
+            ((context.layout.wholeRegion().height - m_bonusTextRegion.top) -
+             (context.layout.wholeSize().y * 0.25f));
 
-        const bool collectedAllCoins = (context.stats.coin_total == context.stats.coin_collected);
-        if (collectedAllCoins)
+        const unsigned bonusTextCharSize{ 70 };
+        const sf::Color bonusTextColor{ 255, 255, 153 };
+
+        const bool willCoinBonus{ context.stats.coin_total == context.stats.coin_collected };
+        const bool willEnemyBonus{ context.stats.enemy_total == context.stats.enemy_killed };
+        const bool willSurviveBonus{ !context.stats.has_player_died };
+        const bool willPerfectBonus{ willCoinBonus && willEnemyBonus && willSurviveBonus };
+
+        if (willPerfectBonus)
         {
-            context.info_region.scoreAdjust(100);
-
-            bonusStr += "All Coins Found Bonus!";
+            m_bonuses.emplace_back(
+                1000, context.media.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
         }
 
-        const bool killedAllEnemies = (context.stats.enemy_total == context.stats.enemy_killed);
-        if (killedAllEnemies)
+        if (willCoinBonus)
         {
-            context.info_region.scoreAdjust(100);
-
-            if (!bonusStr.empty())
-            {
-                bonusStr += '\n';
-            }
-
-            bonusStr += "All Enemies Killed Bonus!";
+            m_bonuses.emplace_back(
+                90,
+                context.media.makeText(
+                    bonusTextCharSize, "All Coins Found Bonus!", bonusTextColor));
         }
 
-        const bool stayedAlive = !context.stats.has_player_died;
-        if (stayedAlive)
+        if (willEnemyBonus)
         {
-            context.info_region.scoreAdjust(100);
-
-            if (!bonusStr.empty())
-            {
-                bonusStr += '\n';
-            }
-
-            bonusStr += "You Didn't Die Bonus!";
+            m_bonuses.emplace_back(
+                50,
+                context.media.makeText(
+                    bonusTextCharSize, "All Enemies Killed Bonus!", bonusTextColor));
         }
 
-        if (collectedAllCoins && killedAllEnemies && stayedAlive)
+        if (willSurviveBonus)
         {
-            context.info_region.scoreAdjust(1000);
-
-            if (!bonusStr.empty())
-            {
-                bonusStr += '\n';
-            }
-
-            bonusStr += "PERFECT!!!";
+            m_bonuses.emplace_back(
+                50,
+                context.media.makeText(bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
         }
 
-        if (bonusStr.empty())
+        if (m_bonuses.size() == 3)
         {
-            bonusStr = "No bonuses, lame.";
+            m_bonuses.emplace_back(
+                0, context.media.makeText(bonusTextCharSize, "No bonuses, lame.", bonusTextColor));
         }
-
-        m_bonusText.setString(bonusStr);
-        util::centerInside(m_bonusText, context.layout.mapRegion());
-        util::setOriginToPosition(m_bonusText);
-
-        m_bonusText.setPosition(
-            m_bonusText.getPosition().x,
-            (util::bottom(context.layout.mapRegion()) - m_bonusText.getGlobalBounds().height));
     }
 
     void LevelCompleteState::updateScoreText(const Context & context)
@@ -132,30 +123,80 @@ namespace halloween
         return false;
     }
 
-    void LevelCompleteState::update(Context & context, const float frameTimeSec)
+    bool LevelCompleteState::popAndDisplayNextBonus(Context & context)
     {
-        m_hasScoreFinishedUpdating = (m_scoreDisplayed == context.info_region.score());
-
-        m_elapsedTimeSec += frameTimeSec;
-        if (m_hasScoreFinishedUpdating && (m_elapsedTimeSec > 6.0f))
+        if (m_bonuses.empty())
         {
-            context.state.setChangePending(State::Play);
+            return false;
         }
 
-        m_elapsedScoreTimeSec += frameTimeSec;
-        if ((m_scoreDisplayed != context.info_region.score()) &&
-            (m_elapsedScoreTimeSec > m_timeBetweenScoreUpdateSec))
+        context.info_region.scoreAdjust(m_bonuses.back().score);
+        m_bonusText = m_bonuses.back().text;
+        util::centerInside(m_bonusText, m_bonusTextRegion);
+
+        m_bonuses.resize(m_bonuses.size() - 1);
+        return true;
+    }
+
+    void LevelCompleteState::update(Context & context, const float frameTimeSec)
+    {
+        auto hasScoreFinishedUpdating = [&]() {
+            return (m_scoreDisplayed == context.info_region.score());
+        };
+
+        if (m_isPreWaiting)
         {
-            m_elapsedScoreTimeSec -= m_timeBetweenScoreUpdateSec;
-
-            ++m_scoreDisplayed;
-            updateScoreText(context);
-            context.audio.play("bell");
-
-            m_hasScoreFinishedUpdating = (m_scoreDisplayed == context.info_region.score());
-            if (m_hasScoreFinishedUpdating)
+            m_elapsedTimeSec += frameTimeSec;
+            if (m_elapsedTimeSec > 4.0f)
             {
                 m_elapsedTimeSec = 0.0f;
+                m_isPreWaiting = false;
+                m_isShowingBonuses = true;
+            }
+        }
+
+        if (m_isShowingBonuses)
+        {
+            if (hasScoreFinishedUpdating())
+            {
+                m_elapsedTimeSec = 0.0f;
+
+                if (popAndDisplayNextBonus(context))
+                {
+                    context.audio.play("bonus");
+                }
+                else
+                {
+                    m_isShowingBonuses = false;
+                    m_isPostWaiting = true;
+                }
+            }
+            else
+            {
+                m_elapsedTimeSec += frameTimeSec;
+                if (m_elapsedTimeSec > m_timeBetweenScoreUpdateSec)
+                {
+                    m_elapsedTimeSec -= m_timeBetweenScoreUpdateSec;
+
+                    int scoreAdjustment = ((context.info_region.score() - m_scoreDisplayed) / 10);
+                    if (0 == scoreAdjustment)
+                    {
+                        scoreAdjustment = 1;
+                    }
+
+                    m_scoreDisplayed += scoreAdjustment;
+                    updateScoreText(context);
+                    context.audio.play("bell");
+                }
+            }
+        }
+
+        if (m_isPostWaiting)
+        {
+            m_elapsedTimeSec += frameTimeSec;
+            if (m_elapsedTimeSec > 6.0f)
+            {
+                context.state.setChangePending(State::Play);
             }
         }
     }
