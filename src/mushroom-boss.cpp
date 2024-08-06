@@ -38,11 +38,11 @@ namespace halloween
     void MushroomBoss::setup(const Settings & settings)
     {
         m_idleAnim.setup((settings.media_path / "image/mushroom"), "idle", 31, 0.05f, true);
-        m_jumpAnim.setup((settings.media_path / "image/mushroom"), "jump", 31, 0.1f, false);
-        m_attackAnim.setup((settings.media_path / "image/mushroom"), "attack", 18, 0.175f, false);
-        m_hitAnim.setup((settings.media_path / "image/mushroom"), "hit", 6, 0.175f, false);
+        m_jumpAnim.setup((settings.media_path / "image/mushroom"), "jump", 31, 0.05f, false);
+        m_attackAnim.setup((settings.media_path / "image/mushroom"), "attack", 18, 0.05f, false);
+        m_hitAnim.setup((settings.media_path / "image/mushroom"), "hit", 6, 0.05f, false);
         m_shakeAnim.setup((settings.media_path / "image/mushroom"), "shake", 5, 0.15f, false);
-        m_deathAnim.setup((settings.media_path / "image/mushroom"), "death", 23, 0.2f, false);
+        m_deathAnim.setup((settings.media_path / "image/mushroom"), "death", 23, 0.05f, false);
 
         m_sprite.setTexture(m_idleAnim.texture(), true);
         m_sprite.scale(1.0f, 1.0f);
@@ -90,10 +90,10 @@ namespace halloween
         {
             target.draw(m_sprite, states);
 
-            const auto rects = collisionRects();
-            util::drawRectangleShape(target, rects.top, false, sf::Color::Red);
-            util::drawRectangleShape(target, rects.middle, false, sf::Color::Red);
-            util::drawRectangleShape(target, rects.bottom, false, sf::Color::Red);
+            // const auto rects = collisionRects();
+            // util::drawRectangleShape(target, rects.top, false, sf::Color::Red);
+            // util::drawRectangleShape(target, rects.middle, false, sf::Color::Red);
+            // util::drawRectangleShape(target, rects.bottom, false, sf::Color::Red);
         }
     }
 
