@@ -13,6 +13,7 @@
 #include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
+#include "mushroom-boss.hpp"
 #include "resources.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
@@ -215,6 +216,11 @@ namespace halloween
         const bool isAttacking = handleAttacking(context, frameTimeSec);
         const bool isThrowing = handleThrowing(context, frameTimeSec);
         const bool isGliding = handleGliding(context, frameTimeSec);
+
+        if (!isAttacking)
+        {
+            handleBossCollisions(context);
+        }
 
         if (!isAttacking && !isThrowing && !isGliding)
         {
@@ -787,6 +793,36 @@ namespace halloween
         context.stats.has_player_died = true;
         context.stats.enemy_killed = 0;
         context.stats.coin_collected = 0;
+    }
+
+    void Avatar::handleBossCollisions(Context & context)
+    {
+        if (!context.boss.isThereABossOnThisLevel())
+        {
+            return;
+        }
+
+        const sf::FloatRect avatarRect{ collisionRect() };
+        const BossCollRects bossRects{ context.boss.collisionRects() };
+
+        if (avatarRect.intersects(bossRects.top) || avatarRect.intersects(bossRects.middle) ||
+            avatarRect.intersects(bossRects.bottom))
+        {
+            context.audio.play("ouch");
+
+            m_sprite.move(-15.0f, 0.0f);
+
+            if (Action::Glide == m_action)
+            {
+                m_velocity.x = -(context.settings.walk_speed_limit * 1.0f);
+                m_velocity.y = -(context.settings.walk_speed_limit * 0.25f);
+            }
+            else
+            {
+                m_velocity.x = -(context.settings.walk_speed_limit * 1.5f);
+                m_velocity.y = -(context.settings.walk_speed_limit * 0.75f);
+            }
+        }
     }
 
 } // namespace halloween

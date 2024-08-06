@@ -57,6 +57,7 @@ namespace halloween
         void preventBacktracking(const Context & context);
         void killIfOutOfBounds(Context & context);
         void triggerDeath(Context & context);
+        void handleBossCollisions(Context & context);
 
       private:
         Blood m_blood;
