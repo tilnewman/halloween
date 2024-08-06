@@ -22,9 +22,17 @@ namespace halloween
 
     //
 
-    enum class BossState
+    struct BossCollRects
     {
-        Idle,
+        sf::FloatRect top;
+        sf::FloatRect bottom;
+    };
+
+    //
+
+    enum class BossState : std::size_t
+    {
+        Idle = 0,
         Advance,
         Jump,
         Attack,
@@ -65,11 +73,15 @@ namespace halloween
         void update(Context & context, const float frameTimeSec) final;
         void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
         void moveWithMap(const sf::Vector2f & move) final;
-        void collideWithAvatar(Context &, const sf::FloatRect &) final {}
+        void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) final;
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
-        void appendCollisions(std::vector<sf::FloatRect> &) const final {}
+        void appendCollisions(std::vector<sf::FloatRect> & collRects) const final;
 
         // bool attack(const sf::FloatRect & attackRect);
+
+      private:
+        AvatarAnim & currentAnim();
+        const BossCollRects collisionRects() const;
 
       private:
         BossState m_state;
@@ -79,10 +91,10 @@ namespace halloween
         AvatarAnim m_hitAnim;
         AvatarAnim m_shakeAnim;
         AvatarAnim m_deathAnim;
-        float m_elapsedTimeSec;
         sf::Sprite m_sprite;
         sf::FloatRect m_region;
         bool m_isThereABossOnThisLevel;
+        bool m_hasFightBegun;
     };
 
 } // namespace halloween
