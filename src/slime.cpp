@@ -163,6 +163,11 @@ namespace halloween
             slime.sprite.move(move);
             slime.rect.left += move.x;
         }
+
+        for (SlimeDeathAnim & anim : m_deathAnims)
+        {
+            anim.sprite.move(move);
+        }
     }
 
     bool Slimes::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const

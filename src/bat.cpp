@@ -207,6 +207,11 @@ namespace halloween
             bat.sprite.move(move);
             bat.rect.left += move.x;
         }
+
+        for (BatDeathAnim & anim : m_deathAnims)
+        {
+            anim.sprite.move(move);
+        }
     }
 
     bool Bats::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
