@@ -35,6 +35,7 @@ namespace halloween
     struct LevelStats;
     class SpikedBalls;
     class PauseScreen;
+    class MushroomBoss;
     class ScreenRegions;
     class LevelFileLoader;
     struct IStatesPending;
@@ -67,7 +68,8 @@ namespace halloween
             Ghosts & gho,
             InfoRegion & inf,
             ObjectManagerList & man,
-            LevelStats & ls)
+            LevelStats & ls,
+            MushroomBoss & mb)
             : settings(set)
             , window(win)
             , random(ran)
@@ -93,6 +95,7 @@ namespace halloween
             , info_region(inf)
             , managers(man)
             , stats(ls)
+            , boss(mb)
             , is_paused(false)
             , will_quit(false)
             , level_number(1)
@@ -123,6 +126,7 @@ namespace halloween
         InfoRegion & info_region;
         ObjectManagerList & managers;
         LevelStats & stats;
+        MushroomBoss & boss;
 
         bool is_paused;
         bool will_quit;

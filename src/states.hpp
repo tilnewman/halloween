@@ -7,6 +7,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include <SFML/Graphics/Text.hpp>
@@ -47,7 +48,7 @@ namespace halloween
 
     namespace state
     {
-        inline std::string toString(const State state)
+        inline constexpr std::string_view toString(const State state) noexcept
         {
             // clang-format off
             switch (state)

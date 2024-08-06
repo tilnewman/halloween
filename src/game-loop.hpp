@@ -16,6 +16,7 @@
 #include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
+#include "mushroom-boss.hpp"
 #include "music-player.hpp"
 #include "object-manager.hpp"
 #include "owl-calls.hpp"
@@ -83,6 +84,7 @@ namespace halloween
         InfoRegion m_infoRegion;
         ObjectManagerList m_managers;
         LevelStats m_stats;
+        MushroomBoss m_boss;
 
         std::vector<std::size_t> m_delayLoopCounts;
         std::vector<std::size_t> m_framesPerSecond;

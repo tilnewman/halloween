@@ -38,6 +38,7 @@ namespace halloween
         , m_infoRegion()
         , m_managers()
         , m_stats()
+        , m_boss()
         , m_delayLoopCounts()
         , m_framesPerSecond()
         , m_perSecondClock()
@@ -67,7 +68,8 @@ namespace halloween
               m_ghosts,
               m_infoRegion,
               m_managers,
-              m_stats)
+              m_stats,
+              m_boss)
     {}
 
     void GameLoop::play()
@@ -111,6 +113,8 @@ namespace halloween
         m_managers.add(m_ghosts);
         m_managers.add(m_slimes);
         m_managers.add(m_bats);
+        m_managers.add(m_boss);
+
         m_managers.setupAll(m_settings);
 
         m_avatar.setup(m_settings);

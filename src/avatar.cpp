@@ -55,12 +55,12 @@ namespace halloween
     {
         m_blood.setup(settings);
 
-        m_runAnim.setup(settings.media_path, "Run", 10, 0.045f, true);
-        m_attackAnim.setup(settings.media_path, "Attack", 10, 0.03f, false);
-        m_deathAnim.setup(settings.media_path, "Dead", 10, 0.05f, false);
-        m_throwAnim.setup(settings.media_path, "Throw", 10, 0.02f, false);
-        m_glideAnim.setup(settings.media_path, "Glide", 10, 0.33f, true);
-        m_idleAnim.setup(settings.media_path, "Idle", 10, 0.1f, true);
+        m_runAnim.setup((settings.media_path / "image/avatar"), "Run", 10, 0.045f, true);
+        m_attackAnim.setup((settings.media_path / "image/avatar"), "Attack", 10, 0.03f, false);
+        m_deathAnim.setup((settings.media_path / "image/avatar"), "Dead", 10, 0.05f, false);
+        m_throwAnim.setup((settings.media_path / "image/avatar"), "Throw", 10, 0.02f, false);
+        m_glideAnim.setup((settings.media_path / "image/avatar"), "Glide", 10, 0.33f, true);
+        m_idleAnim.setup((settings.media_path / "image/avatar"), "Idle", 10, 0.1f, true);
 
         m_jumpTexture.loadFromFile((settings.media_path / "image/avatar/Jump-6.png").string());
         m_jumpTexture.setSmooth(true);

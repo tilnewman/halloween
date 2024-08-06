@@ -10,6 +10,7 @@
 #include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "level.hpp"
+#include "mushroom-boss.hpp"
 #include "resources.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
@@ -212,6 +213,10 @@ namespace halloween
             else if (layerName == "bat")
             {
                 parseObjectLayerRects(context.bats, context, jsonLayer);
+            }
+            else if (layerName == "boss")
+            {
+                parseObjectLayerRects(context.boss, context, jsonLayer);
             }
             else
             {
