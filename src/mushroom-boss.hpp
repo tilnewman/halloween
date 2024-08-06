@@ -25,6 +25,7 @@ namespace halloween
     struct BossCollRects
     {
         sf::FloatRect top;
+        sf::FloatRect middle;
         sf::FloatRect bottom;
     };
 
@@ -75,7 +76,7 @@ namespace halloween
         void moveWithMap(const sf::Vector2f & move) final;
         void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) final;
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
-        void appendCollisions(std::vector<sf::FloatRect> & collRects) const final;
+        void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
         // bool attack(const sf::FloatRect & attackRect);
 

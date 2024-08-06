@@ -92,7 +92,8 @@ namespace halloween
 
             const auto rects = collisionRects();
             util::drawRectangleShape(target, rects.top, false, sf::Color::Red);
-            util::drawRectangleShape(target, rects.bottom, false, sf::Color::Green);
+            util::drawRectangleShape(target, rects.middle, false, sf::Color::Red);
+            util::drawRectangleShape(target, rects.bottom, false, sf::Color::Red);
         }
     }
 
@@ -151,29 +152,28 @@ namespace halloween
 
         const sf::FloatRect globalBounds{ m_sprite.getGlobalBounds() };
 
-        rects.top = globalBounds;
-        rects.top.left += (globalBounds.width * 0.2f);
-        rects.top.width -= (globalBounds.width * 0.4f);
-        rects.top.top += (globalBounds.height * 0.45f);
-        rects.top.height *= 0.25f;
-        rects.top.left *= 1.025f;
+        rects.middle = globalBounds;
+        rects.middle.left += (globalBounds.width * 0.2f);
+        rects.middle.width -= (globalBounds.width * 0.4f);
+        rects.middle.top += (globalBounds.height * 0.475f);
+        rects.middle.height *= 0.25f;
+        rects.middle.left *= 1.025f;
+
+        rects.top = rects.middle;
+        rects.top.height = (rects.middle.height * 0.35f);
+        rects.top.top = (rects.middle.top - rects.top.height);
+        rects.top.width *= 0.75f;
+        rects.top.left = (util::center(rects.middle).x - (rects.top.width * 0.5f));
 
         rects.bottom = globalBounds;
         rects.bottom.left += (globalBounds.width * 0.333f);
         rects.bottom.width -= (globalBounds.width * 0.666f);
-        rects.bottom.top = util::bottom(rects.top) + 2.0f;
+        rects.bottom.top = util::bottom(rects.middle);
         rects.bottom.height = (util::bottom(globalBounds) - rects.bottom.top);
         rects.bottom.left += (globalBounds.width * 0.08f);
         rects.bottom.width *= 0.8f;
 
         return rects;
-    }
-
-    void MushroomBoss::appendCollisions(std::vector<sf::FloatRect> & collRects) const
-    {
-        const auto rects = collisionRects();
-        collRects.push_back(rects.top);
-        collRects.push_back(rects.bottom);
     }
 
 } // namespace halloween
