@@ -76,7 +76,7 @@ namespace halloween
         if (willCoinBonus)
         {
             m_bonuses.emplace_back(
-                90,
+                99,
                 context.media.makeText(
                     bonusTextCharSize, "All Coins Found Bonus!", bonusTextColor));
         }
@@ -92,7 +92,7 @@ namespace halloween
         if (willSurviveBonus)
         {
             m_bonuses.emplace_back(
-                50,
+                75,
                 context.media.makeText(bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
         }
 
