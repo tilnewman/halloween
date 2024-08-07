@@ -301,28 +301,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":21,
-         "name":"boss",
-         "objects":[
-                {
-                 "height":960,
-                 "id":91,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":1184,
-                 "x":352,
-                 "y":320
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":18,
          "name":"saw",
          "objects":[
@@ -1096,17 +1074,6 @@
                  "x":5504,
                  "y":992
                 }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":16,
-         "name":"fire-spout",
-         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,

@@ -253,9 +253,6 @@
  <objectgroup id="20" name="bat">
   <object id="90" x="3136" y="736" width="832" height="64"/>
  </objectgroup>
- <objectgroup id="21" name="boss">
-  <object id="91" x="352" y="320" width="1184" height="960"/>
- </objectgroup>
  <objectgroup id="18" name="saw">
   <object id="84" x="4448" y="1152" width="32" height="32"/>
  </objectgroup>
@@ -338,5 +335,4 @@
   <object id="79" x="5376" y="1152" width="288" height="32"/>
   <object id="81" x="5504" y="992" width="32" height="256"/>
  </objectgroup>
- <objectgroup id="16" name="fire-spout"/>
 </map>
