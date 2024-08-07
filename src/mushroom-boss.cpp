@@ -93,7 +93,7 @@ namespace halloween
 
             if ((BossState::Jump == m_state) && (m_jumpAnim.index() == 19))
             {
-                context.audio.play("slam");
+                context.audio.play("slam", 0.75f);
             }
         }
 
@@ -271,7 +271,10 @@ namespace halloween
             return false;
         }
 
-        --m_hitPoints;
+        if (m_hitPoints > 0)
+        {
+            --m_hitPoints;
+        }
 
         m_state = BossState::Hit;
         currentAnim().restart();
