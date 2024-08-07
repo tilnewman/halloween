@@ -62,8 +62,12 @@ namespace halloween
         const unsigned bonusTextCharSize{ 70 };
         const sf::Color bonusTextColor{ 255, 255, 153 };
 
-        const bool willCoinBonus{ context.stats.coin_total == context.stats.coin_collected };
-        const bool willEnemyBonus{ context.stats.enemy_total == context.stats.enemy_killed };
+        const bool willCoinBonus{ (context.stats.coin_total > 0) &&
+                                  (context.stats.coin_total == context.stats.coin_collected) };
+
+        const bool willEnemyBonus{ (context.stats.enemy_total > 0) &&
+                                   (context.stats.enemy_total == context.stats.enemy_killed) };
+
         const bool willSurviveBonus{ !context.stats.has_player_died };
         const bool willPerfectBonus{ willCoinBonus && willEnemyBonus && willSurviveBonus };
 
