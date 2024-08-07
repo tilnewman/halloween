@@ -78,7 +78,7 @@ namespace halloween
         m_hitPoints = m_hitPointsMax;
     }
 
-    void MushroomBoss::update(Context &, const float frameTimeSec)
+    void MushroomBoss::update(Context & context, const float frameTimeSec)
     {
         if (!m_isThereABossOnThisLevel)
         {
@@ -91,10 +91,22 @@ namespace halloween
             m_sprite.setTexture(anim.texture(), true);
         }
 
-        if (anim.isFinished() && (BossState::Death != m_state))
+        if (anim.isFinished())
         {
-            m_state = BossState::Idle;
-            currentAnim().restart();
+            if (BossState::Death != m_state)
+            {
+                if (0 == m_hitPoints)
+                {
+                    m_state = BossState::Death;
+                    context.audio.play("mushroom-die");
+                    context.info_region.scoreAdjust(context.settings.kill_boss_score);
+                }
+                else
+                {
+                    m_state = BossState::Idle;
+                    currentAnim().restart();
+                }
+            }
         }
     }
 
@@ -244,19 +256,9 @@ namespace halloween
         }
 
         --m_hitPoints;
-
-        if (0 == m_hitPoints)
-        {
-            m_state = BossState::Death;
-            context.audio.play("mushroom-die");
-            context.info_region.scoreAdjust(context.settings.kill_boss_score);
-        }
-        else
-        {
-            m_state = BossState::Hit;
-            context.audio.play("mushroom-hit");
-            currentAnim().restart();
-        }
+        m_state = BossState::Hit;
+        context.audio.play("mushroom-hit");
+        currentAnim().restart();
 
         return true;
     }
