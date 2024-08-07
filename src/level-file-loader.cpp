@@ -53,6 +53,8 @@ namespace halloween
         }
 
         parseLevelDetails(context, json);
+        parseObjectTextureGIDs(context, json);
+        parseBackgroundImageNumber(context, json);
 
         // everything else in the level file is saved in "layers"
         // which are parsed in order from back to front here, one at a time
@@ -84,8 +86,41 @@ namespace halloween
         };
 
         context.level.map_position_offset = { 0.0f, heightOffset };
+    }
 
-        parseBackgroundImageNumber(context, json);
+    void LevelFileLoader::parseObjectTextureGIDs(Context & context, Json & wholeJson)
+    {
+        for (Json & json : wholeJson["tilesets"])
+        {
+            const std::string sourceStr{ json["source"] };
+            const std::filesystem::path path{ sourceStr };
+            const std::string filename{ path.filename().string() };
+
+            const int gid{ json["firstgid"] };
+
+            if (filename == "ground.tsx")
+            {
+                context.media.ground_texture.gid = gid;
+            }
+            else if (filename == "object-1.tsx")
+            {
+                context.media.object_texture1.gid = gid;
+            }
+            else if (filename == "object-2.tsx")
+            {
+                context.media.object_texture2.gid = gid;
+            }
+            else if (filename == "object-3.tsx")
+            {
+                context.media.object_texture3.gid = gid;
+            }
+            else
+            {
+                std::cout << "Warning: While parsing \"" << m_pathStr
+                          << "\": Ignored tileset named \"" << filename << "\", with gid=" << gid
+                          << "\n";
+            }
+        }
     }
 
     void LevelFileLoader::parseBackgroundImageNumber(Context & context, Json & json)
