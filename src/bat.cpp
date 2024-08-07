@@ -8,6 +8,7 @@
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "info-region.hpp"
+#include "level-stats.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -230,7 +231,7 @@ namespace halloween
         return false;
     }
 
-    bool Bats::attack(const sf::FloatRect & attackRect)
+    bool Bats::attack(Context & context, const sf::FloatRect & attackRect)
     {
         bool wereAnyKilled = false;
         for (Bat & bat : m_bats)
@@ -240,6 +241,9 @@ namespace halloween
                 bat.is_alive = false;
                 wereAnyKilled = true;
                 m_deathAnims.emplace_back(bat.bat_index, bat.sprite);
+                context.audio.play("metal-hit");
+                ++context.stats.enemy_killed;
+                context.info_region.scoreAdjust(context.settings.kill_bat_score);
                 break;
             }
         }

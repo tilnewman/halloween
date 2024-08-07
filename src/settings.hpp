@@ -52,6 +52,8 @@ namespace halloween
         int starting_dart_count = 3;
 
         int kill_slime_score = 10;
+        int kill_bat_score = 8;
+        int kill_boss_score = 99;
 
         float spiked_ball_speed = 2.0f;
     };

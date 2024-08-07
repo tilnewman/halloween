@@ -721,11 +721,8 @@ namespace halloween
         }
 
         const auto attackRect = attackCollisionRect();
-        if (context.slimes.attack(attackRect) || context.bats.attack(attackRect))
+        if (context.slimes.attack(context, attackRect) || context.bats.attack(context, attackRect))
         {
-            context.audio.play("squish");
-            ++context.stats.enemy_killed;
-            context.info_region.scoreAdjust(context.settings.kill_slime_score);
         }
         else if (context.boss.attack(context, attackRect))
         {
@@ -804,7 +801,7 @@ namespace halloween
             return;
         }
 
-        context.audio.play("ouch");
+        context.audio.play("hurt");
         bounceAwayFromBoss(context);
     }
 

@@ -8,6 +8,7 @@
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "info-region.hpp"
+#include "level-stats.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -183,7 +184,7 @@ namespace halloween
         return false;
     }
 
-    bool Slimes::attack(const sf::FloatRect & attackRect)
+    bool Slimes::attack(Context & context, const sf::FloatRect & attackRect)
     {
         bool wereAnyKilled = false;
         for (Slime & slime : m_slimes)
@@ -192,8 +193,15 @@ namespace halloween
             {
                 slime.is_alive = false;
                 wereAnyKilled = true;
+
                 auto & anim = m_deathAnims.emplace_back(slime.sprite);
                 anim.sprite.setColor(sf::Color::Red);
+
+                context.audio.play("squish");
+                ++context.stats.enemy_killed;
+                context.info_region.scoreAdjust(context.settings.kill_slime_score);
+
+                break;
             }
         }
 

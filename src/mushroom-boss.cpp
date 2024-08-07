@@ -249,6 +249,7 @@ namespace halloween
         {
             m_state = BossState::Death;
             context.audio.play("mushroom-die");
+            context.info_region.scoreAdjust(context.settings.kill_boss_score);
         }
         else
         {
