@@ -5,6 +5,7 @@
 //
 #include "mushroom-boss.hpp"
 
+#include "avatar.hpp"
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "info-region.hpp"
@@ -95,9 +96,16 @@ namespace halloween
             {
                 context.audio.play("slam", 0.75f);
             }
+            else if (((BossState::Attack == m_state) && (m_attackAnim.index() >= 10)))
+            {
+                if (isPlayerWithinAttackRange(context))
+                {
+                    context.avatar.handleHitByBoss(context);
+                }
+            }
         }
 
-        if (anim.isFinished())
+        if (anim.isFinished() || ((BossState::Advance == m_state) && (m_idleAnim.index() == 0)))
         {
             // change state
             if (BossState::Death != m_state)
@@ -109,7 +117,13 @@ namespace halloween
                     context.audio.play("mushroom-die");
                     context.info_region.scoreAdjust(context.settings.kill_boss_score);
                 }
-                else
+                else if (isPlayerWithinAttackRange(context) && !context.avatar.isDead())
+                {
+                    m_state = BossState::Attack;
+                    currentAnim().restart();
+                    context.audio.play("mushroom-attack");
+                }
+                else if (BossState::Advance != m_state)
                 {
                     m_state = BossState::Advance;
                     currentAnim().restart();
@@ -314,6 +328,13 @@ namespace halloween
             currentAnim().restart();
             context.audio.play("mushroom-jump");
         }
+    }
+
+    bool MushroomBoss::isPlayerWithinAttackRange(const Context & context) const
+    {
+        const sf::FloatRect playerBounds{ context.avatar.bounds() };
+        const float distance{ collisionRects().middle.left - util::right(playerBounds) };
+        return (distance < (playerBounds.width * 2.0f));
     }
 
 } // namespace halloween

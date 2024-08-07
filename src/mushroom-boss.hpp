@@ -86,6 +86,7 @@ namespace halloween
         AvatarAnim & currentAnim();
         const BossCollRects collisionRects() const;
         void keepInRegion();
+        bool isPlayerWithinAttackRange(const Context & context) const;
 
       private:
         BossState m_state;

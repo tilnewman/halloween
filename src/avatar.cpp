@@ -788,12 +788,18 @@ namespace halloween
 
     void Avatar::triggerDeath(Context & context)
     {
+        if (Action::Dead == m_action)
+        {
+            return;
+        }
+
         m_blood.start(context, m_sprite.getPosition(), m_isFacingRight);
         m_action = Action::Dead;
         context.audio.stop("walk");
         context.audio.play("scream");
         m_velocity = { 0.0f, 0.0f };
         m_deathAnim.restart();
+
         context.stats.has_player_died = true;
         context.stats.enemy_killed = 0;
         context.stats.coin_collected = 0;
@@ -821,7 +827,7 @@ namespace halloween
         }
         else if (m_hasLanded)
         {
-            m_velocity.x = -(context.settings.walk_speed_limit * 3.0f);
+            m_velocity.x = -(context.settings.walk_speed_limit * 2.25f);
             m_velocity.y = -(context.settings.walk_speed_limit * 1.5f);
         }
         else
@@ -830,5 +836,7 @@ namespace halloween
             m_velocity.y = -(context.settings.walk_speed_limit * 0.75f);
         }
     }
+
+    void Avatar::handleHitByBoss(Context & context) { triggerDeath(context); }
 
 } // namespace halloween
