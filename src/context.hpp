@@ -98,7 +98,7 @@ namespace halloween
             , boss(mb)
             , is_paused(false)
             , will_quit(false)
-            , level_number(3)
+            , level_number(1)
         {}
 
         const Settings & settings;
