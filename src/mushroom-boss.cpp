@@ -252,7 +252,7 @@ namespace halloween
 
     bool MushroomBoss::doesCollide(const sf::FloatRect & rect) const
     {
-        if (!m_isThereABossOnThisLevel || (BossState::Death == m_state))
+        if (!m_isThereABossOnThisLevel || (BossState::Death == m_state) || !m_hasFightBegun)
         {
             return false;
         }
