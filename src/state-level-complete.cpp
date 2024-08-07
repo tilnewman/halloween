@@ -117,9 +117,21 @@ namespace halloween
 
     void LevelCompleteState::onExit(Context & context) { ++context.level_number; }
 
-    bool LevelCompleteState::handleEvent(Context &, const sf::Event &)
+    bool LevelCompleteState::handleEvent(Context & context, const sf::Event & event)
     {
-        // always returning false prevents the player from quiting the state early
+        if (StateBase::handleEvent(context, event))
+        {
+            return true;
+        }
+
+        if (event.type == sf::Event::KeyPressed)
+        {
+            m_scoreDisplayed = context.info_region.score();
+            updateScoreText(context);
+            m_elapsedTimeSec += 9999.0f;
+            context.audio.play("bell");
+        }
+
         return false;
     }
 
