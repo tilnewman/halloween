@@ -819,6 +819,11 @@ namespace halloween
             m_velocity.x = -(context.settings.walk_speed_limit * 1.0f);
             m_velocity.y = -(context.settings.walk_speed_limit * 0.25f);
         }
+        else if (m_hasLanded)
+        {
+            m_velocity.x = -(context.settings.walk_speed_limit * 3.0f);
+            m_velocity.y = -(context.settings.walk_speed_limit * 1.5f);
+        }
         else
         {
             m_velocity.x = -(context.settings.walk_speed_limit * 1.5f);
