@@ -80,6 +80,7 @@ namespace halloween
 
         bool attack(Context & context, const sf::FloatRect & attackRect);
         bool doesCollide(const sf::FloatRect & rect) const;
+        void reactToThrow(Context & context);
 
       private:
         AvatarAnim & currentAnim();

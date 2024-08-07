@@ -90,6 +90,11 @@ namespace halloween
         if (anim.update(frameTimeSec))
         {
             m_sprite.setTexture(anim.texture(), true);
+
+            if ((BossState::Jump == m_state) && (m_jumpAnim.index() == 19))
+            {
+                context.audio.play("slam");
+            }
         }
 
         if (anim.isFinished())
@@ -100,6 +105,7 @@ namespace halloween
                 if (0 == m_hitPoints)
                 {
                     m_state = BossState::Death;
+                    currentAnim().restart();
                     context.audio.play("mushroom-die");
                     context.info_region.scoreAdjust(context.settings.kill_boss_score);
                 }
@@ -162,6 +168,7 @@ namespace halloween
             m_hasFightBegun = true;
             context.audio.play("mushroom-enrage");
             m_state = BossState::Shake;
+            currentAnim().restart();
         }
     }
 
@@ -265,9 +272,11 @@ namespace halloween
         }
 
         --m_hitPoints;
+
         m_state = BossState::Hit;
-        context.audio.play("mushroom-hit");
         currentAnim().restart();
+
+        context.audio.play("mushroom-hit");
 
         m_sprite.move(15.0f, 0.0f);
         keepInRegion();
@@ -286,6 +295,21 @@ namespace halloween
         else if (util::right(bounds) > util::right(m_region))
         {
             m_sprite.move(-(util::right(bounds) - util::right(m_region)), 0.0f);
+        }
+    }
+
+    void MushroomBoss::reactToThrow(Context & context)
+    {
+        if (!m_isThereABossOnThisLevel || (BossState::Death == m_state) || !m_hasFightBegun)
+        {
+            return;
+        }
+
+        if ((BossState::Advance == m_state) || (BossState::Idle == m_state))
+        {
+            m_state = BossState::Jump;
+            currentAnim().restart();
+            context.audio.play("mushroom-jump");
         }
     }
 

@@ -111,9 +111,7 @@
   <object id="9" x="1824" y="832" width="64" height="96"/>
   <object id="10" x="1920" y="832" width="64" height="96"/>
  </objectgroup>
- <objectgroup id="10" name="spiked-ball">
-  <object id="15" x="1728" y="512" width="64" height="448"/>
- </objectgroup>
+ <objectgroup id="10" name="spiked-ball"/>
  <objectgroup id="11" name="bat">
   <object id="16" x="640" y="1184" width="960" height="64"/>
  </objectgroup>

@@ -409,6 +409,11 @@ namespace halloween
 
             context.info_region.dartsAdjust(-1);
 
+            if (m_isFacingRight)
+            {
+                context.boss.reactToThrow(context);
+            }
+
             return true;
         }
 

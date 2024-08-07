@@ -13,6 +13,7 @@ namespace halloween
     struct Settings
     {
         int player_lives = 3;
+        int starting_dart_count = 30;
         std::size_t boss_hit_points = 5;
 
         // see main.cpp for where this is really set
@@ -48,8 +49,6 @@ namespace halloween
         bool will_smooth_tile_textures = false;
 
         bool will_show_coin_animations = true;
-
-        int starting_dart_count = 3;
 
         int kill_slime_score = 10;
         int kill_bat_score = 8;
