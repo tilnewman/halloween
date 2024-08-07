@@ -25,13 +25,10 @@ namespace halloween
             const bool willLoop);
 
         void restart();
-
-        bool isFinished() const { return m_isFinished; }
-
-        // returns true if the texture changed
-        bool update(const float frameTimeSec);
-
-        const sf::Texture & texture() const { return m_textures.at(m_index); }
+        inline bool isFinished() const { return m_isFinished; }
+        bool update(const float frameTimeSec); // returns true if the texture changed
+        inline const sf::Texture & texture() const { return m_textures.at(m_index); }
+        inline std::size_t index() const { return m_index; }
 
       private:
         bool m_willLoop;

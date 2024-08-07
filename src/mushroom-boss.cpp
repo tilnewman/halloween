@@ -173,7 +173,52 @@ namespace halloween
         rects.bottom.left += (globalBounds.width * 0.08f);
         rects.bottom.width *= 0.8f;
 
+        if (BossState::Jump == m_state)
+        {
+            float heightAdjRatio{ 0.0f };
+
+            // clang-format off
+            switch (m_jumpAnim.index())
+            {
+                case 6:  { heightAdjRatio = 0.16f; break; }
+                case 7:  { heightAdjRatio = 0.24f; break; }
+                case 8:  { heightAdjRatio = 0.28f; break; }
+                case 9:  { heightAdjRatio = 0.31f; break; }
+                case 10: { heightAdjRatio = 0.33f; break; }
+                case 11: { heightAdjRatio = 0.35f; break; }
+                case 12: { heightAdjRatio = 0.37f; break; }
+                case 13: { heightAdjRatio = 0.39f; break; }
+                case 14: { heightAdjRatio = 0.41f; break; }
+                case 15: { heightAdjRatio = 0.35f; break; }
+                case 16: { heightAdjRatio = 0.27f; break; }
+                case 17: { heightAdjRatio = 0.20f; break; }
+                case 18: { heightAdjRatio = 0.14f; break; }
+                case 19: { heightAdjRatio = 0.08f; break; }
+                default: { heightAdjRatio = 0.00f; break; }
+            }
+            // clang-format on
+
+            const float heightAdj{ (heightAdjRatio * globalBounds.height) };
+            rects.top.top -= heightAdj;
+            rects.middle.top -= heightAdj;
+            rects.bottom.top -= heightAdj;
+        }
+
         return rects;
+    }
+
+    bool MushroomBoss::doesCollide(const sf::FloatRect & rect) const
+    {
+        if (!m_isThereABossOnThisLevel || (BossState::Death == m_state))
+        {
+            return false;
+        }
+
+        const BossCollRects bossRects{ collisionRects() };
+
+        return (
+            rect.intersects(bossRects.top) || rect.intersects(bossRects.middle) ||
+            rect.intersects(bossRects.bottom));
     }
 
 } // namespace halloween

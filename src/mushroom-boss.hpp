@@ -80,11 +80,11 @@ namespace halloween
 
         // bool attack(const sf::FloatRect & attackRect);
 
-        bool isThereABossOnThisLevel() const { return m_isThereABossOnThisLevel; }
-        const BossCollRects collisionRects() const;
+        bool doesCollide(const sf::FloatRect & rect) const;
 
       private:
         AvatarAnim & currentAnim();
+        const BossCollRects collisionRects() const;
 
       private:
         BossState m_state;

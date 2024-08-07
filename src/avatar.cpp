@@ -797,16 +797,7 @@ namespace halloween
 
     void Avatar::handleBossCollisions(Context & context)
     {
-        if (!context.boss.isThereABossOnThisLevel())
-        {
-            return;
-        }
-
-        const sf::FloatRect avatarRect{ collisionRect() };
-        const BossCollRects bossRects{ context.boss.collisionRects() };
-
-        if (avatarRect.intersects(bossRects.top) || avatarRect.intersects(bossRects.middle) ||
-            avatarRect.intersects(bossRects.bottom))
+        if (context.boss.doesCollide(collisionRect()))
         {
             context.audio.play("ouch");
 
