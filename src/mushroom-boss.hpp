@@ -84,6 +84,7 @@ namespace halloween
       private:
         AvatarAnim & currentAnim();
         const BossCollRects collisionRects() const;
+        void keepInRegion();
 
       private:
         BossState m_state;

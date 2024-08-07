@@ -85,6 +85,7 @@ namespace halloween
             return;
         }
 
+        // progress animation
         AvatarAnim & anim{ currentAnim() };
         if (anim.update(frameTimeSec))
         {
@@ -93,6 +94,7 @@ namespace halloween
 
         if (anim.isFinished())
         {
+            // change state
             if (BossState::Death != m_state)
             {
                 if (0 == m_hitPoints)
@@ -103,10 +105,17 @@ namespace halloween
                 }
                 else
                 {
-                    m_state = BossState::Idle;
+                    m_state = BossState::Advance;
                     currentAnim().restart();
                 }
             }
+        }
+
+        // move
+        if (BossState::Advance == m_state)
+        {
+            m_sprite.move((-20.0f * frameTimeSec), 0.0f);
+            keepInRegion();
         }
     }
 
@@ -260,7 +269,24 @@ namespace halloween
         context.audio.play("mushroom-hit");
         currentAnim().restart();
 
+        m_sprite.move(15.0f, 0.0f);
+        keepInRegion();
+
         return true;
+    }
+
+    void MushroomBoss::keepInRegion()
+    {
+        const sf::FloatRect bounds{ m_sprite.getGlobalBounds() };
+
+        if (bounds.left < m_region.left)
+        {
+            m_sprite.move((m_region.left - bounds.left), 0.0f);
+        }
+        else if (util::right(bounds) > util::right(m_region))
+        {
+            m_sprite.move(-(util::right(bounds) - util::right(m_region)), 0.0f);
+        }
     }
 
 } // namespace halloween
