@@ -13,6 +13,7 @@ namespace halloween
     struct Settings
     {
         int player_lives = 3;
+        std::size_t boss_hit_points = 5;
 
         // see main.cpp for where this is really set
         std::filesystem::path media_path = { "./media" };

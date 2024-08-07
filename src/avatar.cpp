@@ -729,6 +729,10 @@ namespace halloween
             ++context.stats.enemy_killed;
             context.info_region.scoreAdjust(context.settings.kill_slime_score);
         }
+        else if (context.boss.attack(context, attackRect))
+        {
+            bounceAwayFromBoss(context);
+        }
     }
 
     void Avatar::acidCollisions(Context & context)
@@ -797,22 +801,28 @@ namespace halloween
 
     void Avatar::handleBossCollisions(Context & context)
     {
-        if (context.boss.doesCollide(collisionRect()))
+        if (!context.boss.doesCollide(collisionRect()))
         {
-            context.audio.play("ouch");
+            return;
+        }
 
-            m_sprite.move(-15.0f, 0.0f);
+        context.audio.play("ouch");
+        bounceAwayFromBoss(context);
+    }
 
-            if (Action::Glide == m_action)
-            {
-                m_velocity.x = -(context.settings.walk_speed_limit * 1.0f);
-                m_velocity.y = -(context.settings.walk_speed_limit * 0.25f);
-            }
-            else
-            {
-                m_velocity.x = -(context.settings.walk_speed_limit * 1.5f);
-                m_velocity.y = -(context.settings.walk_speed_limit * 0.75f);
-            }
+    void Avatar::bounceAwayFromBoss(const Context & context)
+    {
+        m_sprite.move(-15.0f, 0.0f);
+
+        if (Action::Glide == m_action)
+        {
+            m_velocity.x = -(context.settings.walk_speed_limit * 1.0f);
+            m_velocity.y = -(context.settings.walk_speed_limit * 0.25f);
+        }
+        else
+        {
+            m_velocity.x = -(context.settings.walk_speed_limit * 1.5f);
+            m_velocity.y = -(context.settings.walk_speed_limit * 0.75f);
         }
     }
 

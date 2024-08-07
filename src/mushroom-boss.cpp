@@ -33,6 +33,8 @@ namespace halloween
         , m_region()
         , m_isThereABossOnThisLevel(false)
         , m_hasFightBegun(false)
+        , m_hitPoints(0)
+        , m_hitPointsMax(0)
     {}
 
     void MushroomBoss::setup(const Settings & settings)
@@ -46,16 +48,34 @@ namespace halloween
 
         m_sprite.setTexture(m_idleAnim.texture(), true);
         m_sprite.scale(1.0f, 1.0f);
+
+        m_hitPointsMax = settings.boss_hit_points;
     }
 
     void MushroomBoss::add(Context &, const sf::FloatRect & rect)
     {
         m_region = rect;
         m_isThereABossOnThisLevel = true;
+        m_hitPoints = m_hitPointsMax;
 
         m_sprite.setPosition(
             (util::right(m_region) - m_sprite.getGlobalBounds().width),
             (util::bottom(m_region) - m_sprite.getGlobalBounds().height));
+    }
+
+    void MushroomBoss::clear()
+    {
+        // reset everything so the boss can be fought again until the player kills it
+        m_state = BossState::Idle;
+        m_idleAnim.restart();
+        m_jumpAnim.restart();
+        m_attackAnim.restart();
+        m_hitAnim.restart();
+        m_shakeAnim.restart();
+        m_deathAnim.restart();
+        m_isThereABossOnThisLevel = false;
+        m_hasFightBegun = false;
+        m_hitPoints = m_hitPointsMax;
     }
 
     void MushroomBoss::update(Context &, const float frameTimeSec)
@@ -71,7 +91,7 @@ namespace halloween
             m_sprite.setTexture(anim.texture(), true);
         }
 
-        if (anim.isFinished())
+        if (anim.isFinished() && (BossState::Death != m_state))
         {
             m_state = BossState::Idle;
             currentAnim().restart();
@@ -111,12 +131,7 @@ namespace halloween
     void MushroomBoss::collideWithAvatar(Context & context, const sf::FloatRect & avatarRect)
     {
         // this function only detects the player entering the fight region for the first time
-        if (!m_isThereABossOnThisLevel)
-        {
-            return;
-        }
-
-        if (m_hasFightBegun)
+        if (!m_isThereABossOnThisLevel || m_hasFightBegun)
         {
             return;
         }
@@ -219,6 +234,30 @@ namespace halloween
         return (
             rect.intersects(bossRects.top) || rect.intersects(bossRects.middle) ||
             rect.intersects(bossRects.bottom));
+    }
+
+    bool MushroomBoss::attack(Context & context, const sf::FloatRect & attackRect)
+    {
+        if (!doesCollide(attackRect))
+        {
+            return false;
+        }
+
+        --m_hitPoints;
+
+        if (0 == m_hitPoints)
+        {
+            m_state = BossState::Death;
+            context.audio.play("mushroom-die");
+        }
+        else
+        {
+            m_state = BossState::Hit;
+            context.audio.play("mushroom-hit");
+            currentAnim().restart();
+        }
+
+        return true;
     }
 
 } // namespace halloween

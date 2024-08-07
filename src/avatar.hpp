@@ -58,6 +58,7 @@ namespace halloween
         void killIfOutOfBounds(Context & context);
         void triggerDeath(Context & context);
         void handleBossCollisions(Context & context);
+        void bounceAwayFromBoss(const Context & context);
 
       private:
         Blood m_blood;

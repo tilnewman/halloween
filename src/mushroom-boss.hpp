@@ -70,7 +70,7 @@ namespace halloween
         bool willDrawBeforeMap() const final { return false; }
         void setup(const Settings & settings) final;
         void add(Context & context, const sf::FloatRect & rect) final;
-        void clear() final {}
+        void clear() final;
         void update(Context & context, const float frameTimeSec) final;
         void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
         void moveWithMap(const sf::Vector2f & move) final;
@@ -78,8 +78,7 @@ namespace halloween
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
-        // bool attack(const sf::FloatRect & attackRect);
-
+        bool attack(Context & context, const sf::FloatRect & attackRect);
         bool doesCollide(const sf::FloatRect & rect) const;
 
       private:
@@ -98,6 +97,8 @@ namespace halloween
         sf::FloatRect m_region;
         bool m_isThereABossOnThisLevel;
         bool m_hasFightBegun;
+        std::size_t m_hitPoints;
+        std::size_t m_hitPointsMax;
     };
 
 } // namespace halloween
