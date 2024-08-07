@@ -112,21 +112,18 @@ namespace halloween
             {
                 if (0 == m_hitPoints)
                 {
-                    m_state = BossState::Death;
-                    currentAnim().restart();
+                    setState(BossState::Death);
                     context.audio.play("mushroom-die");
                     context.info_region.scoreAdjust(context.settings.kill_boss_score);
                 }
                 else if (isPlayerWithinAttackRange(context) && !context.avatar.isDead())
                 {
-                    m_state = BossState::Attack;
-                    currentAnim().restart();
+                    setState(BossState::Attack);
                     context.audio.play("mushroom-attack");
                 }
                 else if (BossState::Advance != m_state)
                 {
-                    m_state = BossState::Advance;
-                    currentAnim().restart();
+                    setState(BossState::Advance);
                 }
             }
         }
@@ -180,10 +177,15 @@ namespace halloween
         if (avatarRect.intersects(m_region))
         {
             m_hasFightBegun = true;
+            setState(BossState::Shake);
             context.audio.play("mushroom-enrage");
-            m_state = BossState::Shake;
-            currentAnim().restart();
         }
+    }
+
+    void MushroomBoss::setState(const BossState newState)
+    {
+        m_state = newState;
+        currentAnim().restart();
     }
 
     AvatarAnim & MushroomBoss::currentAnim()
@@ -290,9 +292,7 @@ namespace halloween
             --m_hitPoints;
         }
 
-        m_state = BossState::Hit;
-        currentAnim().restart();
-
+        setState(BossState::Hit);
         context.audio.play("mushroom-hit");
 
         m_sprite.move(15.0f, 0.0f);
@@ -324,8 +324,7 @@ namespace halloween
 
         if ((BossState::Advance == m_state) || (BossState::Idle == m_state))
         {
-            m_state = BossState::Jump;
-            currentAnim().restart();
+            setState(BossState::Jump);
             context.audio.play("mushroom-jump");
         }
     }

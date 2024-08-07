@@ -83,6 +83,7 @@ namespace halloween
         void reactToThrow(Context & context);
 
       private:
+        void setState(const BossState newState);
         AvatarAnim & currentAnim();
         const BossCollRects collisionRects() const;
         void keepInRegion();
