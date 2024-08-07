@@ -76,6 +76,7 @@ namespace halloween
     {
         setup();
         frameLoop();
+        std::cout << "final score " << m_infoRegion.score() << '\n';
     }
 
     void GameLoop::setup()
