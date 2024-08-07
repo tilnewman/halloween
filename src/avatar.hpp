@@ -79,6 +79,7 @@ namespace halloween
         bool m_isFacingRight;
         float m_deadDelaySec;
         bool m_willDie;
+        float m_timeSinceLastThrowSec;
     };
 
 } // namespace halloween

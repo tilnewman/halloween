@@ -50,6 +50,7 @@ namespace halloween
         , m_isFacingRight(true)
         , m_deadDelaySec(0.0f)
         , m_willDie(false)
+        , m_timeSinceLastThrowSec(0.0f)
     {}
 
     void Avatar::setup(const Settings & settings)
@@ -384,10 +385,15 @@ namespace halloween
 
     bool Avatar::handleThrowing(Context & context, const float frameTimeSec)
     {
+        m_timeSinceLastThrowSec += frameTimeSec;
+
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && (Action::Attack != m_action) &&
-            (Action::Throw != m_action) && (context.info_region.darts() > 0))
+            (Action::Throw != m_action) && (context.info_region.darts() > 0) &&
+            (m_timeSinceLastThrowSec > 0.1f))
         {
+            m_timeSinceLastThrowSec = 0.0f;
+
             context.audio.play("throw");
 
             // attacking in any way slowing walk speed looks right
