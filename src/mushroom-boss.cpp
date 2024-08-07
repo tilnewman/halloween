@@ -147,11 +147,6 @@ namespace halloween
         if (context.layout.mapRegion().intersects(m_sprite.getGlobalBounds()))
         {
             target.draw(m_sprite, states);
-
-            // const auto rects = collisionRects();
-            // util::drawRectangleShape(target, rects.top, false, sf::Color::Red);
-            // util::drawRectangleShape(target, rects.middle, false, sf::Color::Red);
-            // util::drawRectangleShape(target, rects.bottom, false, sf::Color::Red);
         }
     }
 
