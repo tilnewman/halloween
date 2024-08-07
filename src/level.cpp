@@ -9,6 +9,7 @@
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "level-file-loader.hpp"
+#include "object-manager.hpp"
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -53,6 +54,8 @@ namespace halloween
 
     bool Level::load(Context & context)
     {
+        context.managers.clearAll();
+
         if (context.loader.load(context))
         {
             appendVertLayers(context);

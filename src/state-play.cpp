@@ -40,8 +40,6 @@ namespace halloween
     {
         if (context.level.number != context.level_number)
         {
-            context.managers.clearAll();
-
             if (context.level.load(context))
             {
                 context.stats = LevelStats();

@@ -309,8 +309,6 @@ namespace halloween
             {
                 context.info_region.livesAdjust(-1);
 
-                context.managers.clearAll();
-                context.level.reset();
                 context.level.load(context);
 
                 m_action = Action::Idle;

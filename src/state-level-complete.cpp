@@ -111,11 +111,7 @@ namespace halloween
         util::centerInside(m_scoreText, context.layout.wholeRegion());
     }
 
-    void LevelCompleteState::onExit(Context & context)
-    {
-        ++context.level_number;
-        context.managers.clearAll();
-    }
+    void LevelCompleteState::onExit(Context & context) { ++context.level_number; }
 
     bool LevelCompleteState::handleEvent(Context &, const sf::Event &)
     {
