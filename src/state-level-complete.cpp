@@ -126,10 +126,13 @@ namespace halloween
 
         if (event.type == sf::Event::KeyPressed)
         {
-            m_scoreDisplayed = context.info_region.score();
-            updateScoreText(context);
-            m_elapsedTimeSec += 9999.0f;
-            context.audio.play("bell");
+            if (!m_isPreWaiting && !m_isPostWaiting)
+            {
+                m_scoreDisplayed = context.info_region.score();
+                updateScoreText(context);
+                m_elapsedTimeSec += 9999.0f;
+                context.audio.play("bell");
+            }
         }
 
         return false;
