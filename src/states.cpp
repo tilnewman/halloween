@@ -336,7 +336,7 @@ namespace halloween
 
         m_scoreText.setPosition(
             ((context.layout.wholeSize().x * 0.5f) - (m_scoreText.getGlobalBounds().width * 0.5f)),
-            util::bottom(m_text));
+            util::bottom(m_text) - (m_text.getGlobalBounds().height * 0.4f));
     }
 
     void
@@ -370,7 +370,7 @@ namespace halloween
 
         m_scoreText.setPosition(
             ((context.layout.wholeSize().x * 0.5f) - (m_scoreText.getGlobalBounds().width * 0.5f)),
-            util::bottom(m_text));
+            util::bottom(m_text) - (m_text.getGlobalBounds().height * 0.4f));
     }
 
     void WinState::draw(const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
