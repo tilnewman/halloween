@@ -22,6 +22,7 @@ namespace halloween
         , ground_texture()
         , object_texture1()
         , object_texture2()
+        , object_texture3()
     {}
 
     void Resources::setup(const Settings & settings)

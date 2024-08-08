@@ -21,8 +21,8 @@ namespace halloween
 
     struct BatTextures
     {
-        std::vector<sf::Texture> flying;
-        std::vector<sf::Texture> dying;
+        std::vector<sf::Texture> flying{};
+        std::vector<sf::Texture> dying{};
     };
 
     //

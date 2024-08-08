@@ -18,6 +18,7 @@ namespace halloween
         , m_random()
         , m_audio(m_random)
         , m_music()
+        , m_bats()
         , m_owlCalls()
         , m_window()
         , m_loader()
@@ -134,7 +135,7 @@ namespace halloween
 
             handlePerSecondTasks();
             handleEvents();
-            update(1.0f / static_cast<float>(m_settings.frame_rate));
+            update(1.0f / m_settings.frame_rate);
             m_stateMachine.changeIfPending(m_context);
             draw();
 

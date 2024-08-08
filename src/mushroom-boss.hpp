@@ -24,9 +24,9 @@ namespace halloween
 
     struct BossCollRects
     {
-        sf::FloatRect top;
-        sf::FloatRect middle;
-        sf::FloatRect bottom;
+        sf::FloatRect top{};
+        sf::FloatRect middle{};
+        sf::FloatRect bottom{};
     };
 
     //

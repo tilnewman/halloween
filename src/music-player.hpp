@@ -36,8 +36,8 @@ namespace util
       private:
         struct Entry
         {
-            std::string filename;
-            sf::Music music;
+            std::string filename{};
+            sf::Music music{};
         };
 
       private:

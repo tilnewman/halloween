@@ -318,6 +318,7 @@ namespace halloween
 
     LoseState::LoseState(const Context & context)
         : TimedMessageState(context, State::Lose, State::Credits, "You Lose\n", 4.5f)
+        , m_scoreText()
     {}
 
     void LoseState::onEnter(Context & context)
@@ -352,6 +353,7 @@ namespace halloween
 
     WinState::WinState(const Context & context)
         : TimedMessageState(context, State::Win, State::Credits, "You Win\n", 4.5f)
+        , m_scoreText()
     {}
 
     void WinState::onEnter(Context & context)

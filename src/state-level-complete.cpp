@@ -29,6 +29,7 @@ namespace halloween
         , m_scoreText()
         , m_bonusText()
         , m_bonuses()
+        , m_bonusTextRegion()
         , m_isPreWaiting(true)
         , m_isShowingBonuses(false)
         , m_isPostWaiting(false)
