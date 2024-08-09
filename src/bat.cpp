@@ -100,6 +100,11 @@ namespace halloween
         const float posX{ rect.left + (rect.width / 2.0f) };
         const float posY{ util::bottom(rect) - (bat.sprite.getGlobalBounds().height * 0.5f) };
         bat.sprite.setPosition(posX, posY);
+
+        if (!bat.is_moving_left)
+        {
+            bat.sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
+        }
     }
 
     void Bats::update(Context &, const float frameTimeSec)
@@ -134,6 +139,7 @@ namespace halloween
                 if (bat.sprite.getGlobalBounds().left < bat.rect.left)
                 {
                     bat.is_moving_left = false;
+                    bat.sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
                 }
             }
             else
@@ -143,6 +149,7 @@ namespace halloween
                 if (util::right(bat.sprite.getGlobalBounds()) > util::right(bat.rect))
                 {
                     bat.is_moving_left = true;
+                    bat.sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
                 }
             }
         }
