@@ -158,8 +158,8 @@ namespace halloween
         bool areAnyDeathAnimsFinished = false;
         for (BatDeathAnim & anim : m_deathAnims)
         {
-            anim.elapsed_time_sec += (frameTimeSec * 0.5f);
-            if (anim.elapsed_time_sec > m_timePerTextureSec)
+            anim.elapsed_time_sec += frameTimeSec;
+            if (anim.elapsed_time_sec > (m_timePerTextureSec * 5.0f))
             {
                 anim.elapsed_time_sec -= m_timePerTextureSec;
 
@@ -173,7 +173,7 @@ namespace halloween
 
             anim.sprite.scale(0.975f, 0.975f);
 
-            if (anim.sprite.getScale().x < 0.1f)
+            if (util::abs(anim.sprite.getScale().x) < 0.1f)
             {
                 anim.is_visible = false;
                 areAnyDeathAnimsFinished = true;
