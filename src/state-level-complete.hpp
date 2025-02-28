@@ -3,6 +3,7 @@
 //
 // state-level-complete.hpp
 //
+#include "sfml-defaults.hpp"
 #include "states.hpp"
 
 #include <string>
@@ -16,7 +17,7 @@ namespace sf
 {
     class Event;
     class RenderTarget;
-    class RenderStates;
+    struct RenderStates;
 } // namespace sf
 
 //
@@ -31,7 +32,7 @@ namespace halloween
     {
         Bonus()
             : score(0)
-            , text()
+            , text(util::SfmlDefaults::instance().font())
         {}
 
         Bonus(const int s, const sf::Text & t)

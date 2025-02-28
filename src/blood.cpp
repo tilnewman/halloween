@@ -11,6 +11,7 @@
 #include "random.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "texture-loader.hpp"
 #include "util.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -25,39 +26,35 @@ namespace halloween
         , m_timePerFrame(0.05f)
         , m_elapsedTimeSec(0.0f)
         , m_textureIndex(0)
-        , m_sprite()
+        , m_sprite(m_texture)
         , m_isFinished(true)
     {
         // there are two blood splat animation in the same texture
-        m_textureCoords1.emplace_back(0, 0, 128, 128);
-        m_textureCoords1.emplace_back(128, 0, 128, 128);
-        m_textureCoords1.emplace_back(256, 0, 128, 128);
-        m_textureCoords1.emplace_back(384, 0, 128, 128);
-        m_textureCoords1.emplace_back(512, 0, 128, 128);
-        m_textureCoords1.emplace_back(640, 0, 128, 128);
-        m_textureCoords1.emplace_back(768, 0, 128, 128);
-        m_textureCoords1.emplace_back(896, 0, 128, 128);
-        m_textureCoords1.emplace_back(1024, 0, 128, 128);
+        m_textureCoords1.emplace_back(sf::Vector2i{ 0, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 128, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 256, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 384, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 512, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 640, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 768, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 896, 0 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords1.emplace_back(sf::Vector2i{ 1024, 0 }, sf::Vector2i{ 128, 128 });
 
-        m_textureCoords2.emplace_back(0, 128, 128, 128);
-        m_textureCoords2.emplace_back(128, 128, 128, 128);
-        m_textureCoords2.emplace_back(256, 128, 128, 128);
-        m_textureCoords2.emplace_back(384, 128, 128, 128);
-        m_textureCoords2.emplace_back(512, 128, 128, 128);
-        m_textureCoords2.emplace_back(640, 128, 128, 128);
-        m_textureCoords2.emplace_back(768, 128, 128, 128);
-        m_textureCoords2.emplace_back(896, 128, 128, 128);
-        m_textureCoords2.emplace_back(1024, 128, 128, 128);
+        m_textureCoords2.emplace_back(sf::Vector2i{ 0, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 128, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 256, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 384, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 512, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 640, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 768, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 896, 128 }, sf::Vector2i{ 128, 128 });
+        m_textureCoords2.emplace_back(sf::Vector2i{ 1024, 128 }, sf::Vector2i{ 128, 128 });
     }
 
     void Blood::setup(const Settings & settings)
     {
-        const std::string filePath = (settings.media_path / "image" / "blood.png").string();
-
-        m_texture.loadFromFile(filePath);
-        m_texture.setSmooth(true);
-
-        m_sprite.setTexture(m_texture);
+        util::TextureLoader::load(m_texture, (settings.media_path / "image/blood.png"), true);
+        m_sprite.setTexture(m_texture, true);
     }
 
     void Blood::start(Context & context, const sf::Vector2f & position, const bool willSplashRight)
@@ -79,11 +76,11 @@ namespace halloween
 
         if (willSplashRight)
         {
-            m_sprite.setScale(1.0f, 1.0f);
+            m_sprite.setScale({ 1.0f, 1.0f });
         }
         else
         {
-            m_sprite.setScale(-1.0f, 1.0f);
+            m_sprite.setScale({ -1.0f, 1.0f });
         }
     }
 

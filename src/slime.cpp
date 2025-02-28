@@ -14,6 +14,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -32,8 +33,8 @@ namespace halloween
         , m_deathAnims()
     {
         // probably never more than one dozen of each in a level
-        m_slimes.reserve(100);
-        m_deathAnims.reserve(100);
+        m_slimes.reserve(32);
+        m_deathAnims.reserve(32);
     }
 
     void Slimes::setup(const Settings & settings)
@@ -46,8 +47,7 @@ namespace halloween
             str += std::to_string(i);
             str += ".png";
 
-            m_textures.at(i).loadFromFile(str);
-            m_textures.at(i).setSmooth(true);
+            util::TextureLoader::load(m_textures.at(i), str, true);
         }
     }
 
@@ -60,13 +60,13 @@ namespace halloween
         Slime slime(context.random.boolean(), rect, speed);
 
         slime.texture_index = context.random.index(m_textures);
-        slime.sprite.setTexture(m_textures.at(slime.texture_index));
+        slime.sprite.setTexture(m_textures.at(slime.texture_index), true);
         slime.sprite.setScale({ 0.5f, 0.5f });
         util::setOriginToCenter(slime.sprite);
 
-        const float posX{ rect.left + (rect.width / 2.0f) };
-        const float posY{ util::bottom(rect) - (slime.sprite.getGlobalBounds().height * 0.5f) };
-        slime.sprite.setPosition(posX, posY);
+        const float posX{ rect.position.x + (rect.size.x / 2.0f) };
+        const float posY{ util::bottom(rect) - (slime.sprite.getGlobalBounds().size.y * 0.5f) };
+        slime.sprite.setPosition({ posX, posY });
 
         m_slimes.push_back(slime);
     }
@@ -85,7 +85,7 @@ namespace halloween
                     slime.texture_index = 0;
                 }
 
-                slime.sprite.setTexture(m_textures.at(slime.texture_index));
+                slime.sprite.setTexture(m_textures.at(slime.texture_index), true);
             }
 
             m_elapsedTimeSec -= m_timePerTextureSec;
@@ -98,16 +98,16 @@ namespace halloween
 
             if (slime.is_moving_left)
             {
-                slime.sprite.move(-stride, 0.0f);
+                slime.sprite.move({ -stride, 0.0f });
 
-                if (slime.sprite.getGlobalBounds().left < slime.rect.left)
+                if (slime.sprite.getGlobalBounds().position.x < slime.rect.position.x)
                 {
                     slime.is_moving_left = false;
                 }
             }
             else
             {
-                slime.sprite.move(stride, 0.0f);
+                slime.sprite.move({ stride, 0.0f });
 
                 if (util::right(slime.sprite.getGlobalBounds()) > util::right(slime.rect))
                 {
@@ -120,7 +120,7 @@ namespace halloween
         bool areAnyDeathAnimsFinished = false;
         for (SlimeDeathAnim & anim : m_deathAnims)
         {
-            anim.sprite.scale(0.975f, 0.975f);
+            anim.sprite.scale({ 0.975f, 0.975f });
 
             if (anim.sprite.getScale().x < 0.1f)
             {
@@ -145,7 +145,7 @@ namespace halloween
     {
         for (const Slime & slime : m_slimes)
         {
-            if (context.layout.mapRegion().intersects(slime.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(slime.sprite.getGlobalBounds()))
             {
                 target.draw(slime.sprite, states);
             }
@@ -162,7 +162,7 @@ namespace halloween
         for (Slime & slime : m_slimes)
         {
             slime.sprite.move(move);
-            slime.rect.left += move.x;
+            slime.rect.position.x += move.x;
         }
 
         for (SlimeDeathAnim & anim : m_deathAnims)
@@ -175,7 +175,7 @@ namespace halloween
     {
         for (const Slime & slime : m_slimes)
         {
-            if (slime.sprite.getGlobalBounds().intersects(avatarRect))
+            if (slime.sprite.getGlobalBounds().findIntersection(avatarRect))
             {
                 return true;
             }
@@ -189,7 +189,7 @@ namespace halloween
         bool wereAnyKilled = false;
         for (Slime & slime : m_slimes)
         {
-            if (slime.sprite.getGlobalBounds().intersects(attackRect))
+            if (slime.sprite.getGlobalBounds().findIntersection(attackRect))
             {
                 slime.is_alive = false;
                 wereAnyKilled = true;

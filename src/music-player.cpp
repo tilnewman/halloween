@@ -52,9 +52,9 @@ namespace util
             {
                 entryUPtr->music.setVolume(volume);
 
-                if (entryUPtr->music.getStatus() != sf::SoundSource::Playing)
+                if (entryUPtr->music.getStatus() != sf::SoundSource::Status::Playing)
                 {
-                    entryUPtr->music.setLoop(true);
+                    entryUPtr->music.setLooping(true);
                     entryUPtr->music.play();
                 }
 
@@ -76,7 +76,7 @@ namespace util
 
         entryUPtr->filename = filename;
         entryUPtr->music.setVolume(volume);
-        entryUPtr->music.setLoop(true);
+        entryUPtr->music.setLooping(true);
         entryUPtr->music.play();
     }
 
@@ -86,7 +86,7 @@ namespace util
         {
             if (entryUPtr->filename == filename)
             {
-                if (entryUPtr->music.getStatus() == sf::SoundSource::Paused)
+                if (entryUPtr->music.getStatus() == sf::SoundSource::Status::Paused)
                 {
                     entryUPtr->music.play();
                 }
@@ -104,7 +104,7 @@ namespace util
     {
         for (auto & entryUPtr : m_entrys)
         {
-            if (entryUPtr->music.getStatus() == sf::SoundSource::Paused)
+            if (entryUPtr->music.getStatus() == sf::SoundSource::Status::Paused)
             {
                 entryUPtr->music.play();
             }

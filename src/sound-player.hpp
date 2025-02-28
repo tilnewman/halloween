@@ -21,10 +21,10 @@ namespace util
 
         // prevent all copy and assignment
         SoundPlayer(const SoundPlayer &) = delete;
-        SoundPlayer(SoundPlayer &&) = delete;
+        SoundPlayer(SoundPlayer &&)      = delete;
         //
         SoundPlayer & operator=(const SoundPlayer &) = delete;
-        SoundPlayer & operator=(SoundPlayer &&) = delete;
+        SoundPlayer & operator=(SoundPlayer &&)      = delete;
 
         void reset();
 
@@ -65,17 +65,17 @@ namespace util
         struct SoundEffect
         {
             SoundEffect()
-                : filename()
-                , sound()
-                , buffer()
-                , will_loop(false)
+                : filename{}
+                , buffer{}
+                , sound{ buffer }
+                , will_loop{ false }
             {}
 
             std::string toString() const;
 
             std::string filename;
-            sf::Sound sound;
             sf::SoundBuffer buffer;
+            sf::Sound sound;
             bool will_loop;
         };
 

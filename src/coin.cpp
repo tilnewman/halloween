@@ -13,6 +13,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <algorithm>
 
@@ -22,19 +23,19 @@ namespace halloween
 {
     Coin::Coin(const sf::Texture & texture, const sf::Vector2f & position)
         : is_alive(true)
-        , sprite(texture, { 0, 0, 64, 64 })
+        , sprite(texture, { { 0, 0 }, { 64, 64 } })
         , anim_index(0)
     {
-        sprite.setScale(0.5f, 0.75f);
+        sprite.setScale({ 0.5f, 0.75f });
         util::setOriginToCenter(sprite);
         sprite.setPosition(position);
     }
 
     //
 
-    CoinAnim::CoinAnim()
+    CoinAnim::CoinAnim(const sf::Texture & texture)
         : is_alive(true)
-        , sprite()
+        , sprite(texture)
     {}
 
     //
@@ -53,23 +54,21 @@ namespace halloween
         m_animations.reserve(100);
 
         // animation frames in order within the spritesheet
-        m_textureCoords.emplace_back(0, 0, 64, 64);
-        m_textureCoords.emplace_back(64, 0, 64, 64);
-        m_textureCoords.emplace_back(128, 0, 64, 64);
-        m_textureCoords.emplace_back(192, 0, 64, 64);
-        m_textureCoords.emplace_back(256, 0, 64, 64);
-        m_textureCoords.emplace_back(0, 64, 64, 64);
-        m_textureCoords.emplace_back(64, 64, 64, 64);
-        m_textureCoords.emplace_back(128, 64, 64, 64);
-        m_textureCoords.emplace_back(192, 64, 64, 64);
-        m_textureCoords.emplace_back(256, 64, 64, 64);
+        m_textureCoords.emplace_back(sf::Vector2i{ 0, 0 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 64, 0 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 128, 0 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 192, 0 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 256, 0 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 0, 64 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 64, 64 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 128, 64 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 192, 64 }, sf::Vector2i{ 64, 64 });
+        m_textureCoords.emplace_back(sf::Vector2i{ 256, 64 }, sf::Vector2i{ 64, 64 });
     }
 
     void Coins::setup(const Settings & settings)
     {
-        const std::string filePath = (settings.media_path / "image" / "coin.png").string();
-        m_texture.loadFromFile(filePath);
-        m_texture.setSmooth(true);
+        util::TextureLoader::load(m_texture, (settings.media_path / "image/coin.png"), true);
     }
 
     void Coins::add(Context &, const sf::FloatRect & region)
@@ -90,7 +89,7 @@ namespace halloween
         bool wereAnyKilled = false;
         for (CoinAnim & anim : m_animations)
         {
-            sf::Uint8 alpha = anim.sprite.getColor().a;
+            std::uint8_t alpha = anim.sprite.getColor().a;
             if (alpha >= 10)
             {
                 alpha -= 10;
@@ -104,7 +103,7 @@ namespace halloween
 
             const float scaleSpeed{ 2.0f };
             const float newScale{ 1.0f + (frameTimeSec * scaleSpeed) };
-            anim.sprite.scale(newScale, newScale);
+            anim.sprite.scale({ newScale, newScale });
         }
 
         if (wereAnyKilled)
@@ -146,7 +145,7 @@ namespace halloween
     {
         for (const Coin & coin : m_coins)
         {
-            if (context.layout.mapRegion().intersects(coin.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(coin.sprite.getGlobalBounds()))
             {
                 target.draw(coin.sprite, states);
             }
@@ -154,7 +153,7 @@ namespace halloween
 
         for (const CoinAnim & coinAnim : m_animations)
         {
-            if (context.layout.mapRegion().intersects(coinAnim.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(coinAnim.sprite.getGlobalBounds()))
             {
                 target.draw(coinAnim.sprite, states);
             }
@@ -181,7 +180,7 @@ namespace halloween
         {
             const sf::FloatRect coinRect = coin.sprite.getGlobalBounds();
 
-            if (avatarRect.intersects(coinRect))
+            if (avatarRect.findIntersection(coinRect))
             {
                 wereAnyCollected = true;
                 coin.is_alive = false;
@@ -210,8 +209,7 @@ namespace halloween
             return;
         }
 
-        CoinAnim & anim = m_animations.emplace_back();
-        anim.sprite.setTexture(m_texture);
+        CoinAnim & anim = m_animations.emplace_back(m_texture);
         anim.sprite.setTextureRect(m_textureCoords.at(0));
         util::setOriginToCenter(anim.sprite);
         anim.sprite.setPosition(position);

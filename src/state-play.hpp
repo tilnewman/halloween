@@ -11,7 +11,7 @@ namespace sf
 {
     class Event;
     class RenderTarget;
-    class RenderStates;
+    struct RenderStates;
 } // namespace sf
 
 //

@@ -76,32 +76,32 @@ namespace halloween
     bool Level::move(const ScreenRegions & layout, const float move)
     {
         farthest_horiz_traveled += std::abs(move);
-        if (farthest_horiz_traveled > (farthest_horiz_map_pixel - layout.mapRegion().width))
+        if (farthest_horiz_traveled > (farthest_horiz_map_pixel - layout.mapRegion().size.x))
         {
             return false;
         }
 
-        enter_rect.left += move;
-        exit_rect.left += move;
+        enter_rect.position.x += move;
+        exit_rect.position.x += move;
 
         for (sf::FloatRect & rect : kill_collisions)
         {
-            rect.left += move;
+            rect.position.x += move;
         }
 
         for (sf::FloatRect & rect : walk_collisions)
         {
-            rect.left += move;
+            rect.position.x += move;
         }
 
         for (sf::FloatRect & rect : acid_collisions)
         {
-            rect.left += move;
+            rect.position.x += move;
         }
 
         for (sf::FloatRect & rect : water_collisions)
         {
-            rect.left += move;
+            rect.position.x += move;
         }
 
         for (TileLayer & layer : tiles.layers)
@@ -192,7 +192,7 @@ namespace halloween
                 const sf::Vector2f screenPos(sf::Vector2f(posX, posY) + map_position_offset);
                 const sf::FloatRect screenRect{ screenPos, sizeOnScreen };
 
-                util::appendQuadVerts(screenRect, textureRect, layer.verts);
+                util::appendTriangleVerts(screenRect, textureRect, layer.verts);
             }
         }
     }
@@ -212,10 +212,13 @@ namespace halloween
             std::size_t vertIndex = 0;
             while (vertIndex < layer.verts.size())
             {
-                const sf::Vertex topLeftVert = layer.verts[vertIndex++];
-                const sf::Vertex topRightVert = layer.verts[vertIndex++];
-                const sf::Vertex botRightVert = layer.verts[vertIndex++];
-                const sf::Vertex botLeftVert = layer.verts[vertIndex++];
+                // see sfml-util::setupTriangleVerts() for where this order comes from
+                const sf::Vertex topLeftVert = layer.verts[vertIndex + 0];
+                const sf::Vertex topRightVert = layer.verts[vertIndex + 1];
+                const sf::Vertex botLeftVert = layer.verts[vertIndex + 2];
+                const sf::Vertex botLeftVert2 = layer.verts[vertIndex + 3];
+                const sf::Vertex topRightVert2 = layer.verts[vertIndex + 4];
+                const sf::Vertex botRightVert = layer.verts[vertIndex + 5];
 
                 if (layout.mapRegion().contains(topLeftVert.position) ||
                     layout.mapRegion().contains(topRightVert.position) ||
@@ -224,9 +227,13 @@ namespace halloween
                 {
                     layer.visibleVerts.push_back(topLeftVert);
                     layer.visibleVerts.push_back(topRightVert);
-                    layer.visibleVerts.push_back(botRightVert);
                     layer.visibleVerts.push_back(botLeftVert);
+                    layer.visibleVerts.push_back(botLeftVert2);
+                    layer.visibleVerts.push_back(topRightVert2);
+                    layer.visibleVerts.push_back(botRightVert);
                 }
+
+                vertIndex += util::verts_per_quad;
             }
         }
     }

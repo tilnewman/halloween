@@ -3,6 +3,7 @@
 #include "game-loop.hpp"
 
 #include "check-macros.hpp"
+#include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 
 #include <iostream>
@@ -24,9 +25,9 @@ namespace halloween
         , m_loader()
         , m_media()
         , m_layout()
-        , m_avatar()
-        , m_pauseScreen()
-        , m_stateMachine()
+        , m_avatarUPtr()
+        , m_pauseScreenUPtr()
+        , m_stateMachineUPtr()
         , m_level()
         , m_missiles()
         , m_coins()
@@ -36,48 +37,23 @@ namespace halloween
         , m_saws()
         , m_slimes()
         , m_ghosts()
-        , m_infoRegion()
+        , m_infoRegionUPtr()
         , m_managers()
         , m_stats()
-        , m_boss()
+        , m_bossUPtr()
         , m_delayLoopCounts()
         , m_framesPerSecond()
         , m_perSecondClock()
         , m_graphDisplayUPtr()
-        , m_context(
-              m_settings,
-              m_window,
-              m_random,
-              m_audio,
-              m_music,
-              m_bats,
-              m_owlCalls,
-              m_loader,
-              m_media,
-              m_layout,
-              m_avatar,
-              m_pauseScreen,
-              m_stateMachine,
-              m_level,
-              m_missiles,
-              m_coins,
-              m_darts,
-              m_spikedBalls,
-              m_fireSpouts,
-              m_saws,
-              m_slimes,
-              m_ghosts,
-              m_infoRegion,
-              m_managers,
-              m_stats,
-              m_boss)
+        , m_contextUPtr()
     {}
 
     void GameLoop::play()
     {
         setup();
         frameLoop();
-        std::cout << "final score " << m_infoRegion.score() << '\n';
+        std::cout << "final score " << m_infoRegionUPtr->score() << '\n';
+        teardown();
     }
 
     void GameLoop::setup()
@@ -87,21 +63,56 @@ namespace halloween
             "The media folder could not be found at \"" << m_settings.media_path << "\"");
 
         const auto videoMode = util::findVideoModeClosestTo(sf::VideoMode(
-            m_settings.target_screen_res.x,
-            m_settings.target_screen_res.y,
+            { m_settings.target_screen_res.x, m_settings.target_screen_res.y },
             sf::VideoMode::getDesktopMode().bitsPerPixel));
 
-        m_window.create(videoMode, "Halloween", sf::Style::Fullscreen);
+        m_window.create(videoMode, "Halloween", sf::State::Fullscreen);
         M_CHECK(m_window.isOpen(), "Could not open graphics window.");
         std::cout << "resolution is " << m_window.getSize() << std::endl;
 
         m_window.setMouseCursorVisible(false);
+
+        util::SfmlDefaults::instance().setup();
 
         m_audio.mediaPath(m_settings.media_path / "sfx");
         m_audio.loadAll();
         m_audio.willLoop("walk", true);
 
         m_music.setup(m_settings.media_path / "music");
+
+        m_avatarUPtr = std::make_unique<Avatar>();
+        m_pauseScreenUPtr = std::make_unique<PauseScreen>();
+        m_stateMachineUPtr = std::make_unique<StateMachine>();
+        m_infoRegionUPtr = std::make_unique<InfoRegion>();
+        m_bossUPtr = std::make_unique<MushroomBoss>();
+
+        m_contextUPtr = std::make_unique<Context>(
+            m_settings,
+            m_window,
+            m_random,
+            m_audio,
+            m_music,
+            m_bats,
+            m_owlCalls,
+            m_loader,
+            m_media,
+            m_layout,
+            *m_avatarUPtr,
+            *m_pauseScreenUPtr,
+            *m_stateMachineUPtr,
+            m_level,
+            m_missiles,
+            m_coins,
+            m_darts,
+            m_spikedBalls,
+            m_fireSpouts,
+            m_saws,
+            m_slimes,
+            m_ghosts,
+            *m_infoRegionUPtr,
+            m_managers,
+            m_stats,
+            *m_bossUPtr);
 
         m_layout.setup(m_window.getSize());
         m_media.setup(m_settings);
@@ -115,13 +126,25 @@ namespace halloween
         m_managers.add(m_ghosts);
         m_managers.add(m_slimes);
         m_managers.add(m_bats);
-        m_managers.add(m_boss);
+        m_managers.add(*m_bossUPtr);
 
         m_managers.setupAll(m_settings);
 
-        m_avatar.setup(m_settings);
-        m_pauseScreen.setup(m_window.getSize(), m_media);
-        m_infoRegion.setup(m_context);
+        m_avatarUPtr->setup(m_settings);
+        m_pauseScreenUPtr->setup(m_window.getSize(), m_media);
+        m_infoRegionUPtr->setup(*m_contextUPtr);
+    }
+
+    void GameLoop::teardown()
+    {
+        //m_managers.clearAll();
+        m_contextUPtr.reset();
+        m_bossUPtr.reset();
+        m_infoRegionUPtr.reset();
+        m_stateMachineUPtr.reset();
+        m_pauseScreenUPtr.reset();
+        m_avatarUPtr.reset();
+        util::SfmlDefaults::instance().teardown();
     }
 
     void GameLoop::frameLoop()
@@ -129,14 +152,14 @@ namespace halloween
         m_perSecondClock.restart();
 
         sf::Clock frameClock;
-        while (m_window.isOpen() && !m_context.will_quit)
+        while (m_window.isOpen() && !m_contextUPtr->will_quit)
         {
             frameClock.restart();
 
             handlePerSecondTasks();
             handleEvents();
             update(1.0f / m_settings.frame_rate);
-            m_stateMachine.changeIfPending(m_context);
+            m_stateMachineUPtr->changeIfPending(*m_contextUPtr);
             draw();
 
             const float frameTimeSec = frameClock.getElapsedTime().asSeconds();
@@ -187,7 +210,7 @@ namespace halloween
                 m_media.fps_text,
                 util::scaleRectInPlaceCopy(m_layout.infoRegion(), { 1.0f, 0.375f }));
 
-            m_media.fps_text.setPosition(0.0f, (m_layout.wholeSize().y - 50.0f));
+            m_media.fps_text.setPosition({ 0.0f, (m_layout.wholeSize().y - 50.0f) });
         }
 
         if (m_settings.will_display_fps_graph)
@@ -205,16 +228,15 @@ namespace halloween
 
     void GameLoop::handleEvents()
     {
-        sf::Event event;
-        while (m_window.pollEvent(event))
+        while (const auto eventOpt = m_window.pollEvent())
         {
-            m_stateMachine.state().handleEvent(m_context, event);
+            m_stateMachineUPtr->state().handleEvent(*m_contextUPtr, eventOpt.value());
         }
     }
 
     void GameLoop::update(const float frameTimeSec)
     {
-        m_stateMachine.state().update(m_context, frameTimeSec);
+        m_stateMachineUPtr->state().update(*m_contextUPtr, frameTimeSec);
     }
 
     void GameLoop::draw()
@@ -222,7 +244,7 @@ namespace halloween
         m_window.clear();
 
         sf::RenderStates states;
-        m_stateMachine.state().draw(m_context, m_window, states);
+        m_stateMachineUPtr->state().draw(*m_contextUPtr, m_window, states);
 
         if (m_settings.will_display_fps)
         {

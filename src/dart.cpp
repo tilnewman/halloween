@@ -11,6 +11,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <algorithm>
 
@@ -26,21 +27,18 @@ namespace halloween
         , m_scale(0.6f, 0.8f)
     {
         // anything more than dozens will work here
-        m_darts.reserve(100);
-        m_dartAnims.reserve(100);
+        m_darts.reserve(32);
+        m_dartAnims.reserve(32);
     }
 
     void Darts::setup(const Settings & settings)
     {
-        const std::string filePath = (settings.media_path / "image" / "kunai.png").string();
-        m_texture.loadFromFile(filePath);
-        m_texture.setSmooth(true);
+        util::TextureLoader::load(m_texture, (settings.media_path / "image/kunai.png"), true);
     }
 
     void Darts::add(Context &, const sf::FloatRect & region)
     {
-        Dart & dart = m_darts.emplace_back();
-        dart.sprite.setTexture(m_texture);
+        Dart & dart = m_darts.emplace_back(m_texture);
         dart.sprite.setScale(m_scale);
         util::setOriginToCenter(dart.sprite);
         dart.sprite.setPosition(util::center(region));
@@ -53,7 +51,7 @@ namespace halloween
         bool wereAnyKilled = false;
         for (DartAnim & anim : m_dartAnims)
         {
-            sf::Uint8 alpha = anim.sprite.getColor().a;
+            std::uint8_t alpha = anim.sprite.getColor().a;
             if (alpha >= 10)
             {
                 alpha -= 10;
@@ -68,7 +66,7 @@ namespace halloween
 
             const float scaleSpeed{ 2.0f };
             const float newScale{ 1.0f + (frameTimeSec * scaleSpeed) };
-            anim.sprite.scale(newScale, newScale);
+            anim.sprite.scale({ newScale, newScale });
         }
 
         if (wereAnyKilled)
@@ -87,7 +85,7 @@ namespace halloween
     {
         for (const Dart & dart : m_darts)
         {
-            if (context.layout.mapRegion().intersects(dart.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(dart.sprite.getGlobalBounds()))
             {
                 target.draw(dart.sprite, states);
             }
@@ -119,14 +117,14 @@ namespace halloween
         {
             const sf::FloatRect dartRect = dart.sprite.getGlobalBounds();
 
-            if (avatarRect.intersects(dartRect))
+            if (avatarRect.findIntersection(dartRect))
             {
                 wereAnyCollected = true;
                 dart.is_alive = false;
                 context.audio.play("unsheath");
                 context.info_region.dartsAdjust(1);
 
-                DartAnim & anim = m_dartAnims.emplace_back();
+                DartAnim & anim = m_dartAnims.emplace_back(m_texture);
                 anim.sprite = dart.sprite;
             }
         }

@@ -25,9 +25,9 @@ namespace halloween
 
     LevelCompleteState::LevelCompleteState(const Context & context)
         : StateBase(context, State::Level, State::Play)
-        , m_levelCompleteText()
-        , m_scoreText()
-        , m_bonusText()
+        , m_levelCompleteText(util::SfmlDefaults::instance().font())
+        , m_scoreText(util::SfmlDefaults::instance().font())
+        , m_bonusText(util::SfmlDefaults::instance().font())
         , m_bonuses()
         , m_bonusTextRegion()
         , m_isPreWaiting(true)
@@ -52,12 +52,12 @@ namespace halloween
 
         updateScoreText(context);
 
-        m_bonusTextRegion.left = 0.0f;
-        m_bonusTextRegion.top = util::bottom(m_scoreText);
-        m_bonusTextRegion.width = context.layout.wholeRegion().width;
+        m_bonusTextRegion.position.x = 0.0f;
+        m_bonusTextRegion.position.y = util::bottom(m_scoreText);
+        m_bonusTextRegion.size.x = context.layout.wholeRegion().size.x;
 
-        m_bonusTextRegion.height =
-            ((context.layout.wholeRegion().height - m_bonusTextRegion.top) -
+        m_bonusTextRegion.size.y =
+            ((context.layout.wholeRegion().size.y - m_bonusTextRegion.position.y) -
              (context.layout.wholeSize().y * 0.25f));
 
         const unsigned bonusTextCharSize{ 70 };
@@ -125,7 +125,7 @@ namespace halloween
             return true;
         }
 
-        if (event.type == sf::Event::KeyPressed)
+        if (event.is<sf::Event::KeyPressed>())
         {
             if (!m_isPreWaiting && !m_isPostWaiting)
             {

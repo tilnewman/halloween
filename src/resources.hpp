@@ -33,6 +33,8 @@ namespace halloween
         int gid;
     };
 
+    //
+
     struct Resources
     {
         Resources();

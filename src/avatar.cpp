@@ -18,12 +18,14 @@
 #include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
 #include "spiked-ball.hpp"
 #include "state-machine.hpp"
 #include "states.hpp"
+#include "texture-loader.hpp"
 
 #include <cassert>
 
@@ -43,7 +45,7 @@ namespace halloween
         , m_glideAnim()
         , m_idleAnim()
         , m_jumpTexture()
-        , m_sprite()
+        , m_sprite(util::SfmlDefaults::instance().texture())
         , m_velocity()
         , m_action(Action::Idle)
         , m_hasLanded(false)
@@ -64,12 +66,12 @@ namespace halloween
         m_glideAnim.setup((settings.media_path / "image/avatar"), "Glide", 10, 0.33f, true);
         m_idleAnim.setup((settings.media_path / "image/avatar"), "Idle", 10, 0.1f, true);
 
-        m_jumpTexture.loadFromFile((settings.media_path / "image/avatar/Jump-6.png").string());
-        m_jumpTexture.setSmooth(true);
+        util::TextureLoader::load(
+            m_jumpTexture, (settings.media_path / "image/avatar/Jump-6.png"), true);
 
         m_idleAnim.restart();
         m_sprite.setTexture(m_idleAnim.texture(), true);
-        m_sprite.setScale(settings.avatar_scale, settings.avatar_scale);
+        m_sprite.setScale({ settings.avatar_scale, settings.avatar_scale });
     }
 
     void Avatar::draw(sf::RenderTarget & target, sf::RenderStates states) const
@@ -90,87 +92,87 @@ namespace halloween
 
         if ((Action::Idle == m_action) || (Action::Attack == m_action))
         {
-            const float hairVertAdj{ rect.height * 0.15f };
-            rect.top += hairVertAdj;
-            rect.height -= hairVertAdj;
+            const float hairVertAdj{ rect.size.y * 0.15f };
+            rect.position.y += hairVertAdj;
+            rect.size.y -= hairVertAdj;
 
-            rect.width *= 0.7f;
+            rect.size.x *= 0.7f;
 
             if (m_isFacingRight)
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.2f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.2f);
             }
             else
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.1f);
             }
         }
         else if (Action::Run == m_action)
         {
-            const float hairVertAdj{ rect.height * 0.18f };
-            rect.top += hairVertAdj;
-            rect.height -= hairVertAdj;
+            const float hairVertAdj{ rect.size.y * 0.18f };
+            rect.position.y += hairVertAdj;
+            rect.size.y -= hairVertAdj;
 
-            rect.width *= 0.5f;
+            rect.size.x *= 0.5f;
 
             if (m_isFacingRight)
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.2f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.2f);
             }
             else
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.3f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.3f);
             }
         }
         else if (Action::Jump == m_action)
         {
-            const float hairVertAdj{ rect.height * 0.18f };
-            rect.top += hairVertAdj;
-            rect.height -= (1.5f * hairVertAdj);
+            const float hairVertAdj{ rect.size.y * 0.18f };
+            rect.position.y += hairVertAdj;
+            rect.size.y -= (1.5f * hairVertAdj);
 
-            rect.width *= 0.5f;
+            rect.size.x *= 0.5f;
 
             if (m_isFacingRight)
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.2f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.2f);
             }
             else
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.4f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.4f);
             }
         }
         else if (Action::Throw == m_action)
         {
-            const float hairVertAdj{ rect.height * 0.18f };
-            rect.top += hairVertAdj;
-            rect.height -= hairVertAdj;
+            const float hairVertAdj{ rect.size.y * 0.18f };
+            rect.position.y += hairVertAdj;
+            rect.size.y -= hairVertAdj;
 
-            rect.width *= 0.5f;
+            rect.size.x *= 0.5f;
 
             if (m_isFacingRight)
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.17f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.17f);
             }
             else
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.33f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.33f);
             }
         }
         else if (Action::Glide == m_action)
         {
-            const float hairVertAdj{ rect.height * 0.18f };
-            rect.top += hairVertAdj;
-            rect.height -= hairVertAdj;
+            const float hairVertAdj{ rect.size.y * 0.18f };
+            rect.position.y += hairVertAdj;
+            rect.size.y -= hairVertAdj;
 
-            rect.width *= 0.8f;
+            rect.size.x *= 0.8f;
 
             if (m_isFacingRight)
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.15f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.15f);
             }
             else
             {
-                rect.left += (m_sprite.getGlobalBounds().width * 0.25f);
+                rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.25f);
             }
         }
 
@@ -182,19 +184,19 @@ namespace halloween
     {
         auto rect = m_sprite.getGlobalBounds();
 
-        const float hairVertAdj{ rect.height * 0.165f };
-        rect.top += hairVertAdj;
-        rect.height -= (1.5f * hairVertAdj);
+        const float hairVertAdj{ rect.size.y * 0.165f };
+        rect.position.y += hairVertAdj;
+        rect.size.y -= (1.5f * hairVertAdj);
 
-        rect.width *= 0.4f;
+        rect.size.x *= 0.4f;
 
         if (m_isFacingRight)
         {
-            rect.left += (m_sprite.getGlobalBounds().width * 0.5f);
+            rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.5f);
         }
         else
         {
-            rect.left += (m_sprite.getGlobalBounds().width * 0.1f);
+            rect.position.x += (m_sprite.getGlobalBounds().size.x * 0.1f);
         }
 
         return rect;
@@ -203,7 +205,7 @@ namespace halloween
     void Avatar::setPosition(const sf::FloatRect & rect)
     {
         sf::Vector2f position = util::center(rect);
-        position.y = (util::bottom(rect) - m_sprite.getGlobalBounds().height);
+        position.y = (util::bottom(rect) - m_sprite.getGlobalBounds().size.y);
         m_sprite.setPosition(position);
     }
 
@@ -274,7 +276,7 @@ namespace halloween
     void Avatar::moveMap(Context & context)
     {
         const float posXAfter = util::center(m_sprite.getGlobalBounds()).x;
-        const float screenMiddle = (context.layout.mapRegion().width * 0.5f);
+        const float screenMiddle = (context.layout.mapRegion().size.x * 0.5f);
 
         if ((m_velocity.x < 0.0f) || (posXAfter < screenMiddle))
         {
@@ -320,7 +322,7 @@ namespace halloween
                 if (!m_isFacingRight)
                 {
                     m_isFacingRight = true;
-                    m_sprite.scale(-1.0f, 1.0f); // sfml trick to flip image
+                    m_sprite.scale({ -1.0f, 1.0f }); // sfml trick to flip image
                 }
 
                 context.audio.play("respawn");
@@ -344,7 +346,7 @@ namespace halloween
     bool Avatar::handleAttacking(Context & context, const float frameTimeSec)
     {
         // first frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && (Action::Attack != m_action) &&
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::F) && (Action::Attack != m_action) &&
             (Action::Throw != m_action))
         {
             context.audio.play("swipe");
@@ -388,7 +390,7 @@ namespace halloween
         m_timeSinceLastThrowSec += frameTimeSec;
 
         // first frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && (Action::Attack != m_action) &&
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D) && (Action::Attack != m_action) &&
             (Action::Throw != m_action) && (context.info_region.darts() > 0) &&
             (m_timeSinceLastThrowSec > 0.1f))
         {
@@ -410,7 +412,7 @@ namespace halloween
             const sf::FloatRect avatarRect = collisionRect();
             sf::Vector2f missilePosition{ 0.0f, 0.0f };
             missilePosition.x = util::center(avatarRect).x;
-            missilePosition.y = (avatarRect.top + (avatarRect.height * 0.4f));
+            missilePosition.y = (avatarRect.position.y + (avatarRect.size.y * 0.4f));
             context.missiles.add(missilePosition, m_isFacingRight);
 
             context.info_region.dartsAdjust(-1);
@@ -446,7 +448,7 @@ namespace halloween
     bool Avatar::handleGliding(Context & context, const float frameTimeSec)
     {
         // first frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (Action::Jump == m_action) &&
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) && (Action::Jump == m_action) &&
             (m_velocity.y > -1.0f))
         {
             context.audio.play("parachute", 0.5f);
@@ -466,7 +468,7 @@ namespace halloween
         // all other frames
         if (Action::Glide == m_action)
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up))
             {
                 if (m_glideAnim.update(frameTimeSec))
                 {
@@ -511,7 +513,7 @@ namespace halloween
             // What the hell, mario did it.
             const float jumpMoveDivisor = 3.0f;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
             {
                 m_velocity.x += ((context.settings.walk_acc / jumpMoveDivisor) * frameTimeSec);
                 if (m_velocity.x > context.settings.walk_speed_limit)
@@ -520,7 +522,7 @@ namespace halloween
                 }
             }
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
             {
                 m_velocity.x -= ((context.settings.walk_acc / jumpMoveDivisor) * frameTimeSec);
                 if (m_velocity.x < -context.settings.walk_speed_limit)
@@ -531,7 +533,7 @@ namespace halloween
         }
         else
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
             {
                 m_velocity.x += (context.settings.walk_acc * frameTimeSec);
                 if (m_velocity.x > context.settings.walk_speed_limit)
@@ -550,11 +552,11 @@ namespace halloween
                 if (!m_isFacingRight)
                 {
                     m_isFacingRight = true;
-                    m_sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
-                    m_sprite.move(-m_sprite.getGlobalBounds().width, 0.0f);
+                    m_sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
+                    m_sprite.move({ -m_sprite.getGlobalBounds().size.x, 0.0f });
                 }
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
             {
                 m_velocity.x -= (context.settings.walk_acc * frameTimeSec);
                 if (m_velocity.x < -context.settings.walk_speed_limit)
@@ -573,8 +575,8 @@ namespace halloween
                 if (m_isFacingRight)
                 {
                     m_isFacingRight = false;
-                    m_sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
-                    m_sprite.move(m_sprite.getGlobalBounds().width, 0.0f);
+                    m_sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
+                    m_sprite.move({ m_sprite.getGlobalBounds().size.x, 0.0f });
                 }
             }
             else
@@ -596,7 +598,7 @@ namespace halloween
 
     void Avatar::jumping(Context & context, const float frameTimeSec)
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_hasLanded)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) && m_hasLanded)
         {
             m_hasLanded = false;
             m_velocity.y -= (context.settings.jump_acc * frameTimeSec);
@@ -614,10 +616,10 @@ namespace halloween
         const sf::FloatRect avatarRect = collisionRect();
         const sf::Vector2f avatarCenter = util::center(avatarRect);
 
-        const float footRectHeightAdj{ avatarRect.height * 0.8f };
+        const float footRectHeightAdj{ avatarRect.size.y * 0.8f };
         sf::FloatRect footRect = avatarRect;
-        footRect.top += footRectHeightAdj;
-        footRect.height -= footRectHeightAdj;
+        footRect.position.y += footRectHeightAdj;
+        footRect.size.y -= footRectHeightAdj;
 
         std::vector<sf::FloatRect> rects = context.level.walk_collisions;
         context.managers.appendAllCollisions(rects);
@@ -626,7 +628,12 @@ namespace halloween
         sf::FloatRect intersection;
         for (const sf::FloatRect & collRect : rects)
         {
-            if (!avatarRect.intersects(collRect, intersection))
+            const auto intersectionOpt{ avatarRect.findIntersection(collRect) };
+            if (intersectionOpt)
+            {
+                intersection = intersectionOpt.value();
+            }
+            else
             {
                 continue;
             }
@@ -639,13 +646,13 @@ namespace halloween
                 // rising and hit something above
 
                 m_velocity.y = 0.0f;
-                m_sprite.move(0.0f, intersection.height);
+                m_sprite.move({ 0.0f, intersection.size.y });
                 continue;
             }
 
-            const bool doesIntersectFeet = collRect.intersects(footRect);
+            const bool doesIntersectFeet = collRect.findIntersection(footRect).has_value();
 
-            if ((m_velocity.y > 0.0f) && (intersection.height < tolerance) && doesIntersectFeet)
+            if ((m_velocity.y > 0.0f) && (intersection.size.y < tolerance) && doesIntersectFeet)
             {
                 // falling and hit something below
 
@@ -657,24 +664,24 @@ namespace halloween
 
                 m_hasLanded = true;
                 m_velocity.y = 0.0f;
-                m_sprite.move(0.0f, -intersection.height);
+                m_sprite.move({ 0.0f, -intersection.size.y });
                 continue;
             }
 
             // at this point we hit something from the side
 
-            if (intersection.width < tolerance)
+            if (intersection.size.x < tolerance)
             {
                 if (m_velocity.x > 0.0f)
                 {
                     m_velocity.x = 0.0f;
-                    m_sprite.move(-intersection.width, 0.0f);
+                    m_sprite.move({ -intersection.size.x, 0.0f });
                     continue;
                 }
                 else if (m_velocity.x < 0.0f)
                 {
                     m_velocity.x = 0.0f;
-                    m_sprite.move(intersection.width, 0.0f);
+                    m_sprite.move({ intersection.size.x, 0.0f });
                     continue;
                 }
             }
@@ -694,7 +701,7 @@ namespace halloween
 
         for (const sf::FloatRect & coll : context.level.kill_collisions)
         {
-            if (avatarRect.intersects(coll))
+            if (avatarRect.findIntersection(coll))
             {
                 triggerDeath(context);
                 return;
@@ -704,7 +711,7 @@ namespace halloween
 
     void Avatar::exitCollisions(Context & context) const
     {
-        if (collisionRect().intersects(context.level.exit_rect))
+        if (collisionRect().findIntersection(context.level.exit_rect))
         {
             context.audio.stopAllLooped();
             context.state.setChangePending(State::Level);
@@ -714,13 +721,14 @@ namespace halloween
 
     void Avatar::preventBacktracking(const Context & context)
     {
-        const sf::FloatRect backtrackRect{ -100.0f, 0.0f, 100.0f, context.layout.wholeSize().y };
+        const sf::FloatRect backtrackRect{ { -100.0f, 0.0f },
+                                           { 100.0f, context.layout.wholeSize().y } };
 
-        sf::FloatRect intersection;
-        if (collisionRect().intersects(backtrackRect, intersection))
+        const auto intersectionOpt{ collisionRect().findIntersection(backtrackRect) };
+        if (intersectionOpt)
         {
             m_velocity.x = 0.0f;
-            m_sprite.move(intersection.width, 0.0f);
+            m_sprite.move({ intersectionOpt->size.x, 0.0f });
         }
     }
 
@@ -753,7 +761,7 @@ namespace halloween
 
         for (const sf::FloatRect & coll : context.level.acid_collisions)
         {
-            if (avatarRect.intersects(coll))
+            if (avatarRect.findIntersection(coll))
             {
                 m_willDie = true;
                 context.audio.play("acid.ogg");
@@ -774,7 +782,7 @@ namespace halloween
 
         for (const sf::FloatRect & coll : context.level.water_collisions)
         {
-            if (avatarRect.intersects(coll))
+            if (avatarRect.findIntersection(coll))
             {
                 m_willDie = true;
                 context.audio.play("dunk.ogg");
@@ -786,7 +794,7 @@ namespace halloween
 
     void Avatar::killIfOutOfBounds(Context & context)
     {
-        if (!context.layout.mapRegion().intersects(collisionRect()))
+        if (!context.layout.mapRegion().findIntersection(collisionRect()))
         {
             triggerDeath(context);
         }
@@ -824,7 +832,7 @@ namespace halloween
 
     void Avatar::bounceAwayFromBoss(const Context & context)
     {
-        m_sprite.move(-15.0f, 0.0f);
+        m_sprite.move({ -15.0f, 0.0f });
 
         if (Action::Glide == m_action)
         {

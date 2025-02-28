@@ -12,6 +12,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <iostream>
 
@@ -35,29 +36,27 @@ namespace halloween
         m_speed = settings.spiked_ball_speed;
         m_scale = settings.spiked_ball_scale;
 
-        m_texture.loadFromFile((settings.media_path / "image" / "spiked-ball.png").string());
-        m_texture.setSmooth(true);
+        util::TextureLoader::load(
+            m_texture, (settings.media_path / "image" / "spiked-ball.png"), true);
     }
 
     void SpikedBalls::add(Context &, const sf::FloatRect & region)
     {
-        SpikedBall & ball = m_balls.emplace_back();
-
-        ball.sprite.setTexture(m_texture);
+        SpikedBall & ball = m_balls.emplace_back(m_texture);
         ball.sprite.setScale(m_scale);
         util::setOriginToCenter(ball.sprite);
         ball.sprite.setPosition(util::center(region));
 
-        ball.is_horizontal = (region.width > region.height);
+        ball.is_horizontal = (region.size.x > region.size.y);
         if (ball.is_horizontal)
         {
-            ball.slider =
-                util::SliderOscillator<float, float>(region.left, util::right(region), m_speed);
+            ball.slider = util::SliderOscillator<float, float>(
+                region.position.x, util::right(region), m_speed);
         }
         else
         {
-            ball.slider =
-                util::SliderOscillator<float, float>(region.top, util::bottom(region), m_speed);
+            ball.slider = util::SliderOscillator<float, float>(
+                region.position.y, util::bottom(region), m_speed);
         }
     }
 
@@ -71,11 +70,11 @@ namespace halloween
 
             if (ball.is_horizontal)
             {
-                ball.sprite.setPosition(newPosition, ball.sprite.getPosition().y);
+                ball.sprite.setPosition({ newPosition, ball.sprite.getPosition().y });
             }
             else
             {
-                ball.sprite.setPosition(ball.sprite.getPosition().x, newPosition);
+                ball.sprite.setPosition({ ball.sprite.getPosition().x, newPosition });
             }
         }
     }
@@ -85,7 +84,7 @@ namespace halloween
     {
         for (const SpikedBall & ball : m_balls)
         {
-            if (context.layout.mapRegion().intersects(ball.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(ball.sprite.getGlobalBounds()))
             {
                 target.draw(ball.sprite, states);
             }
@@ -113,7 +112,7 @@ namespace halloween
     {
         for (const SpikedBall & ball : m_balls)
         {
-            if (avatarRect.intersects(ball.sprite.getGlobalBounds()))
+            if (avatarRect.findIntersection(ball.sprite.getGlobalBounds()))
             {
                 return true;
             }

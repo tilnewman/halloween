@@ -81,9 +81,9 @@ namespace halloween
         const sf::Vector2f tileCountF{ context.level.tiles.count };
         const sf::Vector2f mapSizeOrig{ context.level.tile_size_screen * tileCountF };
 
-        const float heightOffset{
-            (context.layout.mapRegion().top + context.layout.mapRegion().height) - mapSizeOrig.y
-        };
+        const float heightOffset{ (context.layout.mapRegion().position.y +
+                                   context.layout.mapRegion().size.y) -
+                                  mapSizeOrig.y };
 
         context.level.map_position_offset = { 0.0f, heightOffset };
     }
@@ -297,28 +297,28 @@ namespace halloween
     const sf::FloatRect LevelFileLoader::parseAndConvertRect(const Context & context, Json & json)
     {
         sf::IntRect mapRect;
-        mapRect.left = json["x"];
-        mapRect.top = json["y"];
-        mapRect.width = json["width"];
-        mapRect.height = json["height"];
+        mapRect.position.x = json["x"];
+        mapRect.position.y = json["y"];
+        mapRect.size.x = json["width"];
+        mapRect.size.y = json["height"];
 
         // convert from map to screen coordinates
         sf::FloatRect screenRect{ mapRect };
-        screenRect.left *= context.settings.tile_scale;
-        screenRect.top *= context.settings.tile_scale;
-        screenRect.width *= context.settings.tile_scale;
-        screenRect.height *= context.settings.tile_scale;
+        screenRect.position.x *= context.settings.tile_scale;
+        screenRect.position.y *= context.settings.tile_scale;
+        screenRect.size.x *= context.settings.tile_scale;
+        screenRect.size.y *= context.settings.tile_scale;
         //
-        screenRect.left += context.level.map_position_offset.x;
-        screenRect.top += context.level.map_position_offset.y;
+        screenRect.position.x += context.level.map_position_offset.x;
+        screenRect.position.y += context.level.map_position_offset.y;
 
         return screenRect;
     }
 
     void LevelFileLoader::parseSpawnLayer(Context & context, Json & json)
     {
-        context.level.enter_rect = { 0.0f, 0.0f, -1.0f, -1.0f };
-        context.level.exit_rect = { 0.0f, 0.0f, -1.0f, -1.0f };
+        context.level.enter_rect = { { 0.0f, 0.0f }, { -1.0f, -1.0f } };
+        context.level.exit_rect = { { 0.0f, 0.0f }, { -1.0f, -1.0f } };
 
         for (Json & spawnJson : json["objects"])
         {
@@ -341,11 +341,11 @@ namespace halloween
         }
 
         M_CHECK(
-            (context.level.enter_rect.width > 0.0f),
+            (context.level.enter_rect.size.x > 0.0f),
             "Error Parsing Level File " << m_pathStr << ":  Failed to find enter location.");
 
         M_CHECK(
-            (context.level.exit_rect.width > 0.0f),
+            (context.level.exit_rect.size.x > 0.0f),
             "Error Parsing Level File " << m_pathStr << ":  Failed to find exit location.");
     }
 

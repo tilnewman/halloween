@@ -21,9 +21,9 @@ namespace halloween
 
     struct Dart
     {
-        Dart()
+        Dart(const sf::Texture & texture)
             : is_alive(true)
-            , sprite()
+            , sprite(texture)
         {}
 
         bool is_alive;
@@ -34,9 +34,9 @@ namespace halloween
 
     struct DartAnim
     {
-        DartAnim()
+        DartAnim(const sf::Texture & texture)
             : is_alive(true)
-            , sprite()
+            , sprite(texture)
         {}
 
         bool is_alive;

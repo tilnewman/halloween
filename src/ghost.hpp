@@ -4,6 +4,7 @@
 // ghost.hpp
 //
 #include "object-manager.hpp"
+#include "sfml-defaults.hpp"
 
 #include <vector>
 
@@ -34,7 +35,7 @@ namespace halloween
             : is_alive(true)
             , is_fading_in(true)
             , speed(spd)
-            , sprite()
+            , sprite(util::SfmlDefaults::instance().texture())
         {}
 
         bool is_alive;

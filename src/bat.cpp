@@ -14,6 +14,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -57,8 +58,7 @@ namespace halloween
                 pathStr += std::to_string(textureIndex);
                 pathStr += ".png";
 
-                textureSet.flying.at(textureIndex).loadFromFile(pathStr);
-                textureSet.flying.at(textureIndex).setSmooth(true);
+                util::TextureLoader::load(textureSet.flying.at(textureIndex), pathStr, true);
             }
 
             const std::size_t dyingFrameCount{ 6 };
@@ -70,8 +70,7 @@ namespace halloween
                 pathStr += std::to_string(textureIndex);
                 pathStr += ".png";
 
-                textureSet.dying.at(textureIndex).loadFromFile(pathStr);
-                textureSet.dying.at(textureIndex).setSmooth(true);
+                util::TextureLoader::load(textureSet.dying.at(textureIndex), pathStr, true);
             }
         }
     }
@@ -93,17 +92,17 @@ namespace halloween
         // bats are always flying
         auto & textures = m_textures.at(bat.bat_index).flying;
         bat.texture_index = context.random.index(textures);
-        bat.sprite.setTexture(textures.at(bat.texture_index));
+        bat.sprite.setTexture(textures.at(bat.texture_index), true);
         bat.sprite.setScale({ 0.25f, 0.25f });
         util::setOriginToCenter(bat.sprite);
 
-        const float posX{ rect.left + (rect.width / 2.0f) };
-        const float posY{ util::bottom(rect) - (bat.sprite.getGlobalBounds().height * 0.5f) };
-        bat.sprite.setPosition(posX, posY);
+        const float posX{ rect.position.x + (rect.size.x / 2.0f) };
+        const float posY{ util::bottom(rect) - (bat.sprite.getGlobalBounds().size.y * 0.5f) };
+        bat.sprite.setPosition({ posX, posY });
 
         if (!bat.is_moving_left)
         {
-            bat.sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
+            bat.sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
         }
     }
 
@@ -134,22 +133,22 @@ namespace halloween
 
             if (bat.is_moving_left)
             {
-                bat.sprite.move(-stride, 0.0f);
+                bat.sprite.move({ -stride, 0.0f });
 
-                if (bat.sprite.getGlobalBounds().left < bat.rect.left)
+                if (bat.sprite.getGlobalBounds().position.x < bat.rect.position.x)
                 {
                     bat.is_moving_left = false;
-                    bat.sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
+                    bat.sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
                 }
             }
             else
             {
-                bat.sprite.move(stride, 0.0f);
+                bat.sprite.move({ stride, 0.0f });
 
                 if (util::right(bat.sprite.getGlobalBounds()) > util::right(bat.rect))
                 {
                     bat.is_moving_left = true;
-                    bat.sprite.scale(-1.0f, 1.0f); // sfml trick to horiz flip image
+                    bat.sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
                 }
             }
         }
@@ -171,7 +170,7 @@ namespace halloween
                 }
             }
 
-            anim.sprite.scale(0.975f, 0.975f);
+            anim.sprite.scale({ 0.975f, 0.975f });
 
             if (util::abs(anim.sprite.getScale().x) < 0.1f)
             {
@@ -196,7 +195,7 @@ namespace halloween
     {
         for (const Bat & bat : m_bats)
         {
-            if (context.layout.mapRegion().intersects(bat.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(bat.sprite.getGlobalBounds()))
             {
                 target.draw(bat.sprite, states);
             }
@@ -213,7 +212,7 @@ namespace halloween
         for (Bat & bat : m_bats)
         {
             bat.sprite.move(move);
-            bat.rect.left += move.x;
+            bat.rect.position.x += move.x;
         }
 
         for (BatDeathAnim & anim : m_deathAnims)
@@ -229,7 +228,7 @@ namespace halloween
             const sf::FloatRect batCollRect =
                 util::scaleRectInPlaceCopy(bat.sprite.getGlobalBounds(), { 0.45f, 0.7f });
 
-            if (batCollRect.intersects(avatarRect))
+            if (batCollRect.findIntersection(avatarRect))
             {
                 return true;
             }
@@ -243,7 +242,7 @@ namespace halloween
         bool wereAnyKilled = false;
         for (Bat & bat : m_bats)
         {
-            if (bat.sprite.getGlobalBounds().intersects(attackRect))
+            if (bat.sprite.getGlobalBounds().findIntersection(attackRect))
             {
                 bat.is_alive = false;
                 wereAnyKilled = true;

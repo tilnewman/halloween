@@ -12,6 +12,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -25,20 +26,17 @@ namespace halloween
         , m_saws()
     {
         // probably no more than a dozen in any given map
-        m_saws.reserve(100);
+        m_saws.reserve(16);
     }
 
     void Saws::setup(const Settings & settings)
     {
-        m_texture.loadFromFile((settings.media_path / "image" / "saw.png").string());
-        m_texture.setSmooth(true);
+        util::TextureLoader::load(m_texture, (settings.media_path / "image" / "saw.png"), true);
     }
 
     void Saws::add(Context &, const sf::FloatRect & region)
     {
-        Saw & saw = m_saws.emplace_back();
-
-        saw.sprite.setTexture(m_texture);
+        Saw & saw = m_saws.emplace_back(m_texture);
         saw.sprite.setScale(m_scale);
         util::setOriginToCenter(saw.sprite);
         saw.sprite.setPosition(util::center(region));
@@ -50,7 +48,7 @@ namespace halloween
     {
         for (Saw & saw : m_saws)
         {
-            saw.sprite.rotate(m_rotationSpeed * frameTimeSec);
+            saw.sprite.rotate(sf::degrees(m_rotationSpeed * frameTimeSec));
         }
     }
 
@@ -59,7 +57,7 @@ namespace halloween
     {
         for (const Saw & saw : m_saws)
         {
-            if (context.layout.mapRegion().intersects(saw.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(saw.sprite.getGlobalBounds()))
             {
                 target.draw(saw.sprite, states);
             }
@@ -83,7 +81,7 @@ namespace halloween
             const sf::FloatRect sawBounds = saw.sprite.getGlobalBounds();
             const sf::Vector2f sawCenterPos = util::center(sawBounds);
             const float distance = util::distance(avatarCenterPos, sawCenterPos);
-            if (distance < (sawBounds.width * 0.5f))
+            if (distance < (sawBounds.size.x * 0.5f))
             {
                 return true;
             }

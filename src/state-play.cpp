@@ -24,10 +24,13 @@
 #include "spiked-ball.hpp"
 #include "state-machine.hpp"
 
+#include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Window.hpp>
+
+#include <iostream>
 
 namespace halloween
 {
@@ -90,20 +93,23 @@ namespace halloween
             return true;
         }
 
-        if (event.type == sf::Event::KeyPressed)
+        if (const auto * keyPtr = event.getIf<sf::Event::KeyPressed>())
         {
-            if (event.key.code == sf::Keyboard::Space)
+            if (keyPtr->scancode == sf::Keyboard::Scancode::Space)
             {
                 context.state.setChangePending(State::Pause);
             }
-            else if (event.key.code == sf::Keyboard::S)
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::S)
             {
                 sf::Texture texture;
-                if (texture.create(context.window.getSize().x, context.window.getSize().y))
+                if (texture.resize(context.window.getSize()))
                 {
                     texture.update(context.window);
                     sf::Image image{ texture.copyToImage() };
-                    image.saveToFile("screenshot.png");
+                    if (!image.saveToFile("screenshot.png"))
+                    {
+                        std::cout << "Failed to save screenshot.png\n";
+                    }
                 }
             }
         }
@@ -125,8 +131,19 @@ namespace halloween
 
         for (const TileLayer & layer : context.level.tiles.layers)
         {
+            if (layer.visibleVerts.empty())
+            {
+                continue;
+            }
+
             states.texture = &context.media.tileTexture(layer.image).texture;
-            target.draw(&layer.visibleVerts[0], layer.visibleVerts.size(), sf::Quads, states);
+
+            target.draw(
+                &layer.visibleVerts[0],
+                layer.visibleVerts.size(),
+                sf::PrimitiveType::Triangles,
+                states);
+            
             states.texture = nullptr;
         }
 

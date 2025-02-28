@@ -22,9 +22,9 @@ namespace halloween
 
     struct SpikedBall
     {
-        SpikedBall()
+        SpikedBall(const sf::Texture & texture)
             : is_horizontal(false) // anything works here
-            , sprite()
+            , sprite(texture)
             , slider()
         {}
 

@@ -18,12 +18,12 @@ namespace util
         const Random & random, const sf::FloatRect & region, const std::pair<float, float> & speed)
     {
         m_horizDrifter = SliderDrift<float, float>(
-            random, std::make_pair(region.left, util::right(region)), speed);
+            random, std::make_pair(region.position.x, util::right(region)), speed);
 
         m_horizDrifter.restart(random);
 
         m_vertDrifter = SliderDrift<float, float>(
-            random, std::make_pair(region.top, util::bottom(region)), speed);
+            random, std::make_pair(region.position.y, util::bottom(region)), speed);
 
         m_vertDrifter.restart(random);
     }

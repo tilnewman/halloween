@@ -10,6 +10,7 @@
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
 
@@ -27,7 +28,7 @@ namespace halloween
         , m_timePerScoreUpdate(0.1f)
         , m_lives(0)
         , m_dartCount(0)
-        , m_text()
+        , m_text(util::SfmlDefaults::instance().font())
         , m_region()
         , m_bgVerts()
     {}
@@ -74,7 +75,7 @@ namespace halloween
     {
         m_region = context.layout.infoRegion();
 
-        util::appendQuadVerts(m_region, m_bgVerts, sf::Color(255, 255, 255, 8));
+        util::appendTriangleVerts(m_region, m_bgVerts, sf::Color(255, 255, 255, 8));
 
         m_text.setFont(context.media.font);
         m_text.setCharacterSize(99);
@@ -86,7 +87,7 @@ namespace halloween
 
     void InfoRegion::draw(sf::RenderTarget & target, sf::RenderStates states) const
     {
-        // target.draw(&m_bgVerts[0], m_bgVerts.size(), sf::Quads, states);
+        // target.draw(&m_bgVerts[0], m_bgVerts.size(), sf::PrimitiveType::Triangles, states);
         target.draw(m_text, states);
     }
 

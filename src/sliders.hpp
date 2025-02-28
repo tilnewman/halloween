@@ -6,6 +6,7 @@
 #include "random.hpp"
 #include "util.hpp"
 
+#include <numbers>
 #include <utility>
 
 namespace util
@@ -31,63 +32,63 @@ namespace util
         static_assert(std::is_floating_point_v<T>);
 
       public:
-        SliderRatio()
-            : isMoving_(false)
-            , speed_(0.0)
-            , value_(0.0)
-            , radians_(0.0)
+        constexpr SliderRatio() noexcept
+            : m_isMoving{ false }
+            , m_speed{ 0 }
+            , m_value{ 0 }
+            , m_radians{ 0 }
         {}
 
-        explicit SliderRatio(const T speed, const T startAt = T(0))
-            : isMoving_(true)
-            , speed_(0.0)
-            , value_(0.0)
-            , radians_(0.0)
+        explicit constexpr SliderRatio(const T t_speed, const T t_startAt = T(0)) noexcept
+            : m_isMoving{ true }
+            , m_speed{ 0 }
+            , m_value{ 0 }
+            , m_radians{ 0 }
         {
-            restart(speed, startAt);
+            restart(t_speed, t_startAt);
         }
 
-        inline T radians() const { return radians_; }
-        inline T value() const { return value_; }
-        inline T speed() const { return speed_; }
-        inline void speed(const T newSpeed) { speed_ = newSpeed; }
-        inline bool isMoving() const { return isMoving_; }
-        inline void stop() { isMoving_ = false; }
+        [[nodiscard]] inline constexpr T radians() const noexcept { return m_radians; }
+        [[nodiscard]] inline constexpr T value() const noexcept { return m_value; }
+        [[nodiscard]] inline constexpr T speed() const noexcept { return m_speed; }
+        inline constexpr void speed(const T t_newSpeed) noexcept { m_speed = t_newSpeed; }
+        inline constexpr bool isMoving() const noexcept { return m_isMoving; }
+        inline constexpr void stop() noexcept { m_isMoving = false; }
 
-        void restart(const T speed, const T startAt = T(0))
+        constexpr void restart(const T t_speed, const T t_startAt = T(0))
         {
-            speed_ = speed;
-            value_ = std::clamp(startAt, T(0), T(1));
-            radians_ = (radiansFrom_ + (T(3.1415926) * value_));
+            m_speed   = t_speed;
+            m_value   = std::clamp(t_startAt, T(0), T(1));
+            m_radians = (m_radiansFrom + (std::numbers::pi_v<T> * m_value));
             update(T(0));
         }
 
-        T update(const T adjustment)
+        constexpr T update(const T t_adjustment) noexcept
         {
-            if (isMoving_)
+            if (m_isMoving)
             {
-                radians_ += (adjustment * speed_);
-                value_ = static_cast<T>((T(2.0) - (sin(radians_) + T(1))) * T(0.5));
-                value_ = std::clamp(value_, T(0), T(1));
+                m_radians += (t_adjustment * m_speed);
+                m_value = static_cast<T>((T(2.0) - (sin(m_radians) + T(1))) * T(0.5));
+                m_value = std::clamp(m_value, T(0), T(1));
 
-                if ((radians_ > radiansTo_) || isRealClose(radians_, radiansTo_))
+                if ((m_radians > m_radiansTo) || isRealClose(m_radians, m_radiansTo))
                 {
-                    radians_ = radiansTo_;
-                    value_ = T(1);
+                    m_radians = m_radiansTo;
+                    m_value   = T(1);
                     stop();
                 }
             }
 
-            return value_;
+            return m_value;
         }
 
       private:
-        bool isMoving_;
-        T speed_;
-        T value_;
-        T radians_;
-        inline static constexpr T radiansFrom_{ T(3.1415926) * T(0.5) };
-        inline static constexpr T radiansTo_{ T(3.1415926) * T(1.5) };
+        bool m_isMoving;
+        T m_speed;
+        T m_value;
+        T m_radians;
+        inline static constexpr T m_radiansFrom{ std::numbers::pi_v<T> * T(0.5) };
+        inline static constexpr T m_radiansTo{ std::numbers::pi_v<T> * T(1.5) };
     };
 
     //
@@ -99,54 +100,64 @@ namespace util
         static_assert(std::is_floating_point_v<Math_t>);
 
       public:
-        SliderFromTo()
-            : from_(Value_t(0))
-            , to_(Value_t(0))
-            , max_(Value_t(0))
-            , min_(Value_t(0))
-            , diff_(Value_t(0))
-            , speed_(Math_t(0))
-            , value_(Value_t(0))
-            , slider_()
+        constexpr SliderFromTo() noexcept
+            : m_from{ 0 }
+            , m_to{ 0 }
+            , m_max{ 0 }
+            , m_min{ 0 }
+            , m_diff{ 0 }
+            , m_speed{ 0 }
+            , m_value{ 0 }
+            , m_slider()
         {}
 
-        explicit SliderFromTo(const Value_t from, const Value_t to, const Math_t speed)
-            : from_(from)
-            , to_(to)
-            , max_(util::max(from, to))
-            , min_(util::min(from, to))
-            , diff_(to - from)
-            , speed_(speed)
-            , value_(from)
-            , slider_(speed_)
+        explicit constexpr SliderFromTo(
+            const Value_t t_from, const Value_t t_to, const Math_t t_speed) noexcept
+            : m_from{ t_from }
+            , m_to{ t_to }
+            , m_max{ util::max(t_from, t_to) }
+            , m_min{ util::min(t_from, t_to) }
+            , m_diff{ t_to - t_from }
+            , m_speed{ t_speed }
+            , m_value{ t_from }
+            , m_slider{ m_speed }
         {}
 
-        inline Math_t radians() const { return slider_.radians(); }
-        inline Value_t from() const { return from_; }
-        inline Value_t to() const { return to_; }
-        inline Value_t value() const { return value_; }
-        inline Math_t speed() const { return speed_; }
-        inline bool isMoving() const { return slider_.isMoving(); }
-        inline void stop() { slider_.stop(); }
-        inline Math_t ratio() const { return slider_.value(); }
-
-        Value_t update(const Math_t adjustment)
+        [[nodiscard]] inline constexpr Math_t radians() const noexcept
         {
-            const Math_t ratio = slider_.update(adjustment);
-            value_ = (from_ + static_cast<Value_t>(static_cast<Math_t>(diff_ * ratio)));
-            value_ = std::clamp(value_, min_, max_);
-            return value_;
+            return m_slider.radians();
+        }
+
+        [[nodiscard]] inline constexpr Value_t from() const noexcept { return m_from; }
+        [[nodiscard]] inline constexpr Value_t to() const noexcept { return m_to; }
+        [[nodiscard]] inline constexpr Value_t value() const noexcept { return m_value; }
+        [[nodiscard]] inline constexpr Math_t speed() const noexcept { return m_speed; }
+
+        [[nodiscard]] inline constexpr bool isMoving() const noexcept
+        {
+            return m_slider.isMoving();
+        }
+
+        inline constexpr void stop() noexcept { m_slider.stop(); }
+        [[nodiscard]] inline constexpr Math_t ratio() const noexcept { return m_slider.value(); }
+
+        constexpr Value_t update(const Math_t t_adjustment) noexcept
+        {
+            const Math_t ratio = m_slider.update(t_adjustment);
+            m_value = (m_from + static_cast<Value_t>(static_cast<Math_t>(m_diff * ratio)));
+            m_value = std::clamp(m_value, m_min, m_max);
+            return m_value;
         }
 
       private:
-        Value_t from_;
-        Value_t to_;
-        Value_t max_;
-        Value_t min_;
-        Value_t diff_;
-        Math_t speed_;
-        Value_t value_;
-        SliderRatio<Math_t> slider_;
+        Value_t m_from;
+        Value_t m_to;
+        Value_t m_max;
+        Value_t m_min;
+        Value_t m_diff;
+        Math_t m_speed;
+        Value_t m_value;
+        SliderRatio<Math_t> m_slider;
     };
 
     //
@@ -156,82 +167,104 @@ namespace util
     class SliderOscillator
     {
       public:
-        SliderOscillator()
-            : from_(Value_t(0))
-            , to_(Value_t(0))
-            , slider_()
+        constexpr SliderOscillator() noexcept
+            : m_from{ 0 }
+            , m_to{ 0 }
+            , m_slider{}
         {}
 
         // Use this constructor to start Value() at from.
-        explicit SliderOscillator(const Value_t from, const Value_t to, const Math_t speed)
-            : from_(Value_t(0))
-            , to_(Value_t(0))
-            , slider_()
+        constexpr SliderOscillator(
+            const Value_t t_from, const Value_t t_to, const Math_t t_speed) noexcept
+            : m_from{ 0 }
+            , m_to{ 0 }
+            , m_slider{}
         {
-            restart(from, to, speed, from);
+            restart(t_from, t_to, t_speed, t_from);
         }
 
         // Use this constructor if you want to specify the starting value.
-        explicit SliderOscillator(
-            const Value_t from, const Value_t to, const Math_t speed, const Value_t startAt)
-            : from_(Value_t(0))
-            , to_(Value_t(0))
-            , slider_()
+        constexpr SliderOscillator(
+            const Value_t t_from,
+            const Value_t t_to,
+            const Math_t t_speed,
+            const Value_t t_startAt) noexcept
+            : m_from{ 0 }
+            , m_to{ 0 }
+            , m_slider{}
         {
-            restart(from, to, speed, startAt);
+            restart(t_from, t_to, t_speed, t_startAt);
         }
 
-        inline Math_t radians() const { return slider_.radians(); }
-        inline Value_t from() const { return from_; }
-        inline Value_t to() const { return to_; }
-        inline Math_t speed() const { return slider_.speed(); }
-        inline void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
-        inline Value_t value() const { return slider_.value(); }
-        inline bool isMoving() const { return slider_.isMoving(); }
-        inline void stop() { slider_.stop(); }
-
-        Value_t update(const Math_t adjustment)
+        [[nodiscard]] inline constexpr Math_t radians() const noexcept
         {
-            if (slider_.isMoving())
-            {
-                slider_.update(adjustment);
+            return m_slider.radians();
+        }
 
-                if (!slider_.isMoving())
+        [[nodiscard]] inline constexpr Value_t from() const noexcept { return m_from; }
+        [[nodiscard]] inline constexpr Value_t to() const noexcept { return m_to; }
+        [[nodiscard]] inline constexpr Math_t speed() const noexcept { return m_slider.speed(); }
+
+        inline constexpr void speed(const Math_t t_newSpeed) noexcept
+        {
+            m_slider.speed(t_newSpeed);
+        }
+
+        [[nodiscard]] inline constexpr Value_t value() const noexcept { return m_slider.value(); }
+
+        [[nodiscard]] inline constexpr bool isMoving() const noexcept
+        {
+            return m_slider.isMoving();
+        }
+
+        inline constexpr void stop() noexcept { m_slider.stop(); }
+
+        constexpr Value_t update(const Math_t t_adjustment) noexcept
+        {
+            if (m_slider.isMoving())
+            {
+                m_slider.update(t_adjustment);
+
+                if (!m_slider.isMoving())
                 {
-                    if (isRealClose(slider_.to(), to_))
+                    if (isRealClose(m_slider.to(), m_to))
                     {
-                        slider_ = SliderFromTo<Value_t, Math_t>(to_, from_, speed());
+                        m_slider = SliderFromTo<Value_t, Math_t>(m_to, m_from, speed());
                     }
                     else
                     {
-                        slider_ = SliderFromTo<Value_t, Math_t>(from_, to_, speed());
+                        m_slider = SliderFromTo<Value_t, Math_t>(m_from, m_to, speed());
                     }
                 }
             }
 
-            return slider_.value();
+            return m_slider.value();
         }
 
-        void
-            restart(const Value_t from, const Value_t to, const Math_t speed, const Value_t startAt)
+        constexpr void restart(
+            const Value_t t_from,
+            const Value_t t_to,
+            const Math_t t_speed,
+            const Value_t t_startAt) noexcept
         {
-            from_ = from;
-            to_ = to;
+            m_from = t_from;
+            m_to   = t_to;
 
-            // If StartAtClamp() set value_ to to then start reversed
-            if (isRealClose(startAt, to))
+            // If StartAtClamp() set m_value to t_to then start reversed
+            if (isRealClose(t_startAt, t_to))
             {
-                slider_ = SliderFromTo<Value_t, Math_t>(to_, from_, speed);
+                m_slider = SliderFromTo<Value_t, Math_t>(m_to, m_from, t_speed);
             }
             else
             {
-                slider_ = SliderFromTo<Value_t, Math_t>(startAt, to, speed);
+                m_slider = SliderFromTo<Value_t, Math_t>(t_startAt, t_to, t_speed);
             }
         }
 
-        Value_t from_;
-        Value_t to_;
-        SliderFromTo<Value_t, Math_t> slider_;
+      private:
+        Value_t m_from;
+        Value_t m_to;
+        SliderFromTo<Value_t, Math_t> m_slider;
     };
 
     //
@@ -241,57 +274,66 @@ namespace util
     class SliderDrift
     {
       public:
-        SliderDrift()
-            : valueRange_(Value_t(0), Value_t(0))
-            , speedRange_(Math_t(0), Math_t(0))
-            , slider_()
+        constexpr SliderDrift()
+            : m_valueRange{ 0, 0 }
+            , m_speedRange{ 0, 0 }
+            , m_slider{}
         {}
 
         SliderDrift(
-            const Random & random,
-            const std::pair<Value_t, Value_t> & valueRange,
-            const std::pair<Math_t, Math_t> & speedRange)
-            : valueRange_(valueRange)
-            , speedRange_(speedRange)
-            , slider_(
-                  random.fromTo(valueRange.first, valueRange.second),
-                  random.fromTo(valueRange.first, valueRange.second),
-                  random.fromTo(speedRange_.first, speedRange_.second))
+            const Random & t_random,
+            const std::pair<Value_t, Value_t> & t_valueRange,
+            const std::pair<Math_t, Math_t> & t_speedRange)
+            : m_valueRange{ t_valueRange }
+            , m_speedRange{ t_speedRange }
+            , m_slider{ t_random.fromTo(t_valueRange.first, t_valueRange.second),
+                        t_random.fromTo(t_valueRange.first, t_valueRange.second),
+                        t_random.fromTo(m_speedRange.first, m_speedRange.second) }
         {}
 
-        void update(const Random & random, const Math_t adjustment)
+        void update(const Random & t_random, const Math_t t_adjustment)
         {
-            slider_.update(adjustment);
+            m_slider.update(t_adjustment);
 
-            if (!slider_.isMoving())
+            if (!m_slider.isMoving())
             {
-                restart(random);
+                restart(t_random);
             }
         }
 
-        inline Math_t speed() const { return slider_.speed(); }
-        inline void speed(const Math_t newSpeed) { slider_.speed(newSpeed); }
-        inline Value_t value() const { return slider_.value(); }
-        inline bool isMoving() const { return slider_.isMoving(); }
-        inline void stop() { slider_.stop(); }
+        [[nodiscard]] inline constexpr Math_t speed() const noexcept { return m_slider.speed(); }
 
-        inline float ratio() const
+        inline constexpr void speed(const Math_t t_newSpeed) noexcept
         {
-            return util::mapToRatio(slider_.value(), valueRange_.first, valueRange_.second);
+            m_slider.speed(t_newSpeed);
         }
 
-        void restart(const Random & random)
+        [[nodiscard]] inline constexpr Value_t value() const noexcept { return m_slider.value(); }
+
+        [[nodiscard]] inline constexpr bool isMoving() const noexcept
         {
-            slider_ = util::SliderFromTo<Math_t>(
-                slider_.value(),
-                random.fromTo(valueRange_.first, valueRange_.second),
-                random.fromTo(speedRange_.first, speedRange_.second));
+            return m_slider.isMoving();
+        }
+
+        inline constexpr void stop() noexcept { m_slider.stop(); }
+
+        [[nodiscard]] inline constexpr float ratio() const noexcept
+        {
+            return util::mapToRatio(m_slider.value(), m_valueRange.first, m_valueRange.second);
+        }
+
+        void restart(const Random & t_random)
+        {
+            m_slider = util::SliderFromTo<Math_t>(
+                m_slider.value(),
+                t_random.fromTo(m_valueRange.first, m_valueRange.second),
+                t_random.fromTo(m_speedRange.first, m_speedRange.second));
         }
 
       private:
-        std::pair<Value_t, Value_t> valueRange_;
-        std::pair<Math_t, Math_t> speedRange_;
-        util::SliderFromTo<Math_t> slider_;
+        std::pair<Value_t, Value_t> m_valueRange;
+        std::pair<Math_t, Math_t> m_speedRange;
+        util::SliderFromTo<Math_t> m_slider;
     };
 
 } // namespace util

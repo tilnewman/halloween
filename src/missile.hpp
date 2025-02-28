@@ -19,10 +19,10 @@ namespace halloween
 
     struct Missile
     {
-        Missile(const bool isMovingRight)
+        Missile(const bool isMovingRight, const sf::Texture & texture)
             : is_alive(true)
             , is_moving_right(isMovingRight)
-            , sprite()
+            , sprite(texture)
         {}
 
         bool is_alive;

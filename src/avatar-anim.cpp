@@ -7,6 +7,7 @@
 
 #include "check-macros.hpp"
 #include "settings.hpp"
+#include "texture-loader.hpp"
 
 #include "util.hpp"
 
@@ -39,8 +40,7 @@ namespace halloween
             const std::string filePath = (mediaPath / filename).string();
 
             sf::Texture & texture = m_textures.emplace_back();
-            texture.loadFromFile(filePath);
-            texture.setSmooth(true);
+            util::TextureLoader::load(texture, filePath, true);
         }
 
         m_frameCount = frameCount;

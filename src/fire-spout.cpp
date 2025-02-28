@@ -12,6 +12,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -32,8 +33,8 @@ namespace halloween
 
     void FireSpouts::setup(const Settings & settings)
     {
-        m_spoutTexture.loadFromFile((settings.media_path / "image" / "fire-spouts.png").string());
-        m_spoutTexture.setSmooth(true);
+        util::TextureLoader::load(
+            m_spoutTexture, (settings.media_path / "image/fire-spouts.png"), true);
 
         const std::size_t fireTextureCount{ 14 };
         m_fireTextures.reserve(fireTextureCount);
@@ -44,33 +45,28 @@ namespace halloween
             filePath += ".png";
 
             sf::Texture & texture = m_fireTextures.emplace_back();
-            texture.loadFromFile(filePath);
-            texture.setSmooth(true);
+            util::TextureLoader::load(texture, filePath, true);
         }
     }
 
     void FireSpouts::add(Context & context, const sf::FloatRect & region)
     {
-        FireSpout & spout = m_fireSpouts.emplace_back();
+        FireSpout & spout = m_fireSpouts.emplace_back(m_spoutTexture, m_fireTextures.at(0));
 
-        spout.spout_sprite.setTexture(m_spoutTexture);
-        spout.spout_sprite.setTextureRect({ 0, 10, 35, 22 });
-        spout.spout_sprite.setScale(2.0f, 2.0f);
+        spout.spout_sprite.setTextureRect({ { 0, 10 }, { 35, 22 } });
+        spout.spout_sprite.setScale({ 2.0f, 2.0f });
 
         const sf::FloatRect spoutBounds = spout.spout_sprite.getGlobalBounds();
 
-        spout.spout_sprite.setPosition(
-            (util::center(region).x - (spoutBounds.width * 0.5f)),
-            (util::bottom(region) - spoutBounds.height));
+        spout.spout_sprite.setPosition({ (util::center(region).x - (spoutBounds.size.x * 0.5f)),
+                                         (util::bottom(region) - spoutBounds.size.y) });
 
-        spout.fire_sprite.setTexture(m_fireTextures.at(0));
-        spout.fire_sprite.setScale(2.0f, 2.0f);
+        spout.fire_sprite.setScale({ 2.0f, 2.0f });
 
         const sf::FloatRect fireBounds = spout.fire_sprite.getGlobalBounds();
 
-        spout.fire_sprite.setPosition(
-            (util::center(spoutBounds).x - (fireBounds.width * 0.5f)),
-            (spout.spout_sprite.getPosition().y - fireBounds.height));
+        spout.fire_sprite.setPosition({ (util::center(spoutBounds).x - (fireBounds.size.x * 0.5f)),
+                                        (spout.spout_sprite.getPosition().y - fireBounds.size.y) });
 
         spout.is_spurting = false;
         spout.texture_index = 0;
@@ -109,9 +105,9 @@ namespace halloween
                 const sf::FloatRect fireBounds = spout.fire_sprite.getGlobalBounds();
 
                 spout.fire_sprite.setPosition(
-                    (util::center(spout.spout_sprite.getGlobalBounds()).x -
-                     (fireBounds.width * 0.5f)),
-                    (spout.spout_sprite.getPosition().y - fireBounds.height));
+                    { (util::center(spout.spout_sprite.getGlobalBounds()).x -
+                       (fireBounds.size.x * 0.5f)),
+                      (spout.spout_sprite.getPosition().y - fireBounds.size.y) });
             }
             else
             {
@@ -136,7 +132,8 @@ namespace halloween
 
             if (spout.is_spurting)
             {
-                if (context.layout.mapRegion().intersects(spout.fire_sprite.getGlobalBounds()))
+                if (context.layout.mapRegion().findIntersection(
+                        spout.fire_sprite.getGlobalBounds()))
                 {
                     target.draw(spout.fire_sprite, states);
                 }
@@ -163,7 +160,7 @@ namespace halloween
             }
 
             const sf::FloatRect spoutRect = spout.fire_sprite.getGlobalBounds();
-            if (avatarRect.intersects(spoutRect))
+            if (avatarRect.findIntersection(spoutRect))
             {
                 return true;
             }

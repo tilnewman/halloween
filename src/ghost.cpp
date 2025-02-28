@@ -13,6 +13,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -42,13 +43,14 @@ namespace halloween
 
     void Ghosts::setup(const Settings & settings)
     {
-        m_texture1.loadFromFile((settings.media_path / "image/ghost" / "ghost-1.png").string());
-        m_texture2.loadFromFile((settings.media_path / "image/ghost" / "ghost-2.png").string());
-        m_texture3.loadFromFile((settings.media_path / "image/ghost" / "ghost-3.png").string());
+        util::TextureLoader::load(
+            m_texture1, (settings.media_path / "image/ghost/ghost-1.png"), true);
 
-        m_texture1.setSmooth(true);
-        m_texture2.setSmooth(true);
-        m_texture3.setSmooth(true);
+        util::TextureLoader::load(
+            m_texture2, (settings.media_path / "image/ghost/ghost-2.png"), true);
+        
+        util::TextureLoader::load(
+            m_texture3, (settings.media_path / "image/ghost/ghost-3.png"), true);
 
         M_CHECK(
             (m_spawnMaxTimeSec > m_spawnMinTimeSec),
@@ -92,15 +94,15 @@ namespace halloween
             const int selection = context.random.fromTo(1, 3);
             if (selection == 1)
             {
-                newGhost.sprite.setTexture(m_texture1);
+                newGhost.sprite.setTexture(m_texture1, true);
             }
             else if (selection == 2)
             {
-                newGhost.sprite.setTexture(m_texture2);
+                newGhost.sprite.setTexture(m_texture2, true);
             }
             else
             {
-                newGhost.sprite.setTexture(m_texture3);
+                newGhost.sprite.setTexture(m_texture3, true);
             }
 
             newGhost.sprite.setScale(context.settings.ghost_scale);
@@ -111,9 +113,9 @@ namespace halloween
 
         for (Ghost & ghost : m_ghosts)
         {
-            ghost.sprite.move(0.0f, -(ghost.speed * frameTimeSec));
+            ghost.sprite.move({ 0.0f, -(ghost.speed * frameTimeSec) });
 
-            sf::Uint8 alpha = ghost.sprite.getColor().a;
+            std::uint8_t alpha = ghost.sprite.getColor().a;
 
             if (ghost.is_fading_in)
             {
@@ -156,7 +158,7 @@ namespace halloween
 
         for (const Ghost & ghost : m_ghosts)
         {
-            if (context.layout.mapRegion().intersects(ghost.sprite.getGlobalBounds()))
+            if (context.layout.mapRegion().findIntersection(ghost.sprite.getGlobalBounds()))
             {
                 target.draw(ghost.sprite, states);
             }

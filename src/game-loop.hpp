@@ -51,6 +51,7 @@ namespace halloween
 
       private:
         void setup();
+        void teardown();
         void frameLoop();
         void handleSleepUntilEndOfFrame(const float elapsedTimeSec);
         void handlePerSecondTasks();
@@ -69,9 +70,9 @@ namespace halloween
         LevelFileLoader m_loader;
         Resources m_media;
         ScreenRegions m_layout;
-        Avatar m_avatar;
-        PauseScreen m_pauseScreen;
-        StateMachine m_stateMachine;
+        std::unique_ptr<Avatar> m_avatarUPtr;
+        std::unique_ptr<PauseScreen> m_pauseScreenUPtr;
+        std::unique_ptr<StateMachine> m_stateMachineUPtr;
         Level m_level;
         Missiles m_missiles;
         Coins m_coins;
@@ -81,17 +82,17 @@ namespace halloween
         Saws m_saws;
         Slimes m_slimes;
         Ghosts m_ghosts;
-        InfoRegion m_infoRegion;
+        std::unique_ptr<InfoRegion> m_infoRegionUPtr;
         ObjectManagerList m_managers;
         LevelStats m_stats;
-        MushroomBoss m_boss;
+        std::unique_ptr<MushroomBoss> m_bossUPtr;
 
         std::vector<std::size_t> m_delayLoopCounts;
         std::vector<std::size_t> m_framesPerSecond;
         sf::Clock m_perSecondClock;
         std::unique_ptr<util::GraphDisplay<std::size_t>> m_graphDisplayUPtr;
 
-        Context m_context;
+        std::unique_ptr<Context> m_contextUPtr;
     };
 } // namespace halloween
 

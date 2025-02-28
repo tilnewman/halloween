@@ -12,6 +12,7 @@
 #include "level.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
 
@@ -30,7 +31,7 @@ namespace halloween
         , m_hitAnim()
         , m_shakeAnim()
         , m_deathAnim()
-        , m_sprite()
+        , m_sprite(util::SfmlDefaults::instance().texture())
         , m_region()
         , m_isThereABossOnThisLevel(false)
         , m_hasFightBegun(false)
@@ -48,7 +49,7 @@ namespace halloween
         m_deathAnim.setup((settings.media_path / "image/mushroom"), "death", 23, 0.05f, false);
 
         m_sprite.setTexture(m_idleAnim.texture(), true);
-        m_sprite.scale(1.0f, 1.0f);
+        m_sprite.scale({ 1.0f, 1.0f });
 
         m_hitPointsMax = settings.boss_hit_points;
     }
@@ -59,9 +60,8 @@ namespace halloween
         m_isThereABossOnThisLevel = true;
         m_hitPoints = m_hitPointsMax;
 
-        m_sprite.setPosition(
-            (util::right(m_region) - m_sprite.getGlobalBounds().width),
-            (util::bottom(m_region) - m_sprite.getGlobalBounds().height));
+        m_sprite.setPosition({ (util::right(m_region) - m_sprite.getGlobalBounds().size.x),
+                               (util::bottom(m_region) - m_sprite.getGlobalBounds().size.y) });
     }
 
     void MushroomBoss::clear()
@@ -131,7 +131,7 @@ namespace halloween
         // move
         if (BossState::Advance == m_state)
         {
-            m_sprite.move((-20.0f * frameTimeSec), 0.0f);
+            m_sprite.move({ (-20.0f * frameTimeSec), 0.0f });
             keepInRegion();
         }
     }
@@ -144,7 +144,7 @@ namespace halloween
             return;
         }
 
-        if (context.layout.mapRegion().intersects(m_sprite.getGlobalBounds()))
+        if (context.layout.mapRegion().findIntersection(m_sprite.getGlobalBounds()))
         {
             target.draw(m_sprite, states);
         }
@@ -158,7 +158,7 @@ namespace halloween
         }
 
         m_sprite.move(move);
-        m_region.left += move.x;
+        m_region.position.x += move.x;
     }
 
     void MushroomBoss::collideWithAvatar(Context & context, const sf::FloatRect & avatarRect)
@@ -169,7 +169,7 @@ namespace halloween
             return;
         }
 
-        if (avatarRect.intersects(m_region))
+        if (avatarRect.findIntersection(m_region))
         {
             m_hasFightBegun = true;
             setState(BossState::Shake);
@@ -207,25 +207,25 @@ namespace halloween
         const sf::FloatRect globalBounds{ m_sprite.getGlobalBounds() };
 
         rects.middle = globalBounds;
-        rects.middle.left += (globalBounds.width * 0.2f);
-        rects.middle.width -= (globalBounds.width * 0.4f);
-        rects.middle.top += (globalBounds.height * 0.475f);
-        rects.middle.height *= 0.25f;
-        rects.middle.left *= 1.025f;
+        rects.middle.position.x += (globalBounds.size.x * 0.2f);
+        rects.middle.size.x -= (globalBounds.size.x * 0.4f);
+        rects.middle.position.y += (globalBounds.size.y * 0.475f);
+        rects.middle.size.y *= 0.25f;
+        rects.middle.position.x *= 1.025f;
 
         rects.top = rects.middle;
-        rects.top.height = (rects.middle.height * 0.35f);
-        rects.top.top = (rects.middle.top - rects.top.height);
-        rects.top.width *= 0.75f;
-        rects.top.left = (util::center(rects.middle).x - (rects.top.width * 0.5f));
+        rects.top.size.y = (rects.middle.size.y * 0.35f);
+        rects.top.position.y = (rects.middle.position.y - rects.top.size.y);
+        rects.top.size.x *= 0.75f;
+        rects.top.position.x = (util::center(rects.middle).x - (rects.top.size.x * 0.5f));
 
         rects.bottom = globalBounds;
-        rects.bottom.left += (globalBounds.width * 0.333f);
-        rects.bottom.width -= (globalBounds.width * 0.666f);
-        rects.bottom.top = util::bottom(rects.middle);
-        rects.bottom.height = (util::bottom(globalBounds) - rects.bottom.top);
-        rects.bottom.left += (globalBounds.width * 0.08f);
-        rects.bottom.width *= 0.8f;
+        rects.bottom.position.x += (globalBounds.size.x * 0.333f);
+        rects.bottom.size.x -= (globalBounds.size.x * 0.666f);
+        rects.bottom.position.y = util::bottom(rects.middle);
+        rects.bottom.size.y = (util::bottom(globalBounds) - rects.bottom.position.y);
+        rects.bottom.position.x += (globalBounds.size.x * 0.08f);
+        rects.bottom.size.x *= 0.8f;
 
         if (BossState::Jump == m_state)
         {
@@ -252,10 +252,10 @@ namespace halloween
             }
             // clang-format on
 
-            const float heightAdj{ (heightAdjRatio * globalBounds.height) };
-            rects.top.top -= heightAdj;
-            rects.middle.top -= heightAdj;
-            rects.bottom.top -= heightAdj;
+            const float heightAdj{ (heightAdjRatio * globalBounds.size.y) };
+            rects.top.position.y -= heightAdj;
+            rects.middle.position.y -= heightAdj;
+            rects.bottom.position.y -= heightAdj;
         }
 
         return rects;
@@ -271,8 +271,8 @@ namespace halloween
         const BossCollRects bossRects{ collisionRects() };
 
         return (
-            rect.intersects(bossRects.top) || rect.intersects(bossRects.middle) ||
-            rect.intersects(bossRects.bottom));
+            rect.findIntersection(bossRects.top) || rect.findIntersection(bossRects.middle) ||
+            rect.findIntersection(bossRects.bottom));
     }
 
     bool MushroomBoss::attack(Context & context, const sf::FloatRect & attackRect)
@@ -290,7 +290,7 @@ namespace halloween
         setState(BossState::Hit);
         context.audio.play("mushroom-hit");
 
-        m_sprite.move(15.0f, 0.0f);
+        m_sprite.move({ 15.0f, 0.0f });
         keepInRegion();
 
         return true;
@@ -300,13 +300,13 @@ namespace halloween
     {
         const sf::FloatRect bounds{ m_sprite.getGlobalBounds() };
 
-        if (bounds.left < m_region.left)
+        if (bounds.position.x < m_region.position.x)
         {
-            m_sprite.move((m_region.left - bounds.left), 0.0f);
+            m_sprite.move({ (m_region.position.x - bounds.position.x), 0.0f });
         }
         else if (util::right(bounds) > util::right(m_region))
         {
-            m_sprite.move(-(util::right(bounds) - util::right(m_region)), 0.0f);
+            m_sprite.move({ -(util::right(bounds) - util::right(m_region)), 0.0f });
         }
     }
 
@@ -329,8 +329,8 @@ namespace halloween
     {
         const float mutliplier{ (isHitQuery) ? 1.0f : 2.0f };
         const sf::FloatRect playerBounds{ context.avatar.bounds() };
-        const float distance{ collisionRects().middle.left - util::right(playerBounds) };
-        return (distance < (playerBounds.width * mutliplier));
+        const float distance{ collisionRects().middle.position.x - util::right(playerBounds) };
+        return (distance < (playerBounds.size.x * mutliplier));
     }
 
 } // namespace halloween

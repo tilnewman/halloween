@@ -16,6 +16,7 @@
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 #include <algorithm>
 
@@ -39,21 +40,17 @@ namespace halloween
         m_velocity.x = settings.dart_speed;
         m_scale = settings.dart_scale;
 
-        const std::string path = (settings.media_path / "image" / "kunai.png").string();
-        m_texture.loadFromFile(path);
-        m_texture.setSmooth(true);
+        util::TextureLoader::load(m_texture, (settings.media_path / "image" / "kunai.png"), true);
     }
 
     void Missiles::add(const sf::Vector2f & position, const bool isMovingRight)
     {
-        Missile & dart = m_missiles.emplace_back(isMovingRight);
-
-        dart.sprite.setTexture(m_texture);
+        Missile & dart = m_missiles.emplace_back(isMovingRight, m_texture);
         dart.sprite.setScale(m_scale);
 
         if (!dart.is_moving_right)
         {
-            dart.sprite.scale(-1.0f, 1.0f);
+            dart.sprite.scale({ -1.0f, 1.0f });
         }
 
         util::setOriginToCenter(dart.sprite);
@@ -76,7 +73,7 @@ namespace halloween
 
             const sf::FloatRect missileRect = missile.sprite.getGlobalBounds();
 
-            missile.is_alive = context.layout.mapRegion().intersects(missileRect);
+            missile.is_alive = context.layout.mapRegion().findIntersection(missileRect).has_value();
             if (!missile.is_alive)
             {
                 continue;
@@ -99,7 +96,7 @@ namespace halloween
 
             for (const sf::FloatRect & collRect : context.level.walk_collisions)
             {
-                if (missileRect.intersects(collRect))
+                if (missileRect.findIntersection(collRect))
                 {
                     wereAnyKilled = true;
                     missile.is_alive = false;

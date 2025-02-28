@@ -11,6 +11,7 @@
 #include "music-player.hpp"
 #include "resources.hpp"
 #include "screen-regions.hpp"
+#include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
 #include "state-machine.hpp"
@@ -30,10 +31,10 @@ namespace halloween
         const std::string & desc,
         const std::string & license,
         const std::string & extra)
-        : m_nameText()
-        , m_descText()
-        , m_licenseText()
-        , m_extraText()
+        : m_nameText(util::SfmlDefaults::instance().font())
+        , m_descText(util::SfmlDefaults::instance().font())
+        , m_licenseText(util::SfmlDefaults::instance().font())
+        , m_extraText(util::SfmlDefaults::instance().font())
     {
         const sf::FloatRect screenRect = context.layout.wholeRegion();
 
@@ -42,35 +43,35 @@ namespace halloween
         m_nameText = context.media.makeText(55, name, textColor);
 
         m_nameText.setPosition(
-            ((screenRect.width * 0.5f) - (m_nameText.getGlobalBounds().width * 0.5f)),
-            screenRect.height);
+            { ((screenRect.size.x * 0.5f) - (m_nameText.getGlobalBounds().size.x * 0.5f)),
+              screenRect.size.y });
 
         m_descText = context.media.makeText(40, desc, textColor);
 
         m_descText.setPosition(
-            ((screenRect.width * 0.5f) - (m_descText.getGlobalBounds().width * 0.5f)),
-            util::bottom(m_nameText) + m_vertPad);
+            { ((screenRect.size.x * 0.5f) - (m_descText.getGlobalBounds().size.x * 0.5f)),
+              util::bottom(m_nameText) + m_vertPad });
 
         m_licenseText = context.media.makeText(25, license, textColor);
 
         m_licenseText.setPosition(
-            ((screenRect.width * 0.5f) - (m_licenseText.getGlobalBounds().width * 0.5f)),
-            util::bottom(m_descText) + m_vertPad);
+            { ((screenRect.size.x * 0.5f) - (m_licenseText.getGlobalBounds().size.x * 0.5f)),
+              util::bottom(m_descText) + m_vertPad });
 
         m_extraText = context.media.makeText(25, extra, textColor);
 
         m_extraText.setPosition(
-            ((screenRect.width * 0.5f) - (m_extraText.getGlobalBounds().width * 0.5f)),
-            util::bottom(m_licenseText) + m_vertPad);
+            { ((screenRect.size.x * 0.5f) - (m_extraText.getGlobalBounds().size.x * 0.5f)),
+              util::bottom(m_licenseText) + m_vertPad });
     }
 
     void Credit::update(const float frameTimeSec)
     {
         const float scrollSpeed = 30.0f;
-        m_nameText.move(0.0f, -(frameTimeSec * scrollSpeed));
-        m_descText.move(0.0f, -(frameTimeSec * scrollSpeed));
-        m_licenseText.move(0.0f, -(frameTimeSec * scrollSpeed));
-        m_extraText.move(0.0f, -(frameTimeSec * scrollSpeed));
+        m_nameText.move({ 0.0f, -(frameTimeSec * scrollSpeed) });
+        m_descText.move({ 0.0f, -(frameTimeSec * scrollSpeed) });
+        m_licenseText.move({ 0.0f, -(frameTimeSec * scrollSpeed) });
+        m_extraText.move({ 0.0f, -(frameTimeSec * scrollSpeed) });
     }
 
     void Credit::draw(sf::RenderTarget & target, sf::RenderStates states) const
@@ -83,16 +84,16 @@ namespace halloween
 
     void Credit::vertPosition(const float pos)
     {
-        m_nameText.setPosition(m_nameText.getGlobalBounds().left, pos);
+        m_nameText.setPosition({ m_nameText.getGlobalBounds().position.x, pos });
 
         m_descText.setPosition(
-            m_descText.getGlobalBounds().left, util::bottom(m_nameText) + m_vertPad);
+            { m_descText.getGlobalBounds().position.x, util::bottom(m_nameText) + m_vertPad });
 
         m_licenseText.setPosition(
-            m_licenseText.getGlobalBounds().left, util::bottom(m_descText) + m_vertPad);
+            { m_licenseText.getGlobalBounds().position.x, util::bottom(m_descText) + m_vertPad });
 
         m_extraText.setPosition(
-            m_extraText.getGlobalBounds().left, util::bottom(m_licenseText) + m_vertPad);
+            { m_extraText.getGlobalBounds().position.x, util::bottom(m_licenseText) + m_vertPad });
     }
 
     float Credit::bottom() const { return util::bottom(m_licenseText); }
@@ -119,7 +120,7 @@ namespace halloween
             "SIL Open Font License 1.1",
             "www.scripts.sil.org/ofl");
 
-        const float vertSpacer = (screenRect.height * 0.125f);
+        const float vertSpacer = (screenRect.size.y * 0.125f);
         fontCredit.vertPosition(softwareCredit.bottom() + vertSpacer);
 
         Credit & sfmlCredit = m_credits.emplace_back(
@@ -179,7 +180,7 @@ namespace halloween
     bool StateCredits::handleEvent(Context & context, const sf::Event & event)
     {
         // any keypress or mouse click will exit
-        if ((event.type == sf::Event::MouseButtonPressed) || (event.type == sf::Event::KeyPressed))
+        if (event.is<sf::Event::MouseButtonPressed>() || event.is<sf::Event::KeyPressed>())
         {
             context.state.setChangePending(State::Quit);
         }

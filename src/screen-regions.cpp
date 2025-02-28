@@ -28,16 +28,16 @@ namespace halloween
         m_wholeSize = { static_cast<float>(windowSize.x), static_cast<float>(windowSize.y) };
         m_wholeRegion = { { 0.0f, 0.0f }, m_wholeSize };
 
-        m_infoRegion.left = 0.0f;
-        m_infoRegion.top = 0.0f;
-        m_infoRegion.width = m_wholeRegion.width;
-        m_infoRegion.height = (m_wholeRegion.height * 0.075f);
+        m_infoRegion.position.x = 0.0f;
+        m_infoRegion.position.y = 0.0f;
+        m_infoRegion.size.x = m_wholeRegion.size.x;
+        m_infoRegion.size.y = (m_wholeRegion.size.y * 0.075f);
         util::floor(m_infoRegion);
 
-        m_mapRegion.left = 0.0f;
-        m_mapRegion.top = (m_infoRegion.height + 1.0f);
-        m_mapRegion.width = m_wholeRegion.width;
-        m_mapRegion.height = (m_wholeRegion.height - m_mapRegion.top);
+        m_mapRegion.position.x = 0.0f;
+        m_mapRegion.position.y = (m_infoRegion.size.y + 1.0f);
+        m_mapRegion.size.x = m_wholeRegion.size.x;
+        m_mapRegion.size.y = (m_wholeRegion.size.y - m_mapRegion.position.y);
         util::floor(m_mapRegion);
     }
 

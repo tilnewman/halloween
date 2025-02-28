@@ -21,10 +21,10 @@ namespace halloween
 
     struct FireSpout
     {
-        FireSpout()
+        FireSpout(const sf::Texture & spoutTexture, const sf::Texture & fireTexture)
             : is_spurting(false)
-            , spout_sprite()
-            , fire_sprite()
+            , spout_sprite(spoutTexture)
+            , fire_sprite(fireTexture)
             , texture_index(0)
             , elapsed_time_sec(0.0f)
             , time_between_spurts_sec(0.0f)

@@ -6,8 +6,23 @@ file(GLOB source_files *.?pp)
 add_executable(${PROJECT_NAME} ${source_files})
 
 
-find_package(SFML 2.6.1 COMPONENTS window graphics audio REQUIRED)
-target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
+#on windows we build sfml from source, otherwise just use find_package()
+if(WIN32)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+	option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
+	include(FetchContent)
+	FetchContent_Declare(SFML
+		GIT_REPOSITORY https://github.com/SFML/SFML.git
+		GIT_TAG 3.0.0
+		GIT_SHALLOW ON)
+	FetchContent_MakeAvailable(SFML)
+else()
+	find_package(SFML 3.0.0 COMPONENTS System Window Graphics Audio REQUIRED)
+endif()
+
+
+target_link_libraries(${PROJECT_NAME} SFML::System SFML::Window SFML::Graphics SFML::Audio)
 
 
 #compiler/linker options
@@ -18,7 +33,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     target_compile_options(
         ${PROJECT_NAME}
         PUBLIC
-        /std:c++latest
+        /std:c++20
         /permissive-
         /fp:fast
         -DWIN32_LEAN_AND_MEAN
@@ -53,7 +68,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         -DNDEBUG
         -lstdc++
         -O3
-        -std=c++17
+        -std=c++20
         -Weverything
         -Wno-c++98-compat
         -Wno-c++98-compat-pedantic
@@ -74,8 +89,8 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         -Wno-ctad-maybe-unsupported
         -Woverloaded-virtual
         -Wcast-align
-        -Wformat=2)
-
+        -Wformat=2
+	-Wno-c++20-extensions)
 
     option(ASAN "Using Clang's Address Sanitizer" ON)
 
@@ -90,7 +105,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     target_compile_options(
         ${PROJECT_NAME}
         PUBLIC
-        -std=c++17
+        -std=c++20
         -O3
         -DNDEBUG
         -lstdc++

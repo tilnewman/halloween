@@ -30,7 +30,7 @@ namespace halloween
 
     struct CoinAnim
     {
-        CoinAnim();
+        CoinAnim(const sf::Texture & texture);
 
         bool is_alive;
         sf::Sprite sprite;

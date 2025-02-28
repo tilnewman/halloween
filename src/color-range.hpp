@@ -24,19 +24,19 @@ namespace colors
     // color value diffs
 
     template <typename T = Diff_t>
-    [[nodiscard]] constexpr T diff(const sf::Uint8 left, const sf::Uint8 right) noexcept
+    [[nodiscard]] constexpr T diff(const std::uint8_t left, const std::uint8_t right) noexcept
     {
         return (static_cast<T>(left) - static_cast<T>(right));
     }
 
     template <typename T = Diff_t>
-    [[nodiscard]] constexpr T diffAbs(const sf::Uint8 left, const sf::Uint8 right) noexcept
+    [[nodiscard]] constexpr T diffAbs(const std::uint8_t left, const std::uint8_t right) noexcept
     {
         return util::abs(diff<T>(left, right));
     }
 
     [[nodiscard]] inline constexpr float
-        diffRatio(const sf::Uint8 left, const sf::Uint8 right) noexcept
+        diffRatio(const std::uint8_t left, const std::uint8_t right) noexcept
     {
         return (diffAbs<float>(left, right) / 255.0f);
     }
@@ -125,10 +125,10 @@ namespace colors
 
     // blends
 
-    [[nodiscard]] inline constexpr sf::Uint8
-        blend(const float ratio, const sf::Uint8 from, const sf::Uint8 to) noexcept
+    [[nodiscard]] inline constexpr std::uint8_t
+        blend(const float ratio, const std::uint8_t from, const std::uint8_t to) noexcept
     {
-        return static_cast<sf::Uint8>(
+        return static_cast<std::uint8_t>(
             util::mapRatioTo(ratio, static_cast<float>(from), static_cast<float>(to)));
     }
 
@@ -203,7 +203,7 @@ namespace colors
             const float hue,
             const float saturation,
             const float lightness,
-            const sf::Uint8 alpha = 255)
+            const std::uint8_t alpha = 255)
             : h(hue)
             , s(saturation)
             , l(lightness)
@@ -264,9 +264,9 @@ namespace colors
 
             if (util::isRealClose(s, 0.0f))
             {
-                color.r = static_cast<sf::Uint8>(l * 255.0f);
-                color.g = static_cast<sf::Uint8>(l * 255.0f);
-                color.b = static_cast<sf::Uint8>(l * 255.0f);
+                color.r = static_cast<std::uint8_t>(l * 255.0f);
+                color.g = static_cast<std::uint8_t>(l * 255.0f);
+                color.b = static_cast<std::uint8_t>(l * 255.0f);
             }
             else
             {
@@ -300,7 +300,7 @@ namespace colors
         float h{ 0.0f }; // ratio of degrees [0,360]
         float s{ 0.0f };
         float l{ 0.0f };
-        sf::Uint8 a{ 255 }; // same as sf::Color.a (transparent=0, opaque=255)
+        std::uint8_t a{ 255 }; // same as sf::Color.a (transparent=0, opaque=255)
 
       private:
         static constexpr float hueRatioCorrect(const float hueRatio) noexcept
@@ -320,7 +320,7 @@ namespace colors
             return result;
         }
 
-        static constexpr sf::Uint8
+        static constexpr std::uint8_t
             hueRatioToRgb(const float var1, const float var2, const float hueParam) noexcept
         {
             const float hue{ hueRatioCorrect(hueParam) };
@@ -352,7 +352,7 @@ namespace colors
                 result = std::ceil(result);
             }
 
-            return static_cast<sf::Uint8>(result);
+            return static_cast<std::uint8_t>(result);
         }
     };
 
@@ -531,18 +531,18 @@ namespace colors
     inline sf::Color random(const util::Random & random, const bool willRandomizeAlpha = false)
     {
         return sf::Color(
-            random.ofType<sf::Uint8>(),
-            random.ofType<sf::Uint8>(),
-            random.ofType<sf::Uint8>(),
-            ((willRandomizeAlpha) ? random.ofType<sf::Uint8>() : 255));
+            random.ofType<std::uint8_t>(),
+            random.ofType<std::uint8_t>(),
+            random.ofType<std::uint8_t>(),
+            ((willRandomizeAlpha) ? random.ofType<std::uint8_t>() : 255));
     }
 
     inline sf::Color
         randomVibrant(const util::Random & random, const bool willRandomizeAlpha = false)
     {
-        std::array<sf::Uint8, 3> values = { random.fromTo<sf::Uint8>(0, 255),
-                                            random.fromTo<sf::Uint8>(0, 255),
-                                            random.fromTo<sf::Uint8>(0, 255) };
+        std::array<std::uint8_t, 3> values = { random.fromTo<std::uint8_t>(0, 255),
+                                               random.fromTo<std::uint8_t>(0, 255),
+                                               random.fromTo<std::uint8_t>(0, 255) };
 
         if (diff(values[0], values[1]) < 191)
         {
@@ -550,20 +550,20 @@ namespace colors
 
             if (avg < 127)
             {
-                values[2] = random.fromTo<sf::Uint8>(235, 255);
+                values[2] = random.fromTo<std::uint8_t>(235, 255);
             }
             else
             {
-                values[2] = random.fromTo<sf::Uint8>(0, 20);
+                values[2] = random.fromTo<std::uint8_t>(0, 20);
             }
         }
 
         random.shuffle(values);
 
-        sf::Uint8 alpha{ 255 };
+        std::uint8_t alpha{ 255 };
         if (willRandomizeAlpha)
         {
-            alpha = random.ofType<sf::Uint8>();
+            alpha = random.ofType<std::uint8_t>();
         }
 
         return sf::Color(values[0], values[1], values[2], alpha);
@@ -768,28 +768,29 @@ namespace colors
             return cache;
         }
 
-        template <typename Container_t>
-        static BlendCache makeFromBlendCaches(const std::size_t size, const Container_t & container)
-        {
-            std::size_t total{ 0 };
-            for (const BlendCache & cache : container)
-            {
-                total += cache.size();
-            }
-
-            std::vector<sf::Color> colors;
-            colors.reserve(total);
-
-            for (const BlendCache & cache : container)
-            {
-                std::copy(
-                    std::begin(cache.vector()),
-                    std::end(cache.vector()),
-                    std::back_inserter(cache.m_colors));
-            }
-
-            return makeFromColors(size, colors);
-        }
+        // template <typename Container_t>
+        // static BlendCache makeFromBlendCaches(const std::size_t size, const Container_t &
+        // container)
+        // {
+        //     std::size_t total{ 0 };
+        //     for (const BlendCache & cache : container)
+        //     {
+        //         total += cache.size();
+        //     }
+        //
+        //     std::vector<sf::Color> colors;
+        //     colors.reserve(total);
+        //
+        //     for (const BlendCache & cache : container)
+        //     {
+        //         std::copy(
+        //             std::begin(cache.vector()),
+        //             std::end(cache.vector()),
+        //             std::back_inserter(cache.m_colors));
+        //     }
+        //
+        //     return makeFromColors(size, colors);
+        // }
 
       private:
         std::vector<sf::Color> m_colors;
