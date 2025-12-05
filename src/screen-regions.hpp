@@ -18,10 +18,10 @@ namespace halloween
 
         void setup(const sf::Vector2u & windowSize);
 
-        inline const sf::Vector2f wholeSize() const { return m_wholeSize; }
-        inline const sf::FloatRect wholeRegion() const { return m_wholeRegion; }
-        inline const sf::FloatRect mapRegion() const { return m_mapRegion; }
-        inline const sf::FloatRect infoRegion() const { return m_infoRegion; }
+        inline const sf::Vector2f wholeSize() const noexcept { return m_wholeSize; }
+        inline const sf::FloatRect wholeRegion() const noexcept { return m_wholeRegion; }
+        inline const sf::FloatRect mapRegion() const noexcept { return m_mapRegion; }
+        inline const sf::FloatRect infoRegion() const noexcept { return m_infoRegion; }
 
       private:
         sf::Vector2f m_wholeSize;

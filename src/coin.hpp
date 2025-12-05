@@ -55,7 +55,7 @@ namespace halloween
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
-        std::size_t count() const { return m_coins.size(); }
+        constexpr std::size_t count() const noexcept { return m_coins.size(); }
 
       private:
         void addAnimation(const Context & context, const sf::Vector2f & position);

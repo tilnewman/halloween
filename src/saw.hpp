@@ -21,7 +21,7 @@ namespace halloween
 
     struct Saw
     {
-        Saw(const sf::Texture & texture)
+        explicit Saw(const sf::Texture & texture)
             : sprite(texture)
         {}
 

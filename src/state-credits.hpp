@@ -19,6 +19,8 @@ namespace halloween
 {
     struct Context;
 
+    //
+
     class Credit : public sf::Drawable
     {
       public:

@@ -91,7 +91,7 @@ namespace halloween
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
         bool attack(Context & context, const sf::FloatRect & attackRect);
-        std::size_t count() const { return m_bats.size(); }
+        constexpr std::size_t count() const noexcept { return m_bats.size(); }
 
       private:
         std::size_t m_batCount;

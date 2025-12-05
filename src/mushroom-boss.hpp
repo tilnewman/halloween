@@ -42,7 +42,7 @@ namespace halloween
         Death
     };
 
-    inline constexpr std::string_view toString(const BossState state) noexcept
+    constexpr std::string_view toString(const BossState state) noexcept
     {
         // clang-format off
         switch (state)

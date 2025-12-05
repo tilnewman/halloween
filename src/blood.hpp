@@ -16,6 +16,7 @@ namespace halloween
     struct Settings;
 
     //
+
     class Blood
     {
       public:

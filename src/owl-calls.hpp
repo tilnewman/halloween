@@ -12,6 +12,8 @@ namespace halloween
     struct Context;
     struct Settings;
 
+    //
+
     class OwlCalls
     {
       public:

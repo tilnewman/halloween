@@ -24,13 +24,13 @@ namespace halloween
         void update(Context & context, const float frameTimeSec);
         void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
-        inline int score() const { return m_score; }
+        constexpr int score() const noexcept { return m_score; }
         void scoreAdjust(const int adj);
 
-        inline int lives() const { return m_lives; }
+        constexpr int lives() const noexcept { return m_lives; }
         void livesAdjust(const int adj);
 
-        inline int darts() const { return m_dartCount; }
+        constexpr int darts() const noexcept { return m_dartCount; }
         void dartsAdjust(const int adj);
 
       private:

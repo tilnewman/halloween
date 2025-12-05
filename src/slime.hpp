@@ -43,7 +43,7 @@ namespace halloween
 
     struct SlimeDeathAnim
     {
-        SlimeDeathAnim(const sf::Sprite & spr)
+        explicit SlimeDeathAnim(const sf::Sprite & spr)
             : is_visible(true)
             , sprite(spr)
         {}
@@ -72,7 +72,7 @@ namespace halloween
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
         bool attack(Context & context, const sf::FloatRect & attackRect);
-        std::size_t count() const { return m_slimes.size(); }
+        constexpr std::size_t count() const noexcept { return m_slimes.size(); }
 
       private:
         std::vector<sf::Texture> m_textures;

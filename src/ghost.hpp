@@ -31,7 +31,7 @@ namespace halloween
 
     struct Ghost
     {
-        Ghost(const float spd)
+        explicit Ghost(const float spd)
             : is_alive(true)
             , is_fading_in(true)
             , speed(spd)
