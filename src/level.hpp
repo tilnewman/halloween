@@ -21,7 +21,6 @@ namespace halloween
         Level();
 
         bool load(Context & context);
-        void reset();
         bool move(const ScreenRegions & layout, const float move);
 
         TileSet tiles;
@@ -39,6 +38,7 @@ namespace halloween
         std::size_t number;
 
       private:
+        void reset(Context & t_context);
         void findFarthestHorizMapPixel();
         void appendVertLayers(Context & context);
         void populateVisibleVerts(const ScreenRegions & layout);

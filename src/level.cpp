@@ -21,19 +21,19 @@ namespace halloween
 {
 
     Level::Level()
-        : tiles()
-        , map_position_offset()
-        , tile_size_screen()
-        , tile_size_texture()
-        , walk_collisions()
-        , kill_collisions()
-        , acid_collisions()
-        , water_collisions()
-        , enter_rect()
-        , exit_rect()
-        , farthest_horiz_map_pixel(0.0f)
-        , farthest_horiz_traveled(0.0f)
-        , number(0)
+        : tiles{}
+        , map_position_offset{}
+        , tile_size_screen{}
+        , tile_size_texture{}
+        , walk_collisions{}
+        , kill_collisions{}
+        , acid_collisions{}
+        , water_collisions{}
+        , enter_rect{}
+        , exit_rect{}
+        , farthest_horiz_map_pixel{ 0.0f }
+        , farthest_horiz_traveled{ 0.0f }
+        , number{ 0 }
     {
         walk_collisions.reserve(1000);
         kill_collisions.reserve(100);
@@ -41,36 +41,36 @@ namespace halloween
         water_collisions.reserve(100);
     }
 
-    void Level::reset()
+    void Level::reset(Context & t_context)
     {
         tiles.reset();
         walk_collisions.clear();
         kill_collisions.clear();
         acid_collisions.clear();
         water_collisions.clear();
+        t_context.managers.clearAll();
         farthest_horiz_map_pixel = 0.0f;
         farthest_horiz_traveled = 0.0f;
     }
 
-    bool Level::load(Context & context)
+    bool Level::load(Context & t_context)
     {
-        // TODO shouldn't we just call reset() here?
-        context.managers.clearAll();
-
-        if (context.loader.load(context))
+        reset(t_context);
+        
+        if (t_context.loader.load(t_context))
         {
             verifyLayerIndexCounts();
-            appendVertLayers(context);
-            context.avatar.setPosition(enter_rect);
+            appendVertLayers(t_context);
+            t_context.avatar.setPosition(enter_rect);
             findFarthestHorizMapPixel();
             farthest_horiz_traveled = 0.0f;
-            number = context.level_number;
+            number = t_context.level_number;
             // dumpInfo(levelNumber);
             return true;
         }
         else
         {
-            reset();
+            reset(t_context);
             return false;
         }
     }

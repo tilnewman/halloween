@@ -53,6 +53,7 @@ namespace halloween
             {
                 // if we fail to load it is because there are no more levels to play
                 context.state.setChangePending(State::Win);
+                return;
             }
         }
 
