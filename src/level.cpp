@@ -158,16 +158,15 @@ namespace halloween
         // TODO move this check to level loading
         const sf::Vector2i textureTileCount{ t_texture.size / t_tileSizeOnMap };
 
-        const std::size_t totalCount{ (
-            static_cast<std::size_t>(t_tileCount.x) * static_cast<std::size_t>(t_tileCount.y)) };
+        const std::size_t totalCount{ static_cast<std::size_t>(t_tileCount.x) *
+                                      static_cast<std::size_t>(t_tileCount.y) };
 
         M_CHECK(
             (totalCount == t_layer.indexes.size()),
             "index_count=" << t_layer.indexes.size()
                            << " does not equal tile_count=" << totalCount);
 
-        // TODO remove this and use floats below
-        const sf::Vector2i sizeOnScreenI(t_tileSizeOnScreen);
+        const sf::Vector2i sizeOnScreenI{ t_tileSizeOnScreen };
 
         std::size_t textureIndex{ 0 };
         for (int y{ 0 }; y < t_tileCount.y; ++y)
