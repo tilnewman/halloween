@@ -59,7 +59,7 @@ namespace halloween
 
         if (context.loader.load(context))
         {
-            verifyLayerIndexCounts(context);
+            verifyLayerIndexCounts();
             appendVertLayers(context);
             context.avatar.setPosition(enter_rect);
             findFarthestHorizMapPixel();
@@ -75,7 +75,7 @@ namespace halloween
         }
     }
 
-    void Level::verifyLayerIndexCounts(const Context & t_context) const
+    void Level::verifyLayerIndexCounts() const
     {
         for (const TileLayer & layer : tiles.layers)
         {
@@ -216,16 +216,16 @@ namespace halloween
 
             layer.visibleVerts.clear();
 
-            std::size_t vertIndex = 0;
+            std::size_t vertIndex{ 0 };
             while (vertIndex < layer.verts.size())
             {
                 // see sfml-util::setupTriangleVerts() for where this order comes from
-                const sf::Vertex topLeftVert = layer.verts[vertIndex + 0];
-                const sf::Vertex topRightVert = layer.verts[vertIndex + 1];
-                const sf::Vertex botLeftVert = layer.verts[vertIndex + 2];
-                const sf::Vertex botLeftVert2 = layer.verts[vertIndex + 3];
-                const sf::Vertex topRightVert2 = layer.verts[vertIndex + 4];
-                const sf::Vertex botRightVert = layer.verts[vertIndex + 5];
+                const sf::Vertex & topLeftVert{ layer.verts[vertIndex + 0] };
+                const sf::Vertex & topRightVert{ layer.verts[vertIndex + 1] };
+                const sf::Vertex & botLeftVert{ layer.verts[vertIndex + 2] };
+                const sf::Vertex & botLeftVert2{ layer.verts[vertIndex + 3] };
+                const sf::Vertex & topRightVert2{ layer.verts[vertIndex + 4] };
+                const sf::Vertex & botRightVert{ layer.verts[vertIndex + 5] };
 
                 if (layout.mapRegion().contains(topLeftVert.position) ||
                     layout.mapRegion().contains(topRightVert.position) ||

@@ -40,8 +40,10 @@ namespace halloween
 
       private:
         void findFarthestHorizMapPixel();
-
         void appendVertLayers(Context & context);
+        void populateVisibleVerts(const ScreenRegions & layout);
+        void dumpInfo(const std::size_t levelNumber) const;
+        void verifyLayerIndexCounts() const;
 
         void appendVertLayer(
             const sf::Vector2i & t_tileCount,
@@ -49,12 +51,6 @@ namespace halloween
             const sf::Vector2f & t_tileSizeOnScreen,
             const TileTexture & t_tileTexture,
             TileLayer & t_layer) const;
-
-        void populateVisibleVerts(const ScreenRegions & layout);
-
-        void dumpInfo(const std::size_t levelNumber) const;
-
-        void verifyLayerIndexCounts(const Context & t_context) const;
     };
 
 } // namespace halloween
