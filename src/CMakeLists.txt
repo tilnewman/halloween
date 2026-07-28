@@ -88,6 +88,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         -Wno-documentation-unknown-command
         -Wno-ctad-maybe-unsupported
         -Woverloaded-virtual
+        -Wno-extra-semi-stmt
         -Wcast-align
         -Wformat=2
         -Wno-c++20-extensions)
