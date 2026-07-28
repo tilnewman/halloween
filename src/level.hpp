@@ -47,12 +47,14 @@ namespace halloween
             const sf::Vector2i & t_tileCount,
             const sf::Vector2i & t_tileSizeOnMap,
             const sf::Vector2f & t_tileSizeOnScreen,
-            const TileTexture & t_texture,
+            const TileTexture & t_tileTexture,
             TileLayer & t_layer) const;
 
         void populateVisibleVerts(const ScreenRegions & layout);
 
         void dumpInfo(const std::size_t levelNumber) const;
+
+        void verifyLayerIndexCounts(const Context & t_context) const;
     };
 
 } // namespace halloween

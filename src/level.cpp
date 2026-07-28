@@ -54,10 +54,12 @@ namespace halloween
 
     bool Level::load(Context & context)
     {
+        // TODO shouldn't we just call reset() here?
         context.managers.clearAll();
 
         if (context.loader.load(context))
         {
+            verifyLayerIndexCounts(context);
             appendVertLayers(context);
             context.avatar.setPosition(enter_rect);
             findFarthestHorizMapPixel();
@@ -70,6 +72,20 @@ namespace halloween
         {
             reset();
             return false;
+        }
+    }
+
+    void Level::verifyLayerIndexCounts(const Context & t_context) const
+    {
+        for (const TileLayer & layer : tiles.layers)
+        {
+            const std::size_t totalCount{ static_cast<std::size_t>(tiles.count.x) *
+                                          static_cast<std::size_t>(tiles.count.y) };
+
+            M_CHECK(
+                (totalCount == layer.indexes.size()),
+                "index_count=" << layer.indexes.size() << " does not equal tile_count="
+                               << totalCount << " in layer " << layer.image);
         }
     }
 
@@ -119,6 +135,7 @@ namespace halloween
 
     void Level::findFarthestHorizMapPixel()
     {
+        // TODO use the exit rect instaed of this silly nested mess
         farthest_horiz_map_pixel = 0.0f;
 
         for (const TileLayer & layer : tiles.layers)
@@ -152,21 +169,11 @@ namespace halloween
         const sf::Vector2i & t_tileCount,
         const sf::Vector2i & t_tileSizeOnMap,
         const sf::Vector2f & t_tileSizeOnScreen,
-        const TileTexture & t_texture,
+        const TileTexture & t_tileTexture,
         TileLayer & t_layer) const
     {
-        // TODO move this check to level loading
-        const sf::Vector2i textureTileCount{ t_texture.size / t_tileSizeOnMap };
-
-        const std::size_t totalCount{ static_cast<std::size_t>(t_tileCount.x) *
-                                      static_cast<std::size_t>(t_tileCount.y) };
-
-        M_CHECK(
-            (totalCount == t_layer.indexes.size()),
-            "index_count=" << t_layer.indexes.size()
-                           << " does not equal tile_count=" << totalCount);
-
         const sf::Vector2i sizeOnScreenI{ t_tileSizeOnScreen };
+        const sf::Vector2i textureTileCount{ t_tileTexture.size / tiles.size };
 
         std::size_t textureIndex{ 0 };
         for (int y{ 0 }; y < t_tileCount.y; ++y)
@@ -179,7 +186,7 @@ namespace halloween
                     continue; // zero means no image at this location
                 }
 
-                const int index{ textureIndexOrig - t_texture.gid };
+                const int index{ textureIndexOrig - t_tileTexture.gid };
 
                 const int texturePosX{ (index % textureTileCount.x) * t_tileSizeOnMap.x };
                 const int texturePosY{ (index / textureTileCount.x) * t_tileSizeOnMap.y };
@@ -204,9 +211,8 @@ namespace halloween
         {
             M_CHECK(
                 ((layer.verts.size() % util::verts_per_quad) == 0),
-                "Error:  TileLayer.verts.size()=" << layer.verts.size()
-                                                  << " which is not a multiple of "
-                                                  << util::verts_per_quad);
+                "Error:  TileLayer " << layer.image << " verts.size()=" << layer.verts.size()
+                                     << " which is not a multiple of " << util::verts_per_quad);
 
             layer.visibleVerts.clear();
 

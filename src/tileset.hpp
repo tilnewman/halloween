@@ -32,7 +32,7 @@ namespace halloween
             case TileImage::Object1: { os << "object-1"; break; }
             case TileImage::Object2: { os << "object-2"; break; }
             case TileImage::Object3: { os << "object-3"; break; }
-            default:                 { assert(false);    break; }
+            default:        { os << "Unknown_TileImage"; break; }
         }
         // clang-format on
 
