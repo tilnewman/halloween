@@ -44,11 +44,11 @@ namespace halloween
         void appendVertLayers(Context & context);
 
         void appendVertLayer(
-            const sf::Vector2i & count,
-            const sf::Vector2i & size,
-            const sf::Vector2f & sizeOnScreen,
-            const TileTexture & texture,
-            TileLayer & layer) const;
+            const sf::Vector2i & t_tileCount,
+            const sf::Vector2i & t_tileSizeOnMap,
+            const sf::Vector2f & t_tileSizeOnScreen,
+            const TileTexture & t_texture,
+            TileLayer & t_layer) const;
 
         void populateVisibleVerts(const ScreenRegions & layout);
 

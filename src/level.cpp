@@ -149,50 +149,52 @@ namespace halloween
     }
 
     void Level::appendVertLayer(
-        const sf::Vector2i & count,
-        const sf::Vector2i & size,
-        const sf::Vector2f & sizeOnScreen,
-        const TileTexture & texture,
-        TileLayer & layer) const
+        const sf::Vector2i & t_tileCount,
+        const sf::Vector2i & t_tileSizeOnMap,
+        const sf::Vector2f & t_tileSizeOnScreen,
+        const TileTexture & t_texture,
+        TileLayer & t_layer) const
     {
-        const sf::Vector2i textureTileCount{ texture.size / size };
+        // TODO move this check to level loading
+        const sf::Vector2i textureTileCount{ t_texture.size / t_tileSizeOnMap };
 
-        const std::size_t totalCount =
-            (static_cast<std::size_t>(count.x) * static_cast<std::size_t>(count.y));
+        const std::size_t totalCount{ (
+            static_cast<std::size_t>(t_tileCount.x) * static_cast<std::size_t>(t_tileCount.y)) };
 
         M_CHECK(
-            (totalCount == layer.indexes.size()),
-            "index_count=" << layer.indexes.size() << " does not equal tile_count=" << totalCount);
+            (totalCount == t_layer.indexes.size()),
+            "index_count=" << t_layer.indexes.size()
+                           << " does not equal tile_count=" << totalCount);
 
-        const sf::Vector2i sizeOnScreenI(sizeOnScreen);
+        // TODO remove this and use floats below
+        const sf::Vector2i sizeOnScreenI(t_tileSizeOnScreen);
 
-        std::size_t textureIndex = 0;
-        for (int y(0); y < count.y; ++y)
+        std::size_t textureIndex{ 0 };
+        for (int y{ 0 }; y < t_tileCount.y; ++y)
         {
-            const float posY = static_cast<float>(y * sizeOnScreenI.y);
-
-            for (int x(0); x < count.x; ++x)
+            for (int x{ 0 }; x < t_tileCount.x; ++x)
             {
-                const float posX = static_cast<float>(x * sizeOnScreenI.x);
-
-                const int textureIndexOrig(layer.indexes[textureIndex++]);
+                const int textureIndexOrig{ t_layer.indexes[textureIndex++] };
                 if (textureIndexOrig == 0)
                 {
                     continue; // zero means no image at this location
                 }
 
-                const int index(textureIndexOrig - texture.gid);
+                const int index{ textureIndexOrig - t_texture.gid };
 
-                const int texturePosX((index % textureTileCount.x) * size.x);
-                const int texturePosY((index / textureTileCount.x) * size.y);
+                const int texturePosX{ (index % textureTileCount.x) * t_tileSizeOnMap.x };
+                const int texturePosY{ (index / textureTileCount.x) * t_tileSizeOnMap.y };
 
                 const sf::Vector2i texturePos{ texturePosX, texturePosY };
-                const sf::IntRect textureRect{ texturePos, size };
+                const sf::IntRect textureRect{ texturePos, t_tileSizeOnMap };
 
-                const sf::Vector2f screenPos(sf::Vector2f(posX, posY) + map_position_offset);
-                const sf::FloatRect screenRect{ screenPos, sizeOnScreen };
+                const float posX{ static_cast<float>(x * sizeOnScreenI.x) };
+                const float posY{ static_cast<float>(y * sizeOnScreenI.y) };
 
-                util::appendTriangleVerts(screenRect, textureRect, layer.verts);
+                const sf::Vector2f screenPos{ sf::Vector2f(posX, posY) + map_position_offset };
+                const sf::FloatRect screenRect{ screenPos, t_tileSizeOnScreen };
+
+                util::appendTriangleVerts(screenRect, textureRect, t_layer.verts);
             }
         }
     }
