@@ -46,7 +46,7 @@ namespace halloween
 
     //
 
-    class StateCredits : public StateBase
+    class StateCredits final : public StateBase
     {
       public:
         StateCredits();
