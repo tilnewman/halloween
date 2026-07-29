@@ -325,7 +325,7 @@ namespace halloween
                 if (!m_isFacingRight)
                 {
                     m_isFacingRight = true;
-                    m_sprite.scale({ -1.0f, 1.0f }); // sfml trick to flip image
+                    m_sprite.scale({ -1.0f, 1.0f });
                 }
 
                 t_context.audio.play("respawn");
@@ -412,7 +412,7 @@ namespace halloween
             m_throwAnim.restart();
             m_sprite.setTexture(m_throwAnim.texture(), true);
 
-            const sf::FloatRect avatarRect = collisionRect();
+            const sf::FloatRect avatarRect{ collisionRect() };
             sf::Vector2f missilePosition{ 0.0f, 0.0f };
             missilePosition.x = util::center(avatarRect).x;
             missilePosition.y = (avatarRect.position.y + (avatarRect.size.y * 0.4f));
@@ -514,11 +514,11 @@ namespace halloween
             // Allow moving side-to-side at a reduced rate while in the air.
             // It sounds wrong but feels so right.
             // What the hell, mario did it.
-            const float jumpMoveDivisor{ 3.0f }; // TODO move this to t_settings
+            const float jumpMoveRatio{ t_context.settings.jump_move_ratio };
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
             {
-                m_velocity.x += ((t_context.settings.walk_acc / jumpMoveDivisor) * t_frameTimeSec);
+                m_velocity.x += ((t_context.settings.walk_acc * jumpMoveRatio) * t_frameTimeSec);
                 if (m_velocity.x > t_context.settings.walk_speed_limit)
                 {
                     m_velocity.x = t_context.settings.walk_speed_limit;
@@ -527,7 +527,7 @@ namespace halloween
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
             {
-                m_velocity.x -= ((t_context.settings.walk_acc / jumpMoveDivisor) * t_frameTimeSec);
+                m_velocity.x -= ((t_context.settings.walk_acc * jumpMoveRatio) * t_frameTimeSec);
                 if (m_velocity.x < -t_context.settings.walk_speed_limit)
                 {
                     m_velocity.x = -t_context.settings.walk_speed_limit;
@@ -555,7 +555,7 @@ namespace halloween
                 if (!m_isFacingRight)
                 {
                     m_isFacingRight = true;
-                    m_sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
+                    m_sprite.scale({ -1.0f, 1.0f });
                     m_sprite.move({ -m_sprite.getGlobalBounds().size.x, 0.0f });
                 }
             }
@@ -578,7 +578,7 @@ namespace halloween
                 if (m_isFacingRight)
                 {
                     m_isFacingRight = false;
-                    m_sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
+                    m_sprite.scale({ -1.0f, 1.0f });
                     m_sprite.move({ m_sprite.getGlobalBounds().size.x, 0.0f });
                 }
             }

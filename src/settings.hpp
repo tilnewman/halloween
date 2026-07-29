@@ -42,6 +42,7 @@ namespace halloween
         float dart_speed{ 1000.0f };
         float walk_speed_attack_reduction_ratio{ 0.8f };
         float walk_speed_throw_reduction_ratio{ 0.8f };
+        float jump_move_ratio{ 0.333f };
 
         // delay after dying so the player can see how they died
         float death_delay_sec{ 4.0f };
