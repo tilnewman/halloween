@@ -161,7 +161,7 @@ namespace halloween
         for (Slime & slime : m_slimes)
         {
             slime.sprite.move(t_move);
-            slime.rect.position.x += t_move.x;
+            slime.rect.position += t_move;
         }
 
         for (SlimeDeathAnim & anim : m_deathAnims)

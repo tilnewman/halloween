@@ -210,7 +210,7 @@ namespace halloween
         for (Bat & bat : m_bats)
         {
             bat.sprite.move(t_move);
-            bat.rect.position.x += t_move.x;
+            bat.rect.position += t_move;
         }
 
         for (BatDeathAnim & anim : m_deathAnims)

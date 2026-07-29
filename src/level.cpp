@@ -92,42 +92,42 @@ namespace halloween
         }
     }
 
-    bool Level::move(const ScreenRegions & t_layout, const float t_move)
+    bool Level::move(const ScreenRegions & t_layout, const sf::Vector2f & t_move)
     {
-        m_farthestHorizTraveled += std::abs(t_move);
+        m_farthestHorizTraveled += std::abs(t_move.x);
         if (m_farthestHorizTraveled > (m_farthestHorizMapPixel - t_layout.mapRegion().size.x))
         {
             return false;
         }
 
-        m_enterRect.position.x += t_move;
-        m_exitRect.position.x += t_move;
+        m_enterRect.position += t_move;
+        m_exitRect.position += t_move;
 
         for (sf::FloatRect & rect : m_killCollisions)
         {
-            rect.position.x += t_move;
+            rect.position += t_move;
         }
 
         for (sf::FloatRect & rect : m_walkCollisions)
         {
-            rect.position.x += t_move;
+            rect.position += t_move;
         }
 
         for (sf::FloatRect & rect : m_acidCollisions)
         {
-            rect.position.x += t_move;
+            rect.position += t_move;
         }
 
         for (sf::FloatRect & rect : m_waterCollisions)
         {
-            rect.position.x += t_move;
+            rect.position += t_move;
         }
 
         for (TileLayer & layer : m_tiles.layers)
         {
             for (sf::Vertex & vertex : layer.verts)
             {
-                vertex.position.x += t_move;
+                vertex.position += t_move;
             }
         }
 

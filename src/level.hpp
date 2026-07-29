@@ -23,7 +23,7 @@ namespace halloween
         Level();
 
         bool load(const Context & t_context);
-        bool move(const ScreenRegions & t_layout, const float t_move);
+        bool move(const ScreenRegions & t_layout, const sf::Vector2f & t_move);
 
         inline const std::vector<sf::FloatRect> & walkCollisions() const
         {

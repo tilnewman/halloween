@@ -170,7 +170,7 @@ namespace halloween
         }
 
         m_sprite.move(t_move);
-        m_region.position.x += t_move.x;
+        m_region.position += t_move;
     }
 
     void MushroomBoss::collideWithAvatar(

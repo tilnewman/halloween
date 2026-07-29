@@ -285,14 +285,13 @@ namespace halloween
             return;
         }
 
-        const float moveX{ screenMiddle - posXAfter };
+        const sf::Vector2f move{ (screenMiddle - posXAfter), 0.0f };
 
-        if (!t_context.level.move(t_context.layout, moveX))
+        if (!t_context.level.move(t_context.layout, move))
         {
             return;
         }
 
-        const sf::Vector2f move{ moveX, 0.0f };
         m_sprite.move(move);
         t_context.managers.moveAllWithMap(move);
     }
