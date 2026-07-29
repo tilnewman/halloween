@@ -14,45 +14,44 @@
 namespace halloween
 {
 
-    GameLoop::GameLoop(const Settings & settings)
-        : m_settings(settings)
-        , m_random()
-        , m_audio(m_random)
-        , m_music()
-        , m_bats()
-        , m_owlCalls()
-        , m_window()
-        , m_loader()
-        , m_media()
-        , m_layout()
-        , m_avatarUPtr()
-        , m_pauseScreenUPtr()
-        , m_stateMachineUPtr()
-        , m_level()
-        , m_missiles()
-        , m_coins()
-        , m_darts()
-        , m_spikedBalls()
-        , m_fireSpouts()
-        , m_saws()
-        , m_slimes()
-        , m_ghosts()
-        , m_infoRegionUPtr()
-        , m_managers()
-        , m_stats()
-        , m_bossUPtr()
-        , m_delayLoopCounts()
-        , m_framesPerSecond()
-        , m_perSecondClock()
-        , m_graphDisplayUPtr()
-        , m_contextUPtr()
+    GameLoop::GameLoop(const Settings & t_settings)
+        : m_settings{ t_settings }
+        , m_random{}
+        , m_audio{ m_random }
+        , m_music{}
+        , m_bats{}
+        , m_owlCalls{}
+        , m_window{}
+        , m_loader{}
+        , m_media{}
+        , m_layout{}
+        , m_avatarUPtr{}
+        , m_pauseScreenUPtr{}
+        , m_stateMachineUPtr{}
+        , m_level{}
+        , m_missiles{}
+        , m_coins{}
+        , m_darts{}
+        , m_spikedBalls{}
+        , m_fireSpouts{}
+        , m_saws{}
+        , m_slimes{}
+        , m_ghosts{}
+        , m_infoRegionUPtr{}
+        , m_managers{}
+        , m_stats{}
+        , m_bossUPtr{}
+        , m_delayLoopCounts{}
+        , m_framesPerSecond{}
+        , m_perSecondClock{}
+        , m_graphDisplayUPtr{}
+        , m_contextUPtr{}
     {}
 
     void GameLoop::play()
     {
         setup();
         frameLoop();
-        std::cout << "final score " << m_infoRegionUPtr->score() << '\n';
         teardown();
     }
 
@@ -62,14 +61,14 @@ namespace halloween
             std::filesystem::exists(m_settings.media_path),
             "The media folder could not be found at \"" << m_settings.media_path << "\"");
 
-        const auto videoMode = util::findVideoModeClosestTo(sf::VideoMode(
-            { m_settings.target_screen_res.x, m_settings.target_screen_res.y },
-            sf::VideoMode::getDesktopMode().bitsPerPixel));
+        const auto videoMode{ util::findVideoModeClosestTo(
+            sf::VideoMode(
+                { m_settings.target_screen_res.x, m_settings.target_screen_res.y },
+                sf::VideoMode::getDesktopMode().bitsPerPixel)) };
 
         m_window.create(videoMode, "Halloween", sf::State::Fullscreen);
         M_CHECK(m_window.isOpen(), "Could not open graphics window.");
-        std::cout << "resolution is " << m_window.getSize() << std::endl;
-
+        
         m_window.setMouseCursorVisible(false);
 
         util::SfmlDefaults::instance().setup();
@@ -137,7 +136,7 @@ namespace halloween
 
     void GameLoop::teardown()
     {
-        //m_managers.clearAll();
+        // m_managers.clearAll(); // TODO um...
         m_contextUPtr.reset();
         m_bossUPtr.reset();
         m_infoRegionUPtr.reset();
@@ -168,12 +167,12 @@ namespace halloween
         }
     }
 
-    void GameLoop::handleSleepUntilEndOfFrame(const float elapsedTimeSec)
+    void GameLoop::handleSleepUntilEndOfFrame(const float t_elapsedTimeSec)
     {
-        float timeRemainingSec = ((1.0f / m_settings.frame_rate) - elapsedTimeSec);
+        float timeRemainingSec{ (1.0f / m_settings.frame_rate) - t_elapsedTimeSec };
 
         sf::Clock delayClock;
-        std::size_t loopCounter = 0;
+        std::size_t loopCounter{ 0 };
         while (timeRemainingSec > 0.0f)
         {
             ++loopCounter;
@@ -234,9 +233,9 @@ namespace halloween
         }
     }
 
-    void GameLoop::update(const float frameTimeSec)
+    void GameLoop::update(const float t_frameTimeSec)
     {
-        m_stateMachineUPtr->state().update(*m_contextUPtr, frameTimeSec);
+        m_stateMachineUPtr->state().update(*m_contextUPtr, t_frameTimeSec);
     }
 
     void GameLoop::draw()

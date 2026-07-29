@@ -53,10 +53,10 @@ namespace halloween
         void setup();
         void teardown();
         void frameLoop();
-        void handleSleepUntilEndOfFrame(const float elapsedTimeSec);
+        void handleSleepUntilEndOfFrame(const float t_elapsedTimeSec);
         void handlePerSecondTasks();
         void handleEvents();
-        void update(const float frameTimeSec);
+        void update(const float t_frameTimeSec);
         void draw();
 
       private:
@@ -94,6 +94,7 @@ namespace halloween
 
         std::unique_ptr<Context> m_contextUPtr;
     };
+
 } // namespace halloween
 
 #endif // GAME_LOOP_HPP_INCLUDED
