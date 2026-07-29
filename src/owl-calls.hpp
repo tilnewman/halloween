@@ -19,12 +19,12 @@ namespace halloween
       public:
         OwlCalls();
 
-        void start(const Context & context);
+        void start(const Context & t_context);
         void stop();
-        void update(const Context & context, const float frameTimeSec);
+        void update(const Context & t_context, const float t_frameTimeSec);
 
       private:
-        float randomTimeUntilNextCall(const Context & context) const;
+        float randomTimeUntilNextCall(const Context & t_context) const;
 
       private:
         bool m_isRunning;

@@ -13,38 +13,38 @@
 namespace halloween
 {
     OwlCalls::OwlCalls()
-        : m_isRunning(false)
-        , m_clock()
-        , m_elapsedTimeSec(0.0f)
-        , m_timeUntilSec(0.0f)
+        : m_isRunning{ false }
+        , m_clock{}
+        , m_elapsedTimeSec{ 0.0f }
+        , m_timeUntilSec{ 0.0f }
     {}
 
-    void OwlCalls::start(const Context & context)
+    void OwlCalls::start(const Context & t_context)
     {
         m_isRunning = true;
-        m_timeUntilSec = randomTimeUntilNextCall(context);
+        m_timeUntilSec = randomTimeUntilNextCall(t_context);
     }
 
     void OwlCalls::stop() { m_isRunning = false; }
 
-    float OwlCalls::randomTimeUntilNextCall(const Context & context) const
+    float OwlCalls::randomTimeUntilNextCall(const Context & t_context) const
     {
-        return context.random.fromTo(2.0f, 8.0f);
+        return t_context.random.fromTo(2.0f, 8.0f);
     }
 
-    void OwlCalls::update(const Context & context, const float frameTimeSec)
+    void OwlCalls::update(const Context & t_context, const float t_frameTimeSec)
     {
         if (!m_isRunning)
         {
             return;
         }
 
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
         if (m_elapsedTimeSec > m_timeUntilSec)
         {
             m_elapsedTimeSec = 0.0f;
-            m_timeUntilSec = randomTimeUntilNextCall(context);
-            context.audio.play("owl", context.random.fromTo(0.5f, 1.0f));
+            m_timeUntilSec = randomTimeUntilNextCall(t_context);
+            t_context.audio.play("owl", t_context.random.fromTo(0.5f, 1.0f));
         }
     }
 
