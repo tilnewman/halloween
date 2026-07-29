@@ -37,47 +37,47 @@ namespace halloween
 {
 
     Avatar::Avatar()
-        : m_blood()
-        , m_runAnim()
-        , m_attackAnim()
-        , m_deathAnim()
-        , m_throwAnim()
-        , m_glideAnim()
-        , m_idleAnim()
-        , m_jumpTexture()
-        , m_sprite(util::SfmlDefaults::instance().texture())
-        , m_velocity()
-        , m_action(Action::Idle)
-        , m_hasLanded(false)
-        , m_isFacingRight(true)
-        , m_deadDelaySec(0.0f)
-        , m_willDie(false)
-        , m_timeSinceLastThrowSec(0.0f)
+        : m_blood{}
+        , m_runAnim{}
+        , m_attackAnim{}
+        , m_deathAnim{}
+        , m_throwAnim{}
+        , m_glideAnim{}
+        , m_idleAnim{}
+        , m_jumpTexture{}
+        , m_sprite{ util::SfmlDefaults::instance().texture() }
+        , m_velocity{}
+        , m_action{ Action::Idle }
+        , m_hasLanded{ false }
+        , m_isFacingRight{ true }
+        , m_deadDelaySec{ 0.0f }
+        , m_willDie{ false }
+        , m_timeSinceLastThrowSec{ 0.0f }
     {}
 
-    void Avatar::setup(const Settings & settings)
+    void Avatar::setup(const Settings & t_settings)
     {
-        m_blood.setup(settings);
+        m_blood.setup(t_settings);
 
-        m_runAnim.setup((settings.media_path / "image/avatar"), "Run", 10, 0.045f, true);
-        m_attackAnim.setup((settings.media_path / "image/avatar"), "Attack", 10, 0.03f, false);
-        m_deathAnim.setup((settings.media_path / "image/avatar"), "Dead", 10, 0.05f, false);
-        m_throwAnim.setup((settings.media_path / "image/avatar"), "Throw", 10, 0.02f, false);
-        m_glideAnim.setup((settings.media_path / "image/avatar"), "Glide", 10, 0.33f, true);
-        m_idleAnim.setup((settings.media_path / "image/avatar"), "Idle", 10, 0.1f, true);
+        m_runAnim.setup((t_settings.media_path / "image/avatar"), "Run", 10, 0.045f, true);
+        m_attackAnim.setup((t_settings.media_path / "image/avatar"), "Attack", 10, 0.03f, false);
+        m_deathAnim.setup((t_settings.media_path / "image/avatar"), "Dead", 10, 0.05f, false);
+        m_throwAnim.setup((t_settings.media_path / "image/avatar"), "Throw", 10, 0.02f, false);
+        m_glideAnim.setup((t_settings.media_path / "image/avatar"), "Glide", 10, 0.33f, true);
+        m_idleAnim.setup((t_settings.media_path / "image/avatar"), "Idle", 10, 0.1f, true);
 
         util::TextureLoader::load(
-            m_jumpTexture, (settings.media_path / "image/avatar/Jump-6.png"), true);
+            m_jumpTexture, (t_settings.media_path / "image/avatar/Jump-6.png"), true);
 
         m_idleAnim.restart();
         m_sprite.setTexture(m_idleAnim.texture(), true);
-        m_sprite.setScale({ settings.avatar_scale, settings.avatar_scale });
+        m_sprite.setScale({ t_settings.avatar_scale, t_settings.avatar_scale });
     }
 
-    void Avatar::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Avatar::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        target.draw(m_sprite, states);
-        m_blood.draw(target, states);
+        t_target.draw(m_sprite, t_states);
+        m_blood.draw(t_target, t_states);
     }
 
     const sf::FloatRect Avatar::collisionRect() const
@@ -88,7 +88,7 @@ namespace halloween
         // attack sprite includes the sword swinging, but we don't want that sword colliding with
         // the walls and floors.
 
-        auto rect = m_sprite.getGlobalBounds();
+        sf::FloatRect rect{ m_sprite.getGlobalBounds() };
 
         if ((Action::Idle == m_action) || (Action::Attack == m_action))
         {
@@ -182,7 +182,7 @@ namespace halloween
 
     const sf::FloatRect Avatar::attackCollisionRect() const
     {
-        auto rect = m_sprite.getGlobalBounds();
+        sf::FloatRect rect{ m_sprite.getGlobalBounds() };
 
         const float hairVertAdj{ rect.size.y * 0.165f };
         rect.position.y += hairVertAdj;
@@ -202,100 +202,102 @@ namespace halloween
         return rect;
     }
 
-    void Avatar::setPosition(const sf::FloatRect & rect)
+    void Avatar::setSpawnPosForNewLevel(const sf::FloatRect & t_rect)
     {
-        sf::Vector2f position = util::center(rect);
-        position.y = (util::bottom(rect) - m_sprite.getGlobalBounds().size.y);
+        // spawn just above the enterRect so that the player falls a little
+        sf::Vector2f position{ util::center(t_rect) };
+        position.y = (util::bottom(t_rect) - m_sprite.getGlobalBounds().size.y);
         m_sprite.setPosition(position);
     }
 
-    void Avatar::update(Context & context, const float frameTimeSec)
+    void Avatar::update(Context & t_context, const float t_frameTimeSec)
     {
-        if (handleDeath(context, frameTimeSec))
+        if (handleDeath(t_context, t_frameTimeSec))
         {
             return;
         }
 
-        const bool isAttacking = handleAttacking(context, frameTimeSec);
-        const bool isThrowing = handleThrowing(context, frameTimeSec);
-        const bool isGliding = handleGliding(context, frameTimeSec);
+        const bool isAttacking{ handleAttacking(t_context, t_frameTimeSec) };
+        const bool isThrowing{ handleThrowing(t_context, t_frameTimeSec) };
+        const bool isGliding{ handleGliding(t_context, t_frameTimeSec) };
 
         if (!isAttacking)
         {
-            handleBossCollisions(context);
+            handleBossCollisions(t_context);
         }
 
         if (!isAttacking && !isThrowing && !isGliding)
         {
-            sideToSideMotion(context, frameTimeSec);
-            jumping(context, frameTimeSec);
+            sideToSideMotion(t_context, t_frameTimeSec);
+            jumping(t_context, t_frameTimeSec);
         }
 
         if (isGliding)
         {
+            // TODO whats this gravity magic?  Something for gliding that should be in t_settings
             m_velocity +=
-                ((context.settings.gravity_acc * sf::Vector2f(1.0f, 0.1f)) * frameTimeSec);
+                ((t_context.settings.gravity_acc * sf::Vector2f(1.0f, 0.1f)) * t_frameTimeSec);
         }
         else
         {
-            m_velocity += (context.settings.gravity_acc * frameTimeSec);
+            m_velocity += (t_context.settings.gravity_acc * t_frameTimeSec);
         }
 
         m_sprite.move(m_velocity);
 
-        moveMap(context);
+        moveMap(t_context);
 
-        preventBacktracking(context);
-        collisions(context);
-        killCollisions(context);
-        acidCollisions(context);
-        waterCollisions(context);
-        exitCollisions(context);
-        handleAttackingEnemies(context);
+        preventBacktracking(t_context);
+        collisions(t_context);
+        killCollisions(t_context);
+        acidCollisions(t_context);
+        waterCollisions(t_context);
+        exitCollisions(t_context);
+        handleAttackingEnemies(t_context);
 
-        context.managers.collideAllWithAvatar(context, collisionRect());
+        t_context.managers.collideAllWithAvatar(t_context, collisionRect());
 
         //
         // The normal collision rect is small, and makes gathering coins unfair.
         // This will increase it so that any slight near touch can gather a coin.
         // So check coin collisions all over again with this new rect.
-        context.coins.collideWithAvatar(
-            context, util::scaleRectInPlaceCopy(collisionRect(), { 1.3f, 1.75f }));
+        t_context.coins.collideWithAvatar(
+            t_context, util::scaleRectInPlaceCopy(collisionRect(), { 1.3f, 1.75f }));
 
-        if (context.managers.doesAvatarCollideWithAnyAndDie(collisionRect()))
+        if (t_context.managers.doesAvatarCollideWithAnyAndDie(collisionRect()))
         {
-            triggerDeath(context);
+            triggerDeath(t_context);
         }
 
-        killIfOutOfBounds(context);
+        killIfOutOfBounds(t_context);
 
         // this one must come last, after all possible sets to m_action
-        handleIdle(context, frameTimeSec);
+        handleIdle(t_context, t_frameTimeSec);
     }
 
-    void Avatar::moveMap(Context & context)
+    void Avatar::moveMap(Context & t_context)
     {
-        const float posXAfter = util::center(m_sprite.getGlobalBounds()).x;
-        const float screenMiddle = (context.layout.mapRegion().size.x * 0.5f);
+        const float posXAfter{ util::center(m_sprite.getGlobalBounds()).x };
+        const float screenMiddle{ t_context.layout.mapRegion().size.x * 0.5f };
 
         if ((m_velocity.x < 0.0f) || (posXAfter < screenMiddle))
         {
             return;
         }
 
-        const float moveX = (screenMiddle - posXAfter);
+        const float moveX{ screenMiddle - posXAfter };
 
-        if (!context.level.move(context.layout, moveX))
+        if (!t_context.level.move(t_context.layout, moveX))
         {
             return;
         }
 
         const sf::Vector2f move{ moveX, 0.0f };
         m_sprite.move(move);
-        context.managers.moveAllWithMap(move);
+        t_context.managers.moveAllWithMap(move);
     }
 
-    bool Avatar::handleDeath(Context & context, const float frameTimeSec)
+    bool Avatar::handleDeath(Context & t_context, const float t_frameTimeSec)
     {
         if (Action::Dead != m_action)
         {
@@ -305,14 +307,14 @@ namespace halloween
         // Delay a few seconds after death before changing states.
         // This allows the player to see how they died, and for all
         // the various sound effects to finish playing.
-        m_deadDelaySec += frameTimeSec;
-        if (m_deadDelaySec > context.settings.death_delay_sec)
+        m_deadDelaySec += t_frameTimeSec;
+        if (m_deadDelaySec > t_context.settings.death_delay_sec)
         {
-            if (context.info_region.lives() > 1)
+            if (t_context.info_region.lives() > 1)
             {
-                context.info_region.livesAdjust(-1);
+                t_context.info_region.livesAdjust(-1);
 
-                context.level.load(context);
+                t_context.level.load(t_context);
 
                 m_action = Action::Idle;
                 m_hasLanded = true;
@@ -325,36 +327,36 @@ namespace halloween
                     m_sprite.scale({ -1.0f, 1.0f }); // sfml trick to flip image
                 }
 
-                context.audio.play("respawn");
+                t_context.audio.play("respawn");
             }
             else
             {
-                context.state.setChangePending(State::Lose);
+                t_context.state.setChangePending(State::Lose);
             }
         }
 
-        if (m_deathAnim.update(frameTimeSec))
+        if (m_deathAnim.update(t_frameTimeSec))
         {
             m_sprite.setTexture(m_deathAnim.texture(), true);
         }
 
-        m_blood.update(frameTimeSec);
+        m_blood.update(t_frameTimeSec);
 
         return true;
     }
 
-    bool Avatar::handleAttacking(Context & context, const float frameTimeSec)
+    bool Avatar::handleAttacking(Context & t_context, const float t_frameTimeSec)
     {
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::F) && (Action::Attack != m_action) &&
             (Action::Throw != m_action))
         {
-            context.audio.play("swipe");
+            t_context.audio.play("swipe");
 
             // attacking in any way slows walk speed looks right
             if (Action::Run == m_action)
             {
-                m_velocity.x *= context.settings.walk_speed_attack_reduction_ratio;
+                m_velocity.x *= t_context.settings.walk_speed_attack_reduction_ratio;
             }
 
             m_action = Action::Attack;
@@ -368,7 +370,7 @@ namespace halloween
         // all other frames
         if (Action::Attack == m_action)
         {
-            if (m_attackAnim.update(frameTimeSec))
+            if (m_attackAnim.update(t_frameTimeSec))
             {
                 m_sprite.setTexture(m_attackAnim.texture(), true);
 
@@ -385,23 +387,23 @@ namespace halloween
         return false;
     }
 
-    bool Avatar::handleThrowing(Context & context, const float frameTimeSec)
+    bool Avatar::handleThrowing(Context & t_context, const float t_frameTimeSec)
     {
-        m_timeSinceLastThrowSec += frameTimeSec;
+        m_timeSinceLastThrowSec += t_frameTimeSec;
 
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D) && (Action::Attack != m_action) &&
-            (Action::Throw != m_action) && (context.info_region.darts() > 0) &&
+            (Action::Throw != m_action) && (t_context.info_region.darts() > 0) &&
             (m_timeSinceLastThrowSec > 0.1f))
         {
             m_timeSinceLastThrowSec = 0.0f;
 
-            context.audio.play("throw");
+            t_context.audio.play("throw");
 
             // attacking in any way slowing walk speed looks right
             if (Action::Run == m_action)
             {
-                m_velocity.x *= context.settings.walk_speed_throw_reduction_ratio;
+                m_velocity.x *= t_context.settings.walk_speed_throw_reduction_ratio;
             }
 
             m_action = Action::Throw;
@@ -413,13 +415,13 @@ namespace halloween
             sf::Vector2f missilePosition{ 0.0f, 0.0f };
             missilePosition.x = util::center(avatarRect).x;
             missilePosition.y = (avatarRect.position.y + (avatarRect.size.y * 0.4f));
-            context.missiles.add(missilePosition, m_isFacingRight);
+            t_context.missiles.add(missilePosition, m_isFacingRight);
 
-            context.info_region.dartsAdjust(-1);
+            t_context.info_region.dartsAdjust(-1);
 
             if (m_isFacingRight)
             {
-                context.boss.reactToThrow(context);
+                t_context.boss.reactToThrow(t_context);
             }
 
             return true;
@@ -428,7 +430,7 @@ namespace halloween
         // all other frames
         if (Action::Throw == m_action)
         {
-            if (m_throwAnim.update(frameTimeSec))
+            if (m_throwAnim.update(t_frameTimeSec))
             {
                 m_sprite.setTexture(m_throwAnim.texture(), true);
 
@@ -445,13 +447,13 @@ namespace halloween
         return false;
     }
 
-    bool Avatar::handleGliding(Context & context, const float frameTimeSec)
+    bool Avatar::handleGliding(Context & t_context, const float t_frameTimeSec)
     {
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) && (Action::Jump == m_action) &&
             (m_velocity.y > -1.0f))
         {
-            context.audio.play("parachute", 0.5f);
+            t_context.audio.play("parachute", 0.5f);
             m_action = Action::Glide;
             m_glideAnim.restart();
             m_sprite.setTexture(m_glideAnim.texture(), true);
@@ -470,7 +472,7 @@ namespace halloween
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up))
             {
-                if (m_glideAnim.update(frameTimeSec))
+                if (m_glideAnim.update(t_frameTimeSec))
                 {
                     m_sprite.setTexture(m_glideAnim.texture(), true);
                 }
@@ -487,11 +489,11 @@ namespace halloween
         return false;
     }
 
-    bool Avatar::handleIdle(Context &, const float frameTimeSec)
+    bool Avatar::handleIdle(Context &, const float t_frameTimeSec)
     {
         if (Action::Idle == m_action)
         {
-            if (m_idleAnim.update(frameTimeSec))
+            if (m_idleAnim.update(t_frameTimeSec))
             {
                 m_sprite.setTexture(m_idleAnim.texture(), true);
             }
@@ -504,30 +506,30 @@ namespace halloween
         }
     }
 
-    void Avatar::sideToSideMotion(Context & context, const float frameTimeSec)
+    void Avatar::sideToSideMotion(Context & t_context, const float t_frameTimeSec)
     {
         if (Action::Jump == m_action)
         {
             // Allow moving side-to-side at a reduced rate while in the air.
             // It sounds wrong but feels so right.
             // What the hell, mario did it.
-            const float jumpMoveDivisor = 3.0f;
+            const float jumpMoveDivisor{ 3.0f };  // TODO move this to t_settings
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
             {
-                m_velocity.x += ((context.settings.walk_acc / jumpMoveDivisor) * frameTimeSec);
-                if (m_velocity.x > context.settings.walk_speed_limit)
+                m_velocity.x += ((t_context.settings.walk_acc / jumpMoveDivisor) * t_frameTimeSec);
+                if (m_velocity.x > t_context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = context.settings.walk_speed_limit;
+                    m_velocity.x = t_context.settings.walk_speed_limit;
                 }
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
             {
-                m_velocity.x -= ((context.settings.walk_acc / jumpMoveDivisor) * frameTimeSec);
-                if (m_velocity.x < -context.settings.walk_speed_limit)
+                m_velocity.x -= ((t_context.settings.walk_acc / jumpMoveDivisor) * t_frameTimeSec);
+                if (m_velocity.x < -t_context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = -context.settings.walk_speed_limit;
+                    m_velocity.x = -t_context.settings.walk_speed_limit;
                 }
             }
         }
@@ -535,10 +537,10 @@ namespace halloween
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
             {
-                m_velocity.x += (context.settings.walk_acc * frameTimeSec);
-                if (m_velocity.x > context.settings.walk_speed_limit)
+                m_velocity.x += (t_context.settings.walk_acc * t_frameTimeSec);
+                if (m_velocity.x > t_context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = context.settings.walk_speed_limit;
+                    m_velocity.x = t_context.settings.walk_speed_limit;
                 }
 
                 if (Action::Run != m_action)
@@ -547,7 +549,7 @@ namespace halloween
                 }
 
                 m_action = Action::Run;
-                context.audio.play("walk");
+                t_context.audio.play("walk");
 
                 if (!m_isFacingRight)
                 {
@@ -558,10 +560,10 @@ namespace halloween
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
             {
-                m_velocity.x -= (context.settings.walk_acc * frameTimeSec);
-                if (m_velocity.x < -context.settings.walk_speed_limit)
+                m_velocity.x -= (t_context.settings.walk_acc * t_frameTimeSec);
+                if (m_velocity.x < -t_context.settings.walk_speed_limit)
                 {
-                    m_velocity.x = -context.settings.walk_speed_limit;
+                    m_velocity.x = -t_context.settings.walk_speed_limit;
                 }
 
                 if (Action::Run != m_action)
@@ -570,7 +572,7 @@ namespace halloween
                 }
 
                 m_action = Action::Run;
-                context.audio.play("walk");
+                t_context.audio.play("walk");
 
                 if (m_isFacingRight)
                 {
@@ -583,47 +585,47 @@ namespace halloween
             {
                 m_velocity.x = 0.0f;
                 m_action = Action::Idle;
-                context.audio.stop("walk");
+                t_context.audio.stop("walk");
             }
         }
 
         if (Action::Run == m_action)
         {
-            if (m_runAnim.update(frameTimeSec))
+            if (m_runAnim.update(t_frameTimeSec))
             {
                 m_sprite.setTexture(m_runAnim.texture(), true);
             }
         }
     }
 
-    void Avatar::jumping(Context & context, const float frameTimeSec)
+    void Avatar::jumping(Context & t_context, const float t_frameTimeSec)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) && m_hasLanded)
         {
             m_hasLanded = false;
-            m_velocity.y -= (context.settings.jump_acc * frameTimeSec);
-            context.audio.play("jump");
-            context.audio.stop("walk");
+            m_velocity.y -= (t_context.settings.jump_acc * t_frameTimeSec);
+            t_context.audio.play("jump");
+            t_context.audio.stop("walk");
             m_action = Action::Jump;
             m_sprite.setTexture(m_jumpTexture, true);
         }
     }
 
-    void Avatar::collisions(Context & context)
+    void Avatar::collisions(Context & t_context)
     {
-        const float tolerance = 25.0f; // this magic number brought to you by zTn 2021-8-2
+        const float tolerance{ 25.0f }; // this magic number brought to you by zTn 2021-8-2
 
-        const sf::FloatRect avatarRect = collisionRect();
-        const sf::Vector2f avatarCenter = util::center(avatarRect);
+        const sf::FloatRect avatarRect{ collisionRect() };
+        const sf::Vector2f avatarCenter{ util::center(avatarRect) };
 
         const float footRectHeightAdj{ avatarRect.size.y * 0.8f };
-        sf::FloatRect footRect = avatarRect;
+        sf::FloatRect footRect{ avatarRect };
         footRect.position.y += footRectHeightAdj;
         footRect.size.y -= footRectHeightAdj;
 
         // TODO overahul this to
-        std::vector<sf::FloatRect> rects = context.level.walkCollisions();
-        context.managers.appendAllCollisions(rects);
+        std::vector<sf::FloatRect> rects = t_context.level.walkCollisions();
+        t_context.managers.appendAllCollisions(rects);
 
         bool hasHitSomething{ false };
         sf::FloatRect intersection;
@@ -663,7 +665,7 @@ namespace halloween
 
                 if (!m_hasLanded)
                 {
-                    context.audio.play("land");
+                    t_context.audio.play("land");
                     m_action = Action::Idle;
                 }
 
@@ -700,34 +702,34 @@ namespace halloween
         }
     }
 
-    void Avatar::killCollisions(Context & context)
+    void Avatar::killCollisions(Context & t_context)
     {
         const sf::FloatRect avatarRect{ collisionRect() };
 
-        for (const sf::FloatRect & coll : context.level.killCollisions())
+        for (const sf::FloatRect & coll : t_context.level.killCollisions())
         {
             if (avatarRect.findIntersection(coll))
             {
-                triggerDeath(context);
+                triggerDeath(t_context);
                 return;
             }
         }
     }
 
-    void Avatar::exitCollisions(Context & context) const
+    void Avatar::exitCollisions(Context & t_context) const
     {
-        if (collisionRect().findIntersection(context.level.exitRect()))
+        if (collisionRect().findIntersection(t_context.level.exitRect()))
         {
-            context.audio.stopAllLooped();
-            context.state.setChangePending(State::Level);
+            t_context.audio.stopAllLooped();
+            t_context.state.setChangePending(State::Level);
             return;
         }
     }
 
-    void Avatar::preventBacktracking(const Context & context)
+    void Avatar::preventBacktracking(const Context & t_context)
     {
         const sf::FloatRect backtrackRect{ { -100.0f, 0.0f },
-                                           { 100.0f, context.layout.wholeSize().y } };
+                                           { 100.0f, t_context.layout.wholeSize().y } };
 
         const auto intersectionOpt{ collisionRect().findIntersection(backtrackRect) };
         if (intersectionOpt)
@@ -737,24 +739,26 @@ namespace halloween
         }
     }
 
-    void Avatar::handleAttackingEnemies(Context & context)
+    void Avatar::handleAttackingEnemies(Context & t_context)
     {
         if (Action::Attack != m_action)
         {
             return;
         }
 
-        const auto attackRect = attackCollisionRect();
-        if (context.slimes.attack(context, attackRect) || context.bats.attack(context, attackRect))
+        const auto attackRect{ attackCollisionRect() };
+        if (t_context.slimes.attack(t_context, attackRect) ||
+            t_context.bats.attack(t_context, attackRect))
         {
+            // TODO what is this empty logic block?
         }
-        else if (context.boss.attack(context, attackRect))
+        else if (t_context.boss.attack(t_context, attackRect))
         {
-            bounceAwayFromBoss(context);
+            bounceAwayFromBoss(t_context);
         }
     }
 
-    void Avatar::acidCollisions(Context & context)
+    void Avatar::acidCollisions(Context & t_context)
     {
         // this check prevents playing the sfx repeatedly while the player falls
         if (m_willDie)
@@ -764,18 +768,18 @@ namespace halloween
 
         const sf::FloatRect avatarRect{ collisionRect() };
 
-        for (const sf::FloatRect & coll : context.level.acidCollisions())
+        for (const sf::FloatRect & coll : t_context.level.acidCollisions())
         {
             if (avatarRect.findIntersection(coll))
             {
                 m_willDie = true;
-                context.audio.play("acid.ogg");
+                t_context.audio.play("acid.ogg");
                 return;
             }
         }
     }
 
-    void Avatar::waterCollisions(Context & context)
+    void Avatar::waterCollisions(Context & t_context)
     {
         // this check prevents playing the sfx repeatedly while the player falls
         if (m_willDie)
@@ -785,77 +789,77 @@ namespace halloween
 
         const sf::FloatRect avatarRect{ collisionRect() };
 
-        for (const sf::FloatRect & coll : context.level.waterCollisions())
+        for (const sf::FloatRect & coll : t_context.level.waterCollisions())
         {
             if (avatarRect.findIntersection(coll))
             {
                 m_willDie = true;
-                context.audio.play("dunk.ogg");
-                context.audio.play("dunk-bubble.ogg");
+                t_context.audio.play("dunk.ogg");
+                t_context.audio.play("dunk-bubble.ogg");
                 return;
             }
         }
     }
 
-    void Avatar::killIfOutOfBounds(Context & context)
+    void Avatar::killIfOutOfBounds(Context & t_context)
     {
-        if (!context.layout.mapRegion().findIntersection(collisionRect()))
+        if (!t_context.layout.mapRegion().findIntersection(collisionRect()))
         {
-            triggerDeath(context);
+            triggerDeath(t_context);
         }
     }
 
-    void Avatar::triggerDeath(Context & context)
+    void Avatar::triggerDeath(Context & t_context)
     {
         if (Action::Dead == m_action)
         {
             return;
         }
 
-        m_blood.start(context, m_sprite.getPosition(), m_isFacingRight);
+        m_blood.start(t_context, m_sprite.getPosition(), m_isFacingRight);
         m_action = Action::Dead;
-        context.audio.stop("walk");
-        context.audio.play("scream");
+        t_context.audio.stop("walk");
+        t_context.audio.play("scream");
         m_velocity = { 0.0f, 0.0f };
         m_deathAnim.restart();
 
-        context.stats.has_player_died = true;
-        context.stats.enemy_killed = 0;
-        context.stats.coin_collected = 0;
+        t_context.stats.has_player_died = true;
+        t_context.stats.enemy_killed = 0;
+        t_context.stats.coin_collected = 0;
     }
 
-    void Avatar::handleBossCollisions(Context & context)
+    void Avatar::handleBossCollisions(Context & t_context)
     {
-        if (!context.boss.doesCollide(collisionRect()))
+        if (!t_context.boss.doesCollide(collisionRect()))
         {
             return;
         }
 
-        context.audio.play("hurt");
-        bounceAwayFromBoss(context);
+        t_context.audio.play("hurt");
+        bounceAwayFromBoss(t_context);
     }
 
-    void Avatar::bounceAwayFromBoss(const Context & context)
+    void Avatar::bounceAwayFromBoss(const Context & t_context)
     {
         m_sprite.move({ -15.0f, 0.0f });
 
         if (Action::Glide == m_action)
         {
-            m_velocity.x = -(context.settings.walk_speed_limit * 1.0f);
-            m_velocity.y = -(context.settings.walk_speed_limit * 0.25f);
+            m_velocity.x = -(t_context.settings.walk_speed_limit * 1.0f);
+            m_velocity.y = -(t_context.settings.walk_speed_limit * 0.25f);
         }
         else if (m_hasLanded)
         {
-            m_velocity.x = -(context.settings.walk_speed_limit * 2.25f);
-            m_velocity.y = -(context.settings.walk_speed_limit * 1.5f);
+            m_velocity.x = -(t_context.settings.walk_speed_limit * 2.25f);
+            m_velocity.y = -(t_context.settings.walk_speed_limit * 1.5f);
         }
         else
         {
-            m_velocity.x = -(context.settings.walk_speed_limit * 1.5f);
-            m_velocity.y = -(context.settings.walk_speed_limit * 0.75f);
+            m_velocity.x = -(t_context.settings.walk_speed_limit * 1.5f);
+            m_velocity.y = -(t_context.settings.walk_speed_limit * 0.75f);
         }
     }
 
-    void Avatar::handleHitByBoss(Context & context) { triggerDeath(context); }
+    void Avatar::handleHitByBoss(Context & t_context) { triggerDeath(t_context); }
 
 } // namespace halloween

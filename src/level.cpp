@@ -61,7 +61,7 @@ namespace halloween
         {
             verifyLayerIndexCounts();
             appendVertLayers(t_context);
-            t_context.avatar.setPosition(m_enterRect);
+            t_context.avatar.setSpawnPosForNewLevel(m_enterRect);
             m_farthestHorizMapPixel = m_exitRect.position.x;
             m_farthestHorizTraveled = 0.0f;
             m_number = t_context.level_number;
