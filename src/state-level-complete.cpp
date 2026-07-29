@@ -8,12 +8,14 @@
 #include "context.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
+#include "level.hpp"
 #include "object-manager.hpp"
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
 #include "state-machine.hpp"
+#include "state-play.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -119,7 +121,17 @@ namespace halloween
         util::centerInside(m_scoreText, t_context.layout.wholeRegion());
     }
 
-    void LevelCompleteState::onExit(Context & t_context) { ++t_context.level_number; }
+    void LevelCompleteState::onExit(Context & t_context) 
+    { 
+        if (t_context.level.number() < 3)
+        {
+            PlayState::m_willLoadNewLevel = true;
+        }
+        else
+        {
+            t_context.state.setChangePending(State::Win);
+        }
+    }
 
     bool LevelCompleteState::handleEvent(Context & t_context, const sf::Event & t_event)
     {

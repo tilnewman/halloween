@@ -41,8 +41,10 @@ namespace halloween
 
     void PlayState::onEnter(Context & t_context)
     {
-        if (t_context.level.number() != t_context.level_number)
+        if (m_willLoadNewLevel)
         {
+            m_willLoadNewLevel = false;
+            t_context.level.numberIncrement();
             if (t_context.level.load(t_context))
             {
                 t_context.stats = LevelStats();
@@ -70,11 +72,6 @@ namespace halloween
 
     void PlayState::update(Context & t_context, const float t_frameTimeSec)
     {
-        if (t_context.level.number() != t_context.level_number)
-        {
-            return;
-        }
-
         StateBase::update(t_context, t_frameTimeSec);
 
         t_context.info_region.update(t_context, t_frameTimeSec);
@@ -118,11 +115,6 @@ namespace halloween
     void PlayState::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        if (t_context.level.number() != t_context.level_number)
-        {
-            return;
-        }
-
         t_target.draw(t_context.media.bg_sprite, t_states);
 
         t_context.managers.drawAllBeforeMap(t_context, t_target, t_states);

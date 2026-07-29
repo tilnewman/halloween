@@ -96,7 +96,6 @@ namespace halloween
             , managers{ t_objectManagerList }
             , stats{ t_levelStats }
             , boss{ t_mushrooomBoos }
-            , level_number{ 1 }
         {}
 
         const Settings & settings;
@@ -125,9 +124,6 @@ namespace halloween
         ObjectManagerList & managers;
         LevelStats & stats;
         MushroomBoss & boss;
-
-        // TODO get these out of context
-        std::size_t level_number;
     };
 
 } // namespace halloween

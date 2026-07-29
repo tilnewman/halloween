@@ -64,7 +64,6 @@ namespace halloween
             t_context.avatar.setSpawnPosForNewLevel(m_enterRect);
             m_farthestHorizMapPixel = m_exitRect.position.x;
             m_farthestHorizTraveled = 0.0f;
-            m_number = t_context.level_number;
             // dumpInfo(levelNumber);
             return true;
         }

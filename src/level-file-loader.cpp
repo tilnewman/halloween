@@ -34,10 +34,11 @@ namespace halloween
     bool LevelFileLoader::load(Context & t_context)
     {
         std::stringstream fileNameSS;
-        fileNameSS << "level-" << t_context.level_number << ".json";
+        fileNameSS << "level-" << t_context.level.number() << ".json";
 
-        const std::filesystem::path path =
-            (t_context.settings.media_path / "map" / fileNameSS.str());
+        const std::filesystem::path path{ (
+            t_context.settings.media_path / "map" / fileNameSS.str()) };
+
         if (!std::filesystem::exists(path))
         {
             return false;

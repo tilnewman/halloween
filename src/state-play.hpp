@@ -37,6 +37,8 @@ namespace halloween
             const Context & t_context,
             sf::RenderTarget & t_target,
             sf::RenderStates & t_states) const override;
+
+        inline static bool m_willLoadNewLevel{ true };
     };
 
 } // namespace halloween

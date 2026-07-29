@@ -74,7 +74,9 @@ namespace halloween
         inline const sf::Vector2f mapPosition() const { return m_mapPositionOffset; }
         inline const sf::FloatRect & enterRect() const { return m_enterRect; }
         inline const sf::FloatRect & exitRect() const { return m_exitRect; }
-        inline std::size_t number() const { return m_number; }
+
+        constexpr std::size_t number() const noexcept { return m_number; }
+        constexpr void numberIncrement() noexcept { ++m_number; }
 
         inline void setEnterAndExitRects(
             const sf::FloatRect & t_enterRect, const sf::FloatRect & t_exitRect)
