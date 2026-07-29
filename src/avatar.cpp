@@ -59,15 +59,17 @@ namespace halloween
     {
         m_blood.setup(t_settings);
 
-        m_runAnim.setup((t_settings.media_path / "image/avatar"), "Run", 10, 0.045f, true);
-        m_attackAnim.setup((t_settings.media_path / "image/avatar"), "Attack", 10, 0.03f, false);
-        m_deathAnim.setup((t_settings.media_path / "image/avatar"), "Dead", 10, 0.05f, false);
-        m_throwAnim.setup((t_settings.media_path / "image/avatar"), "Throw", 10, 0.02f, false);
-        m_glideAnim.setup((t_settings.media_path / "image/avatar"), "Glide", 10, 0.33f, true);
-        m_idleAnim.setup((t_settings.media_path / "image/avatar"), "Idle", 10, 0.1f, true);
+        m_runAnim.setup((t_settings.media_path / "image" / "avatar"), "Run", 10, 0.045f, true);
+        m_attackAnim.setup(
+            (t_settings.media_path / "image" / "avatar"), "Attack", 10, 0.03f, false);
+
+        m_deathAnim.setup((t_settings.media_path / "image" / "avatar"), "Dead", 10, 0.05f, false);
+        m_throwAnim.setup((t_settings.media_path / "image" / "avatar"), "Throw", 10, 0.02f, false);
+        m_glideAnim.setup((t_settings.media_path / "image" / "avatar"), "Glide", 10, 0.33f, true);
+        m_idleAnim.setup((t_settings.media_path / "image" / "avatar"), "Idle", 10, 0.1f, true);
 
         util::TextureLoader::load(
-            m_jumpTexture, (t_settings.media_path / "image/avatar/Jump-6.png"));
+            m_jumpTexture, (t_settings.media_path / "image" / "avatar" / "Jump-6.png"));
 
         m_idleAnim.restart();
         m_sprite.setTexture(m_idleAnim.texture(), true);
