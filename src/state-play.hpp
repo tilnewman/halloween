@@ -22,11 +22,11 @@ namespace halloween
 
     //
 
-    class PlayState : public StateBase
+    class PlayState final : public StateBase
     {
       public:
         explicit PlayState(const Context & t_context);
-        ~PlayState() override = default;
+        ~PlayState() final = default;
 
         void onEnter(const Context & t_context) override;
         void onExit(const Context & t_context) override;

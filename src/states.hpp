@@ -168,16 +168,16 @@ namespace halloween
 
     //
 
-    struct StartState : public StateBase
+    struct StartState final : public StateBase
     {
         StartState()
             : StateBase{ State::Start, State::Title }
         {}
 
-        ~StartState() override = default;
+        ~StartState() final = default;
 
-        void onEnter(const Context & t_context) override;
-        void onExit(const Context & t_context) override;
+        void onEnter(const Context & t_context) final;
+        void onExit(const Context & t_context) final;
         void update(const Context &, const float) final {}
         bool handleEvent(const Context &, const sf::Event &) final { return false; }
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
@@ -185,13 +185,13 @@ namespace halloween
 
     //
 
-    struct QuitState : public StateBase
+    struct QuitState final : public StateBase
     {
         QuitState()
             : StateBase{ State::Quit, State::Quit }
         {}
 
-        ~QuitState() override = default;
+        ~QuitState() final = default;
 
         void onEnter(const Context &) final {}
         void update(const Context &, const float) final {}
@@ -221,17 +221,17 @@ namespace halloween
 
     //
 
-    struct TitleState : public TimedMessageState
+    struct TitleState final : public TimedMessageState
     {
         explicit TitleState(const Context & t_context);
-        ~TitleState() override = default;
+        ~TitleState() final = default;
 
-        void onEnter(const Context & t_context) override;
+        void onEnter(const Context & t_context) final;
 
         void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const override;
+            sf::RenderStates & t_states) const final;
 
       private:
         sf::Text m_text1;
@@ -242,37 +242,38 @@ namespace halloween
 
     //
 
-    struct PauseState : public TimedMessageState
+    struct PauseState final : public TimedMessageState
     {
         explicit PauseState(const Context & t_context);
-        ~PauseState() override = default;
+        ~PauseState() final = default;
 
-        void onEnter(const Context & t_context) override;
-        void onExit(const Context & t_context) override;
-        void update(const Context & t_context, const float t_frameTimeSec) override;
+        void onEnter(const Context & t_context) final;
+        void onExit(const Context & t_context) final;
+        void update(const Context & t_context, const float t_frameTimeSec) final;
 
         void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const override;
+            sf::RenderStates & t_states) const final;
 
+      private:
         PauseScreen screen;
     };
 
     //
 
-    struct LoseState : public TimedMessageState
+    struct LoseState final : public TimedMessageState
     {
         explicit LoseState(const Context & t_context);
-        ~LoseState() override = default;
+        ~LoseState() final = default;
 
-        void onEnter(const Context & t_context) override;
-        void onExit(const Context & t_context) override;
+        void onEnter(const Context & t_context) final;
+        void onExit(const Context & t_context) final;
 
         void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const override;
+            sf::RenderStates & t_states) const final;
 
       private:
         sf::Text m_scoreText;
@@ -280,18 +281,18 @@ namespace halloween
 
     //
 
-    struct WinState : public TimedMessageState
+    struct WinState final : public TimedMessageState
     {
         explicit WinState(const Context & t_context);
-        ~WinState() override = default;
+        ~WinState() final = default;
 
-        void onEnter(const Context & t_context) override;
-        void onExit(const Context & t_context) override;
+        void onEnter(const Context & t_context) final;
+        void onExit(const Context & t_context) final;
 
         void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const override;
+            sf::RenderStates & t_states) const final;
 
       private:
         sf::Text m_scoreText;

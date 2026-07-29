@@ -46,11 +46,11 @@ namespace halloween
 
     //
 
-    class LevelCompleteState : public StateBase
+    class LevelCompleteState final: public StateBase
     {
       public:
         explicit LevelCompleteState(const Context & context);
-        ~LevelCompleteState() override = default;
+        ~LevelCompleteState() final = default;
 
         void onEnter(const Context & t_context) final;
         void onExit(const Context & t_context) final;
