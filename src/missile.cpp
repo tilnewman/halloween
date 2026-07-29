@@ -26,26 +26,26 @@ namespace halloween
 {
 
     Missiles::Missiles()
-        : m_texture()
-        , m_velocity(0.0f, 0.0f)
-        , m_scale(0.0f, 0.0f)
-        , m_missiles()
+        : m_texture{}
+        , m_velocity{}
+        , m_scale{}
+        , m_missiles{}
     {
         // anything more than dozens will work here
         m_missiles.reserve(100);
     }
 
-    void Missiles::setup(const Settings & settings)
+    void Missiles::setup(const Settings & t_settings)
     {
-        m_velocity.x = settings.dart_speed;
-        m_scale = settings.dart_scale;
+        m_velocity.x = t_settings.dart_speed;
+        m_scale = t_settings.dart_scale;
 
-        util::TextureLoader::load(m_texture, (settings.media_path / "image" / "kunai.png"), true);
+        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "kunai.png"), true);
     }
 
-    void Missiles::add(const sf::Vector2f & position, const bool isMovingRight)
+    void Missiles::add(const sf::Vector2f & t_position, const bool t_isMovingRight)
     {
-        Missile & dart = m_missiles.emplace_back(isMovingRight, m_texture);
+        Missile & dart{ m_missiles.emplace_back(t_isMovingRight, m_texture) };
         dart.sprite.setScale(m_scale);
 
         if (!dart.is_moving_right)
@@ -54,53 +54,55 @@ namespace halloween
         }
 
         util::setOriginToCenter(dart.sprite);
-        dart.sprite.setPosition(position);
+        dart.sprite.setPosition(t_position);
     }
 
-    void Missiles::update(Context & context, const float frameTimeSec)
+    void Missiles::update(Context & t_context, const float t_frameTimeSec)
     {
-        bool wereAnyKilled = false;
+        bool wereAnyKilled{ false };
         for (Missile & missile : m_missiles)
         {
             if (missile.is_moving_right)
             {
-                missile.sprite.move(m_velocity * frameTimeSec);
+                missile.sprite.move(m_velocity * t_frameTimeSec);
             }
             else
             {
-                missile.sprite.move(-m_velocity * frameTimeSec);
+                missile.sprite.move(-m_velocity * t_frameTimeSec);
             }
 
-            const sf::FloatRect missileRect = missile.sprite.getGlobalBounds();
+            const sf::FloatRect missileRect{ missile.sprite.getGlobalBounds() };
 
-            missile.is_alive = context.layout.mapRegion().findIntersection(missileRect).has_value();
+            missile.is_alive =
+                t_context.layout.mapRegion().findIntersection(missileRect).has_value();
+
             if (!missile.is_alive)
             {
                 continue;
             }
 
-            if (context.slimes.attack(context, missileRect) ||
-                context.bats.attack(context, missileRect))
+            if (t_context.slimes.attack(t_context, missileRect) ||
+                t_context.bats.attack(t_context, missileRect))
             {
                 wereAnyKilled = true;
                 missile.is_alive = false;
                 continue;
             }
 
-            if (context.boss.attack(context, missileRect))
+            if (t_context.boss.attack(t_context, missileRect))
             {
                 wereAnyKilled = true;
                 missile.is_alive = false;
                 continue;
             }
 
-            for (const sf::FloatRect & collRect : context.level.walkCollisions())
+            for (const sf::FloatRect & collRect : t_context.level.walkCollisions())
             {
                 if (missileRect.findIntersection(collRect))
                 {
                     wereAnyKilled = true;
                     missile.is_alive = false;
-                    context.audio.play("metal-miss");
+                    t_context.audio.play("metal-miss");
                     break;
                 }
             }
@@ -117,11 +119,11 @@ namespace halloween
         }
     }
 
-    void Missiles::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Missiles::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (const Missile & missile : m_missiles)
         {
-            target.draw(missile.sprite, states);
+            t_target.draw(missile.sprite, t_states);
         }
     }
 

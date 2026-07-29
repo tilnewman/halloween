@@ -19,10 +19,10 @@ namespace halloween
 
     struct Missile
     {
-        Missile(const bool isMovingRight, const sf::Texture & texture)
+        Missile(const bool t_isMovingRight, const sf::Texture & t_texture)
             : is_alive(true)
-            , is_moving_right(isMovingRight)
-            , sprite(texture)
+            , is_moving_right(t_isMovingRight)
+            , sprite(t_texture)
         {}
 
         bool is_alive;
@@ -37,11 +37,11 @@ namespace halloween
       public:
         Missiles();
 
-        void setup(const Settings & settings);
-        void add(const sf::Vector2f & position, const bool isMovingRight);
-        void update(Context &, const float frameTimeSec);
-        void draw(sf::RenderTarget & target, sf::RenderStates states) const;
-        void clear() { m_missiles.clear(); }
+        void setup(const Settings & t_settings);
+        void add(const sf::Vector2f & t_position, const bool t_isMovingRight);
+        void update(Context &, const float t_frameTimeSec);
+        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
+        constexpr void clear() noexcept { m_missiles.clear(); }
 
       private:
         sf::Texture m_texture;
