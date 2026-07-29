@@ -30,16 +30,16 @@ namespace halloween
 
     struct Bat
     {
-        Bat(const std::size_t batIndex,
-            const bool isMovingLeft,
-            const sf::FloatRect & range,
-            const float spd)
+        Bat(const std::size_t t_batIndex,
+            const bool t_isMovingLeft,
+            const sf::FloatRect & t_range,
+            const float t_speed)
             : is_alive(true)
-            , is_moving_left(isMovingLeft)
-            , bat_index(batIndex)
+            , is_moving_left(t_isMovingLeft)
+            , bat_index(t_batIndex)
             , texture_index(0)
-            , rect(range)
-            , speed(spd)
+            , rect(t_range)
+            , speed(t_speed)
             , sprite(util::SfmlDefaults::instance().texture())
         {}
 
@@ -56,12 +56,12 @@ namespace halloween
 
     struct BatDeathAnim
     {
-        BatDeathAnim(const std::size_t batIndex, const sf::Sprite & spr)
+        BatDeathAnim(const std::size_t t_batIndex, const sf::Sprite & t_sprite)
             : is_visible(true)
-            , bat_index(batIndex)
+            , bat_index(t_batIndex)
             , texture_index(0)
             , elapsed_time_sec(0.0f)
-            , sprite(spr)
+            , sprite(t_sprite)
         {}
 
         bool is_visible;
@@ -80,17 +80,20 @@ namespace halloween
         virtual ~Bats() override = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & settings) final;
-        void add(Context & context, const sf::FloatRect & rect) final;
+        void setup(const Settings & t_settings) final;
+        void add(Context & t_context, const sf::FloatRect & t_rect) final;
         void clear() final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
-        void moveWithMap(const sf::Vector2f & move) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+        void moveWithMap(const sf::Vector2f &) final;
         void collideWithAvatar(Context &, const sf::FloatRect &) final {}
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const final;
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const final;
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
-        bool attack(Context & context, const sf::FloatRect & attackRect);
+        bool attack(Context & t_context, const sf::FloatRect & t_attackRect);
         constexpr std::size_t count() const noexcept { return m_bats.size(); }
 
       private:
