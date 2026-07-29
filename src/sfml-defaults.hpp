@@ -16,7 +16,7 @@ namespace util
     // Ever since SFML 3.0 sprites, text, and sounds have no default constructors.
     // Everywhere you have one you need it's corresponding resource object,
     // which is kinda ridiculous.  So I'm forced to make this singleton that can
-    // be accessed anywhere and provide dummy resources for Text and Textures.
+    // be accessed anywhere and provide dummy Text and Textures.
     class SfmlDefaults
     {
       private:

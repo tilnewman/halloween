@@ -10,22 +10,24 @@
 namespace util
 {
     PositionDrifter::PositionDrifter()
-        : m_horizDrifter()
-        , m_vertDrifter()
+        : m_horizDrifter{}
+        , m_vertDrifter{}
     {}
 
     void PositionDrifter::setup(
-        const Random & random, const sf::FloatRect & region, const std::pair<float, float> & speed)
+        const Random & t_random,
+        const sf::FloatRect & t_region,
+        const std::pair<float, float> & t_speed)
     {
         m_horizDrifter = SliderDrift<float, float>(
-            random, std::make_pair(region.position.x, util::right(region)), speed);
+            t_random, std::make_pair(t_region.position.x, util::right(t_region)), t_speed);
 
-        m_horizDrifter.restart(random);
+        m_horizDrifter.restart(t_random);
 
         m_vertDrifter = SliderDrift<float, float>(
-            random, std::make_pair(region.position.y, util::bottom(region)), speed);
+            t_random, std::make_pair(t_region.position.y, util::bottom(t_region)), t_speed);
 
-        m_vertDrifter.restart(random);
+        m_vertDrifter.restart(t_random);
     }
 
     const sf::Vector2f PositionDrifter::position() const
@@ -33,10 +35,10 @@ namespace util
         return { m_horizDrifter.value(), m_vertDrifter.value() };
     }
 
-    void PositionDrifter::update(const Random & random, const float frameTimeSec)
+    void PositionDrifter::update(const Random & t_random, const float t_frameTimeSec)
     {
-        m_horizDrifter.update(random, frameTimeSec);
-        m_vertDrifter.update(random, frameTimeSec);
+        m_horizDrifter.update(t_random, t_frameTimeSec);
+        m_vertDrifter.update(t_random, t_frameTimeSec);
     }
 
 } // namespace util

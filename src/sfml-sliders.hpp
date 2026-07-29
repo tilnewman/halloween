@@ -1,5 +1,5 @@
-#ifndef SFMLSLIDERS_HPP_INCLUDED
-#define SFMLSLIDERS_HPP_INCLUDED
+#ifndef SFML_SLIDERS_HPP_INCLUDED
+#define SFML_SLIDERS_HPP_INCLUDED
 //
 // sfml-sliders.hpp
 //
@@ -18,13 +18,13 @@ namespace util
         PositionDrifter();
 
         void setup(
-            const Random & random,
-            const sf::FloatRect & region,
-            const std::pair<float, float> & speed);
+            const Random & t_random,
+            const sf::FloatRect & t_region,
+            const std::pair<float, float> & t_speed);
 
         const sf::Vector2f position() const;
 
-        void update(const Random & random, const float frameTimeSec);
+        void update(const Random & t_random, const float t_frameTimeSec);
 
       private:
         SliderDrift<float, float> m_horizDrifter;
@@ -33,4 +33,4 @@ namespace util
 
 } // namespace util
 
-#endif // SFMLSLIDERS_HPP_INCLUDED
+#endif // SFML_SLIDERS_HPP_INCLUDED
