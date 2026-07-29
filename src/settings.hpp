@@ -30,7 +30,7 @@ namespace halloween
 
         // frames per second
         float frame_rate = 60;
-        bool will_display_fps = false;
+        bool will_display_fps = true;
         bool will_display_fps_graph = false;
 
         // movement speeds and accelerations
