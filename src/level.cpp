@@ -34,6 +34,7 @@ namespace halloween
         , m_farthestHorizMapPixel{ 0.0f }
         , m_farthestHorizTraveled{ 0.0f }
         , m_number{ 0 }
+        , m_loader{}
     {
         m_walkCollisions.reserve(1000);
         m_killCollisions.reserve(100);
@@ -57,7 +58,7 @@ namespace halloween
     {
         reset(t_context);
         
-        if (t_context.loader.load(t_context))
+        if (m_loader.load(t_context))
         {
             verifyLayerIndexCounts();
             appendVertLayers(t_context);

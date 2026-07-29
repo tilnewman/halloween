@@ -22,7 +22,6 @@ namespace halloween
         , m_bats{}
         , m_owlCalls{}
         , m_window{}
-        , m_loader{}
         , m_media{}
         , m_layout{}
         , m_avatarUPtr{}
@@ -93,7 +92,6 @@ namespace halloween
             m_music,
             m_bats,
             m_owlCalls,
-            m_loader,
             m_media,
             m_layout,
             *m_avatarUPtr,

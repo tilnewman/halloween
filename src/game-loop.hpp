@@ -12,7 +12,6 @@
 #include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
-#include "level-file-loader.hpp"
 #include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
@@ -67,7 +66,6 @@ namespace halloween
         Bats m_bats;
         OwlCalls m_owlCalls;
         sf::RenderWindow m_window;
-        LevelFileLoader m_loader;
         Resources m_media;
         ScreenRegions m_layout;
         std::unique_ptr<Avatar> m_avatarUPtr;

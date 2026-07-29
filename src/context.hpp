@@ -37,7 +37,6 @@ namespace halloween
     class PauseScreen;
     class MushroomBoss;
     class ScreenRegions;
-    class LevelFileLoader;
     struct IStatesPending;
     class ObjectManagerList;
 
@@ -51,7 +50,6 @@ namespace halloween
             util::MusicPlayer & t_musicPlayer,
             Bats & t_bats,
             OwlCalls & t_owlCalls,
-            LevelFileLoader & t_levelFileLoader,
             Resources & t_resources,
             ScreenRegions & t_screenReigons,
             Avatar & t_avatar,
@@ -77,7 +75,6 @@ namespace halloween
             , music{ t_musicPlayer }
             , bats{ t_bats }
             , owl_calls{ t_owlCalls }
-            , loader{ t_levelFileLoader }
             , media{ t_resources }
             , layout{ t_screenReigons }
             , avatar{ t_avatar }
@@ -105,7 +102,6 @@ namespace halloween
         util::MusicPlayer & music;
         Bats & bats;
         OwlCalls & owl_calls;
-        LevelFileLoader & loader;
         Resources & media;
         ScreenRegions & layout;
         Avatar & avatar;

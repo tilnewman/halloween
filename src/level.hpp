@@ -3,6 +3,7 @@
 //
 // level.hpp
 //
+#include "level-file-loader.hpp"
 #include "tileset.hpp"
 
 #include <vector>
@@ -117,7 +118,7 @@ namespace halloween
         TileSet m_tiles;
         sf::Vector2f m_mapPositionOffset;
         sf::Vector2f m_tileSizeScreen;
-        sf::Vector2f m_tileSizeTexture;
+        sf::Vector2f m_tileSizeTexture; // TODO what is this for?
         std::vector<sf::FloatRect> m_walkCollisions;
         std::vector<sf::FloatRect> m_killCollisions;
         std::vector<sf::FloatRect> m_acidCollisions;
@@ -127,6 +128,7 @@ namespace halloween
         float m_farthestHorizMapPixel;
         float m_farthestHorizTraveled;
         std::size_t m_number;
+        LevelFileLoader m_loader;
     };
 
 } // namespace halloween
