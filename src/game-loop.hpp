@@ -45,7 +45,7 @@ namespace halloween
     class GameLoop
     {
       public:
-        GameLoop(const Settings & settings);
+        GameLoop(const Settings & t_settings);
 
         void play();
 

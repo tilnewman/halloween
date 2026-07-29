@@ -20,9 +20,9 @@ namespace halloween
 
     struct GhostSpawnPoint
     {
-        GhostSpawnPoint(const sf::Vector2f & pos, const float timeUntilSpawn)
-            : time_remaining_sec(timeUntilSpawn)
-            , position(pos)
+        GhostSpawnPoint(const sf::Vector2f & t_position, const float t_timeUntilSpawn)
+            : time_remaining_sec{ t_timeUntilSpawn }
+            , position{ t_position }
         {}
 
         float time_remaining_sec;
@@ -31,11 +31,11 @@ namespace halloween
 
     struct Ghost
     {
-        explicit Ghost(const float spd)
-            : is_alive(true)
-            , is_fading_in(true)
-            , speed(spd)
-            , sprite(util::SfmlDefaults::instance().texture())
+        explicit Ghost(const float t_speed)
+            : is_alive{ true }
+            , is_fading_in{ true }
+            , speed{ t_speed }
+            , sprite{ util::SfmlDefaults::instance().texture() }
         {}
 
         bool is_alive;
@@ -53,12 +53,15 @@ namespace halloween
         virtual ~Ghosts() override = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & settings) final;
+        void setup(const Settings & t_settings) final;
         void clear() final;
-        void add(Context & context, const sf::FloatRect & region) final;
-        void update(Context &, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
-        void moveWithMap(const sf::Vector2f & move) final;
+        void add(Context & t_context, const sf::FloatRect & t_region) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+        void moveWithMap(const sf::Vector2f & t_move) final;
         void collideWithAvatar(Context &, const sf::FloatRect &) final {}
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}

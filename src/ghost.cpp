@@ -24,15 +24,15 @@ namespace halloween
 {
 
     Ghosts::Ghosts()
-        : m_texture1()
-        , m_texture2()
-        , m_texture3()
-        , m_spawnPoints()
-        , m_ghosts()
-        , m_spawnMinTimeSec(6.0f)
-        , m_spawnMaxTimeSec(12.0f)
-        , m_floatSpeedMin(50.0f)
-        , m_floatSpeedMax(100.0f)
+        : m_texture1{}
+        , m_texture2{}
+        , m_texture3{}
+        , m_spawnPoints{}
+        , m_ghosts{}
+        , m_spawnMinTimeSec{ 6.0f }
+        , m_spawnMaxTimeSec{ 12.0f }
+        , m_floatSpeedMin{ 50.0f }
+        , m_floatSpeedMax{ 100.0f }
     {
         // probably never more than a hundred ghost spawn points in a level
         m_spawnPoints.reserve(100);
@@ -41,16 +41,16 @@ namespace halloween
         m_ghosts.reserve(100);
     }
 
-    void Ghosts::setup(const Settings & settings)
+    void Ghosts::setup(const Settings & t_settings)
     {
         util::TextureLoader::load(
-            m_texture1, (settings.media_path / "image/ghost/ghost-1.png"), true);
+            m_texture1, (t_settings.media_path / "image" / "ghost" / "ghost-1.png"), true);
 
         util::TextureLoader::load(
-            m_texture2, (settings.media_path / "image/ghost/ghost-2.png"), true);
-        
+            m_texture2, (t_settings.media_path / "image" / "ghost" / "ghost-2.png"), true);
+
         util::TextureLoader::load(
-            m_texture3, (settings.media_path / "image/ghost/ghost-3.png"), true);
+            m_texture3, (t_settings.media_path / "image" / "ghost" / "ghost-3.png"), true);
 
         M_CHECK(
             (m_spawnMaxTimeSec > m_spawnMinTimeSec),
@@ -67,31 +67,31 @@ namespace halloween
         m_ghosts.clear();
     }
 
-    void Ghosts::add(Context & context, const sf::FloatRect & region)
+    void Ghosts::add(Context & t_context, const sf::FloatRect & t_region)
     {
         m_spawnPoints.emplace_back(
-            util::center(region), context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec));
+            util::center(t_region), t_context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec));
     }
 
-    void Ghosts::update(Context & context, const float frameTimeSec)
+    void Ghosts::update(Context & t_context, const float t_frameTimeSec)
     {
         for (GhostSpawnPoint & spawnPoint : m_spawnPoints)
         {
-            spawnPoint.time_remaining_sec -= frameTimeSec;
+            spawnPoint.time_remaining_sec -= t_frameTimeSec;
 
             if ((spawnPoint.time_remaining_sec > 0.0f) ||
-                !context.layout.mapRegion().contains(spawnPoint.position))
+                !t_context.layout.mapRegion().contains(spawnPoint.position))
             {
                 continue;
             }
 
             spawnPoint.time_remaining_sec =
-                context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec);
+                t_context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec);
 
-            Ghost & newGhost =
-                m_ghosts.emplace_back(context.random.fromTo(m_floatSpeedMin, m_floatSpeedMax));
+            Ghost & newGhost{ m_ghosts.emplace_back(
+                t_context.random.fromTo(m_floatSpeedMin, m_floatSpeedMax)) };
 
-            const int selection = context.random.fromTo(1, 3);
+            const int selection{ t_context.random.fromTo(1, 3) };
             if (selection == 1)
             {
                 newGhost.sprite.setTexture(m_texture1, true);
@@ -105,7 +105,7 @@ namespace halloween
                 newGhost.sprite.setTexture(m_texture3, true);
             }
 
-            newGhost.sprite.setScale(context.settings.ghost_scale);
+            newGhost.sprite.setScale(t_context.settings.ghost_scale);
             util::setOriginToCenter(newGhost.sprite);
             newGhost.sprite.setPosition(spawnPoint.position);
             newGhost.sprite.setColor(sf::Color(255, 255, 255, 0));
@@ -113,13 +113,13 @@ namespace halloween
 
         for (Ghost & ghost : m_ghosts)
         {
-            ghost.sprite.move({ 0.0f, -(ghost.speed * frameTimeSec) });
+            ghost.sprite.move({ 0.0f, -(ghost.speed * t_frameTimeSec) });
 
-            std::uint8_t alpha = ghost.sprite.getColor().a;
+            std::uint8_t alpha{ ghost.sprite.getColor().a };
 
             if (ghost.is_fading_in)
             {
-                if (alpha < 95)
+                if (alpha < 95u)
                 {
                     ++alpha;
                 }
@@ -130,9 +130,9 @@ namespace halloween
             }
             else
             {
-                if (alpha >= 5)
+                if (alpha >= 5u)
                 {
-                    alpha -= 5;
+                    alpha -= 5u;
                 }
                 else
                 {
@@ -152,29 +152,31 @@ namespace halloween
     }
 
     void Ghosts::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        states.blendMode = sf::BlendAdd;
+        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+
+        t_states.blendMode = sf::BlendAdd;
 
         for (const Ghost & ghost : m_ghosts)
         {
-            if (context.layout.mapRegion().findIntersection(ghost.sprite.getGlobalBounds()))
+            if (mapRect.findIntersection(ghost.sprite.getGlobalBounds()))
             {
-                target.draw(ghost.sprite, states);
+                t_target.draw(ghost.sprite, t_states);
             }
         }
     }
 
-    void Ghosts::moveWithMap(const sf::Vector2f & move)
+    void Ghosts::moveWithMap(const sf::Vector2f & t_move)
     {
         for (GhostSpawnPoint & spawnPoint : m_spawnPoints)
         {
-            spawnPoint.position += move;
+            spawnPoint.position += t_move;
         }
 
         for (Ghost & ghost : m_ghosts)
         {
-            ghost.sprite.move(move);
+            ghost.sprite.move(t_move);
         }
     }
 
