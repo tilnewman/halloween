@@ -24,65 +24,66 @@ namespace halloween
 {
 
     LevelCompleteState::LevelCompleteState(const Context & context)
-        : StateBase(context, State::Level, State::Play)
-        , m_levelCompleteText(util::SfmlDefaults::instance().font())
-        , m_scoreText(util::SfmlDefaults::instance().font())
-        , m_bonusText(util::SfmlDefaults::instance().font())
-        , m_bonuses()
-        , m_bonusTextRegion()
-        , m_isPreWaiting(true)
-        , m_isShowingBonuses(false)
-        , m_isPostWaiting(false)
-        , m_timeBetweenScoreUpdateSec(0.05f)
-        , m_scoreDisplayed(0)
+        : StateBase{ context, State::Level, State::Play }
+        , m_levelCompleteText{ util::SfmlDefaults::instance().font() }
+        , m_scoreText{ util::SfmlDefaults::instance().font() }
+        , m_bonusText{ util::SfmlDefaults::instance().font() }
+        , m_bonuses{}
+        , m_bonusTextRegion{}
+        , m_isPreWaiting{ true }
+        , m_isShowingBonuses{ false }
+        , m_isPostWaiting{ false }
+        , m_timeBetweenScoreUpdateSec{ 0.05f }
+        , m_scoreDisplayed{ 0 }
     {}
 
-    void LevelCompleteState::onEnter(Context & context)
+    void LevelCompleteState::onEnter(Context & t_context)
     {
-        context.audio.play("level-complete");
+        t_context.audio.play("level-complete");
 
-        m_levelCompleteText = context.media.makeText(99, "Level Complete!\n\n", m_textColorDefault);
+        m_levelCompleteText =
+            t_context.media.makeText(99, "Level Complete!\n\n", m_textColorDefault);
 
         util::fitAndCenterInside(
-            m_levelCompleteText, util::scaleRectInPlaceCopy(context.layout.wholeRegion(), 0.25f));
+            m_levelCompleteText, util::scaleRectInPlaceCopy(t_context.layout.wholeRegion(), 0.25f));
 
-        m_scoreDisplayed = context.info_region.score();
+        m_scoreDisplayed = t_context.info_region.score();
 
-        m_scoreText = context.media.makeText(50, "", sf::Color(160, 160, 160));
+        m_scoreText = t_context.media.makeText(50, "", sf::Color(160, 160, 160));
 
-        updateScoreText(context);
+        updateScoreText(t_context);
 
         m_bonusTextRegion.position.x = 0.0f;
         m_bonusTextRegion.position.y = util::bottom(m_scoreText);
-        m_bonusTextRegion.size.x = context.layout.wholeRegion().size.x;
+        m_bonusTextRegion.size.x = t_context.layout.wholeRegion().size.x;
 
         m_bonusTextRegion.size.y =
-            ((context.layout.wholeRegion().size.y - m_bonusTextRegion.position.y) -
-             (context.layout.wholeSize().y * 0.25f));
+            ((t_context.layout.wholeRegion().size.y - m_bonusTextRegion.position.y) -
+             (t_context.layout.wholeSize().y * 0.25f));
 
         const unsigned bonusTextCharSize{ 70 };
         const sf::Color bonusTextColor{ 255, 255, 153 };
 
-        const bool willCoinBonus{ (context.stats.coin_total > 0) &&
-                                  (context.stats.coin_total == context.stats.coin_collected) };
+        const bool willCoinBonus{ (t_context.stats.coin_total > 0) &&
+                                  (t_context.stats.coin_total == t_context.stats.coin_collected) };
 
-        const bool willEnemyBonus{ (context.stats.enemy_total > 0) &&
-                                   (context.stats.enemy_total == context.stats.enemy_killed) };
+        const bool willEnemyBonus{ (t_context.stats.enemy_total > 0) &&
+                                   (t_context.stats.enemy_total == t_context.stats.enemy_killed) };
 
-        const bool willSurviveBonus{ !context.stats.has_player_died };
+        const bool willSurviveBonus{ !t_context.stats.has_player_died };
         const bool willPerfectBonus{ willCoinBonus && willEnemyBonus && willSurviveBonus };
 
         if (willPerfectBonus)
         {
             m_bonuses.emplace_back(
-                1000, context.media.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
+                1000, t_context.media.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
         }
 
         if (willCoinBonus)
         {
             m_bonuses.emplace_back(
                 99,
-                context.media.makeText(
+                t_context.media.makeText(
                     bonusTextCharSize, "All Coins Found Bonus!", bonusTextColor));
         }
 
@@ -90,7 +91,7 @@ namespace halloween
         {
             m_bonuses.emplace_back(
                 50,
-                context.media.makeText(
+                t_context.media.makeText(
                     bonusTextCharSize, "All Enemies Killed Bonus!", bonusTextColor));
         }
 
@@ -98,55 +99,57 @@ namespace halloween
         {
             m_bonuses.emplace_back(
                 75,
-                context.media.makeText(bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
+                t_context.media.makeText(
+                    bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
         }
 
         if (m_bonuses.size() == 3)
         {
             m_bonuses.emplace_back(
-                0, context.media.makeText(bonusTextCharSize, "No bonuses, lame.", bonusTextColor));
+                0,
+                t_context.media.makeText(bonusTextCharSize, "No bonuses, lame.", bonusTextColor));
         }
     }
 
-    void LevelCompleteState::updateScoreText(const Context & context)
+    void LevelCompleteState::updateScoreText(const Context & t_context)
     {
         std::string scoreStr{ "Score: " };
         scoreStr += std::to_string(m_scoreDisplayed);
         m_scoreText.setString(scoreStr);
-        util::centerInside(m_scoreText, context.layout.wholeRegion());
+        util::centerInside(m_scoreText, t_context.layout.wholeRegion());
     }
 
-    void LevelCompleteState::onExit(Context & context) { ++context.level_number; }
+    void LevelCompleteState::onExit(Context & t_context) { ++t_context.level_number; }
 
-    bool LevelCompleteState::handleEvent(Context & context, const sf::Event & event)
+    bool LevelCompleteState::handleEvent(Context & t_context, const sf::Event & t_event)
     {
-        if (StateBase::handleEvent(context, event))
+        if (StateBase::handleEvent(t_context, t_event))
         {
             return true;
         }
 
-        if (event.is<sf::Event::KeyPressed>())
+        if (t_event.is<sf::Event::KeyPressed>())
         {
             if (!m_isPreWaiting && !m_isPostWaiting)
             {
-                m_scoreDisplayed = context.info_region.score();
-                updateScoreText(context);
+                m_scoreDisplayed = t_context.info_region.score();
+                updateScoreText(t_context);
                 m_elapsedTimeSec += 9999.0f;
-                context.audio.play("bell");
+                t_context.audio.play("bell");
             }
         }
 
         return false;
     }
 
-    bool LevelCompleteState::popAndDisplayNextBonus(Context & context)
+    bool LevelCompleteState::popAndDisplayNextBonus(Context & t_context)
     {
         if (m_bonuses.empty())
         {
             return false;
         }
 
-        context.info_region.scoreAdjust(m_bonuses.back().score);
+        t_context.info_region.scoreAdjust(m_bonuses.back().score);
         m_bonusText = m_bonuses.back().text;
         util::centerInside(m_bonusText, m_bonusTextRegion);
 
@@ -154,15 +157,15 @@ namespace halloween
         return true;
     }
 
-    void LevelCompleteState::update(Context & context, const float frameTimeSec)
+    void LevelCompleteState::update(Context & t_context, const float t_frameTimeSec)
     {
         auto hasScoreFinishedUpdating = [&]() {
-            return (m_scoreDisplayed == context.info_region.score());
+            return (m_scoreDisplayed == t_context.info_region.score());
         };
 
         if (m_isPreWaiting)
         {
-            m_elapsedTimeSec += frameTimeSec;
+            m_elapsedTimeSec += t_frameTimeSec;
             if (m_elapsedTimeSec > 4.0f)
             {
                 m_elapsedTimeSec = 0.0f;
@@ -177,9 +180,9 @@ namespace halloween
             {
                 m_elapsedTimeSec = 0.0f;
 
-                if (popAndDisplayNextBonus(context))
+                if (popAndDisplayNextBonus(t_context))
                 {
-                    context.audio.play("bonus");
+                    t_context.audio.play("bonus");
                 }
                 else
                 {
@@ -189,40 +192,40 @@ namespace halloween
             }
             else
             {
-                m_elapsedTimeSec += frameTimeSec;
+                m_elapsedTimeSec += t_frameTimeSec;
                 if (m_elapsedTimeSec > m_timeBetweenScoreUpdateSec)
                 {
                     m_elapsedTimeSec -= m_timeBetweenScoreUpdateSec;
 
-                    int scoreAdjustment = ((context.info_region.score() - m_scoreDisplayed) / 10);
+                    int scoreAdjustment = ((t_context.info_region.score() - m_scoreDisplayed) / 10);
                     if (0 == scoreAdjustment)
                     {
                         scoreAdjustment = 1;
                     }
 
                     m_scoreDisplayed += scoreAdjustment;
-                    updateScoreText(context);
-                    context.audio.play("bell");
+                    updateScoreText(t_context);
+                    t_context.audio.play("bell");
                 }
             }
         }
 
         if (m_isPostWaiting)
         {
-            m_elapsedTimeSec += frameTimeSec;
+            m_elapsedTimeSec += t_frameTimeSec;
             if (m_elapsedTimeSec > 6.0f)
             {
-                context.state.setChangePending(State::Play);
+                t_context.state.setChangePending(State::Play);
             }
         }
     }
 
     void LevelCompleteState::draw(
-        const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        target.draw(m_levelCompleteText, states);
-        target.draw(m_scoreText, states);
-        target.draw(m_bonusText, states);
+        t_target.draw(m_levelCompleteText, t_states);
+        t_target.draw(m_scoreText, t_states);
+        t_target.draw(m_bonusText, t_states);
     }
 
 } // namespace halloween

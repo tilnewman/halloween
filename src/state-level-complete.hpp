@@ -31,13 +31,13 @@ namespace halloween
     struct Bonus
     {
         Bonus()
-            : score(0)
-            , text(util::SfmlDefaults::instance().font())
+            : score{ 0 }
+            , text{ util::SfmlDefaults::instance().font() }
         {}
 
-        Bonus(const int s, const sf::Text & t)
-            : score(s)
-            , text(t)
+        Bonus(const int t_score, const sf::Text & t_text)
+            : score{ t_score }
+            , text{ t_text }
         {}
 
         int score;
@@ -52,15 +52,19 @@ namespace halloween
         explicit LevelCompleteState(const Context & context);
         ~LevelCompleteState() override = default;
 
-        void onEnter(Context & context) final;
-        void onExit(Context & context) final;
-        bool handleEvent(Context & context, const sf::Event & event) final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const final;
+        void onEnter(Context & t_context) final;
+        void onExit(Context & t_context) final;
+        bool handleEvent(Context & t_context, const sf::Event & t_event) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(
+            const Context & t_context,
+            sf::RenderTarget & t_target,
+            sf::RenderStates & t_states) const final;
 
       private:
-        bool popAndDisplayNextBonus(Context & context);
-        void updateScoreText(const Context & context);
+        bool popAndDisplayNextBonus(Context & t_context);
+        void updateScoreText(const Context & t_context);
 
       private:
         sf::Text m_levelCompleteText;
