@@ -21,33 +21,33 @@
 
 namespace halloween
 {
-    Coin::Coin(const sf::Texture & texture, const sf::Vector2f & position)
-        : is_alive(true)
-        , sprite(texture, { { 0, 0 }, { 64, 64 } })
-        , anim_index(0)
+    Coin::Coin(const sf::Texture & t_texture, const sf::Vector2f & t_position)
+        : is_alive{ true }
+        , sprite{ t_texture, { { 0, 0 }, { 64, 64 } } }
+        , anim_index{ 0 }
     {
         sprite.setScale({ 0.5f, 0.75f });
         util::setOriginToCenter(sprite);
-        sprite.setPosition(position);
+        sprite.setPosition(t_position);
     }
 
     //
 
-    CoinAnim::CoinAnim(const sf::Texture & texture)
-        : is_alive(true)
-        , sprite(texture)
+    CoinAnim::CoinAnim(const sf::Texture & t_texture)
+        : is_alive{ true }
+        , sprite{ t_texture }
     {}
 
     //
 
     Coins::Coins()
-        : m_texture()
-        , m_textureCoords()
-        , m_timePerFrame(0.075f)
-        , m_coins()
-        , m_elapsedTimeSec(0.0f)
-        , m_textureIndex(0)
-        , m_animations()
+        : m_texture{}
+        , m_textureCoords{}
+        , m_timePerFrame{ 0.075f }
+        , m_coins{}
+        , m_elapsedTimeSec{ 0.0f }
+        , m_textureIndex{ 0 }
+        , m_animations{}
     {
         // anything more than dozens will work here
         m_coins.reserve(100);
@@ -66,30 +66,30 @@ namespace halloween
         m_textureCoords.emplace_back(sf::Vector2i{ 256, 64 }, sf::Vector2i{ 64, 64 });
     }
 
-    void Coins::setup(const Settings & settings)
+    void Coins::setup(const Settings & t_settings)
     {
-        util::TextureLoader::load(m_texture, (settings.media_path / "image/coin.png"), true);
+        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "coin.png"), true);
     }
 
-    void Coins::add(Context &, const sf::FloatRect & region)
+    void Coins::add(Context &, const sf::FloatRect & t_region)
     {
-        m_coins.emplace_back(m_texture, util::center(region));
+        m_coins.emplace_back(m_texture, util::center(t_region));
     }
 
     void Coins::clear() { m_coins.clear(); }
 
-    void Coins::update(Context &, const float frameTimeSec)
+    void Coins::update(Context &, const float t_frameTimeSec)
     {
-        updateTextures(frameTimeSec);
-        updateAnimations(frameTimeSec);
+        updateTextures(t_frameTimeSec);
+        updateAnimations(t_frameTimeSec);
     }
 
-    void Coins::updateAnimations(const float frameTimeSec)
+    void Coins::updateAnimations(const float t_frameTimeSec)
     {
-        bool wereAnyKilled = false;
+        bool wereAnyKilled{ false };
         for (CoinAnim & anim : m_animations)
         {
-            std::uint8_t alpha = anim.sprite.getColor().a;
+            std::uint8_t alpha{ anim.sprite.getColor().a };
             if (alpha >= 10)
             {
                 alpha -= 10;
@@ -102,7 +102,7 @@ namespace halloween
             }
 
             const float scaleSpeed{ 2.0f };
-            const float newScale{ 1.0f + (frameTimeSec * scaleSpeed) };
+            const float newScale{ 1.0f + (t_frameTimeSec * scaleSpeed) };
             anim.sprite.scale({ newScale, newScale });
         }
 
@@ -117,10 +117,10 @@ namespace halloween
         }
     }
 
-    void Coins::updateTextures(const float frameTimeSec)
+    void Coins::updateTextures(const float t_frameTimeSec)
     {
         // all coins spin at the same time and rate
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
         if (m_elapsedTimeSec < m_timePerFrame)
         {
             return;
@@ -141,53 +141,53 @@ namespace halloween
     }
 
     void Coins::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (const Coin & coin : m_coins)
         {
-            if (context.layout.mapRegion().findIntersection(coin.sprite.getGlobalBounds()))
+            if (t_context.layout.mapRegion().findIntersection(coin.sprite.getGlobalBounds()))
             {
-                target.draw(coin.sprite, states);
+                t_target.draw(coin.sprite, t_states);
             }
         }
 
         for (const CoinAnim & coinAnim : m_animations)
         {
-            if (context.layout.mapRegion().findIntersection(coinAnim.sprite.getGlobalBounds()))
+            if (t_context.layout.mapRegion().findIntersection(coinAnim.sprite.getGlobalBounds()))
             {
-                target.draw(coinAnim.sprite, states);
+                t_target.draw(coinAnim.sprite, t_states);
             }
         }
     }
 
-    void Coins::moveWithMap(const sf::Vector2f & move)
+    void Coins::moveWithMap(const sf::Vector2f & t_move)
     {
         for (Coin & coin : m_coins)
         {
-            coin.sprite.move(move);
+            coin.sprite.move(t_move);
         }
 
         for (CoinAnim & anim : m_animations)
         {
-            anim.sprite.move(move);
+            anim.sprite.move(t_move);
         }
     }
 
-    void Coins::collideWithAvatar(Context & context, const sf::FloatRect & avatarRect)
+    void Coins::collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect)
     {
-        bool wereAnyCollected = false;
+        bool wereAnyCollected{ false };
         for (Coin & coin : m_coins)
         {
             const sf::FloatRect coinRect = coin.sprite.getGlobalBounds();
 
-            if (avatarRect.findIntersection(coinRect))
+            if (t_avatarRect.findIntersection(coinRect))
             {
                 wereAnyCollected = true;
                 coin.is_alive = false;
-                context.audio.play("coin");
-                context.info_region.scoreAdjust(1);
-                ++context.stats.coin_collected;
-                addAnimation(context, util::center(coinRect));
+                t_context.audio.play("coin");
+                t_context.info_region.scoreAdjust(1);
+                ++t_context.stats.coin_collected;
+                addAnimation(t_context, util::center(coinRect));
             }
         }
 
@@ -202,17 +202,17 @@ namespace halloween
         }
     }
 
-    void Coins::addAnimation(const Context & context, const sf::Vector2f & position)
+    void Coins::addAnimation(const Context & t_context, const sf::Vector2f & t_position)
     {
-        if (!context.settings.will_show_coin_animations)
+        if (!t_context.settings.will_show_coin_animations)
         {
             return;
         }
 
-        CoinAnim & anim = m_animations.emplace_back(m_texture);
+        CoinAnim & anim{ m_animations.emplace_back(m_texture) };
         anim.sprite.setTextureRect(m_textureCoords.at(0));
         util::setOriginToCenter(anim.sprite);
-        anim.sprite.setPosition(position);
+        anim.sprite.setPosition(t_position);
     }
 
 } // namespace halloween
