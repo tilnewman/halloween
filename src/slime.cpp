@@ -25,25 +25,25 @@ namespace halloween
 {
 
     Slimes::Slimes()
-        : m_textures()
-        , m_slimes()
-        , m_timePerTextureSec(0.0333f)
-        , m_elapsedTimeSec(0.0f)
-        , m_textureCount(30)
-        , m_deathAnims()
+        : m_textures{}
+        , m_slimes{}
+        , m_timePerTextureSec{ 0.0333f }
+        , m_elapsedTimeSec{ 0.0f }
+        , m_textureCount{ 30 }
+        , m_deathAnims{}
     {
         // probably never more than one dozen of each in a level
         m_slimes.reserve(32);
         m_deathAnims.reserve(32);
     }
 
-    void Slimes::setup(const Settings & settings)
+    void Slimes::setup(const Settings & t_settings)
     {
         m_textures.resize(m_textureCount);
         for (std::size_t i(0); i < m_textureCount; ++i)
         {
             std::string str;
-            str = (settings.media_path / "image/slime" / "slime-").string();
+            str = (t_settings.media_path / "image" / "slime" / "slime-").string();
             str += std::to_string(i);
             str += ".png";
 
@@ -53,28 +53,28 @@ namespace halloween
 
     void Slimes::clear() { m_slimes.clear(); }
 
-    void Slimes::add(Context & context, const sf::FloatRect & rect)
+    void Slimes::add(Context & t_context, const sf::FloatRect & t_rect)
     {
-        const float speed{ context.random.fromTo(20.0f, 75.0f) };
+        const float speed{ t_context.random.fromTo(20.0f, 75.0f) };
 
-        Slime slime(context.random.boolean(), rect, speed);
+        Slime slime(t_context.random.boolean(), t_rect, speed);
 
-        slime.texture_index = context.random.index(m_textures);
+        slime.texture_index = t_context.random.index(m_textures);
         slime.sprite.setTexture(m_textures.at(slime.texture_index), true);
         slime.sprite.setScale({ 0.5f, 0.5f });
         util::setOriginToCenter(slime.sprite);
 
-        const float posX{ rect.position.x + (rect.size.x / 2.0f) };
-        const float posY{ util::bottom(rect) - (slime.sprite.getGlobalBounds().size.y * 0.5f) };
+        const float posX{ t_rect.position.x + (t_rect.size.x / 2.0f) };
+        const float posY{ util::bottom(t_rect) - (slime.sprite.getGlobalBounds().size.y * 0.5f) };
         slime.sprite.setPosition({ posX, posY });
 
         m_slimes.push_back(slime);
     }
 
-    void Slimes::update(Context &, const float frameTimeSec)
+    void Slimes::update(Context &, const float t_frameTimeSec)
     {
         // animate
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
         if (m_elapsedTimeSec > m_timePerTextureSec)
         {
             for (Slime & slime : m_slimes)
@@ -94,7 +94,7 @@ namespace halloween
         // move
         for (Slime & slime : m_slimes)
         {
-            const float stride{ slime.speed * frameTimeSec };
+            const float stride{ slime.speed * t_frameTimeSec };
 
             if (slime.is_moving_left)
             {
@@ -141,41 +141,41 @@ namespace halloween
     }
 
     void Slimes::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (const Slime & slime : m_slimes)
         {
-            if (context.layout.mapRegion().findIntersection(slime.sprite.getGlobalBounds()))
+            if (t_context.layout.mapRegion().findIntersection(slime.sprite.getGlobalBounds()))
             {
-                target.draw(slime.sprite, states);
+                t_target.draw(slime.sprite, t_states);
             }
         }
 
         for (const SlimeDeathAnim & anim : m_deathAnims)
         {
-            target.draw(anim.sprite, states);
+            t_target.draw(anim.sprite, t_states);
         }
     }
 
-    void Slimes::moveWithMap(const sf::Vector2f & move)
+    void Slimes::moveWithMap(const sf::Vector2f & t_move)
     {
         for (Slime & slime : m_slimes)
         {
-            slime.sprite.move(move);
-            slime.rect.position.x += move.x;
+            slime.sprite.move(t_move);
+            slime.rect.position.x += t_move.x;
         }
 
         for (SlimeDeathAnim & anim : m_deathAnims)
         {
-            anim.sprite.move(move);
+            anim.sprite.move(t_move);
         }
     }
 
-    bool Slimes::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
+    bool Slimes::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
     {
         for (const Slime & slime : m_slimes)
         {
-            if (slime.sprite.getGlobalBounds().findIntersection(avatarRect))
+            if (slime.sprite.getGlobalBounds().findIntersection(t_avatarRect))
             {
                 return true;
             }
@@ -184,22 +184,22 @@ namespace halloween
         return false;
     }
 
-    bool Slimes::attack(Context & context, const sf::FloatRect & attackRect)
+    bool Slimes::attack(Context & t_context, const sf::FloatRect & t_attackRect)
     {
-        bool wereAnyKilled = false;
+        bool wereAnyKilled{ false };
         for (Slime & slime : m_slimes)
         {
-            if (slime.sprite.getGlobalBounds().findIntersection(attackRect))
+            if (slime.sprite.getGlobalBounds().findIntersection(t_attackRect))
             {
                 slime.is_alive = false;
                 wereAnyKilled = true;
 
-                auto & anim = m_deathAnims.emplace_back(slime.sprite);
+                auto & anim{ m_deathAnims.emplace_back(slime.sprite) };
                 anim.sprite.setColor(sf::Color::Red);
 
-                context.audio.play("squish");
-                ++context.stats.enemy_killed;
-                context.info_region.scoreAdjust(context.settings.kill_slime_score);
+                t_context.audio.play("squish");
+                ++t_context.stats.enemy_killed;
+                t_context.info_region.scoreAdjust(t_context.settings.kill_slime_score);
 
                 break;
             }
@@ -208,12 +208,7 @@ namespace halloween
         // remove any dead
         if (wereAnyKilled)
         {
-            m_slimes.erase(
-                std::remove_if(
-                    std::begin(m_slimes),
-                    std::end(m_slimes),
-                    [](const Slime & slime) { return !slime.is_alive; }),
-                std::end(m_slimes));
+            std::erase_if(m_slimes, [](const Slime & t_slime) { return !t_slime.is_alive; });
         }
 
         return wereAnyKilled;

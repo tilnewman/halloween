@@ -22,13 +22,13 @@ namespace halloween
 
     struct Slime
     {
-        Slime(const bool isMovingLeft, const sf::FloatRect & range, const float spd)
-            : is_alive(true)
-            , is_moving_left(isMovingLeft)
-            , texture_index(0)
-            , rect(range)
-            , speed(spd)
-            , sprite(util::SfmlDefaults::instance().texture())
+        Slime(const bool t_isMovingLeft, const sf::FloatRect & t_range, const float t_speed)
+            : is_alive{ true }
+            , is_moving_left{ t_isMovingLeft }
+            , texture_index{ 0 }
+            , rect{ t_range }
+            , speed{ t_speed }
+            , sprite{ util::SfmlDefaults::instance().texture() }
         {}
 
         bool is_alive;
@@ -43,9 +43,9 @@ namespace halloween
 
     struct SlimeDeathAnim
     {
-        explicit SlimeDeathAnim(const sf::Sprite & spr)
-            : is_visible(true)
-            , sprite(spr)
+        explicit SlimeDeathAnim(const sf::Sprite & t_sprite)
+            : is_visible{ true }
+            , sprite{ t_sprite }
         {}
 
         bool is_visible;
@@ -61,17 +61,20 @@ namespace halloween
         virtual ~Slimes() override = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & settings) final;
-        void add(Context & context, const sf::FloatRect & rect) final;
+        void setup(const Settings & t_settings) final;
+        void add(Context & t_context, const sf::FloatRect & t_rect) final;
         void clear() final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
-        void moveWithMap(const sf::Vector2f & move) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+        void moveWithMap(const sf::Vector2f & t_move) final;
         void collideWithAvatar(Context &, const sf::FloatRect &) final {}
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const final;
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const final;
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
-        bool attack(Context & context, const sf::FloatRect & attackRect);
+        bool attack(Context & t_context, const sf::FloatRect & t_attackRect);
         constexpr std::size_t count() const noexcept { return m_slimes.size(); }
 
       private:
