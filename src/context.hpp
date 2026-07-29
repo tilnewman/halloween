@@ -96,7 +96,6 @@ namespace halloween
             , managers(man)
             , stats(ls)
             , boss(mb)
-            , is_paused(false)
             , will_quit(false)
             , level_number(1)
         {}
@@ -129,7 +128,6 @@ namespace halloween
         MushroomBoss & boss;
 
         // TODO get these out of context
-        bool is_paused;
         bool will_quit;
         std::size_t level_number;
     };
