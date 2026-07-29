@@ -11,6 +11,7 @@
 #include "music-player.hpp"
 #include "resources.hpp"
 #include "screen-regions.hpp"
+#include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
@@ -63,9 +64,9 @@ namespace halloween
               util::bottom(m_licenseText) + m_vertPad });
     }
 
-    void Credit::update(const float t_frameTimeSec)
+    void Credit::update(const Context & t_context, const float t_frameTimeSec)
     {
-        const float scrollSpeed{ 30.0f }; // TODO make this a setting
+        const float scrollSpeed{ t_context.settings.credits_scroll_speed };
         m_nameText.move({ 0.0f, -(t_frameTimeSec * scrollSpeed) });
         m_descText.move({ 0.0f, -(t_frameTimeSec * scrollSpeed) });
         m_licenseText.move({ 0.0f, -(t_frameTimeSec * scrollSpeed) });
@@ -157,7 +158,7 @@ namespace halloween
     {
         for (Credit & credit : m_credits)
         {
-            credit.update(t_frameTimeSec);
+            credit.update(t_context, t_frameTimeSec);
         }
 
         Credit & lastCredit{ m_credits.back() };

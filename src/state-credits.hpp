@@ -31,7 +31,7 @@ namespace halloween
             const std::string & t_license = "",
             const std::string & t_extra = "");
 
-        void update(const float t_frameTimeSec);
+        void update(const Context & t_context, const float t_frameTimeSec);
         void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const override;
         void vertPosition(const float t_position);
         float bottom() const;

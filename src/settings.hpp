@@ -44,8 +44,9 @@ namespace halloween
         float walk_speed_attack_reduction_ratio{ 0.8f };
         float walk_speed_throw_reduction_ratio{ 0.8f };
         float jump_move_ratio{ 0.333f };
-        //
+
         float mushroom_boss_walk_speed{ 20.0f };
+        float credits_scroll_speed{ 30.0f };
 
         // delay after dying so the player can see how they died
         float death_delay_sec{ 4.0f };
