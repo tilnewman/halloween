@@ -11,56 +11,53 @@
 #include "state-level-complete.hpp"
 #include "state-play.hpp"
 
-#include <SFML/Graphics/RenderStates.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Window/Event.hpp>
-
 namespace halloween
 {
     StateMachine::StateMachine()
-        : m_stateUPtr()
-        , m_changePendingOpt(State::Start)
+        : m_stateUPtr{}
+        , m_changePendingOpt{ State::Start }
     {
         reset();
     }
 
     void StateMachine::reset()
     {
+        // TODO um...why set the pending state if already set to start?
         m_stateUPtr = std::make_unique<StartState>();
         m_changePendingOpt = m_stateUPtr->state();
     }
 
-    void StateMachine::setChangePending(const State state) { m_changePendingOpt = state; }
+    void StateMachine::setChangePending(const State t_state) { m_changePendingOpt = t_state; }
 
-    void StateMachine::changeIfPending(Context & context)
+    void StateMachine::changeIfPending(Context & t_context)
     {
         if (!m_changePendingOpt)
         {
             return;
         }
 
-        m_stateUPtr->onExit(context);
+        m_stateUPtr->onExit(t_context);
 
-        m_stateUPtr = makeState(context, m_changePendingOpt.value());
+        m_stateUPtr = makeState(t_context, m_changePendingOpt.value());
         m_changePendingOpt = std::nullopt;
 
-        m_stateUPtr->onEnter(context);
+        m_stateUPtr->onEnter(t_context);
     }
 
-    IStateUPtr_t StateMachine::makeState(Context & context, const State state)
+    IStateUPtr_t StateMachine::makeState(Context & t_context, const State t_state)
     {
         // clang-format off
-        switch (state)
+        switch (t_state)
         {
-            case State::Start:    { return std::make_unique<StartState>();                }
-            case State::Title:    { return std::make_unique<TitleState>(context);         }
-            case State::Play:     { return std::make_unique<PlayState>(context);          }
-            case State::Pause:    { return std::make_unique<PauseState>(context);         }
-            case State::Level:    { return std::make_unique<LevelCompleteState>(context); }
-            case State::Lose:     { return std::make_unique<LoseState>(context);          }
-            case State::Win:      { return std::make_unique<WinState>(context);           }
-            case State::Credits:  { return std::make_unique<StateCredits>();              }
-            case State::Quit:     { return std::make_unique<QuitState>();                 }
+            case State::Start:    { return std::make_unique<StartState>();                  }
+            case State::Title:    { return std::make_unique<TitleState>(t_context);         }
+            case State::Play:     { return std::make_unique<PlayState>(t_context);          }
+            case State::Pause:    { return std::make_unique<PauseState>(t_context);         }
+            case State::Level:    { return std::make_unique<LevelCompleteState>(t_context); }
+            case State::Lose:     { return std::make_unique<LoseState>(t_context);          }
+            case State::Win:      { return std::make_unique<WinState>(t_context);           }
+            case State::Credits:  { return std::make_unique<StateCredits>();                }
+            case State::Quit:     { return std::make_unique<QuitState>();                   }
             default:
             {
                 M_LOG("Asked to make a state that is not implemented.  Til, you forgot"\
