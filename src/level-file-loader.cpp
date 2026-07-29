@@ -71,15 +71,13 @@ namespace halloween
         const sf::Vector2i tileCount{ json["width"], json["height"] };
         const sf::Vector2i tileSizeOnMap{ json["tilewidth"], json["tileheight"] };
 
-        const sf::Vector2f tileSizeTexture{ sf::Vector2f{ tileSizeOnMap } };
-
         sf::Vector2f tileSizeOnScreen{ sf::Vector2f{ tileSizeOnMap } *
                                        t_context.settings.tile_scale };
 
         tileSizeOnScreen.x = floorf(tileSizeOnScreen.x);
         tileSizeOnScreen.y = floorf(tileSizeOnScreen.y);
 
-        // calc map position offset
+        // calc map position so that the bottom starts at the bottom of the screen
         const sf::Vector2f tileCountF{ tileCount };
         const sf::Vector2f mapSizeOrig{ tileSizeOnScreen * tileCountF };
 
@@ -87,10 +85,10 @@ namespace halloween
                                    t_context.layout.mapRegion().size.y) -
                                   mapSizeOrig.y };
 
-        const sf::Vector2f mapPositionOffset{ 0.0f, heightOffset };
+        const sf::Vector2f mapPosition{ 0.0f, heightOffset };
 
         t_context.level.setLevelDetails(
-            tileCount, tileSizeOnMap, tileSizeTexture, tileSizeOnScreen, mapPositionOffset);
+            tileCount, tileSizeOnMap, tileSizeOnScreen, mapPosition);
     }
 
     void LevelFileLoader::parseObjectTextureGIDs(const Context & t_context, Json & wholeJson)

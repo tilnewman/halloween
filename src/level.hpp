@@ -72,7 +72,7 @@ namespace halloween
             m_tiles.layers.push_back(t_tileLayer);
         }
 
-        inline const sf::Vector2f mapPosition() const { return m_mapPositionOffset; }
+        inline const sf::Vector2f mapPosition() const { return m_mapPosition; }
         inline const sf::FloatRect & enterRect() const { return m_enterRect; }
         inline const sf::FloatRect & exitRect() const { return m_exitRect; }
 
@@ -89,15 +89,13 @@ namespace halloween
         inline void setLevelDetails(
             const sf::Vector2i & t_tileCount,
             const sf::Vector2i & t_tileSizeOnMap,
-            const sf::Vector2f & t_tileSizeTexture,
             const sf::Vector2f & t_tileSizeScreen,
-            const sf::Vector2f & t_mapPosOffset)
+            const sf::Vector2f & t_mapPosition)
         {
             m_tiles.count = t_tileCount;
             m_tiles.size = t_tileSizeOnMap;
-            m_tileSizeTexture = t_tileSizeTexture;
             m_tileSizeScreen = t_tileSizeScreen;
-            m_mapPositionOffset = t_mapPosOffset;
+            m_mapPosition = t_mapPosition;
         }
 
       private:
@@ -116,9 +114,8 @@ namespace halloween
 
       private:
         TileSet m_tiles;
-        sf::Vector2f m_mapPositionOffset;
+        sf::Vector2f m_mapPosition;
         sf::Vector2f m_tileSizeScreen;
-        sf::Vector2f m_tileSizeTexture; // TODO what is this for?
         std::vector<sf::FloatRect> m_walkCollisions;
         std::vector<sf::FloatRect> m_killCollisions;
         std::vector<sf::FloatRect> m_acidCollisions;

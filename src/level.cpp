@@ -22,9 +22,8 @@ namespace halloween
 
     Level::Level()
         : m_tiles{}
-        , m_mapPositionOffset{}
+        , m_mapPosition{}
         , m_tileSizeScreen{}
-        , m_tileSizeTexture{}
         , m_walkCollisions{}
         , m_killCollisions{}
         , m_acidCollisions{}
@@ -184,7 +183,7 @@ namespace halloween
                 const float posX{ static_cast<float>(x * sizeOnScreenI.x) };
                 const float posY{ static_cast<float>(y * sizeOnScreenI.y) };
 
-                const sf::Vector2f screenPos{ sf::Vector2f(posX, posY) + m_mapPositionOffset };
+                const sf::Vector2f screenPos{ sf::Vector2f(posX, posY) + m_mapPosition };
                 const sf::FloatRect screenRect{ screenPos, t_tileSizeOnScreen };
 
                 util::appendTriangleVerts(screenRect, textureRect, t_layer.verts);
