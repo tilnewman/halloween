@@ -38,13 +38,13 @@ namespace halloween
 
         // background image
         util::TextureLoader::load(
-            bg_texture1, (t_settings.media_path / "image" / "background-1.png"));
+            bg_texture1, (t_settings.media_path / "image" / "background-1.png"), true);
 
         util::TextureLoader::load(
-            bg_texture2, (t_settings.media_path / "image" / "background-2.png"));
+            bg_texture2, (t_settings.media_path / "image" / "background-2.png"), true);
 
         util::TextureLoader::load(
-            bg_texture3, (t_settings.media_path / "image" / "background-3.png"));
+            bg_texture3, (t_settings.media_path / "image" / "background-3.png"), true);
 
         bg_sprite.setTexture(bg_texture1, true);
 
