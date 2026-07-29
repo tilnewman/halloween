@@ -554,7 +554,7 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":19232,
+                 "x":6080,
                  "y":0
                 }],
          "opacity":1,
@@ -573,7 +573,7 @@
          "value":3
         }],
  "renderorder":"right-down",
- "tiledversion":"1.11.0",
+ "tiledversion":"1.11.2",
  "tileheight":32,
  "tilesets":[
         {
