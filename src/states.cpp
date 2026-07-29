@@ -306,7 +306,7 @@ namespace halloween
         const Context & context, sf::RenderTarget & target, sf::RenderStates & states) const
     {
         StateBase::draw(context, target, states);
-        context.pause_screen.draw(target);
+        context.pause_screen.draw(target, states);
     }
 
     //
