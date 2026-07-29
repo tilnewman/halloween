@@ -21,9 +21,9 @@ namespace halloween
 
     struct Dart
     {
-        explicit Dart(const sf::Texture & texture)
-            : is_alive(true)
-            , sprite(texture)
+        explicit Dart(const sf::Texture & t_texture)
+            : is_alive{ true }
+            , sprite{ t_texture }
         {}
 
         bool is_alive;
@@ -34,9 +34,9 @@ namespace halloween
 
     struct DartAnim
     {
-        explicit DartAnim(const sf::Texture & texture)
-            : is_alive(true)
-            , sprite(texture)
+        explicit DartAnim(const sf::Texture & t_texture)
+            : is_alive{ true }
+            , sprite{ t_texture }
         {}
 
         bool is_alive;
@@ -52,13 +52,16 @@ namespace halloween
         virtual ~Darts() override = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & settings) final;
-        void add(Context & context, const sf::FloatRect & region) final;
+        void setup(const Settings & t_settings) final;
+        void add(Context & t_context, const sf::FloatRect & t_region) final;
         void clear() final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
-        void moveWithMap(const sf::Vector2f & move) final;
-        void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+        void moveWithMap(const sf::Vector2f & t_move) final;
+        void collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect) final;
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
