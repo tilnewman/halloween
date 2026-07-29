@@ -21,10 +21,10 @@ namespace halloween
     struct TileTexture
     {
         TileTexture()
-            : which(TileImage::Ground) // any default works here
-            , size()
-            , texture()
-            , gid(0)
+            : which{ TileImage::Ground } // any default works here
+            , size{}
+            , texture{}
+            , gid{ 0 }
         {}
 
         TileImage which;
@@ -39,12 +39,14 @@ namespace halloween
     {
         Resources();
 
-        void setup(const Settings & settings);
+        void setup(const Settings & t_settings);
 
-        const sf::Text
-            makeText(unsigned int charSize, const std::string & str, const sf::Color & color) const;
+        const sf::Text makeText(
+            const unsigned int t_charSize,
+            const std::string & t_message,
+            const sf::Color & t_color) const;
 
-        const TileTexture & tileTexture(const TileImage image) const;
+        const TileTexture & tileTexture(const TileImage t_image) const;
 
         sf::Font font;
         sf::Text fps_text;
