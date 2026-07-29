@@ -605,8 +605,8 @@ namespace halloween
         {
             m_hasLanded = false;
             m_velocity.y -= (t_context.settings.jump_acc * t_frameTimeSec);
-            t_context.audio.play("jump");
             t_context.audio.stop("walk");
+            t_context.audio.play("jump");
             m_action = Action::Jump;
             m_sprite.setTexture(m_jumpTexture, true);
         }
@@ -643,7 +643,7 @@ namespace halloween
             }
 
             hasHitSomething = true;
-            const sf::Vector2f collCenter = util::center(collRect);
+            const sf::Vector2f collCenter{ util::center(collRect) };
 
             // TODO overhaul how this works to match what we did in Bramblefore
 
@@ -719,7 +719,7 @@ namespace halloween
 
     void Avatar::exitCollisions(const Context & t_context) const
     {
-        if (collisionRect().findIntersection(t_context.level.exitRect()))
+        if (util::right(collisionRect()) > util::right(t_context.level.exitRect()))
         {
             t_context.audio.stopAllLooped();
             t_context.state.setChangePending(State::Level);
