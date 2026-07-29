@@ -52,7 +52,7 @@ namespace halloween
 
         m_hitAnim.setup(
             (t_context.settings.media_path / "image" / "mushroom"), "hit", 6, 0.05f, false);
-        
+
         m_shakeAnim.setup(
             (t_context.settings.media_path / "image" / "mushroom"), "shake", 5, 0.15f, false);
 
@@ -142,8 +142,9 @@ namespace halloween
         // move
         if (BossState::Advance == m_state)
         {
-            // TODO make the boss walk speed a setting
-            m_sprite.move({ (-20.0f * t_frameTimeSec), 0.0f });
+            m_sprite.move(
+                { (-1.0f * t_context.settings.mushroom_boss_walk_speed * t_frameTimeSec), 0.0f });
+
             keepInRegion();
         }
     }
