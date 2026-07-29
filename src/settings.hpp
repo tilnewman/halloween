@@ -5,6 +5,7 @@
 //
 #include <filesystem>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 
 namespace halloween
@@ -54,6 +55,8 @@ namespace halloween
         int kill_slime_score{ 10 };
         int kill_bat_score{ 8 };
         int kill_boss_score{ 99 };
+
+        sf::Color pause_screen_color{ 120, 110, 215 };
     };
 
 } // namespace halloween

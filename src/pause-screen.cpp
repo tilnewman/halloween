@@ -5,6 +5,7 @@
 #include "check-macros.hpp"
 #include "color-range.hpp"
 #include "context.hpp"
+#include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "texture-loader.hpp"
@@ -66,7 +67,7 @@ namespace halloween
         if (m_texture.loadFromImage(image))
         {
             m_sprite.setTexture(m_texture, true);
-            m_sprite.setColor(sf::Color(120, 110, 215)); // TODO move to settings
+            m_sprite.setColor(t_context.settings.pause_screen_color);
         }
     }
 
