@@ -25,15 +25,15 @@ namespace halloween
     {
       public:
         Credit(
-            const Context & context,
-            const std::string & name,
-            const std::string & desc,
-            const std::string & license = "",
-            const std::string & extra = "");
+            const Context & t_context,
+            const std::string & t_name,
+            const std::string & t_desc,
+            const std::string & t_license = "",
+            const std::string & t_extra = "");
 
-        void update(const float frameTimeSec);
-        void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
-        void vertPosition(const float pos);
+        void update(const float t_frameTimeSec);
+        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const override;
+        void vertPosition(const float t_position);
         float bottom() const;
 
       private:
@@ -41,7 +41,7 @@ namespace halloween
         sf::Text m_descText;
         sf::Text m_licenseText;
         sf::Text m_extraText;
-        static const float m_vertPad;
+        inline static const float m_vertPad{ 10.0f };
     };
 
     //
@@ -52,11 +52,16 @@ namespace halloween
         StateCredits();
         virtual ~StateCredits() final {}
 
-        void onEnter(Context & context) final;
-        void onExit(Context & context) final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & con, sf::RenderTarget & tar, sf::RenderStates & sta) const final;
-        bool handleEvent(Context & context, const sf::Event & event) final;
+        void onEnter(Context & t_context) final;
+        void onExit(Context & t_context) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(
+            const Context & t_context,
+            sf::RenderTarget & t_target,
+            sf::RenderStates & t_states) const final;
+
+        bool handleEvent(Context & t_context, const sf::Event & t_event) final;
 
       private:
         std::vector<Credit> m_credits;
