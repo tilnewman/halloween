@@ -21,36 +21,36 @@ namespace halloween
 {
 
     Level::Level()
-        : tiles{}
-        , map_position_offset{}
-        , tile_size_screen{}
-        , tile_size_texture{}
-        , walk_collisions{}
-        , kill_collisions{}
-        , acid_collisions{}
-        , water_collisions{}
-        , enter_rect{}
-        , exit_rect{}
-        , farthest_horiz_map_pixel{ 0.0f }
-        , farthest_horiz_traveled{ 0.0f }
-        , number{ 0 }
+        : m_tiles{}
+        , m_mapPositionOffset{}
+        , m_tileSizeScreen{}
+        , m_tileSizeTexture{}
+        , m_walkCollisions{}
+        , m_killCollisions{}
+        , m_acidCollisions{}
+        , m_waterCollisions{}
+        , m_enterRect{}
+        , m_exitRect{}
+        , m_farthestHorizMapPixel{ 0.0f }
+        , m_farthestHorizTraveled{ 0.0f }
+        , m_number{ 0 }
     {
-        walk_collisions.reserve(1000);
-        kill_collisions.reserve(100);
-        acid_collisions.reserve(100);
-        water_collisions.reserve(100);
+        m_walkCollisions.reserve(1000);
+        m_killCollisions.reserve(100);
+        m_acidCollisions.reserve(100);
+        m_waterCollisions.reserve(100);
     }
 
     void Level::reset(Context & t_context)
     {
-        tiles.reset();
-        walk_collisions.clear();
-        kill_collisions.clear();
-        acid_collisions.clear();
-        water_collisions.clear();
+        m_tiles.reset();
+        m_walkCollisions.clear();
+        m_killCollisions.clear();
+        m_acidCollisions.clear();
+        m_waterCollisions.clear();
         t_context.managers.clearAll();
-        farthest_horiz_map_pixel = 0.0f;
-        farthest_horiz_traveled = 0.0f;
+        m_farthestHorizMapPixel = 0.0f;
+        m_farthestHorizTraveled = 0.0f;
     }
 
     bool Level::load(Context & t_context)
@@ -61,10 +61,10 @@ namespace halloween
         {
             verifyLayerIndexCounts();
             appendVertLayers(t_context);
-            t_context.avatar.setPosition(enter_rect);
-            farthest_horiz_map_pixel = exit_rect.position.x;
-            farthest_horiz_traveled = 0.0f;
-            number = t_context.level_number;
+            t_context.avatar.setPosition(m_enterRect);
+            m_farthestHorizMapPixel = m_exitRect.position.x;
+            m_farthestHorizTraveled = 0.0f;
+            m_number = t_context.level_number;
             // dumpInfo(levelNumber);
             return true;
         }
@@ -76,10 +76,10 @@ namespace halloween
 
     void Level::verifyLayerIndexCounts() const
     {
-        for (const TileLayer & layer : tiles.layers)
+        for (const TileLayer & layer : m_tiles.layers)
         {
-            const std::size_t totalCount{ static_cast<std::size_t>(tiles.count.x) *
-                                          static_cast<std::size_t>(tiles.count.y) };
+            const std::size_t totalCount{ static_cast<std::size_t>(m_tiles.count.x) *
+                                          static_cast<std::size_t>(m_tiles.count.y) };
 
             M_CHECK(
                 (totalCount == layer.indexes.size()),
@@ -96,36 +96,36 @@ namespace halloween
 
     bool Level::move(const ScreenRegions & t_layout, const float t_move)
     {
-        farthest_horiz_traveled += std::abs(t_move);
-        if (farthest_horiz_traveled > (farthest_horiz_map_pixel - t_layout.mapRegion().size.x))
+        m_farthestHorizTraveled += std::abs(t_move);
+        if (m_farthestHorizTraveled > (m_farthestHorizMapPixel - t_layout.mapRegion().size.x))
         {
             return false;
         }
 
-        enter_rect.position.x += t_move;
-        exit_rect.position.x += t_move;
+        m_enterRect.position.x += t_move;
+        m_exitRect.position.x += t_move;
 
-        for (sf::FloatRect & rect : kill_collisions)
+        for (sf::FloatRect & rect : m_killCollisions)
         {
             rect.position.x += t_move;
         }
 
-        for (sf::FloatRect & rect : walk_collisions)
+        for (sf::FloatRect & rect : m_walkCollisions)
         {
             rect.position.x += t_move;
         }
 
-        for (sf::FloatRect & rect : acid_collisions)
+        for (sf::FloatRect & rect : m_acidCollisions)
         {
             rect.position.x += t_move;
         }
 
-        for (sf::FloatRect & rect : water_collisions)
+        for (sf::FloatRect & rect : m_waterCollisions)
         {
             rect.position.x += t_move;
         }
 
-        for (TileLayer & layer : tiles.layers)
+        for (TileLayer & layer : m_tiles.layers)
         {
             for (sf::Vertex & vertex : layer.verts)
             {
@@ -140,12 +140,12 @@ namespace halloween
 
     void Level::appendVertLayers(Context & t_context)
     {
-        for (TileLayer & layer : tiles.layers)
+        for (TileLayer & layer : m_tiles.layers)
         {
             appendVertLayer(
-                tiles.count,
-                tiles.size,
-                tile_size_screen,
+                m_tiles.count,
+                m_tiles.size,
+                m_tileSizeScreen,
                 t_context.media.tileTexture(layer.image),
                 layer);
         }
@@ -161,7 +161,7 @@ namespace halloween
         TileLayer & t_layer) const
     {
         const sf::Vector2i sizeOnScreenI{ t_tileSizeOnScreen };
-        const sf::Vector2i textureTileCount{ t_tileTexture.size / tiles.size };
+        const sf::Vector2i textureTileCount{ t_tileTexture.size / m_tiles.size };
 
         std::size_t textureIndex{ 0 };
         for (int y{ 0 }; y < t_tileCount.y; ++y)
@@ -185,7 +185,7 @@ namespace halloween
                 const float posX{ static_cast<float>(x * sizeOnScreenI.x) };
                 const float posY{ static_cast<float>(y * sizeOnScreenI.y) };
 
-                const sf::Vector2f screenPos{ sf::Vector2f(posX, posY) + map_position_offset };
+                const sf::Vector2f screenPos{ sf::Vector2f(posX, posY) + m_mapPositionOffset };
                 const sf::FloatRect screenRect{ screenPos, t_tileSizeOnScreen };
 
                 util::appendTriangleVerts(screenRect, textureRect, t_layer.verts);
@@ -195,7 +195,7 @@ namespace halloween
 
     void Level::populateVisibleVerts(const ScreenRegions & t_layout)
     {
-        for (TileLayer & layer : tiles.layers)
+        for (TileLayer & layer : m_tiles.layers)
         {
             layer.visibleVerts.clear();
 
@@ -232,7 +232,7 @@ namespace halloween
     {
         std::cout << "Level " << levelNumber << " Graphics Info\n";
 
-        for (const TileLayer & layer : tiles.layers)
+        for (const TileLayer & layer : m_tiles.layers)
         {
             std::cout << "\tLayer Tiles:  " << layer.image << ", possible=" << layer.indexes.size()
                       << ", actual=" << (layer.verts.size() / util::verts_per_quad)

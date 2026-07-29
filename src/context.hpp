@@ -20,7 +20,7 @@ namespace halloween
 {
     class Bats;
     class Saws;
-    struct Level;
+    class Level;
     class Coins;
     class Darts;
     class Slimes;

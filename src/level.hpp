@@ -16,26 +16,86 @@ namespace halloween
     class ScreenRegions;
 
     //
-    struct Level
+    class Level
     {
+      public:
         Level();
 
         bool load(Context & t_context);
         bool move(const ScreenRegions & t_layout, const float t_move);
 
-        TileSet tiles;
-        sf::Vector2f map_position_offset;
-        sf::Vector2f tile_size_screen;
-        sf::Vector2f tile_size_texture;
-        std::vector<sf::FloatRect> walk_collisions;
-        std::vector<sf::FloatRect> kill_collisions;
-        std::vector<sf::FloatRect> acid_collisions;
-        std::vector<sf::FloatRect> water_collisions;
-        sf::FloatRect enter_rect;
-        sf::FloatRect exit_rect;
-        float farthest_horiz_map_pixel;
-        float farthest_horiz_traveled;
-        std::size_t number;
+        inline const std::vector<sf::FloatRect> & walkCollisions() const
+        {
+            return m_walkCollisions;
+        }
+
+        void setWalkCollisions(const std::vector<sf::FloatRect> & t_rects)
+        {
+            m_walkCollisions = t_rects;
+        }
+
+        inline const std::vector<sf::FloatRect> & killCollisions() const
+        {
+            return m_killCollisions;
+        }
+
+        void setKillCollisions(const std::vector<sf::FloatRect> & t_rects)
+        {
+            m_killCollisions = t_rects;
+        }
+
+        inline const std::vector<sf::FloatRect> & acidCollisions() const
+        {
+            return m_acidCollisions;
+        }
+
+        void setAcidCollisions(const std::vector<sf::FloatRect> & t_rects)
+        {
+            m_acidCollisions = t_rects;
+        }
+
+        inline const std::vector<sf::FloatRect> & waterCollisions() const
+        {
+            return m_waterCollisions;
+        }
+
+        void setWaterCollisions(const std::vector<sf::FloatRect> & t_rects)
+        {
+            m_waterCollisions = t_rects;
+        }
+
+        inline const std::vector<TileLayer> & tileLayers() const { return m_tiles.layers; }
+
+        void appendTileLayer(const TileLayer & t_tileLayer)
+        {
+            m_tiles.layers.push_back(t_tileLayer);
+        }
+
+        inline const sf::Vector2f mapPosition() const { return m_mapPositionOffset; }
+        inline const sf::FloatRect & enterRect() const { return m_enterRect; }
+        inline const sf::FloatRect & exitRect() const { return m_exitRect; }
+        inline std::size_t number() const { return m_number; }
+
+        inline void setEnterAndExitRects(
+            const sf::FloatRect & t_enterRect, const sf::FloatRect & t_exitRect)
+        {
+            m_enterRect = t_enterRect;
+            m_exitRect = t_exitRect;
+        }
+
+        inline void setLevelDetails(
+            const sf::Vector2i & t_tileCount,
+            const sf::Vector2i & t_tileSizeOnMap,
+            const sf::Vector2f & t_tileSizeTexture,
+            const sf::Vector2f & t_tileSizeScreen,
+            const sf::Vector2f & t_mapPosOffset)
+        {
+            m_tiles.count = t_tileCount;
+            m_tiles.size = t_tileSizeOnMap;
+            m_tileSizeTexture = t_tileSizeTexture;
+            m_tileSizeScreen = t_tileSizeScreen;
+            m_mapPositionOffset = t_mapPosOffset;
+        }
 
       private:
         void reset(Context & t_context);
@@ -50,6 +110,21 @@ namespace halloween
             const sf::Vector2f & t_tileSizeOnScreen,
             const TileTexture & t_tileTexture,
             TileLayer & t_layer) const;
+
+      private:
+        TileSet m_tiles;
+        sf::Vector2f m_mapPositionOffset;
+        sf::Vector2f m_tileSizeScreen;
+        sf::Vector2f m_tileSizeTexture;
+        std::vector<sf::FloatRect> m_walkCollisions;
+        std::vector<sf::FloatRect> m_killCollisions;
+        std::vector<sf::FloatRect> m_acidCollisions;
+        std::vector<sf::FloatRect> m_waterCollisions;
+        sf::FloatRect m_enterRect;
+        sf::FloatRect m_exitRect;
+        float m_farthestHorizMapPixel;
+        float m_farthestHorizTraveled;
+        std::size_t m_number;
     };
 
 } // namespace halloween

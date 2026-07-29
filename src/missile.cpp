@@ -94,7 +94,7 @@ namespace halloween
                 continue;
             }
 
-            for (const sf::FloatRect & collRect : context.level.walk_collisions)
+            for (const sf::FloatRect & collRect : context.level.walkCollisions())
             {
                 if (missileRect.findIntersection(collRect))
                 {

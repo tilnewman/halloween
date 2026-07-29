@@ -41,7 +41,7 @@ namespace halloween
 
     void PlayState::onEnter(Context & context)
     {
-        if (context.level.number != context.level_number)
+        if (context.level.number() != context.level_number)
         {
             if (context.level.load(context))
             {
@@ -70,7 +70,7 @@ namespace halloween
 
     void PlayState::update(Context & context, const float frameTimeSec)
     {
-        if (context.level_number != context.level.number)
+        if (context.level.number() != context.level_number)
         {
             return;
         }
@@ -121,7 +121,7 @@ namespace halloween
     void PlayState::draw(
         const Context & context, sf::RenderTarget & target, sf::RenderStates & states) const
     {
-        if (context.level_number != context.level.number)
+        if (context.level.number() != context.level_number)
         {
             return;
         }
@@ -130,7 +130,7 @@ namespace halloween
 
         context.managers.drawAllBeforeMap(context, target, states);
 
-        for (const TileLayer & layer : context.level.tiles.layers)
+        for (const TileLayer & layer : context.level.tileLayers())
         {
             if (layer.visibleVerts.empty())
             {

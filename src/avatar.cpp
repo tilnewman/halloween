@@ -621,7 +621,8 @@ namespace halloween
         footRect.position.y += footRectHeightAdj;
         footRect.size.y -= footRectHeightAdj;
 
-        std::vector<sf::FloatRect> rects = context.level.walk_collisions;
+        // TODO overahul this to
+        std::vector<sf::FloatRect> rects = context.level.walkCollisions();
         context.managers.appendAllCollisions(rects);
 
         bool hasHitSomething{ false };
@@ -640,6 +641,10 @@ namespace halloween
 
             hasHitSomething = true;
             const sf::Vector2f collCenter = util::center(collRect);
+
+            // TODO overhaul how this works to match what we did in Bramblefore
+
+            // TODO make sure the falling from up high through the floor bug is fixed
 
             if ((m_velocity.y < 0.0f) && (collCenter.y < avatarCenter.y))
             {
@@ -697,9 +702,9 @@ namespace halloween
 
     void Avatar::killCollisions(Context & context)
     {
-        const sf::FloatRect avatarRect = collisionRect();
+        const sf::FloatRect avatarRect{ collisionRect() };
 
-        for (const sf::FloatRect & coll : context.level.kill_collisions)
+        for (const sf::FloatRect & coll : context.level.killCollisions())
         {
             if (avatarRect.findIntersection(coll))
             {
@@ -711,7 +716,7 @@ namespace halloween
 
     void Avatar::exitCollisions(Context & context) const
     {
-        if (collisionRect().findIntersection(context.level.exit_rect))
+        if (collisionRect().findIntersection(context.level.exitRect()))
         {
             context.audio.stopAllLooped();
             context.state.setChangePending(State::Level);
@@ -757,9 +762,9 @@ namespace halloween
             return;
         }
 
-        const sf::FloatRect avatarRect = collisionRect();
+        const sf::FloatRect avatarRect{ collisionRect() };
 
-        for (const sf::FloatRect & coll : context.level.acid_collisions)
+        for (const sf::FloatRect & coll : context.level.acidCollisions())
         {
             if (avatarRect.findIntersection(coll))
             {
@@ -778,9 +783,9 @@ namespace halloween
             return;
         }
 
-        const sf::FloatRect avatarRect = collisionRect();
+        const sf::FloatRect avatarRect{ collisionRect() };
 
-        for (const sf::FloatRect & coll : context.level.water_collisions)
+        for (const sf::FloatRect & coll : context.level.waterCollisions())
         {
             if (avatarRect.findIntersection(coll))
             {

@@ -24,26 +24,26 @@ namespace halloween
       public:
         LevelFileLoader();
 
-        bool load(Context & context);
+        bool load(Context & t_context);
 
       private:
-        void parseLevelDetails(Context & context, Json & json);
-        void parseObjectTextureGIDs(Context & context, Json & json);
-        void parseBackgroundImageNumber(Context & context, Json & json);
-        void parseLayers(Context & context, Json & json);
-        void parseTileLayer(Context & context, const TileImage image, Json & json);
-        void parseRectLayer(Context & context, Json & json, std::vector<sf::FloatRect> & rects);
-        const sf::FloatRect parseAndConvertRect(const Context & context, Json & json);
-        void parseSpawnLayer(Context & context, Json & json);
+        void parseLevelDetails(Context & t_context, Json & json);
+        void parseObjectTextureGIDs(Context & t_context, Json & json);
+        void parseBackgroundImageNumber(Context & t_context, Json & json);
+        void parseLayers(Context & t_context, Json & json);
+        void parseTileLayer(Context & t_context, const TileImage image, Json & json);
+        void parseRectLayer(Context & t_context, Json & json, std::vector<sf::FloatRect> & rects);
+        const sf::FloatRect parseAndConvertRect(const Context & t_context, Json & json);
+        void parseSpawnLayer(Context & t_context, Json & json);
 
         template <typename T>
-        void parseObjectLayerRects(T & manager, Context & context, Json & json)
+        void parseObjectLayerRects(T & manager, Context & t_context, Json & json)
         {
             manager.clear();
 
             for (Json & j : json["objects"])
             {
-                manager.add(context, parseAndConvertRect(context, j));
+                manager.add(t_context, parseAndConvertRect(t_context, j));
             }
         }
 

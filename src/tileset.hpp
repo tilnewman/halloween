@@ -49,6 +49,7 @@ namespace halloween
             , verts()
             , visibleVerts()
         {
+            // TODO these values need work
             indexes.reserve(10'000);
             verts.reserve(10'000);
             visibleVerts.reserve(10'000);
@@ -69,7 +70,7 @@ namespace halloween
             , size()
             , layers()
         {
-            layers.reserve(16);
+            layers.reserve(32);
         }
 
         void reset()
