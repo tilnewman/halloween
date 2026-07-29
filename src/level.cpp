@@ -85,54 +85,60 @@ namespace halloween
                 (totalCount == layer.indexes.size()),
                 "index_count=" << layer.indexes.size() << " does not equal tile_count="
                                << totalCount << " in layer " << layer.image);
+
+            M_CHECK(
+                ((layer.verts.size() % util::verts_per_quad) == 0),
+                "Error:  TileLayer " << layer.image << " verts.size()=" << layer.verts.size()
+                                     << " which is not a multiple of " << util::verts_per_quad);
+
         }
     }
 
-    bool Level::move(const ScreenRegions & layout, const float move)
+    bool Level::move(const ScreenRegions & t_layout, const float t_move)
     {
-        farthest_horiz_traveled += std::abs(move);
-        if (farthest_horiz_traveled > (farthest_horiz_map_pixel - layout.mapRegion().size.x))
+        farthest_horiz_traveled += std::abs(t_move);
+        if (farthest_horiz_traveled > (farthest_horiz_map_pixel - t_layout.mapRegion().size.x))
         {
             return false;
         }
 
-        enter_rect.position.x += move;
-        exit_rect.position.x += move;
+        enter_rect.position.x += t_move;
+        exit_rect.position.x += t_move;
 
         for (sf::FloatRect & rect : kill_collisions)
         {
-            rect.position.x += move;
+            rect.position.x += t_move;
         }
 
         for (sf::FloatRect & rect : walk_collisions)
         {
-            rect.position.x += move;
+            rect.position.x += t_move;
         }
 
         for (sf::FloatRect & rect : acid_collisions)
         {
-            rect.position.x += move;
+            rect.position.x += t_move;
         }
 
         for (sf::FloatRect & rect : water_collisions)
         {
-            rect.position.x += move;
+            rect.position.x += t_move;
         }
 
         for (TileLayer & layer : tiles.layers)
         {
             for (sf::Vertex & vertex : layer.verts)
             {
-                vertex.position.x += move;
+                vertex.position.x += t_move;
             }
         }
 
-        populateVisibleVerts(layout);
+        populateVisibleVerts(t_layout);
 
         return true;
     }
 
-    void Level::appendVertLayers(Context & context)
+    void Level::appendVertLayers(Context & t_context)
     {
         for (TileLayer & layer : tiles.layers)
         {
@@ -140,11 +146,11 @@ namespace halloween
                 tiles.count,
                 tiles.size,
                 tile_size_screen,
-                context.media.tileTexture(layer.image),
+                t_context.media.tileTexture(layer.image),
                 layer);
         }
 
-        populateVisibleVerts(context.layout);
+        populateVisibleVerts(t_context.layout);
     }
 
     void Level::appendVertLayer(
@@ -187,15 +193,10 @@ namespace halloween
         }
     }
 
-    void Level::populateVisibleVerts(const ScreenRegions & layout)
+    void Level::populateVisibleVerts(const ScreenRegions & t_layout)
     {
         for (TileLayer & layer : tiles.layers)
         {
-            M_CHECK(
-                ((layer.verts.size() % util::verts_per_quad) == 0),
-                "Error:  TileLayer " << layer.image << " verts.size()=" << layer.verts.size()
-                                     << " which is not a multiple of " << util::verts_per_quad);
-
             layer.visibleVerts.clear();
 
             std::size_t vertIndex{ 0 };
@@ -209,10 +210,10 @@ namespace halloween
                 const sf::Vertex & topRightVert2{ layer.verts[vertIndex + 4] };
                 const sf::Vertex & botRightVert{ layer.verts[vertIndex + 5] };
 
-                if (layout.mapRegion().contains(topLeftVert.position) ||
-                    layout.mapRegion().contains(topRightVert.position) ||
-                    layout.mapRegion().contains(botRightVert.position) ||
-                    layout.mapRegion().contains(botLeftVert.position))
+                if (t_layout.mapRegion().contains(topLeftVert.position) ||
+                    t_layout.mapRegion().contains(topRightVert.position) ||
+                    t_layout.mapRegion().contains(botRightVert.position) ||
+                    t_layout.mapRegion().contains(botLeftVert.position))
                 {
                     layer.visibleVerts.push_back(topLeftVert);
                     layer.visibleVerts.push_back(topRightVert);
