@@ -31,8 +31,8 @@ namespace halloween
         , m_ghosts{}
         , m_spawnMinTimeSec{ 6.0f }
         , m_spawnMaxTimeSec{ 12.0f }
-        , m_floatSpeedMin{ 50.0f }
-        , m_floatSpeedMax{ 100.0f }
+        , m_floatSpeedMin{ 20.0f }
+        , m_floatSpeedMax{ 80.0f }
     {
         // probably never more than a hundred ghost spawn points in a level
         m_spawnPoints.reserve(100);
