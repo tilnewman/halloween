@@ -21,8 +21,8 @@ namespace halloween
 
     struct Saw
     {
-        explicit Saw(const sf::Texture & texture)
-            : sprite(texture)
+        explicit Saw(const sf::Texture & t_texture)
+            : sprite{ t_texture }
         {}
 
         sf::Sprite sprite;
@@ -37,14 +37,17 @@ namespace halloween
         virtual ~Saws() override = default;
 
         bool willDrawBeforeMap() const final { return true; }
-        void setup(const Settings & settings) final;
-        void add(Context & context, const sf::FloatRect & region) final;
+        void setup(const Settings & t_settings) final;
+        void add(Context & t_context, const sf::FloatRect & t_region) final;
         void clear() final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
-        void moveWithMap(const sf::Vector2f & move) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+        void moveWithMap(const sf::Vector2f & t_move) final;
         void collideWithAvatar(Context &, const sf::FloatRect &) final {}
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const final;
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const final;
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
       private:

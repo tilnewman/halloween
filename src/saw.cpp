@@ -20,67 +20,67 @@ namespace halloween
 {
 
     Saws::Saws()
-        : m_texture()
-        , m_scale(0.5f, 0.5f)
-        , m_rotationSpeed(-200.0f)
-        , m_saws()
+        : m_texture{}
+        , m_scale{ 0.5f, 0.5f }
+        , m_rotationSpeed{ -200.0f }
+        , m_saws{}
     {
         // probably no more than a dozen in any given map
         m_saws.reserve(16);
     }
 
-    void Saws::setup(const Settings & settings)
+    void Saws::setup(const Settings & t_settings)
     {
-        util::TextureLoader::load(m_texture, (settings.media_path / "image" / "saw.png"), true);
+        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "saw.png"), true);
     }
 
-    void Saws::add(Context &, const sf::FloatRect & region)
+    void Saws::add(Context &, const sf::FloatRect & t_region)
     {
-        Saw & saw = m_saws.emplace_back(m_texture);
+        Saw & saw{ m_saws.emplace_back(m_texture) };
         saw.sprite.setScale(m_scale);
         util::setOriginToCenter(saw.sprite);
-        saw.sprite.setPosition(util::center(region));
+        saw.sprite.setPosition(util::center(t_region));
     }
 
     void Saws::clear() { m_saws.clear(); }
 
-    void Saws::update(Context &, const float frameTimeSec)
+    void Saws::update(Context &, const float t_frameTimeSec)
     {
         for (Saw & saw : m_saws)
         {
-            saw.sprite.rotate(sf::degrees(m_rotationSpeed * frameTimeSec));
+            saw.sprite.rotate(sf::degrees(m_rotationSpeed * t_frameTimeSec));
         }
     }
 
     void Saws::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (const Saw & saw : m_saws)
         {
-            if (context.layout.mapRegion().findIntersection(saw.sprite.getGlobalBounds()))
+            if (t_context.layout.mapRegion().findIntersection(saw.sprite.getGlobalBounds()))
             {
-                target.draw(saw.sprite, states);
+                t_target.draw(saw.sprite, t_states);
             }
         }
     }
 
-    void Saws::moveWithMap(const sf::Vector2f & move)
+    void Saws::moveWithMap(const sf::Vector2f & t_move)
     {
         for (Saw & saw : m_saws)
         {
-            saw.sprite.move(move);
+            saw.sprite.move(t_move);
         }
     }
 
-    bool Saws::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
+    bool Saws::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
     {
-        const sf::Vector2f avatarCenterPos = util::center(avatarRect);
+        const sf::Vector2f avatarCenterPos = util::center(t_avatarRect);
 
         for (const Saw & saw : m_saws)
         {
-            const sf::FloatRect sawBounds = saw.sprite.getGlobalBounds();
-            const sf::Vector2f sawCenterPos = util::center(sawBounds);
-            const float distance = util::distance(avatarCenterPos, sawCenterPos);
+            const sf::FloatRect sawBounds{ saw.sprite.getGlobalBounds() };
+            const sf::Vector2f sawCenterPos{ util::center(sawBounds) };
+            const float distance{ util::distance(avatarCenterPos, sawCenterPos) };
             if (distance < (sawBounds.size.x * 0.5f))
             {
                 return true;
