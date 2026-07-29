@@ -17,15 +17,15 @@ namespace halloween
 {
 
     ScreenRegions::ScreenRegions()
-        : m_wholeSize()
-        , m_wholeRegion()
-        , m_mapRegion()
-        , m_infoRegion()
+        : m_wholeSize{}
+        , m_wholeRegion{}
+        , m_mapRegion{}
+        , m_infoRegion{}
     {}
 
-    void ScreenRegions::setup(const sf::Vector2u & windowSize)
+    void ScreenRegions::setup(const sf::Vector2u & t_windowSize)
     {
-        m_wholeSize = { static_cast<float>(windowSize.x), static_cast<float>(windowSize.y) };
+        m_wholeSize = { static_cast<float>(t_windowSize.x), static_cast<float>(t_windowSize.y) };
         m_wholeRegion = { { 0.0f, 0.0f }, m_wholeSize };
 
         m_infoRegion.position.x = 0.0f;
