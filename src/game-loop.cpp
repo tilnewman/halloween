@@ -16,28 +16,28 @@ namespace halloween
 
     GameLoop::GameLoop(const Settings & t_settings)
         : m_settings{ t_settings }
-        , m_random{}
-        , m_audio{ m_random }
-        , m_music{}
-        , m_bats{}
-        , m_owlCalls{}
-        , m_window{}
-        , m_media{}
-        , m_layout{}
+        , m_randomUPtr{}
+        , m_audioUPtr{}
+        , m_musicUPtr{}
+        , m_batsUPtr{}
+        , m_owlCallsUPtr{}
+        , m_windowUPtr{}
+        , m_mediaUPtr{}
+        , m_layoutUPtr{}
         , m_avatarUPtr{}
         , m_stateMachineUPtr{}
-        , m_level{}
-        , m_missiles{}
-        , m_coins{}
-        , m_darts{}
-        , m_spikedBalls{}
-        , m_fireSpouts{}
-        , m_saws{}
-        , m_slimes{}
-        , m_ghosts{}
+        , m_levelUPtr{}
+        , m_missilesUPtr{}
+        , m_coinsUPtr{}
+        , m_dartsUPtr{}
+        , m_spikedBallsUPtr{}
+        , m_fireSpoutsUPtr{}
+        , m_sawsUPtr{}
+        , m_slimesUPtr{}
+        , m_ghostsUPtr{}
         , m_infoRegionUPtr{}
-        , m_managers{}
-        , m_stats{}
+        , m_managersUPtr{}
+        , m_statsUPtr{}
         , m_bossUPtr{}
         , m_framerateDisplayUPtr{}
         , m_contextUPtr{}
@@ -56,71 +56,93 @@ namespace halloween
             std::filesystem::exists(m_settings.media_path),
             "The media folder could not be found at \"" << m_settings.media_path << "\"");
 
+        //
+        m_windowUPtr = std::make_unique<sf::RenderWindow>();
+
         const auto videoMode{ util::findVideoModeClosestTo(
             sf::VideoMode(
                 { m_settings.target_screen_res.x, m_settings.target_screen_res.y },
                 sf::VideoMode::getDesktopMode().bitsPerPixel)) };
 
-        m_window.create(videoMode, "Halloween", sf::State::Fullscreen);
-        M_CHECK(m_window.isOpen(), "Could not open graphics window.");
+        m_windowUPtr->create(videoMode, "Halloween", sf::State::Fullscreen);
+        M_CHECK(m_windowUPtr->isOpen(), "Could not open graphics window.");
 
-        m_window.setMouseCursorVisible(false);
+        m_windowUPtr->setMouseCursorVisible(false);
 
+        //
         util::SfmlDefaults::instance().setup();
-
-        m_audio.mediaPath(m_settings.media_path / "sfx");
-        m_audio.loadAll();
-        m_audio.willLoop("walk", true);
-
-        m_music.setup(m_settings.media_path / "music");
 
         m_avatarUPtr = std::make_unique<Avatar>();
         m_stateMachineUPtr = std::make_unique<StateMachine>();
         m_infoRegionUPtr = std::make_unique<InfoRegion>();
         m_bossUPtr = std::make_unique<MushroomBoss>();
         m_framerateDisplayUPtr = std::make_unique<FramerateDisplay>();
+        m_randomUPtr = std::make_unique<util::Random>();
+        m_audioUPtr = std::make_unique<util::SoundPlayer>(*m_randomUPtr);
+        m_musicUPtr = std::make_unique<util::MusicPlayer>();
+        m_batsUPtr = std::make_unique<Bats>();
+        m_owlCallsUPtr = std::make_unique<OwlCalls>();
+        m_mediaUPtr = std::make_unique<Resources>();
+        m_layoutUPtr = std::make_unique<ScreenRegions>();
+        m_levelUPtr = std::make_unique<Level>();
+        m_missilesUPtr = std::make_unique<Missiles>();
+        m_coinsUPtr = std::make_unique<Coins>();
+        m_dartsUPtr = std::make_unique<Darts>();
+        m_spikedBallsUPtr = std::make_unique<SpikedBalls>();
+        m_fireSpoutsUPtr = std::make_unique<FireSpouts>();
+        m_sawsUPtr = std::make_unique<Saws>();
+        m_slimesUPtr = std::make_unique<Slimes>();
+        m_ghostsUPtr = std::make_unique<Ghosts>();
+        m_managersUPtr = std::make_unique<ObjectManagerList>();
+        m_statsUPtr = std::make_unique<LevelStats>();
+
+        m_audioUPtr->mediaPath(m_settings.media_path / "sfx");
+        m_audioUPtr->loadAll();
+        m_audioUPtr->willLoop("walk", true);
+
+        m_musicUPtr->setup(m_settings.media_path / "music");
 
         m_contextUPtr = std::make_unique<Context>(
             m_settings,
-            m_window,
-            m_random,
-            m_audio,
-            m_music,
-            m_bats,
-            m_owlCalls,
-            m_media,
-            m_layout,
+            *m_windowUPtr,
+            *m_randomUPtr,
+            *m_audioUPtr,
+            *m_musicUPtr,
+            *m_batsUPtr,
+            *m_owlCallsUPtr,
+            *m_mediaUPtr,
+            *m_layoutUPtr,
             *m_avatarUPtr,
             *m_stateMachineUPtr,
-            m_level,
-            m_missiles,
-            m_coins,
-            m_darts,
-            m_spikedBalls,
-            m_fireSpouts,
-            m_saws,
-            m_slimes,
-            m_ghosts,
+            *m_levelUPtr,
+            *m_missilesUPtr,
+            *m_coinsUPtr,
+            *m_dartsUPtr,
+            *m_spikedBallsUPtr,
+            *m_fireSpoutsUPtr,
+            *m_sawsUPtr,
+            *m_slimesUPtr,
+            *m_ghostsUPtr,
             *m_infoRegionUPtr,
-            m_managers,
-            m_stats,
+            *m_managersUPtr,
+            *m_statsUPtr,
             *m_bossUPtr);
 
-        m_layout.setup(m_window.getSize());
-        m_media.setup(m_settings);
-        m_missiles.setup(m_settings);
+        m_layoutUPtr->setup(m_windowUPtr->getSize());
+        m_mediaUPtr->setup(m_settings);
+        m_missilesUPtr->setup(m_settings);
 
-        m_managers.add(m_coins);
-        m_managers.add(m_spikedBalls);
-        m_managers.add(m_fireSpouts);
-        m_managers.add(m_saws);
-        m_managers.add(m_darts);
-        m_managers.add(m_ghosts);
-        m_managers.add(m_slimes);
-        m_managers.add(m_bats);
-        m_managers.add(*m_bossUPtr);
-
-        m_managers.setupAll(*m_contextUPtr);
+        m_managersUPtr->add(*m_coinsUPtr);
+        m_managersUPtr->add(*m_spikedBallsUPtr);
+        m_managersUPtr->add(*m_fireSpoutsUPtr);
+        m_managersUPtr->add(*m_sawsUPtr);
+        m_managersUPtr->add(*m_dartsUPtr);
+        m_managersUPtr->add(*m_ghostsUPtr);
+        m_managersUPtr->add(*m_slimesUPtr);
+        m_managersUPtr->add(*m_batsUPtr);
+        m_managersUPtr->add(*m_bossUPtr);
+        //
+        m_managersUPtr->setupAll(*m_contextUPtr);
 
         m_avatarUPtr->setup(m_settings);
         m_infoRegionUPtr->setup(*m_contextUPtr);
@@ -129,10 +151,31 @@ namespace halloween
     void GameLoop::teardown()
     {
         m_contextUPtr.reset();
+
+        m_managersUPtr.reset();
+
+        m_statsUPtr.reset();
+        m_ghostsUPtr.reset();
+        m_slimesUPtr.reset();
+        m_sawsUPtr.reset();
+        m_fireSpoutsUPtr.reset();
+        m_spikedBallsUPtr.reset();
+        m_dartsUPtr.reset();
+        m_coinsUPtr.reset();
+        m_missilesUPtr.reset();
+        m_levelUPtr.reset();
+        m_batsUPtr.reset();
+        m_owlCallsUPtr.reset();
         m_bossUPtr.reset();
         m_infoRegionUPtr.reset();
         m_stateMachineUPtr.reset();
         m_avatarUPtr.reset();
+        m_mediaUPtr.reset();
+        m_layoutUPtr.reset();
+        m_audioUPtr.reset();
+        m_musicUPtr.reset();
+
+        m_randomUPtr.reset(); // this must happen ater m_audioUPtr.reset()
 
         util::SfmlDefaults::instance().teardown();
     }
@@ -140,7 +183,7 @@ namespace halloween
     void GameLoop::frameLoop()
     {
         sf::Clock frameClock;
-        while (m_window.isOpen() && (m_stateMachineUPtr->stateEnum() != State::Quit))
+        while (m_windowUPtr->isOpen() && (m_stateMachineUPtr->stateEnum() != State::Quit))
         {
             frameClock.restart();
 
@@ -170,7 +213,7 @@ namespace halloween
 
     void GameLoop::handleEvents()
     {
-        while (const auto eventOpt = m_window.pollEvent())
+        while (const auto eventOpt = m_windowUPtr->pollEvent())
         {
             m_stateMachineUPtr->state().handleEvent(*m_contextUPtr, eventOpt.value());
         }
@@ -183,10 +226,10 @@ namespace halloween
 
     void GameLoop::draw()
     {
-        m_window.clear();
-        m_stateMachineUPtr->state().draw(*m_contextUPtr, m_window, m_states);
-        m_framerateDisplayUPtr->draw(*m_contextUPtr, m_window, m_states);
-        m_window.display();
+        m_windowUPtr->clear();
+        m_stateMachineUPtr->state().draw(*m_contextUPtr, *m_windowUPtr, m_states);
+        m_framerateDisplayUPtr->draw(*m_contextUPtr, *m_windowUPtr, m_states);
+        m_windowUPtr->display();
     }
 
 } // namespace halloween
