@@ -1,5 +1,5 @@
-#ifndef UTIL_SLIDERS_HPP_INCLUDED
-#define UTIL_SLIDERS_HPP_INCLUDED
+#ifndef SLIDERS_HPP_INCLUDED
+#define SLIDERS_HPP_INCLUDED
 //
 // sliders.hpp
 //
@@ -7,12 +7,13 @@
 #include "util.hpp"
 
 #include <numbers>
+#include <type_traits>
 #include <utility>
 
 namespace util
 {
     // All Sliders:
-    //  - Use sin() to achieve smooth motion called "sliding" here.
+    //  - Use Smooth Step to achieve sin motion called "sliding" here.
     //  - Start automatically at the given value and isMoving() returns true.
     //  - Call Update() with a fraction of a second to move the value towards the target.
     //  - Update() will call stop() automatically when target value is reached or IsRealClose().
@@ -22,7 +23,7 @@ namespace util
     //  - Given speeds are clamped to 0.0f or greater.
 
     //
-    // Slides a value from zero to one using smooth sin() motion.
+    // Slides a value from zero to one using smoothstep equation.
     // Motion is fastest (bounce-like) when startAt=0.5.
     // Will not work with negative speeds or update(...).
     //
@@ -36,30 +37,36 @@ namespace util
             : m_isMoving{ false }
             , m_speed{ 0 }
             , m_value{ 0 }
-            , m_radians{ 0 }
+            , m_base{ 0 }
         {}
 
         explicit constexpr SliderRatio(const T t_speed, const T t_startAt = T(0)) noexcept
             : m_isMoving{ true }
             , m_speed{ 0 }
             , m_value{ 0 }
-            , m_radians{ 0 }
+            , m_base{ std::clamp(t_startAt, T(0), T(1)) }
         {
             restart(t_speed, t_startAt);
         }
 
-        [[nodiscard]] constexpr T radians() const noexcept { return m_radians; }
         [[nodiscard]] constexpr T value() const noexcept { return m_value; }
         [[nodiscard]] constexpr T speed() const noexcept { return m_speed; }
         constexpr void speed(const T t_newSpeed) noexcept { m_speed = t_newSpeed; }
-        constexpr bool isMoving() const noexcept { return m_isMoving; }
+        [[nodiscard]] constexpr bool isMoving() const noexcept { return m_isMoving; }
         constexpr void stop() noexcept { m_isMoving = false; }
 
         constexpr void restart(const T t_speed, const T t_startAt = T(0))
         {
-            m_speed = t_speed;
-            m_value = std::clamp(t_startAt, T(0), T(1));
-            m_radians = (m_radiansFrom + (std::numbers::pi_v<T> * m_value));
+            m_isMoving = true;
+            m_speed    = t_speed;
+            m_base     = std::clamp(t_startAt, T(0), T(1));
+            update(T(0));
+        }
+
+        constexpr void restart(const T t_startAt = T(0))
+        {
+            m_isMoving = true;
+            m_base     = std::clamp(t_startAt, T(0), T(1));
             update(T(0));
         }
 
@@ -67,15 +74,16 @@ namespace util
         {
             if (m_isMoving)
             {
-                m_radians += (t_adjustment * m_speed);
-                m_value = static_cast<T>((T(2.0) - (sin(m_radians) + T(1))) * T(0.5));
-                m_value = std::clamp(m_value, T(0), T(1));
-
-                if ((m_radians > m_radiansTo) || isRealClose(m_radians, m_radiansTo))
+                m_base += (t_adjustment * m_speed);
+                if ((m_base > T(1)) || isRealClose(m_base, T(1)))
                 {
-                    m_radians = m_radiansTo;
                     m_value = T(1);
                     stop();
+                }
+                else
+                {
+                    m_value = ((m_base * m_base) * (T(3) - (T(2) * m_base)));
+                    m_value = std::clamp(m_value, T(0), T(1));
                 }
             }
 
@@ -86,9 +94,7 @@ namespace util
         bool m_isMoving;
         T m_speed;
         T m_value;
-        T m_radians;
-        inline static constexpr T m_radiansFrom{ std::numbers::pi_v<T> * T(0.5) };
-        inline static constexpr T m_radiansTo{ std::numbers::pi_v<T> * T(1.5) };
+        T m_base;
     };
 
     //
@@ -233,7 +239,7 @@ namespace util
             const Value_t t_startAt) noexcept
         {
             m_from = t_from;
-            m_to = t_to;
+            m_to   = t_to;
 
             // If StartAtClamp() set m_value to t_to then start reversed
             if (isRealClose(t_startAt, t_to))
@@ -317,4 +323,4 @@ namespace util
 
 } // namespace util
 
-#endif // UTIL_SLIDERS_HPP_INCLUDED
+#endif // SLIDERS_HPP_INCLUDED
