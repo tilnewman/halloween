@@ -3,6 +3,8 @@
 //
 // states.hpp
 //
+#include "pause-screen.hpp"
+
 #include <cassert>
 #include <memory>
 #include <optional>
@@ -253,6 +255,8 @@ namespace halloween
             const Context & t_context,
             sf::RenderTarget & t_target,
             sf::RenderStates & t_states) const override;
+
+        PauseScreen screen;
     };
 
     //

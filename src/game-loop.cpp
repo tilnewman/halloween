@@ -25,7 +25,6 @@ namespace halloween
         , m_media{}
         , m_layout{}
         , m_avatarUPtr{}
-        , m_pauseScreenUPtr{}
         , m_stateMachineUPtr{}
         , m_level{}
         , m_missiles{}
@@ -79,7 +78,6 @@ namespace halloween
         m_music.setup(m_settings.media_path / "music");
 
         m_avatarUPtr = std::make_unique<Avatar>();
-        m_pauseScreenUPtr = std::make_unique<PauseScreen>();
         m_stateMachineUPtr = std::make_unique<StateMachine>();
         m_infoRegionUPtr = std::make_unique<InfoRegion>();
         m_bossUPtr = std::make_unique<MushroomBoss>();
@@ -95,7 +93,6 @@ namespace halloween
             m_media,
             m_layout,
             *m_avatarUPtr,
-            *m_pauseScreenUPtr,
             *m_stateMachineUPtr,
             m_level,
             m_missiles,
@@ -128,19 +125,19 @@ namespace halloween
         m_managers.setupAll(m_settings);
 
         m_avatarUPtr->setup(m_settings);
-        m_pauseScreenUPtr->setup(m_window.getSize(), m_media);
         m_infoRegionUPtr->setup(*m_contextUPtr);
     }
 
     void GameLoop::teardown()
     {
         // m_managers.clearAll(); // TODO um...
+        
         m_contextUPtr.reset();
         m_bossUPtr.reset();
         m_infoRegionUPtr.reset();
         m_stateMachineUPtr.reset();
-        m_pauseScreenUPtr.reset();
         m_avatarUPtr.reset();
+
         util::SfmlDefaults::instance().teardown();
     }
 

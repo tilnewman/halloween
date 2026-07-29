@@ -19,7 +19,6 @@
 #include "music-player.hpp"
 #include "object-manager.hpp"
 #include "owl-calls.hpp"
-#include "pause-screen.hpp"
 #include "random.hpp"
 #include "resources.hpp"
 #include "saw.hpp"
@@ -69,7 +68,6 @@ namespace halloween
         Resources m_media;
         ScreenRegions m_layout;
         std::unique_ptr<Avatar> m_avatarUPtr;
-        std::unique_ptr<PauseScreen> m_pauseScreenUPtr;
         std::unique_ptr<StateMachine> m_stateMachineUPtr;
         Level m_level;
         Missiles m_missiles;

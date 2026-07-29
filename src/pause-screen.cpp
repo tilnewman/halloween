@@ -4,6 +4,7 @@
 
 #include "check-macros.hpp"
 #include "color-range.hpp"
+#include "context.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "texture-loader.hpp"
@@ -16,41 +17,32 @@ namespace halloween
 {
 
     PauseScreen::PauseScreen()
-        : m_isSupported{ false }
-        , m_texture{}
+        : m_texture{}
         , m_sprite{ util::SfmlDefaults::instance().texture() }
         , m_text{ util::SfmlDefaults::instance().font() }
     {}
 
-    void PauseScreen::setup(const sf::Vector2u & t_windowSize, const Resources & t_media)
+    void PauseScreen::setup(const Context & t_context)
     {
-        m_isSupported = m_texture.resize(t_windowSize);
-
-        M_CHECK_LOG(
-            m_isSupported, "Your video card sucks so the pause screen won't look very good.");
-
-        m_text.setFont(t_media.font);
+        m_text.setFont(t_context.media.font);
         m_text.setString("PAUSED");
         m_text.setCharacterSize(99);
 
-        const sf::Vector2f windowSizeF{ t_windowSize };
+        const sf::Vector2f windowSizeF{ t_context.window.getSize() };
         sf::FloatRect textRect;
         textRect.position.x = 0.0f;
         textRect.size.x = windowSizeF.x;
         textRect.size.y = (windowSizeF.y / 8.0f);
         textRect.position.y = ((windowSizeF.y * 0.3f) - (textRect.size.y * 0.5f));
         util::fitAndCenterInside(m_text, textRect);
-    }
 
-    void PauseScreen::update(const sf::Window & t_window)
-    {
-        if (!m_isSupported)
+        if (!m_texture.resize(t_context.window.getSize()))
         {
+            M_LOG("Your video card sucks so the pause screen won't look very good.");
             return;
         }
 
-        m_texture.update(t_window);
-
+        m_texture.update(t_context.window);
         sf::Image image{ m_texture.copyToImage() };
 
         for (unsigned int y{ 0 }; y < image.getSize().y; ++y)
@@ -78,7 +70,7 @@ namespace halloween
         }
     }
 
-    void PauseScreen::draw(sf::RenderTarget & t_target, sf::RenderStates t_states)
+    void PauseScreen::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         t_target.draw(m_sprite, t_states);
         t_target.draw(m_text, t_states);

@@ -281,14 +281,13 @@ namespace halloween
 
     PauseState::PauseState(const Context & t_context)
         : TimedMessageState{ t_context, State::Pause, State::Play, "PAUSE", -1.0f }
+        , screen{}
     {}
 
     void PauseState::onEnter(Context & t_context)
     {
         t_context.audio.play("pause");
-
-        // update pause screen texture
-        t_context.pause_screen.update(t_context.window);
+        screen.setup(t_context);
     }
 
     void PauseState::onExit(Context & t_context) { t_context.audio.play("pause"); }
@@ -307,7 +306,7 @@ namespace halloween
         const Context & t_context, sf::RenderTarget & target, sf::RenderStates & states) const
     {
         StateBase::draw(t_context, target, states);
-        t_context.pause_screen.draw(target, states);
+        screen.draw(target, states);
     }
 
     //

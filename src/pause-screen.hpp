@@ -12,18 +12,19 @@
 
 namespace halloween
 {
+    struct Context;
+
+    //
 
     class PauseScreen
     {
       public:
         PauseScreen();
 
-        void setup(const sf::Vector2u & t_windowSize, const Resources & t_media);
-        void update(const sf::Window & t_window);
-        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states);
+        void setup(const Context & t_context);
+        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
 
       private:
-        bool m_isSupported;
         sf::Texture m_texture;
         sf::Sprite m_sprite;
         sf::Text m_text;
