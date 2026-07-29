@@ -944,12 +944,9 @@ namespace util
     {
         std::vector<sf::VideoMode> videoModes = sf::VideoMode::getFullscreenModes();
 
-        videoModes.erase(
-            std::remove_if(
-                std::begin(videoModes),
-                std::end(videoModes),
-                [&](const auto & vm) { return (vm.bitsPerPixel != targetMode.bitsPerPixel); }),
-            std::end(videoModes));
+        std::erase_if(videoModes, [&](const auto & t_vm) {
+            return (t_vm.bitsPerPixel != targetMode.bitsPerPixel);
+        });
 
         if (videoModes.empty())
         {

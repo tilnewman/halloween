@@ -108,12 +108,7 @@ namespace halloween
 
         if (wereAnyKilled)
         {
-            m_animations.erase(
-                std::remove_if(
-                    std::begin(m_animations),
-                    std::end(m_animations),
-                    [](const CoinAnim & anim) { return !anim.is_alive; }),
-                std::end(m_animations));
+            std::erase_if(m_animations, [](const CoinAnim & t_anim) { return !t_anim.is_alive; });
         }
     }
 
@@ -193,12 +188,7 @@ namespace halloween
 
         if (wereAnyCollected)
         {
-            m_coins.erase(
-                std::remove_if(
-                    std::begin(m_coins),
-                    std::end(m_coins),
-                    [](const Coin & coin) { return !coin.is_alive; }),
-                std::end(m_coins));
+            std::erase_if(m_coins, [](const Coin & t_coin) { return !t_coin.is_alive; });
         }
     }
 

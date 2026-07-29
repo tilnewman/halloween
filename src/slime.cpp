@@ -40,7 +40,7 @@ namespace halloween
     void Slimes::setup(const Settings & t_settings)
     {
         m_textures.resize(m_textureCount);
-        for (std::size_t i(0); i < m_textureCount; ++i)
+        for (std::size_t i{ 0 }; i < m_textureCount; ++i)
         {
             std::string str;
             str = (t_settings.media_path / "image" / "slime" / "slime-").string();
@@ -131,12 +131,8 @@ namespace halloween
 
         if (areAnyDeathAnimsFinished)
         {
-            m_deathAnims.erase(
-                std::remove_if(
-                    std::begin(m_deathAnims),
-                    std::end(m_deathAnims),
-                    [](const SlimeDeathAnim & anim) { return !anim.is_visible; }),
-                std::end(m_deathAnims));
+            std::erase_if(
+                m_deathAnims, [](const SlimeDeathAnim & t_anim) { return !t_anim.is_visible; });
         }
     }
 

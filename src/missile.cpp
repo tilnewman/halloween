@@ -110,12 +110,8 @@ namespace halloween
 
         if (wereAnyKilled)
         {
-            m_missiles.erase(
-                std::remove_if(
-                    std::begin(m_missiles),
-                    std::end(m_missiles),
-                    [](const Missile & missile) { return !missile.is_alive; }),
-                std::end(m_missiles));
+            std::erase_if(
+                m_missiles, [](const Missile & t_missile) { return !t_missile.is_alive; });
         }
     }
 

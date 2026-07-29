@@ -255,12 +255,7 @@ namespace halloween
         // remove any dead
         if (wereAnyKilled)
         {
-            m_bats.erase(
-                std::remove_if(
-                    std::begin(m_bats),
-                    std::end(m_bats),
-                    [](const Bat & bat) { return !bat.is_alive; }),
-                std::end(m_bats));
+            std::erase_if(m_bats, [](const Bat & t_bat) { return !t_bat.is_alive; });
         }
 
         return wereAnyKilled;

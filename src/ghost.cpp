@@ -143,12 +143,7 @@ namespace halloween
             ghost.sprite.setColor(sf::Color(255, 255, 255, alpha));
         }
 
-        m_ghosts.erase(
-            std::remove_if(
-                std::begin(m_ghosts),
-                std::end(m_ghosts),
-                [](const Ghost & ghost) { return !ghost.is_alive; }),
-            std::end(m_ghosts));
+        std::erase_if(m_ghosts, [](const Ghost & t_ghost) { return !t_ghost.is_alive; });
     }
 
     void Ghosts::draw(
