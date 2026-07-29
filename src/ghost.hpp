@@ -46,14 +46,14 @@ namespace halloween
 
     //
 
-    class Ghosts : public IObjectManager
+    class Ghosts final : public IObjectManager
     {
       public:
         Ghosts();
-        virtual ~Ghosts() override = default;
+        virtual ~Ghosts() final = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & t_settings) final;
+        void setup(const Context & t_context) final;
         void clear() final;
         void add(const Context & t_context, const sf::FloatRect & t_region) final;
         void update(const Context & t_context, const float t_frameTimeSec) final;

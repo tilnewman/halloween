@@ -31,16 +31,19 @@ namespace halloween
         m_fireSpouts.reserve(32);
     }
 
-    void FireSpouts::setup(const Settings & t_settings)
+    void FireSpouts::setup(const Context & t_context)
     {
         util::TextureLoader::load(
-            m_spoutTexture, (t_settings.media_path / "image" / "fire-spouts.png"), true);
+            m_spoutTexture, (t_context.settings.media_path / "image" / "fire-spouts.png"), true);
 
         const std::size_t fireTextureCount{ 14 };
         m_fireTextures.reserve(fireTextureCount);
         for (std::size_t i{ 1 }; i <= fireTextureCount; ++i)
         {
-            std::string filePath = (t_settings.media_path / "image" / "fire/" / "fire-").string();
+            std::string filePath{
+                (t_context.settings.media_path / "image" / "fire" / "fire-").string()
+            };
+
             filePath += std::to_string(i);
             filePath += ".png";
 

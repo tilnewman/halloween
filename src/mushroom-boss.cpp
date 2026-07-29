@@ -39,24 +39,29 @@ namespace halloween
         , m_hitPointsMax{ 0 }
     {}
 
-    void MushroomBoss::setup(const Settings & t_settings)
+    void MushroomBoss::setup(const Context & t_context)
     {
-        m_idleAnim.setup((t_settings.media_path / "image" / "mushroom"), "idle", 31, 0.05f, true);
-        m_jumpAnim.setup((t_settings.media_path / "image" / "mushroom"), "jump", 31, 0.05f, false);
+        m_idleAnim.setup(
+            (t_context.settings.media_path / "image" / "mushroom"), "idle", 31, 0.05f, true);
+
+        m_jumpAnim.setup(
+            (t_context.settings.media_path / "image" / "mushroom"), "jump", 31, 0.05f, false);
 
         m_attackAnim.setup(
-            (t_settings.media_path / "image" / "mushroom"), "attack", 18, 0.05f, false);
+            (t_context.settings.media_path / "image" / "mushroom"), "attack", 18, 0.05f, false);
 
-        m_hitAnim.setup((t_settings.media_path / "image" / "mushroom"), "hit", 6, 0.05f, false);
-        m_shakeAnim.setup((t_settings.media_path / "image" / "mushroom"), "shake", 5, 0.15f, false);
+        m_hitAnim.setup(
+            (t_context.settings.media_path / "image" / "mushroom"), "hit", 6, 0.05f, false);
+        
+        m_shakeAnim.setup(
+            (t_context.settings.media_path / "image" / "mushroom"), "shake", 5, 0.15f, false);
 
         m_deathAnim.setup(
-            (t_settings.media_path / "image" / "mushroom"), "death", 23, 0.05f, false);
+            (t_context.settings.media_path / "image" / "mushroom"), "death", 23, 0.05f, false);
 
         m_sprite.setTexture(m_idleAnim.texture(), true);
-        m_sprite.scale({ 1.0f, 1.0f }); // TODO what is going on here?
 
-        m_hitPointsMax = t_settings.boss_hit_points;
+        m_hitPointsMax = t_context.settings.boss_hit_points;
     }
 
     void MushroomBoss::add(const Context &, const sf::FloatRect & t_rect)

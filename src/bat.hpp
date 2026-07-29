@@ -73,14 +73,14 @@ namespace halloween
 
     //
 
-    class Bats : public IObjectManager
+    class Bats final : public IObjectManager
     {
       public:
         Bats();
-        virtual ~Bats() override = default;
+        virtual ~Bats() final = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & t_settings) final;
+        void setup(const Context & t_context) final;
         void add(const Context & t_context, const sf::FloatRect & t_rect) final;
         void clear() final;
         void update(const Context & t_context, const float t_frameTimeSec) final;

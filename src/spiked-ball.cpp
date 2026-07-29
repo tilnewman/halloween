@@ -31,14 +31,13 @@ namespace halloween
         m_balls.reserve(100);
     }
 
-    void SpikedBalls::setup(const Settings & settings)
+    void SpikedBalls::setup(const Context & t_context)
     {
-        // TODO random this speed a little
-        m_speed = settings.spiked_ball_speed;
-        m_scale = settings.spiked_ball_scale;
+        m_speed = t_context.random.fromTo(0.75f, 1.25f);
+        m_scale = t_context.settings.spiked_ball_scale;
 
         util::TextureLoader::load(
-            m_texture, (settings.media_path / "image" / "spiked-ball.png"), true);
+            m_texture, (t_context.settings.media_path / "image" / "spiked-ball.png"), true);
     }
 
     void SpikedBalls::add(const Context &, const sf::FloatRect & t_region)

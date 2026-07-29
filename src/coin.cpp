@@ -66,9 +66,10 @@ namespace halloween
         m_textureCoords.emplace_back(sf::Vector2i{ 256, 64 }, sf::Vector2i{ 64, 64 });
     }
 
-    void Coins::setup(const Settings & t_settings)
+    void Coins::setup(const Context & t_context)
     {
-        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "coin.png"), true);
+        util::TextureLoader::load(
+            m_texture, (t_context.settings.media_path / "image" / "coin.png"), true);
     }
 
     void Coins::add(const Context &, const sf::FloatRect & t_region)

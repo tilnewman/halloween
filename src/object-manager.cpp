@@ -28,11 +28,11 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::setupAll(const Settings & t_settings)
+    void ObjectManagerList::setupAll(const Context & t_context)
     {
         for (auto & manager : m_managers)
         {
-            manager.get().setup(t_settings);
+            manager.get().setup(t_context);
         }
     }
 

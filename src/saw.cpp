@@ -29,9 +29,10 @@ namespace halloween
         m_saws.reserve(16);
     }
 
-    void Saws::setup(const Settings & t_settings)
+    void Saws::setup(const Context & t_context)
     {
-        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "saw.png"), true);
+        util::TextureLoader::load(
+            m_texture, (t_context.settings.media_path / "image" / "saw.png"), true);
     }
 
     void Saws::add(const Context &, const sf::FloatRect & t_region)

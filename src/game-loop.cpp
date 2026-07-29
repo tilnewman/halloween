@@ -122,7 +122,7 @@ namespace halloween
         m_managers.add(m_bats);
         m_managers.add(*m_bossUPtr);
 
-        m_managers.setupAll(m_settings);
+        m_managers.setupAll(*m_contextUPtr);
 
         m_avatarUPtr->setup(m_settings);
         m_infoRegionUPtr->setup(*m_contextUPtr);

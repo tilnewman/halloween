@@ -37,17 +37,20 @@ namespace halloween
         m_deathAnims.reserve(32);
     }
 
-    void Slimes::setup(const Settings & t_settings)
+    void Slimes::setup(const Context & t_context)
     {
         m_textures.resize(m_textureCount);
+
         for (std::size_t i{ 0 }; i < m_textureCount; ++i)
         {
-            std::string str;
-            str = (t_settings.media_path / "image" / "slime" / "slime-").string();
+            std::string str{
+                (t_context.settings.media_path / "image" / "slime" / "slime-").string()
+            };
+
             str += std::to_string(i);
             str += ".png";
 
-            util::TextureLoader::load(m_textures.at(i), str, true);
+            util::TextureLoader::load(m_textures.at(i), str);
         }
     }
 

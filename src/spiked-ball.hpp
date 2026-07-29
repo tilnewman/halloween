@@ -35,14 +35,14 @@ namespace halloween
 
     //
 
-    class SpikedBalls : public IObjectManager
+    class SpikedBalls final : public IObjectManager
     {
       public:
         SpikedBalls();
-        virtual ~SpikedBalls() override = default;
+        virtual ~SpikedBalls() final = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & t_settings) final;
+        void setup(const Context & t_context) final;
         void add(const Context & t_context, const sf::FloatRect & t_region) final;
         void clear() final;
         void update(const Context & t_context, const float t_frameTimeSec) final;

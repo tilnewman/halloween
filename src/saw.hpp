@@ -30,14 +30,14 @@ namespace halloween
 
     //
 
-    class Saws : public IObjectManager
+    class Saws final : public IObjectManager
     {
       public:
         Saws();
-        virtual ~Saws() override = default;
+        virtual ~Saws() final = default;
 
         bool willDrawBeforeMap() const final { return true; }
-        void setup(const Settings & t_settings) final;
+        void setup(const Context & t_context) final;
         void add(const Context & t_context, const sf::FloatRect & t_region) final;
         void clear() final;
         void update(const Context & t_context, const float t_frameTimeSec) final;

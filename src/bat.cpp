@@ -37,7 +37,7 @@ namespace halloween
         m_deathAnims.reserve(100);
     }
 
-    void Bats::setup(const Settings & t_settings)
+    void Bats::setup(const Context & t_context)
     {
         m_textures.resize(m_batCount);
 
@@ -45,7 +45,7 @@ namespace halloween
         {
             BatTextures & textureSet{ m_textures.at(batIndex) };
 
-            const std::string preStr{ (t_settings.media_path / "image" / "bat" / "bat")
+            const std::string preStr{ (t_context.settings.media_path / "image" / "bat" / "bat")
                                           .string()
                                           .append(std::to_string(batIndex + 1)) };
 

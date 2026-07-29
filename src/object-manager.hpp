@@ -1,5 +1,5 @@
-#ifndef OBJECTMANAGER_HPP_INCLUDED
-#define OBJECTMANAGER_HPP_INCLUDED
+#ifndef OBJECT_MANAGER_HPP_INCLUDED
+#define OBJECT_MANAGER_HPP_INCLUDED
 //
 // object-manager.hpp
 //
@@ -14,7 +14,6 @@
 namespace halloween
 {
     struct Context;
-    struct Settings;
 
     //
 
@@ -25,7 +24,7 @@ namespace halloween
 
         virtual bool willDrawBeforeMap() const = 0;
         virtual void clear() = 0;
-        virtual void setup(const Settings & t_settings) = 0;
+        virtual void setup(const Context & t_context) = 0;
         virtual void add(const Context & t_context, const sf::FloatRect & t_region) = 0;
         virtual void update(const Context & t_context, const float t_frameTimeSec) = 0;
         virtual void moveWithMap(const sf::Vector2f & t_move) = 0;
@@ -52,7 +51,7 @@ namespace halloween
         void add(IObjectManager & t_manager);
 
         void clearAll();
-        void setupAll(const Settings & t_settings);
+        void setupAll(const Context & t_context);
         void updateAll(const Context & t_context, const float t_frameTimeSec);
 
         void drawAllBeforeMap(
@@ -76,4 +75,4 @@ namespace halloween
 
 } // namespace halloween
 
-#endif // OBJECTMANAGER_HPP_INCLUDED
+#endif // OBJECT_MANAGER_HPP_INCLUDED
