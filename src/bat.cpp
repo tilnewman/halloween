@@ -41,17 +41,17 @@ namespace halloween
     {
         m_textures.resize(m_batCount);
 
-        for (std::size_t batIndex(0); batIndex < m_textures.size(); ++batIndex)
+        for (std::size_t batIndex{ 0 }; batIndex < m_textures.size(); ++batIndex)
         {
             BatTextures & textureSet{ m_textures.at(batIndex) };
 
-            const std::string preStr{ (t_settings.media_path / "image/bat" / "bat")
+            const std::string preStr{ (t_settings.media_path / "image" / "bat" / "bat")
                                           .string()
                                           .append(std::to_string(batIndex + 1)) };
 
             const std::size_t flyingFrameCount{ 10 };
             textureSet.flying.resize(flyingFrameCount);
-            for (std::size_t textureIndex(0); textureIndex < flyingFrameCount; ++textureIndex)
+            for (std::size_t textureIndex{ 0 }; textureIndex < flyingFrameCount; ++textureIndex)
             {
                 std::string pathStr{ preStr };
                 pathStr += "-fly-";
@@ -63,7 +63,7 @@ namespace halloween
 
             const std::size_t dyingFrameCount{ 6 };
             textureSet.dying.resize(dyingFrameCount);
-            for (std::size_t textureIndex(0); textureIndex < dyingFrameCount; ++textureIndex)
+            for (std::size_t textureIndex{ 0 }; textureIndex < dyingFrameCount; ++textureIndex)
             {
                 std::string pathStr{ preStr };
                 pathStr += "-die-";
@@ -93,7 +93,7 @@ namespace halloween
         auto & textures{ m_textures.at(bat.bat_index).flying };
         bat.texture_index = t_context.random.index(textures);
         bat.sprite.setTexture(textures.at(bat.texture_index), true);
-        bat.sprite.setScale({ 0.25f, 0.25f });
+        bat.sprite.setScale({ 1.0f, 1.0f });
         util::setOriginToCenter(bat.sprite);
 
         const float posX{ t_rect.position.x + (t_rect.size.x / 2.0f) };
@@ -181,12 +181,8 @@ namespace halloween
 
         if (areAnyDeathAnimsFinished)
         {
-            m_deathAnims.erase(
-                std::remove_if(
-                    std::begin(m_deathAnims),
-                    std::end(m_deathAnims),
-                    [](const BatDeathAnim & anim) { return !anim.is_visible; }),
-                std::end(m_deathAnims));
+            std::erase_if(
+                m_deathAnims, [](const BatDeathAnim & t_anim) { return !t_anim.is_visible; });
         }
     }
 
