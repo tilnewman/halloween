@@ -21,13 +21,13 @@ namespace halloween
 
     struct FireSpout
     {
-        FireSpout(const sf::Texture & spoutTexture, const sf::Texture & fireTexture)
-            : is_spurting(false)
-            , spout_sprite(spoutTexture)
-            , fire_sprite(fireTexture)
-            , texture_index(0)
-            , elapsed_time_sec(0.0f)
-            , time_between_spurts_sec(0.0f)
+        FireSpout(const sf::Texture & t_spoutTexture, const sf::Texture & t_fireTexture)
+            : is_spurting{ false }
+            , spout_sprite{ t_spoutTexture }
+            , fire_sprite{ t_fireTexture }
+            , texture_index{ 0 }
+            , elapsed_time_sec{ 0.0f }
+            , time_between_spurts_sec{ 0.0f }
         {}
 
         bool is_spurting;
@@ -47,14 +47,17 @@ namespace halloween
         virtual ~FireSpouts() override = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & settings) final;
-        void add(Context & context, const sf::FloatRect & region) final;
+        void setup(const Settings & t_settings) final;
+        void add(Context & t_context, const sf::FloatRect & t_region) final;
         void clear() final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
-        void moveWithMap(const sf::Vector2f & move) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+        void moveWithMap(const sf::Vector2f & t_move) final;
         void collideWithAvatar(Context &, const sf::FloatRect &) final {}
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const final;
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const final;
         void appendCollisions(std::vector<sf::FloatRect> &) const final;
 
       private:
@@ -62,8 +65,8 @@ namespace halloween
         float m_timePerFrame;
         std::vector<FireSpout> m_fireSpouts;
         std::vector<sf::Texture> m_fireTextures;
-        float m_timebetweenSpurtsMinSec;
-        float m_timebetweenSpurtsMaxSec;
+        float m_timeBetweenSpurtsMinSec;
+        float m_timeBetweenSpurtsMaxSec;
     };
 
 } // namespace halloween
