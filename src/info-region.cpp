@@ -22,25 +22,25 @@ namespace halloween
 {
 
     InfoRegion::InfoRegion()
-        : m_score(0)
-        , m_visibleScore(0)
-        , m_elapsedTimeSec(0.0f)
-        , m_timePerScoreUpdate(0.1f)
-        , m_lives(0)
-        , m_dartCount(0)
-        , m_text(util::SfmlDefaults::instance().font())
-        , m_region()
-        , m_bgVerts()
+        : m_score{ 0 }
+        , m_visibleScore{ 0 }
+        , m_elapsedTimeSec{ 0.0f }
+        , m_timePerScoreUpdate{ 0.1f }
+        , m_lives{ 0 }
+        , m_dartCount{ 0 }
+        , m_text{ util::SfmlDefaults::instance().font() }
+        , m_region{}
+        , m_bgVerts{}
     {}
 
-    void InfoRegion::update(Context & context, const float frameTimeSec)
+    void InfoRegion::update(Context & t_context, const float t_frameTimeSec)
     {
         if (m_score == m_visibleScore)
         {
             return;
         }
 
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
         if (m_elapsedTimeSec > m_timePerScoreUpdate)
         {
             m_elapsedTimeSec -= m_timePerScoreUpdate;
@@ -48,60 +48,60 @@ namespace halloween
             if ((m_score - m_visibleScore) > 10)
             {
                 m_visibleScore = m_score;
-                context.audio.play("bell", 0.5f);
+                t_context.audio.play("bell", 0.5f);
             }
             else
             {
                 ++m_visibleScore;
-                context.audio.play("bell");
+                t_context.audio.play("bell");
             }
 
             updateText();
         }
     }
 
-    void InfoRegion::reset(Context & context)
+    void InfoRegion::reset(Context & t_context)
     {
         m_elapsedTimeSec = 0.0f;
         m_score = 0;
         m_visibleScore = 0;
-        m_lives = context.settings.player_lives;
-        m_dartCount = context.settings.starting_dart_count;
+        m_lives = t_context.settings.player_lives;
+        m_dartCount = t_context.settings.starting_dart_count;
 
         updateText();
     }
 
-    void InfoRegion::setup(Context & context)
+    void InfoRegion::setup(Context & t_context)
     {
-        m_region = context.layout.infoRegion();
+        m_region = t_context.layout.infoRegion();
 
         util::appendTriangleVerts(m_region, m_bgVerts, sf::Color(255, 255, 255, 8));
 
-        m_text.setFont(context.media.font);
+        m_text.setFont(t_context.media.font);
         m_text.setCharacterSize(99);
         m_text.setFillColor(sf::Color(255, 255, 255, 64));
         util::setOriginToPosition(m_text);
 
-        reset(context);
+        reset(t_context);
     }
 
-    void InfoRegion::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void InfoRegion::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         // target.draw(&m_bgVerts[0], m_bgVerts.size(), sf::PrimitiveType::Triangles, states);
-        target.draw(m_text, states);
+        t_target.draw(m_text, t_states);
     }
 
-    void InfoRegion::scoreAdjust(const int adj) { m_score += adj; }
+    void InfoRegion::scoreAdjust(const int t_adjustment) { m_score += t_adjustment; }
 
-    void InfoRegion::livesAdjust(const int adj)
+    void InfoRegion::livesAdjust(const int t_adjustment)
     {
-        m_lives += adj;
+        m_lives += t_adjustment;
         updateText();
     }
 
-    void InfoRegion::dartsAdjust(int adj)
+    void InfoRegion::dartsAdjust(int t_adjustment)
     {
-        m_dartCount += adj;
+        m_dartCount += t_adjustment;
         updateText();
     }
 

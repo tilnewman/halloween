@@ -19,19 +19,19 @@ namespace halloween
       public:
         InfoRegion();
 
-        void setup(Context & context);
-        void reset(Context & context);
-        void update(Context & context, const float frameTimeSec);
-        void draw(sf::RenderTarget & target, sf::RenderStates states) const;
+        void setup(Context & t_context);
+        void reset(Context & t_context);
+        void update(Context & t_context, const float t_frameTimeSec);
+        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
 
         constexpr int score() const noexcept { return m_score; }
-        void scoreAdjust(const int adj);
+        void scoreAdjust(const int t_adustment);
 
         constexpr int lives() const noexcept { return m_lives; }
-        void livesAdjust(const int adj);
+        void livesAdjust(const int t_adjustment);
 
         constexpr int darts() const noexcept { return m_dartCount; }
-        void dartsAdjust(const int adj);
+        void dartsAdjust(const int t_adjustment);
 
       private:
         void updateText();
