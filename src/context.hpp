@@ -34,9 +34,9 @@ namespace halloween
     class FireSpouts;
     struct LevelStats;
     class SpikedBalls;
+    class StateMachine;
     class MushroomBoss;
     class ScreenRegions;
-    struct IStatesPending;
     class ObjectManagerList;
 
     struct Context
@@ -52,7 +52,7 @@ namespace halloween
             Resources & t_resources,
             ScreenRegions & t_screenReigons,
             Avatar & t_avatar,
-            IStatesPending & t_statesPending,
+            StateMachine & t_stateMachine,
             Level & t_level,
             Missiles & t_missles,
             Coins & t_coins,
@@ -76,7 +76,7 @@ namespace halloween
             , media{ t_resources }
             , layout{ t_screenReigons }
             , avatar{ t_avatar }
-            , state{ t_statesPending }
+            , state{ t_stateMachine }
             , level{ t_level }
             , missiles{ t_missles }
             , coins{ t_coins }
@@ -102,7 +102,7 @@ namespace halloween
         Resources & media;
         ScreenRegions & layout;
         Avatar & avatar;
-        IStatesPending & state;
+        StateMachine & state;
         Level & level;
         Missiles & missiles;
         Coins & coins;

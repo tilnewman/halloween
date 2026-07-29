@@ -11,23 +11,10 @@ namespace halloween
 
     //
 
-    // TODO is this interface really needed anymore?
-    struct IStatesPending
-    {
-        virtual ~IStatesPending() = default;
-
-        virtual bool isChangePending() const = 0;
-        virtual StateOpt_t getChangePending() const = 0;
-        virtual void setChangePending(const State t_state) = 0;
-    };
-
-    //
-
-    class StateMachine final : public IStatesPending
+    class StateMachine
     {
       public:
         StateMachine();
-        ~StateMachine() final = default;
 
         // prevent all copy and assignment
         StateMachine(const StateMachine &) = delete;
@@ -41,9 +28,9 @@ namespace halloween
         inline IState & state() { return *m_stateUPtr; }
         inline const IState & state() const { return *m_stateUPtr; }
 
-        inline bool isChangePending() const final { return m_changePendingOpt.has_value(); }
-        inline StateOpt_t getChangePending() const final { return m_changePendingOpt; }
-        void setChangePending(const State t_state) final;
+        inline bool isChangePending() const  { return m_changePendingOpt.has_value(); }
+        inline StateOpt_t getChangePending() const  { return m_changePendingOpt; }
+        void setChangePending(const State t_state);
         void changeIfPending(const Context & t_context);
 
       private:
