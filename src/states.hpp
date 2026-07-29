@@ -86,6 +86,7 @@ namespace halloween
         virtual State nextState() const = 0;
         virtual void update(const Context & t_context, const float t_frameTimeSec) = 0;
         virtual bool handleEvent(const Context & t_context, const sf::Event & t_event) = 0;
+
         virtual void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
@@ -112,10 +113,6 @@ namespace halloween
     {
       protected:
         StateBase(
-            const State t_state, const State t_nextState, const float t_minDurationSec = -1.0f);
-
-        StateBase(
-            const Context & t_context,
             const State t_state,
             const State t_nextState,
             const std::string & t_message = {},
@@ -141,7 +138,7 @@ namespace halloween
             sf::RenderTarget & t_target,
             sf::RenderStates & t_states) const override;
 
-        void onEnter(const Context &) override {}
+        void onEnter(const Context &) override;
         void onExit(const Context &) override {}
 
       protected:
@@ -160,6 +157,7 @@ namespace halloween
         State m_nextState;
         float m_elapsedTimeSec;
         float m_minDurationSec; // any negative means this value is ignored
+        std::string m_message;
         sf::Text m_text;
 
         static inline const sf::Color m_textColorDefault{ sf::Color(220, 220, 220) };
@@ -168,8 +166,9 @@ namespace halloween
 
     //
 
-    struct StartState final : public StateBase
+    class StartState final : public StateBase
     {
+      public:
         StartState()
             : StateBase{ State::Start, State::Title }
         {}
@@ -185,8 +184,9 @@ namespace halloween
 
     //
 
-    struct QuitState final : public StateBase
+    class QuitState final : public StateBase
     {
+      public:
         QuitState()
             : StateBase{ State::Quit, State::Quit }
         {}
@@ -201,10 +201,10 @@ namespace halloween
 
     //
 
-    struct TimedMessageState : public StateBase
+    class TimedMessageState : public StateBase
     {
+      public:
         TimedMessageState(
-            const Context & t_context,
             const State t_state,
             const State t_nextState,
             const std::string & t_message,
@@ -212,6 +212,7 @@ namespace halloween
 
         ~TimedMessageState() override = default;
 
+        void onEnter(const Context & t_context) override;
         void update(const Context & t_context, const float t_frameTimeSec) override;
         bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
 
@@ -221,9 +222,10 @@ namespace halloween
 
     //
 
-    struct TitleState final : public TimedMessageState
+    class TitleState final : public TimedMessageState
     {
-        explicit TitleState(const Context & t_context);
+      public:
+        TitleState();
         ~TitleState() final = default;
 
         void onEnter(const Context & t_context) final;
@@ -242,9 +244,10 @@ namespace halloween
 
     //
 
-    struct PauseState final : public TimedMessageState
+    class PauseState final : public TimedMessageState
     {
-        explicit PauseState(const Context & t_context);
+      public:
+        PauseState();
         ~PauseState() final = default;
 
         void onEnter(const Context & t_context) final;
@@ -257,14 +260,15 @@ namespace halloween
             sf::RenderStates & t_states) const final;
 
       private:
-        PauseScreen screen;
+        PauseScreen m_screen;
     };
 
     //
 
-    struct LoseState final : public TimedMessageState
+    class LoseState final : public TimedMessageState
     {
-        explicit LoseState(const Context & t_context);
+      public:
+        LoseState();
         ~LoseState() final = default;
 
         void onEnter(const Context & t_context) final;
@@ -281,9 +285,10 @@ namespace halloween
 
     //
 
-    struct WinState final : public TimedMessageState
+    class WinState final : public TimedMessageState
     {
-        explicit WinState(const Context & t_context);
+      public:
+        WinState();
         ~WinState() final = default;
 
         void onEnter(const Context & t_context) final;

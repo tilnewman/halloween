@@ -34,7 +34,7 @@ namespace halloween
         void changeIfPending(const Context & t_context);
 
       private:
-        static IStateUPtr_t makeState(const Context & t_context, const State t_state);
+        static IStateUPtr_t makeState(const State t_state);
 
       private:
         IStateUPtr_t m_stateUPtr;

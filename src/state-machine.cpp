@@ -14,7 +14,7 @@
 namespace halloween
 {
     StateMachine::StateMachine()
-        : m_stateUPtr{ std::make_unique<StartState>() }
+        : m_stateUPtr{ makeState(State::Start) }
         , m_changePendingOpt{ State::Start }
     {}
 
@@ -29,26 +29,26 @@ namespace halloween
 
         m_stateUPtr->onExit(t_context);
 
-        m_stateUPtr = makeState(t_context, m_changePendingOpt.value());
+        m_stateUPtr = makeState(m_changePendingOpt.value());
         m_changePendingOpt = std::nullopt;
 
         m_stateUPtr->onEnter(t_context);
     }
 
-    IStateUPtr_t StateMachine::makeState(const Context & t_context, const State t_state)
+    IStateUPtr_t StateMachine::makeState(const State t_state)
     {
         // clang-format off
         switch (t_state)
         {
-            case State::Start:    { return std::make_unique<StartState>();                  }
-            case State::Title:    { return std::make_unique<TitleState>(t_context);         }
-            case State::Play:     { return std::make_unique<PlayState>(t_context);          }
-            case State::Pause:    { return std::make_unique<PauseState>(t_context);         }
-            case State::Level:    { return std::make_unique<LevelCompleteState>(t_context); }
-            case State::Lose:     { return std::make_unique<LoseState>(t_context);          }
-            case State::Win:      { return std::make_unique<WinState>(t_context);           }
-            case State::Credits:  { return std::make_unique<StateCredits>();                }
-            case State::Quit:     { return std::make_unique<QuitState>();                   }
+            case State::Start:    { return std::make_unique<StartState>();         }
+            case State::Title:    { return std::make_unique<TitleState>();         }
+            case State::Play:     { return std::make_unique<PlayState>();          }
+            case State::Pause:    { return std::make_unique<PauseState>();         }
+            case State::Level:    { return std::make_unique<LevelCompleteState>(); }
+            case State::Lose:     { return std::make_unique<LoseState>();          }
+            case State::Win:      { return std::make_unique<WinState>();           }
+            case State::Credits:  { return std::make_unique<StateCredits>();       }
+            case State::Quit:     { return std::make_unique<QuitState>();          }
             default:
             {
                 M_LOG("Asked to make a state that is not implemented.  Til, you forgot"\

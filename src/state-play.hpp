@@ -25,7 +25,7 @@ namespace halloween
     class PlayState final : public StateBase
     {
       public:
-        explicit PlayState(const Context & t_context);
+        PlayState();
         ~PlayState() final = default;
 
         void onEnter(const Context & t_context) override;

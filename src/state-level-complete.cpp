@@ -25,8 +25,8 @@
 namespace halloween
 {
 
-    LevelCompleteState::LevelCompleteState(const Context & context)
-        : StateBase{ context, State::Level, State::Play }
+    LevelCompleteState::LevelCompleteState()
+        : StateBase{ State::Level, State::Play }
         , m_levelCompleteText{ util::SfmlDefaults::instance().font() }
         , m_scoreText{ util::SfmlDefaults::instance().font() }
         , m_bonusText{ util::SfmlDefaults::instance().font() }
@@ -41,6 +41,8 @@ namespace halloween
 
     void LevelCompleteState::onEnter(const Context & t_context)
     {
+        StateBase::onEnter(t_context);
+
         t_context.audio.play("level-complete");
 
         m_levelCompleteText =

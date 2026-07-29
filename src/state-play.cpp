@@ -35,12 +35,14 @@
 namespace halloween
 {
 
-    PlayState::PlayState(const Context & t_context)
-        : StateBase{ t_context, State::Play, State::Play }
+    PlayState::PlayState()
+        : StateBase{ State::Play, State::Play }
     {}
 
     void PlayState::onEnter(const Context & t_context)
     {
+        StateBase::onEnter(t_context);
+
         if (m_willLoadNewLevel)
         {
             m_willLoadNewLevel = false;

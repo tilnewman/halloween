@@ -26,24 +26,20 @@
 
 namespace halloween
 {
-    StateBase::StateBase(const State t_state, const State t_nextState, const float t_minDurationSec)
-        : m_state{ t_state }
-        , m_nextState{ t_nextState }
-        , m_elapsedTimeSec{ 0.0f }
-        , m_minDurationSec{ t_minDurationSec } // any negative means this value is ignored
-        , m_text{ util::SfmlDefaults::instance().font() }
-    {}
-
     StateBase::StateBase(
-        const Context & t_context,
         const State t_state,
         const State t_nextState,
         const std::string & t_message,
         const float t_minDurationSec)
-        : StateBase{ t_state, t_nextState, t_minDurationSec }
-    {
-        setupText(t_context, t_message);
-    }
+        : m_state{ t_state }
+        , m_nextState{ t_nextState }
+        , m_elapsedTimeSec{ 0.0f }
+        , m_minDurationSec{ t_minDurationSec } // any negative means this value is ignored
+        , m_message{ t_message }
+        , m_text{ util::SfmlDefaults::instance().font() }
+    {}
+
+    void StateBase::onEnter(const Context & t_context) { setupText(t_context, m_message); }
 
     void StateBase::setupText(const Context & t_context, const std::string & t_message)
     {
@@ -165,13 +161,17 @@ namespace halloween
     //
 
     TimedMessageState::TimedMessageState(
-        const Context & t_context,
         const State t_state,
         const State t_nextState,
         const std::string & t_message,
         const float t_minDurationSec)
-        : StateBase{ t_context, t_state, t_nextState, t_message, t_minDurationSec }
+        : StateBase{ t_state, t_nextState, t_message, t_minDurationSec }
+    {}
+
+    void TimedMessageState::onEnter(const Context & t_context)
     {
+        StateBase::onEnter(t_context);
+
         const sf::FloatRect textBounds{ util::scaleRectInPlaceCopy(
             t_context.layout.mapRegion(), 0.9f) };
 
@@ -216,18 +216,18 @@ namespace halloween
 
     //
 
-    TitleState::TitleState(const Context & t_context)
-        : TimedMessageState{
-            t_context, State::Title, State::Play, "", (m_defaultMinDurationSec * 2.0f)
-        }
-        , m_text1(util::SfmlDefaults::instance().font())
-        , m_text2(util::SfmlDefaults::instance().font())
-        , m_text3(util::SfmlDefaults::instance().font())
-        , m_text4(util::SfmlDefaults::instance().font())
+    TitleState::TitleState()
+        : TimedMessageState{ State::Title, State::Play, "", (m_defaultMinDurationSec * 2.0f) }
+        , m_text1{ util::SfmlDefaults::instance().font() }
+        , m_text2{ util::SfmlDefaults::instance().font() }
+        , m_text3{ util::SfmlDefaults::instance().font() }
+        , m_text4{ util::SfmlDefaults::instance().font() }
     {}
 
     void TitleState::onEnter(const Context & t_context)
     {
+        TimedMessageState::onEnter(t_context);
+
         m_text1.setFont(t_context.media.font);
         m_text1.setFillColor(sf::Color::White);
         m_text1.setCharacterSize(99);
@@ -279,15 +279,16 @@ namespace halloween
 
     //
 
-    PauseState::PauseState(const Context & t_context)
-        : TimedMessageState{ t_context, State::Pause, State::Play, "PAUSE", -1.0f }
-        , screen{}
+    PauseState::PauseState()
+        : TimedMessageState{ State::Pause, State::Play, "PAUSE", -1.0f }
+        , m_screen{}
     {}
 
     void PauseState::onEnter(const Context & t_context)
     {
+        TimedMessageState::onEnter(t_context);
         t_context.audio.play("pause");
-        screen.setup(t_context);
+        m_screen.setup(t_context);
     }
 
     void PauseState::onExit(const Context & t_context) { t_context.audio.play("pause"); }
@@ -306,18 +307,20 @@ namespace halloween
         const Context & t_context, sf::RenderTarget & target, sf::RenderStates & states) const
     {
         StateBase::draw(t_context, target, states);
-        screen.draw(target, states);
+        m_screen.draw(target, states);
     }
 
     //
 
-    LoseState::LoseState(const Context & t_context)
-        : TimedMessageState{ t_context, State::Lose, State::Credits, "You Lose\n", 4.5f }
+    LoseState::LoseState()
+        : TimedMessageState{ State::Lose, State::Credits, "You Lose\n", 4.5f }
         , m_scoreText{ util::SfmlDefaults::instance().font() }
     {}
 
     void LoseState::onEnter(const Context & t_context)
     {
+        TimedMessageState::onEnter(t_context);
+
         t_context.audio.play("game-over");
 
         m_scoreText = m_text;
@@ -347,13 +350,15 @@ namespace halloween
 
     //
 
-    WinState::WinState(const Context & t_context)
-        : TimedMessageState{ t_context, State::Win, State::Credits, "You Win\n", 4.5f }
+    WinState::WinState()
+        : TimedMessageState{ State::Win, State::Credits, "You Win\n", 4.5f }
         , m_scoreText{ util::SfmlDefaults::instance().font() }
     {}
 
     void WinState::onEnter(const Context & t_context)
     {
+        TimedMessageState::onEnter(t_context);
+
         t_context.audio.play("winner");
 
         m_scoreText = m_text;
