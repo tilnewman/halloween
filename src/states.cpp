@@ -164,10 +164,6 @@ namespace halloween
 
     //
 
-    void QuitState::onEnter(Context & t_context) { t_context.will_quit = true; }
-
-    //
-
     TimedMessageState::TimedMessageState(
         const Context & t_context,
         const State t_state,

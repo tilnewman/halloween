@@ -151,7 +151,7 @@ namespace halloween
         m_perSecondClock.restart();
 
         sf::Clock frameClock;
-        while (m_window.isOpen() && !m_contextUPtr->will_quit)
+        while (m_window.isOpen() && (m_stateMachineUPtr->stateEnum() != State::Quit))
         {
             frameClock.restart();
 

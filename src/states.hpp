@@ -191,7 +191,7 @@ namespace halloween
 
         ~QuitState() override = default;
 
-        void onEnter(Context & t_context) override;
+        void onEnter(Context &) final {}
         void update(Context &, const float) final {}
         bool handleEvent(Context &, const sf::Event &) final { return false; }
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}

@@ -96,7 +96,6 @@ namespace halloween
             , managers{ t_objectManagerList }
             , stats{ t_levelStats }
             , boss{ t_mushrooomBoos }
-            , will_quit{ false }
             , level_number{ 1 }
         {}
 
@@ -128,7 +127,6 @@ namespace halloween
         MushroomBoss & boss;
 
         // TODO get these out of context
-        bool will_quit;
         std::size_t level_number;
     };
 
