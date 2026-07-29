@@ -25,14 +25,18 @@ namespace halloween
     class PlayState : public StateBase
     {
       public:
-        explicit PlayState(const Context & context);
+        explicit PlayState(const Context & t_context);
         ~PlayState() override = default;
 
-        void onEnter(Context & context) override;
-        void onExit(Context & context) override;
-        bool handleEvent(Context & context, const sf::Event &) override;
-        void update(Context & context, const float frameTimeSec) override;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates & s) const override;
+        void onEnter(Context & t_context) override;
+        void onExit(Context & t_context) override;
+        bool handleEvent(Context & t_context, const sf::Event & t_event) override;
+        void update(Context & t_context, const float t_frameTimeSec) override;
+
+        void draw(
+            const Context & t_context,
+            sf::RenderTarget & t_target,
+            sf::RenderStates & t_states) const override;
     };
 
 } // namespace halloween

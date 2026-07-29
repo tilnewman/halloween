@@ -35,77 +35,74 @@
 namespace halloween
 {
 
-    PlayState::PlayState(const Context & context)
-        : StateBase(context, State::Play, State::Play)
+    PlayState::PlayState(const Context & t_context)
+        : StateBase{ t_context, State::Play, State::Play }
     {}
 
-    void PlayState::onEnter(Context & context)
+    void PlayState::onEnter(Context & t_context)
     {
-        if (context.level.number() != context.level_number)
+        if (t_context.level.number() != t_context.level_number)
         {
-            if (context.level.load(context))
+            if (t_context.level.load(t_context))
             {
-                context.stats = LevelStats();
-                context.stats.coin_total = context.coins.count();
-                context.stats.enemy_total = (context.slimes.count() + context.bats.count());
+                t_context.stats = LevelStats();
+                t_context.stats.coin_total = t_context.coins.count();
+                t_context.stats.enemy_total = (t_context.slimes.count() + t_context.bats.count());
             }
             else
             {
                 // if we fail to load it is because there are no more levels to play
-                context.state.setChangePending(State::Win);
+                t_context.state.setChangePending(State::Win);
                 return;
             }
         }
 
-        context.owl_calls.start(context);
-        context.music.start("crickets.ogg");
+        t_context.owl_calls.start(t_context);
+        t_context.music.start("crickets.ogg");
     }
 
-    void PlayState::onExit(Context & context)
+    void PlayState::onExit(Context & t_context)
     {
-        context.audio.stopAll();
-        context.owl_calls.stop();
-        context.music.stop("crickets.ogg");
+        t_context.audio.stopAll();
+        t_context.owl_calls.stop();
+        t_context.music.stop("crickets.ogg");
     }
 
-    void PlayState::update(Context & context, const float frameTimeSec)
+    void PlayState::update(Context & t_context, const float t_frameTimeSec)
     {
-        if (context.level.number() != context.level_number)
+        if (t_context.level.number() != t_context.level_number)
         {
             return;
         }
 
-        StateBase::update(context, frameTimeSec);
+        StateBase::update(t_context, t_frameTimeSec);
 
-        context.info_region.update(context, frameTimeSec);
-
-        context.missiles.update(context, frameTimeSec);
-        context.owl_calls.update(context, frameTimeSec);
-
-        context.managers.updateAll(context, frameTimeSec);
-
-        context.avatar.update(context, frameTimeSec);
+        t_context.info_region.update(t_context, t_frameTimeSec);
+        t_context.missiles.update(t_context, t_frameTimeSec);
+        t_context.owl_calls.update(t_context, t_frameTimeSec);
+        t_context.managers.updateAll(t_context, t_frameTimeSec);
+        t_context.avatar.update(t_context, t_frameTimeSec);
     }
 
-    bool PlayState::handleEvent(Context & context, const sf::Event & event)
+    bool PlayState::handleEvent(Context & t_context, const sf::Event & t_event)
     {
-        if (StateBase::handleEvent(context, event))
+        if (StateBase::handleEvent(t_context, t_event))
         {
             return true;
         }
 
-        if (const auto * keyPtr = event.getIf<sf::Event::KeyPressed>())
+        if (const auto * keyPtr = t_event.getIf<sf::Event::KeyPressed>())
         {
             if (keyPtr->scancode == sf::Keyboard::Scancode::Space)
             {
-                context.state.setChangePending(State::Pause);
+                t_context.state.setChangePending(State::Pause);
             }
             else if (keyPtr->scancode == sf::Keyboard::Scancode::S)
             {
                 sf::Texture texture;
-                if (texture.resize(context.window.getSize()))
+                if (texture.resize(t_context.window.getSize()))
                 {
-                    texture.update(context.window);
+                    texture.update(t_context.window);
                     sf::Image image{ texture.copyToImage() };
                     if (!image.saveToFile("screenshot.png"))
                     {
@@ -115,44 +112,43 @@ namespace halloween
             }
         }
 
-        return context.state.isChangePending();
+        return t_context.state.isChangePending();
     }
 
     void PlayState::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates & states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        if (context.level.number() != context.level_number)
+        if (t_context.level.number() != t_context.level_number)
         {
             return;
         }
 
-        target.draw(context.media.bg_sprite, states);
+        t_target.draw(t_context.media.bg_sprite, t_states);
 
-        context.managers.drawAllBeforeMap(context, target, states);
+        t_context.managers.drawAllBeforeMap(t_context, t_target, t_states);
 
-        for (const TileLayer & layer : context.level.tileLayers())
+        for (const TileLayer & layer : t_context.level.tileLayers())
         {
             if (layer.visibleVerts.empty())
             {
                 continue;
             }
 
-            states.texture = &context.media.tileTexture(layer.image).texture;
+            t_states.texture = &t_context.media.tileTexture(layer.image).texture;
 
-            target.draw(
+            t_target.draw(
                 &layer.visibleVerts[0],
                 layer.visibleVerts.size(),
                 sf::PrimitiveType::Triangles,
-                states);
+                t_states);
             
-            states.texture = nullptr;
+            t_states.texture = nullptr;
         }
 
-        context.managers.drawAllAfterMap(context, target, states);
-
-        context.missiles.draw(target, states);
-        context.info_region.draw(target, states);
-        context.avatar.draw(target, states);
+        t_context.managers.drawAllAfterMap(t_context, t_target, t_states);
+        t_context.missiles.draw(t_target, t_states);
+        t_context.info_region.draw(t_target, t_states);
+        t_context.avatar.draw(t_target, t_states);
     }
 
 } // namespace halloween
