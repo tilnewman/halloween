@@ -26,100 +26,100 @@
 
 namespace halloween
 {
-    StateBase::StateBase(const State state, const State nextState, const float minDurationSec)
-        : m_state(state)
-        , m_nextState(nextState)
-        , m_elapsedTimeSec(0.0f)
-        , m_minDurationSec(minDurationSec) // any negative means this value is ignored
-        , m_text(util::SfmlDefaults::instance().font())
+    StateBase::StateBase(const State t_state, const State t_nextState, const float t_minDurationSec)
+        : m_state{ t_state }
+        , m_nextState{ t_nextState }
+        , m_elapsedTimeSec{ 0.0f }
+        , m_minDurationSec{ t_minDurationSec } // any negative means this value is ignored
+        , m_text{ util::SfmlDefaults::instance().font() }
     {}
 
     StateBase::StateBase(
-        const Context & context,
-        const State state,
-        const State nextState,
-        const std::string & message,
-        const float minDurationSec)
-        : StateBase(state, nextState, minDurationSec)
+        const Context & t_context,
+        const State t_state,
+        const State t_nextState,
+        const std::string & t_message,
+        const float t_minDurationSec)
+        : StateBase{ t_state, t_nextState, t_minDurationSec }
     {
-        setupText(context, message);
+        setupText(t_context, t_message);
     }
 
-    void StateBase::setupText(const Context & context, const std::string & message)
+    void StateBase::setupText(const Context & t_context, const std::string & t_message)
     {
-        m_text.setString(message);
+        m_text.setString(t_message);
         m_text.setCharacterSize(99);
-        m_text.setFont(context.media.font);
+        m_text.setFont(t_context.media.font);
         m_text.setFillColor(m_textColorDefault);
 
         util::fitAndCenterInside(
-            m_text, util::scaleRectInPlaceCopy(context.layout.wholeRegion(), 0.25f));
+            m_text, util::scaleRectInPlaceCopy(t_context.layout.wholeRegion(), 0.25f));
     }
 
-    void StateBase::update(Context &, const float frameTimeSec)
+    void StateBase::update(Context &, const float t_frameTimeSec)
     {
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
     }
 
-    bool StateBase::changeToNextState(const Context & context)
+    bool StateBase::changeToNextState(const Context & t_context)
     {
         if (state() == m_nextState)
         {
             return false;
         }
 
-        context.state.setChangePending(nextState());
+        t_context.state.setChangePending(nextState());
         return true;
     }
 
-    bool StateBase::willIgnoreEvent(const Context & context, const sf::Event & event) const
+    bool StateBase::willIgnoreEvent(const Context & t_context, const sf::Event & t_event) const
     {
         // all events should be ignored after a state change is scheduled
-        if (context.state.isChangePending())
+        if (t_context.state.isChangePending())
         {
             return true;
         }
 
         // clang-format off
-        return ((event.is<sf::Event::KeyReleased>()) ||
-                (event.is<sf::Event::MouseMoved>()) ||
-                (event.is<sf::Event::MouseEntered>()) ||
-                (event.is<sf::Event::MouseLeft>()) ||
-                (event.is<sf::Event::MouseButtonReleased>()) ||
-                (event.is<sf::Event::FocusGained>()) ||
-                (event.is<sf::Event::FocusLost>()) ||
-                (event.is<sf::Event::TouchBegan>()) ||
-                (event.is<sf::Event::TouchEnded>()) ||
-                (event.is<sf::Event::TouchMoved>()));
+        return ((t_event.is<sf::Event::KeyReleased>()) ||
+                (t_event.is<sf::Event::MouseMoved>()) ||
+                (t_event.is<sf::Event::MouseEntered>()) ||
+                (t_event.is<sf::Event::MouseLeft>()) ||
+                (t_event.is<sf::Event::MouseButtonReleased>()) ||
+                (t_event.is<sf::Event::FocusGained>()) ||
+                (t_event.is<sf::Event::FocusLost>()) ||
+                (t_event.is<sf::Event::TouchBegan>()) ||
+                (t_event.is<sf::Event::TouchEnded>()) ||
+                (t_event.is<sf::Event::TouchMoved>()));
         // clang-format on
     }
 
-    bool StateBase::handleQuitEvents(Context & context, const sf::Event & event)
+    bool StateBase::handleQuitEvents(Context & t_context, const sf::Event & t_event)
     {
-        if (event.is<sf::Event::Closed>())
+        if (t_event.is<sf::Event::Closed>())
         {
-            context.state.setChangePending(State::Quit);
+            t_context.state.setChangePending(State::Quit);
             return true;
         }
 
         if (state() == State::Pause)
         {
-            context.state.setChangePending(State::Play);
+            t_context.state.setChangePending(State::Play);
             return true;
         }
 
         // all that remain are keystrokes
-        if (const auto * const keyPtr = event.getIf<sf::Event::KeyPressed>())
+        if (const auto * const keyPtr = t_event.getIf<sf::Event::KeyPressed>())
         {
             if (keyPtr->scancode == sf::Keyboard::Scancode::Q)
             {
                 if (state() == State::Play)
                 {
-                    context.state.setChangePending(State::Lose);
+                    t_context.state.setChangePending(State::Lose);
                 }
                 else
                 {
-                    context.state.setChangePending(State::Quit);
+                    t_context.state.setChangePending(State::Quit);
                 }
 
                 return true;
@@ -127,7 +127,7 @@ namespace halloween
 
             if (keyPtr->scancode == sf::Keyboard::Scancode::Escape)
             {
-                context.state.setChangePending(State::Quit);
+                t_context.state.setChangePending(State::Quit);
                 return true;
             }
         }
@@ -135,61 +135,61 @@ namespace halloween
         return false;
     }
 
-    bool StateBase::handleEvent(Context & context, const sf::Event & event)
+    bool StateBase::handleEvent(Context & t_context, const sf::Event & t_event)
     {
-        if (willIgnoreEvent(context, event))
+        if (willIgnoreEvent(t_context, t_event))
         {
             return true;
         }
 
-        if (handleQuitEvents(context, event))
+        if (handleQuitEvents(t_context, t_event))
         {
             return true;
         }
 
-        return context.state.isChangePending();
+        return t_context.state.isChangePending();
     }
 
-    void
-        StateBase::draw(const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+    void StateBase::draw(
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        target.draw(m_text, states);
+        t_target.draw(m_text, t_states);
     }
 
     //
 
-    void StartState::onEnter(Context & context) { changeToNextState(context); }
+    void StartState::onEnter(Context & t_context) { changeToNextState(t_context); }
 
-    void StartState::onExit(Context & context) { context.audio.play("respawn"); }
+    void StartState::onExit(Context & t_context) { t_context.audio.play("respawn"); }
 
     //
 
-    void QuitState::onEnter(Context & context) { context.will_quit = true; }
+    void QuitState::onEnter(Context & t_context) { t_context.will_quit = true; }
 
     //
 
     TimedMessageState::TimedMessageState(
-        const Context & context,
-        const State state,
-        const State nextState,
-        const std::string & message,
-        const float minDurationSec)
-        : StateBase(context, state, nextState, message, minDurationSec)
+        const Context & t_context,
+        const State t_state,
+        const State t_nextState,
+        const std::string & t_message,
+        const float t_minDurationSec)
+        : StateBase{ t_context, t_state, t_nextState, t_message, t_minDurationSec }
     {
         const sf::FloatRect textBounds{ util::scaleRectInPlaceCopy(
-            context.layout.mapRegion(), 0.9f) };
+            t_context.layout.mapRegion(), 0.9f) };
 
         util::centerInside(m_text, textBounds);
     }
 
-    bool TimedMessageState::handleEvent(Context & context, const sf::Event & event)
+    bool TimedMessageState::handleEvent(Context & t_context, const sf::Event & t_event)
     {
-        if (StateBase::handleEvent(context, event))
+        if (StateBase::handleEvent(t_context, t_event))
         {
             return true;
         }
 
-        if (event.is<sf::Event::KeyPressed>() || event.is<sf::Event::MouseButtonPressed>())
+        if (t_event.is<sf::Event::KeyPressed>() || t_event.is<sf::Event::MouseButtonPressed>())
         {
             m_hasMouseClickedOrKeyPressed = true;
         }
@@ -201,42 +201,43 @@ namespace halloween
 
         if (m_hasMouseClickedOrKeyPressed)
         {
-            changeToNextState(context);
+            changeToNextState(t_context);
             return true;
         }
 
         return false;
     }
 
-    void TimedMessageState::update(Context & context, const float frameTimeSec)
+    void TimedMessageState::update(Context & t_context, const float t_frameTimeSec)
     {
-        StateBase::update(context, frameTimeSec);
+        StateBase::update(t_context, t_frameTimeSec);
 
         if (hasMinTimeElapsed() || m_hasMouseClickedOrKeyPressed)
         {
-            changeToNextState(context);
+            changeToNextState(t_context);
         }
     }
 
     //
 
-    TitleState::TitleState(const Context & context)
-        : TimedMessageState(
-              context, State::Title, State::Play, "", (m_defaultMinDurationSec * 2.0f))
+    TitleState::TitleState(const Context & t_context)
+        : TimedMessageState{
+            t_context, State::Title, State::Play, "", (m_defaultMinDurationSec * 2.0f)
+        }
         , m_text1(util::SfmlDefaults::instance().font())
         , m_text2(util::SfmlDefaults::instance().font())
         , m_text3(util::SfmlDefaults::instance().font())
         , m_text4(util::SfmlDefaults::instance().font())
     {}
 
-    void TitleState::onEnter(Context & context)
+    void TitleState::onEnter(Context & t_context)
     {
-        m_text1.setFont(context.media.font);
+        m_text1.setFont(t_context.media.font);
         m_text1.setFillColor(sf::Color::White);
         m_text1.setCharacterSize(99);
         m_text1.setString("Super Lucky");
 
-        const sf::FloatRect wholeRect = context.layout.wholeRegion();
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 
         util::fitAndCenterInside(m_text1, util::scaleRectInPlaceCopy(wholeRect, 0.25f));
 
@@ -254,130 +255,135 @@ namespace halloween
 
         const float vertPad{ wholeRect.size.y * 0.015f };
 
-        m_text1.setPosition({ (wholeRect.size.x * 0.5f) - (m_text1.getGlobalBounds().size.x * 0.5f),
-                              (wholeRect.size.y * 0.25f) });
+        m_text1.setPosition(
+            { (wholeRect.size.x * 0.5f) - (m_text1.getGlobalBounds().size.x * 0.5f),
+              (wholeRect.size.y * 0.25f) });
 
-        m_text2.setPosition({ (wholeRect.size.x * 0.5f) - (m_text2.getGlobalBounds().size.x * 0.5f),
-                              (util::bottom(m_text1) + vertPad) });
+        m_text2.setPosition(
+            { (wholeRect.size.x * 0.5f) - (m_text2.getGlobalBounds().size.x * 0.5f),
+              (util::bottom(m_text1) + vertPad) });
 
-        m_text3.setPosition({ (wholeRect.size.x * 0.5f) - (m_text3.getGlobalBounds().size.x * 0.5f),
-                              (util::bottom(m_text2) + vertPad) });
+        m_text3.setPosition(
+            { (wholeRect.size.x * 0.5f) - (m_text3.getGlobalBounds().size.x * 0.5f),
+              (util::bottom(m_text2) + vertPad) });
 
-        m_text4.setPosition({ (wholeRect.size.x * 0.5f) - (m_text4.getGlobalBounds().size.x * 0.5f),
-                              (util::bottom(m_text3) + vertPad) });
+        m_text4.setPosition(
+            { (wholeRect.size.x * 0.5f) - (m_text4.getGlobalBounds().size.x * 0.5f),
+              (util::bottom(m_text3) + vertPad) });
     }
 
     void TitleState::draw(
-        const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        target.draw(m_text1, states);
-        target.draw(m_text2, states);
-        target.draw(m_text3, states);
-        target.draw(m_text4, states);
+        t_target.draw(m_text1, t_states);
+        t_target.draw(m_text2, t_states);
+        t_target.draw(m_text3, t_states);
+        t_target.draw(m_text4, t_states);
     }
 
     //
 
-    PauseState::PauseState(const Context & context)
-        : TimedMessageState(context, State::Pause, State::Play, "PAUSE", -1.0f)
+    PauseState::PauseState(const Context & t_context)
+        : TimedMessageState{ t_context, State::Pause, State::Play, "PAUSE", -1.0f }
     {}
 
-    void PauseState::onEnter(Context & context)
+    void PauseState::onEnter(Context & t_context)
     {
-        context.audio.play("pause");
+        t_context.audio.play("pause");
 
         // update pause screen texture
-        context.pause_screen.update(context.window);
+        t_context.pause_screen.update(t_context.window);
     }
 
-    void PauseState::onExit(Context & context) { context.audio.play("pause"); }
+    void PauseState::onExit(Context & t_context) { t_context.audio.play("pause"); }
 
-    void PauseState::update(Context & context, const float frameTimeSec)
+    void PauseState::update(Context & t_context, const float t_frameTimeSec)
     {
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
 
         if (m_hasMouseClickedOrKeyPressed)
         {
-            changeToNextState(context);
+            changeToNextState(t_context);
         }
     }
 
     void PauseState::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates & states) const
+        const Context & t_context, sf::RenderTarget & target, sf::RenderStates & states) const
     {
-        StateBase::draw(context, target, states);
-        context.pause_screen.draw(target, states);
+        StateBase::draw(t_context, target, states);
+        t_context.pause_screen.draw(target, states);
     }
 
     //
 
-    LoseState::LoseState(const Context & context)
-        : TimedMessageState(context, State::Lose, State::Credits, "You Lose\n", 4.5f)
-        , m_scoreText(util::SfmlDefaults::instance().font())
+    LoseState::LoseState(const Context & t_context)
+        : TimedMessageState{ t_context, State::Lose, State::Credits, "You Lose\n", 4.5f }
+        , m_scoreText{ util::SfmlDefaults::instance().font() }
     {}
 
-    void LoseState::onEnter(Context & context)
+    void LoseState::onEnter(Context & t_context)
     {
-        context.audio.play("game-over");
+        t_context.audio.play("game-over");
 
         m_scoreText = m_text;
         m_scoreText.scale({ 0.35f, 0.35f });
 
-        std::string str("Score: ");
-        str += std::to_string(context.info_region.score());
+        std::string str{ "Score: " };
+        str += std::to_string(t_context.info_region.score());
         m_scoreText.setString(str);
         m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
         util::setOriginToPosition(m_scoreText);
 
         m_scoreText.setPosition(
-            { ((context.layout.wholeSize().x * 0.5f) -
+            { ((t_context.layout.wholeSize().x * 0.5f) -
                (m_scoreText.getGlobalBounds().size.x * 0.5f)),
               util::bottom(m_text) - (m_text.getGlobalBounds().size.y * 0.4f) });
     }
 
-    void
-        LoseState::draw(const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+    void LoseState::draw(
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        target.draw(m_text, states);
-        target.draw(m_scoreText, states);
+        t_target.draw(m_text, t_states);
+        t_target.draw(m_scoreText, t_states);
     }
 
-    void LoseState::onExit(Context & context) { context.audio.stopAll(); }
+    void LoseState::onExit(Context & t_context) { t_context.audio.stopAll(); }
 
     //
 
-    WinState::WinState(const Context & context)
-        : TimedMessageState(context, State::Win, State::Credits, "You Win\n", 4.5f)
-        , m_scoreText(util::SfmlDefaults::instance().font())
+    WinState::WinState(const Context & t_context)
+        : TimedMessageState{ t_context, State::Win, State::Credits, "You Win\n", 4.5f }
+        , m_scoreText{ util::SfmlDefaults::instance().font() }
     {}
 
-    void WinState::onEnter(Context & context)
+    void WinState::onEnter(Context & t_context)
     {
-        context.audio.play("winner");
+        t_context.audio.play("winner");
 
         m_scoreText = m_text;
         m_scoreText.scale({ 0.35f, 0.35f });
 
-        std::string str("Score: ");
-        str += std::to_string(context.info_region.score());
+        std::string str{ "Score: " };
+        str += std::to_string(t_context.info_region.score());
         m_scoreText.setString(str);
         m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
         util::setOriginToPosition(m_scoreText);
 
         m_scoreText.setPosition(
-            { ((context.layout.wholeSize().x * 0.5f) -
+            { ((t_context.layout.wholeSize().x * 0.5f) -
                (m_scoreText.getGlobalBounds().size.x * 0.5f)),
               util::bottom(m_text) - (m_text.getGlobalBounds().size.y * 0.4f) });
     }
 
-    void WinState::draw(const Context &, sf::RenderTarget & target, sf::RenderStates & states) const
+    void WinState::draw(
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        target.draw(m_text, states);
-        target.draw(m_scoreText, states);
+        t_target.draw(m_text, t_states);
+        t_target.draw(m_scoreText, t_states);
     }
 
-    void WinState::onExit(Context & context) { context.audio.stopAll(); }
+    void WinState::onExit(Context & t_context) { t_context.audio.stopAll(); }
 
 } // namespace halloween
