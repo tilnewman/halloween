@@ -10,6 +10,7 @@
 #include "context.hpp"
 #include "dart.hpp"
 #include "fire-spout.hpp"
+#include "framerate-display.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
@@ -29,7 +30,6 @@
 #include "spiked-ball.hpp"
 #include "state-machine.hpp"
 #include "states.hpp"
-#include "stats-display.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -52,12 +52,12 @@ namespace halloween
         void teardown();
         void frameLoop();
         void handleSleepUntilEndOfFrame(const float t_elapsedTimeSec);
-        void handlePerSecondTasks();
         void handleEvents();
         void update(const float t_frameTimeSec);
         void draw();
 
       private:
+        sf::RenderStates m_states;
         Settings m_settings;
         util::Random m_random;
         util::SoundPlayer m_audio;
@@ -82,11 +82,7 @@ namespace halloween
         ObjectManagerList m_managers;
         LevelStats m_stats;
         std::unique_ptr<MushroomBoss> m_bossUPtr;
-
-        std::vector<std::size_t> m_delayLoopCounts;
-        std::vector<std::size_t> m_framesPerSecond;
-        sf::Clock m_perSecondClock;
-        std::unique_ptr<util::GraphDisplay<std::size_t>> m_graphDisplayUPtr;
+        std::unique_ptr<FramerateDisplay> m_framerateDisplayUPtr;
 
         std::unique_ptr<Context> m_contextUPtr;
     };

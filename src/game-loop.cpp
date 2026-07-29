@@ -39,10 +39,7 @@ namespace halloween
         , m_managers{}
         , m_stats{}
         , m_bossUPtr{}
-        , m_delayLoopCounts{}
-        , m_framesPerSecond{}
-        , m_perSecondClock{}
-        , m_graphDisplayUPtr{}
+        , m_framerateDisplayUPtr{}
         , m_contextUPtr{}
     {}
 
@@ -66,7 +63,7 @@ namespace halloween
 
         m_window.create(videoMode, "Halloween", sf::State::Fullscreen);
         M_CHECK(m_window.isOpen(), "Could not open graphics window.");
-        
+
         m_window.setMouseCursorVisible(false);
 
         util::SfmlDefaults::instance().setup();
@@ -81,6 +78,7 @@ namespace halloween
         m_stateMachineUPtr = std::make_unique<StateMachine>();
         m_infoRegionUPtr = std::make_unique<InfoRegion>();
         m_bossUPtr = std::make_unique<MushroomBoss>();
+        m_framerateDisplayUPtr = std::make_unique<FramerateDisplay>();
 
         m_contextUPtr = std::make_unique<Context>(
             m_settings,
@@ -130,8 +128,6 @@ namespace halloween
 
     void GameLoop::teardown()
     {
-        // m_managers.clearAll(); // TODO um...
-        
         m_contextUPtr.reset();
         m_bossUPtr.reset();
         m_infoRegionUPtr.reset();
@@ -143,22 +139,19 @@ namespace halloween
 
     void GameLoop::frameLoop()
     {
-        m_perSecondClock.restart();
-
         sf::Clock frameClock;
         while (m_window.isOpen() && (m_stateMachineUPtr->stateEnum() != State::Quit))
         {
             frameClock.restart();
 
-            handlePerSecondTasks();
             handleEvents();
             update(1.0f / m_settings.frame_rate);
             m_stateMachineUPtr->changeIfPending(*m_contextUPtr);
             draw();
 
-            const float frameTimeSec = frameClock.getElapsedTime().asSeconds();
-            m_framesPerSecond.push_back(static_cast<std::size_t>(std::round(1.0f / frameTimeSec)));
-            handleSleepUntilEndOfFrame(frameTimeSec);
+            const float elapsedFrameTimeSec{ frameClock.getElapsedTime().asSeconds() };
+            handleSleepUntilEndOfFrame(elapsedFrameTimeSec);
+            m_framerateDisplayUPtr->update(*m_contextUPtr, elapsedFrameTimeSec);
         }
     }
 
@@ -167,57 +160,12 @@ namespace halloween
         float timeRemainingSec{ (1.0f / m_settings.frame_rate) - t_elapsedTimeSec };
 
         sf::Clock delayClock;
-        std::size_t loopCounter{ 0 };
         while (timeRemainingSec > 0.0f)
         {
-            ++loopCounter;
-
             delayClock.restart();
             sf::sleep(sf::microseconds(100));
             timeRemainingSec -= delayClock.getElapsedTime().asSeconds();
         }
-
-        m_delayLoopCounts.push_back(loopCounter);
-    }
-
-    void GameLoop::handlePerSecondTasks()
-    {
-        const float elapsedTimeSec = m_perSecondClock.getElapsedTime().asSeconds();
-        if (elapsedTimeSec < 1.0f)
-        {
-            return;
-        }
-
-        if (m_settings.will_display_fps)
-        {
-            std::string str;
-            str = " FPS: ";
-            str += util::makeStats(m_framesPerSecond).toString();
-            str += "     Spin: ";
-            str += util::makeStats(m_delayLoopCounts).toString();
-            m_media.fps_text.setString(str);
-
-            util::setOriginToPosition(m_media.fps_text);
-            m_media.fps_text.setFillColor(sf::Color(195, 160, 126));
-
-            util::fitAndCenterInside(
-                m_media.fps_text,
-                util::scaleRectInPlaceCopy(m_layout.infoRegion(), { 1.0f, 0.375f }));
-
-            m_media.fps_text.setPosition({ 0.0f, (m_layout.wholeSize().y - 50.0f) });
-        }
-
-        if (m_settings.will_display_fps_graph)
-        {
-            std::sort(std::begin(m_framesPerSecond), std::end(m_framesPerSecond));
-
-            m_graphDisplayUPtr = std::make_unique<util::GraphDisplay<std::size_t>>(
-                m_framesPerSecond, sf::Vector2u{ 500, 200 });
-        }
-
-        m_perSecondClock.restart();
-        m_delayLoopCounts.clear();
-        m_framesPerSecond.clear();
     }
 
     void GameLoop::handleEvents()
@@ -236,20 +184,8 @@ namespace halloween
     void GameLoop::draw()
     {
         m_window.clear();
-
-        sf::RenderStates states;
-        m_stateMachineUPtr->state().draw(*m_contextUPtr, m_window, states);
-
-        if (m_settings.will_display_fps)
-        {
-            m_window.draw(m_media.fps_text);
-        }
-
-        if (m_settings.will_display_fps_graph && m_graphDisplayUPtr)
-        {
-            m_window.draw(*m_graphDisplayUPtr, states);
-        }
-
+        m_stateMachineUPtr->state().draw(*m_contextUPtr, m_window, m_states);
+        m_framerateDisplayUPtr->draw(*m_contextUPtr, m_window, m_states);
         m_window.display();
     }
 
