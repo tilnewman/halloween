@@ -19,15 +19,15 @@
 namespace halloween
 {
     Blood::Blood()
-        : m_texture()
-        , m_textureCoords1()
-        , m_textureCoords2()
-        , m_isUsingFirstAnim(true)
-        , m_timePerFrame(0.05f)
-        , m_elapsedTimeSec(0.0f)
-        , m_textureIndex(0)
-        , m_sprite(m_texture)
-        , m_isFinished(true)
+        : m_texture{}
+        , m_textureCoords1{}
+        , m_textureCoords2{}
+        , m_isUsingFirstAnim{ true }
+        , m_timePerFrame{ 0.05f }
+        , m_elapsedTimeSec{ 0.0f }
+        , m_textureIndex{ 0 }
+        , m_sprite{ m_texture }
+        , m_isFinished{ true }
     {
         // there are two blood splat animation in the same texture
         m_textureCoords1.emplace_back(sf::Vector2i{ 0, 0 }, sf::Vector2i{ 128, 128 });
@@ -51,19 +51,20 @@ namespace halloween
         m_textureCoords2.emplace_back(sf::Vector2i{ 1024, 128 }, sf::Vector2i{ 128, 128 });
     }
 
-    void Blood::setup(const Settings & settings)
+    void Blood::setup(const Settings & t_settings)
     {
-        util::TextureLoader::load(m_texture, (settings.media_path / "image/blood.png"), true);
+        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "blood.png"), true);
         m_sprite.setTexture(m_texture, true);
     }
 
-    void Blood::start(Context & context, const sf::Vector2f & position, const bool willSplashRight)
+    void Blood::start(
+        Context & t_context, const sf::Vector2f & t_position, const bool t_willSplashRight)
     {
         m_isFinished = false;
         m_elapsedTimeSec = 0.0f;
         m_textureIndex = 0;
-        m_isUsingFirstAnim = context.random.boolean();
-        m_sprite.setPosition(position);
+        m_isUsingFirstAnim = t_context.random.boolean();
+        m_sprite.setPosition(t_position);
 
         if (m_isUsingFirstAnim)
         {
@@ -74,7 +75,7 @@ namespace halloween
             m_sprite.setTextureRect(m_textureCoords2.at(0));
         }
 
-        if (willSplashRight)
+        if (t_willSplashRight)
         {
             m_sprite.setScale({ 1.0f, 1.0f });
         }
@@ -84,14 +85,14 @@ namespace halloween
         }
     }
 
-    void Blood::update(const float frameTimeSec)
+    void Blood::update(const float t_frameTimeSec)
     {
         if (m_isFinished)
         {
             return;
         }
 
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
         if (m_elapsedTimeSec < m_timePerFrame)
         {
             return;
@@ -117,11 +118,11 @@ namespace halloween
         }
     }
 
-    void Blood::draw(sf::RenderTarget & target, sf::RenderStates states) const
+    void Blood::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         if (!m_isFinished)
         {
-            target.draw(m_sprite, states);
+            t_target.draw(m_sprite, t_states);
         }
     }
 
