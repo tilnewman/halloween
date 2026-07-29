@@ -69,7 +69,7 @@ namespace halloween
     void Coins::setup(const Context & t_context)
     {
         util::TextureLoader::load(
-            m_texture, (t_context.settings.media_path / "image" / "coin.png"), true);
+            m_texture, (t_context.settings.media_path / "image" / "coin.png"));
     }
 
     void Coins::add(const Context &, const sf::FloatRect & t_region)

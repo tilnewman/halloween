@@ -34,7 +34,7 @@ namespace halloween
     void FireSpouts::setup(const Context & t_context)
     {
         util::TextureLoader::load(
-            m_spoutTexture, (t_context.settings.media_path / "image" / "fire-spouts.png"), true);
+            m_spoutTexture, (t_context.settings.media_path / "image" / "fire-spouts.png"));
 
         const std::size_t fireTextureCount{ 14 };
         m_fireTextures.reserve(fireTextureCount);
@@ -48,13 +48,13 @@ namespace halloween
             filePath += ".png";
 
             sf::Texture & texture{ m_fireTextures.emplace_back() };
-            util::TextureLoader::load(texture, filePath, true);
+            util::TextureLoader::load(texture, filePath);
         }
     }
 
     void FireSpouts::add(const Context & t_context, const sf::FloatRect & t_region)
     {
-        FireSpout & spout = m_fireSpouts.emplace_back(m_spoutTexture, m_fireTextures.at(0));
+        FireSpout & spout{ m_fireSpouts.emplace_back(m_spoutTexture, m_fireTextures.at(0)) };
 
         spout.spout_sprite.setTextureRect({ { 0, 10 }, { 35, 22 } });
         spout.spout_sprite.setScale({ 2.0f, 2.0f });

@@ -40,7 +40,7 @@ namespace halloween
         m_velocity.x = t_settings.dart_speed;
         m_scale = t_settings.dart_scale;
 
-        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "kunai.png"), true);
+        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "kunai.png"));
     }
 
     void Missiles::add(const sf::Vector2f & t_position, const bool t_isMovingRight)

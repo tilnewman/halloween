@@ -34,7 +34,7 @@ namespace halloween
     void Darts::setup(const Context & t_context)
     {
         util::TextureLoader::load(
-            m_texture, (t_context.settings.media_path / "image" / "kunai.png"), true);
+            m_texture, (t_context.settings.media_path / "image" / "kunai.png"));
     }
 
     void Darts::add(const Context &, const sf::FloatRect & t_region)

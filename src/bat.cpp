@@ -58,7 +58,7 @@ namespace halloween
                 pathStr += std::to_string(textureIndex);
                 pathStr += ".png";
 
-                util::TextureLoader::load(textureSet.flying.at(textureIndex), pathStr, true);
+                util::TextureLoader::load(textureSet.flying.at(textureIndex), pathStr);
             }
 
             const std::size_t dyingFrameCount{ 6 };
@@ -70,7 +70,7 @@ namespace halloween
                 pathStr += std::to_string(textureIndex);
                 pathStr += ".png";
 
-                util::TextureLoader::load(textureSet.dying.at(textureIndex), pathStr, true);
+                util::TextureLoader::load(textureSet.dying.at(textureIndex), pathStr);
             }
         }
     }

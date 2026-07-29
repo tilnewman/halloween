@@ -53,7 +53,7 @@ namespace halloween
 
     void Blood::setup(const Settings & t_settings)
     {
-        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "blood.png"), true);
+        util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "blood.png"));
         m_sprite.setTexture(m_texture, true);
     }
 

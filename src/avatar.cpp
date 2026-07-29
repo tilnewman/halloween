@@ -67,7 +67,7 @@ namespace halloween
         m_idleAnim.setup((t_settings.media_path / "image/avatar"), "Idle", 10, 0.1f, true);
 
         util::TextureLoader::load(
-            m_jumpTexture, (t_settings.media_path / "image/avatar/Jump-6.png"), true);
+            m_jumpTexture, (t_settings.media_path / "image/avatar/Jump-6.png"));
 
         m_idleAnim.restart();
         m_sprite.setTexture(m_idleAnim.texture(), true);

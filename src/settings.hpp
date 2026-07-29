@@ -45,9 +45,6 @@ namespace halloween
         // delay after dying so the player can see how they died
         float death_delay_sec{ 4.0f };
 
-        // this will cause minor artifacts and I can't tell the diff in quality anyway
-        bool will_smooth_tile_textures{ false };
-
         bool will_show_coin_animations{ true };
 
         int kill_slime_score{ 10 };

@@ -37,7 +37,7 @@ namespace halloween
         m_scale = t_context.settings.spiked_ball_scale;
 
         util::TextureLoader::load(
-            m_texture, (t_context.settings.media_path / "image" / "spiked-ball.png"), true);
+            m_texture, (t_context.settings.media_path / "image" / "spiked-ball.png"));
     }
 
     void SpikedBalls::add(const Context &, const sf::FloatRect & t_region)

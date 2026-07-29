@@ -40,7 +40,7 @@ namespace halloween
             const std::string filePath = (t_mediaPath / filename).string();
 
             sf::Texture & texture = m_textures.emplace_back();
-            util::TextureLoader::load(texture, filePath, true);
+            util::TextureLoader::load(texture, filePath);
         }
 
         m_frameCount = t_frameCount;

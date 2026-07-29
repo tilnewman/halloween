@@ -44,13 +44,13 @@ namespace halloween
     void Ghosts::setup(const Context & t_context)
     {
         util::TextureLoader::load(
-            m_texture1, (t_context.settings.media_path / "image" / "ghost" / "ghost-1.png"), true);
+            m_texture1, (t_context.settings.media_path / "image" / "ghost" / "ghost-1.png"));
 
         util::TextureLoader::load(
-            m_texture2, (t_context.settings.media_path / "image" / "ghost" / "ghost-2.png"), true);
+            m_texture2, (t_context.settings.media_path / "image" / "ghost" / "ghost-2.png"));
 
         util::TextureLoader::load(
-            m_texture3, (t_context.settings.media_path / "image" / "ghost" / "ghost-3.png"), true);
+            m_texture3, (t_context.settings.media_path / "image" / "ghost" / "ghost-3.png"));
 
         M_CHECK(
             (m_spawnMaxTimeSec > m_spawnMinTimeSec),
