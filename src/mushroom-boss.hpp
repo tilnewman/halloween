@@ -42,10 +42,10 @@ namespace halloween
         Death
     };
 
-    constexpr std::string_view toString(const BossState state) noexcept
+    constexpr std::string_view toString(const BossState t_state) noexcept
     {
         // clang-format off
-        switch (state)
+        switch (t_state)
         {
             case BossState::Idle:   { return "Idle";            }
             case BossState::Advance:{ return "Advance";         }
@@ -54,7 +54,7 @@ namespace halloween
             case BossState::Hit:    { return "Hit";             }
             case BossState::Shake:  { return "Shake";           }
             case BossState::Death:  { return "Death";           }
-            default:                { assert(false); return ""; }
+            default:              { return "Unknown_BossState"; }
         }
         // clang-format on
     }
@@ -68,26 +68,29 @@ namespace halloween
         virtual ~MushroomBoss() override = default;
 
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Settings & settings) final;
-        void add(Context & context, const sf::FloatRect & rect) final;
+        void setup(const Settings & t_settings) final;
+        void add(Context & t_context, const sf::FloatRect & t_rect) final;
         void clear() final;
-        void update(Context & context, const float frameTimeSec) final;
-        void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const final;
-        void moveWithMap(const sf::Vector2f & move) final;
-        void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) final;
+        void update(Context & t_context, const float t_frameTimeSec) final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+        void moveWithMap(const sf::Vector2f & t_move) final;
+        void collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect) final;
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
-        bool attack(Context & context, const sf::FloatRect & attackRect);
-        bool doesCollide(const sf::FloatRect & rect) const;
-        void reactToThrow(Context & context);
+        bool attack(Context & context, const sf::FloatRect & t_attackRect);
+        bool doesCollide(const sf::FloatRect & t_rect) const;
+        void reactToThrow(Context & t_context);
 
       private:
-        void setState(const BossState newState);
+        void setState(const BossState t_newState);
         AvatarAnim & currentAnim();
         const BossCollRects collisionRects() const;
         void keepInRegion();
-        bool isPlayerWithinAttackRange(const Context & context, const bool isHitQuery) const;
+        bool isPlayerWithinAttackRange(const Context & t_context, const bool t_isHitQuery) const;
 
       private:
         BossState m_state;

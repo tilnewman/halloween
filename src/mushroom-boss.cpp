@@ -24,49 +24,55 @@ namespace halloween
 {
 
     MushroomBoss::MushroomBoss()
-        : m_state(BossState::Idle)
-        , m_idleAnim()
-        , m_jumpAnim()
-        , m_attackAnim()
-        , m_hitAnim()
-        , m_shakeAnim()
-        , m_deathAnim()
-        , m_sprite(util::SfmlDefaults::instance().texture())
-        , m_region()
-        , m_isThereABossOnThisLevel(false)
-        , m_hasFightBegun(false)
-        , m_hitPoints(0)
-        , m_hitPointsMax(0)
+        : m_state{ BossState::Idle }
+        , m_idleAnim{}
+        , m_jumpAnim{}
+        , m_attackAnim{}
+        , m_hitAnim{}
+        , m_shakeAnim{}
+        , m_deathAnim{}
+        , m_sprite{ util::SfmlDefaults::instance().texture() }
+        , m_region{}
+        , m_isThereABossOnThisLevel{ false }
+        , m_hasFightBegun{ false }
+        , m_hitPoints{ 0 }
+        , m_hitPointsMax{ 0 }
     {}
 
-    void MushroomBoss::setup(const Settings & settings)
+    void MushroomBoss::setup(const Settings & t_settings)
     {
-        m_idleAnim.setup((settings.media_path / "image/mushroom"), "idle", 31, 0.05f, true);
-        m_jumpAnim.setup((settings.media_path / "image/mushroom"), "jump", 31, 0.05f, false);
-        m_attackAnim.setup((settings.media_path / "image/mushroom"), "attack", 18, 0.05f, false);
-        m_hitAnim.setup((settings.media_path / "image/mushroom"), "hit", 6, 0.05f, false);
-        m_shakeAnim.setup((settings.media_path / "image/mushroom"), "shake", 5, 0.15f, false);
-        m_deathAnim.setup((settings.media_path / "image/mushroom"), "death", 23, 0.05f, false);
+        m_idleAnim.setup((t_settings.media_path / "image" / "mushroom"), "idle", 31, 0.05f, true);
+        m_jumpAnim.setup((t_settings.media_path / "image" / "mushroom"), "jump", 31, 0.05f, false);
+
+        m_attackAnim.setup(
+            (t_settings.media_path / "image" / "mushroom"), "attack", 18, 0.05f, false);
+
+        m_hitAnim.setup((t_settings.media_path / "image" / "mushroom"), "hit", 6, 0.05f, false);
+        m_shakeAnim.setup((t_settings.media_path / "image" / "mushroom"), "shake", 5, 0.15f, false);
+
+        m_deathAnim.setup(
+            (t_settings.media_path / "image" / "mushroom"), "death", 23, 0.05f, false);
 
         m_sprite.setTexture(m_idleAnim.texture(), true);
-        m_sprite.scale({ 1.0f, 1.0f });
+        m_sprite.scale({ 1.0f, 1.0f }); // TODO what is going on here?
 
-        m_hitPointsMax = settings.boss_hit_points;
+        m_hitPointsMax = t_settings.boss_hit_points;
     }
 
-    void MushroomBoss::add(Context &, const sf::FloatRect & rect)
+    void MushroomBoss::add(Context &, const sf::FloatRect & t_rect)
     {
-        m_region = rect;
+        m_region = t_rect;
         m_isThereABossOnThisLevel = true;
         m_hitPoints = m_hitPointsMax;
 
-        m_sprite.setPosition({ (util::right(m_region) - m_sprite.getGlobalBounds().size.x),
-                               (util::bottom(m_region) - m_sprite.getGlobalBounds().size.y) });
+        m_sprite.setPosition(
+            { (util::right(m_region) - m_sprite.getGlobalBounds().size.x),
+              (util::bottom(m_region) - m_sprite.getGlobalBounds().size.y) });
     }
 
     void MushroomBoss::clear()
     {
-        // reset everything so the boss can be fought again until the player kills it
+        // reset everything so the boss can be fought again
         m_state = BossState::Idle;
         m_idleAnim.restart();
         m_jumpAnim.restart();
@@ -79,7 +85,7 @@ namespace halloween
         m_hitPoints = m_hitPointsMax;
     }
 
-    void MushroomBoss::update(Context & context, const float frameTimeSec)
+    void MushroomBoss::update(Context & t_context, const float t_frameTimeSec)
     {
         if (!m_isThereABossOnThisLevel)
         {
@@ -88,19 +94,19 @@ namespace halloween
 
         // progress animation
         AvatarAnim & anim{ currentAnim() };
-        if (anim.update(frameTimeSec))
+        if (anim.update(t_frameTimeSec))
         {
             m_sprite.setTexture(anim.texture(), true);
 
             if ((BossState::Jump == m_state) && (m_jumpAnim.index() == 19))
             {
-                context.audio.play("slam", 0.75f);
+                t_context.audio.play("slam", 0.75f);
             }
             else if (((BossState::Attack == m_state) && (m_attackAnim.index() >= 10)))
             {
-                if (isPlayerWithinAttackRange(context, true))
+                if (isPlayerWithinAttackRange(t_context, true))
                 {
-                    context.avatar.handleHitByBoss(context);
+                    t_context.avatar.handleHitByBoss(t_context);
                 }
             }
         }
@@ -113,13 +119,13 @@ namespace halloween
                 if (0 == m_hitPoints)
                 {
                     setState(BossState::Death);
-                    context.audio.play("mushroom-die");
-                    context.info_region.scoreAdjust(context.settings.kill_boss_score);
+                    t_context.audio.play("mushroom-die");
+                    t_context.info_region.scoreAdjust(t_context.settings.kill_boss_score);
                 }
-                else if (isPlayerWithinAttackRange(context, false) && !context.avatar.isDead())
+                else if (isPlayerWithinAttackRange(t_context, false) && !t_context.avatar.isDead())
                 {
                     setState(BossState::Attack);
-                    context.audio.play("mushroom-attack");
+                    t_context.audio.play("mushroom-attack");
                 }
                 else if (BossState::Advance != m_state)
                 {
@@ -131,37 +137,38 @@ namespace halloween
         // move
         if (BossState::Advance == m_state)
         {
-            m_sprite.move({ (-20.0f * frameTimeSec), 0.0f });
+            // TODO make the boss walk speed a setting
+            m_sprite.move({ (-20.0f * t_frameTimeSec), 0.0f });
             keepInRegion();
         }
     }
 
     void MushroomBoss::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         if (!m_isThereABossOnThisLevel)
         {
             return;
         }
 
-        if (context.layout.mapRegion().findIntersection(m_sprite.getGlobalBounds()))
+        if (t_context.layout.mapRegion().findIntersection(m_sprite.getGlobalBounds()))
         {
-            target.draw(m_sprite, states);
+            t_target.draw(m_sprite, t_states);
         }
     }
 
-    void MushroomBoss::moveWithMap(const sf::Vector2f & move)
+    void MushroomBoss::moveWithMap(const sf::Vector2f & t_move)
     {
         if (!m_isThereABossOnThisLevel)
         {
             return;
         }
 
-        m_sprite.move(move);
-        m_region.position.x += move.x;
+        m_sprite.move(t_move);
+        m_region.position.x += t_move.x;
     }
 
-    void MushroomBoss::collideWithAvatar(Context & context, const sf::FloatRect & avatarRect)
+    void MushroomBoss::collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         // this function only detects the player entering the fight region for the first time
         if (!m_isThereABossOnThisLevel || m_hasFightBegun)
@@ -169,11 +176,11 @@ namespace halloween
             return;
         }
 
-        if (avatarRect.findIntersection(m_region))
+        if (t_avatarRect.findIntersection(m_region))
         {
             m_hasFightBegun = true;
             setState(BossState::Shake);
-            context.audio.play("mushroom-enrage");
+            t_context.audio.play("mushroom-enrage");
         }
     }
 
@@ -310,7 +317,7 @@ namespace halloween
         }
     }
 
-    void MushroomBoss::reactToThrow(Context & context)
+    void MushroomBoss::reactToThrow(Context & t_context)
     {
         if (!m_isThereABossOnThisLevel || (BossState::Death == m_state) || !m_hasFightBegun)
         {
@@ -320,15 +327,15 @@ namespace halloween
         if ((BossState::Advance == m_state) || (BossState::Idle == m_state))
         {
             setState(BossState::Jump);
-            context.audio.play("mushroom-jump");
+            t_context.audio.play("mushroom-jump");
         }
     }
 
     bool MushroomBoss::isPlayerWithinAttackRange(
-        const Context & context, const bool isHitQuery) const
+        const Context & t_context, const bool t_isHitQuery) const
     {
-        const float mutliplier{ (isHitQuery) ? 1.0f : 2.0f };
-        const sf::FloatRect playerBounds{ context.avatar.bounds() };
+        const float mutliplier{ (t_isHitQuery) ? 1.0f : 2.0f };
+        const sf::FloatRect playerBounds{ t_context.avatar.bounds() };
         const float distance{ collisionRects().middle.position.x - util::right(playerBounds) };
         return (distance < (playerBounds.size.x * mutliplier));
     }
