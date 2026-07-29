@@ -14,18 +14,9 @@
 namespace halloween
 {
     StateMachine::StateMachine()
-        : m_stateUPtr{}
+        : m_stateUPtr{ std::make_unique<StartState>() }
         , m_changePendingOpt{ State::Start }
-    {
-        reset();
-    }
-
-    void StateMachine::reset()
-    {
-        // TODO um...why set the pending state if already set to start?
-        m_stateUPtr = std::make_unique<StartState>();
-        m_changePendingOpt = m_stateUPtr->state();
-    }
+    {}
 
     void StateMachine::setChangePending(const State t_state) { m_changePendingOpt = t_state; }
 

@@ -36,8 +36,6 @@ namespace halloween
         StateMachine & operator=(const StateMachine &) = delete;
         StateMachine & operator=(StateMachine &&) = delete;
 
-        void reset();
-
         inline State stateEnum() const { return m_stateUPtr->state(); }
 
         inline IState & state() { return *m_stateUPtr; }
