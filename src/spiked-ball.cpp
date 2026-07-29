@@ -22,10 +22,10 @@ namespace halloween
 {
 
     SpikedBalls::SpikedBalls()
-        : m_texture()
-        , m_balls()
-        , m_speed(0.0f)
-        , m_scale(0.0f, 0.0f)
+        : m_texture{}
+        , m_balls{}
+        , m_speed{ 0.0f }
+        , m_scale{}
     {
         // probably no more than a dozen of these in any given level
         m_balls.reserve(100);
@@ -33,6 +33,7 @@ namespace halloween
 
     void SpikedBalls::setup(const Settings & settings)
     {
+        // TODO random this speed a little
         m_speed = settings.spiked_ball_speed;
         m_scale = settings.spiked_ball_scale;
 
@@ -40,33 +41,33 @@ namespace halloween
             m_texture, (settings.media_path / "image" / "spiked-ball.png"), true);
     }
 
-    void SpikedBalls::add(Context &, const sf::FloatRect & region)
+    void SpikedBalls::add(Context &, const sf::FloatRect & t_region)
     {
-        SpikedBall & ball = m_balls.emplace_back(m_texture);
+        SpikedBall & ball{ m_balls.emplace_back(m_texture) };
         ball.sprite.setScale(m_scale);
         util::setOriginToCenter(ball.sprite);
-        ball.sprite.setPosition(util::center(region));
+        ball.sprite.setPosition(util::center(t_region));
 
-        ball.is_horizontal = (region.size.x > region.size.y);
+        ball.is_horizontal = (t_region.size.x > t_region.size.y);
         if (ball.is_horizontal)
         {
             ball.slider = util::SliderOscillator<float, float>(
-                region.position.x, util::right(region), m_speed);
+                t_region.position.x, util::right(t_region), m_speed);
         }
         else
         {
             ball.slider = util::SliderOscillator<float, float>(
-                region.position.y, util::bottom(region), m_speed);
+                t_region.position.y, util::bottom(t_region), m_speed);
         }
     }
 
     void SpikedBalls::clear() { m_balls.clear(); }
 
-    void SpikedBalls::update(Context &, const float frameTimeSec)
+    void SpikedBalls::update(Context &, const float t_frameTimeSec)
     {
         for (SpikedBall & ball : m_balls)
         {
-            const float newPosition = ball.slider.update(frameTimeSec);
+            const float newPosition{ ball.slider.update(t_frameTimeSec) };
 
             if (ball.is_horizontal)
             {
@@ -80,13 +81,15 @@ namespace halloween
     }
 
     void SpikedBalls::draw(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+
         for (const SpikedBall & ball : m_balls)
         {
-            if (context.layout.mapRegion().findIntersection(ball.sprite.getGlobalBounds()))
+            if (mapRect.findIntersection(ball.sprite.getGlobalBounds()))
             {
-                target.draw(ball.sprite, states);
+                t_target.draw(ball.sprite, t_states);
             }
         }
     }
@@ -108,11 +111,11 @@ namespace halloween
         }
     }
 
-    bool SpikedBalls::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
+    bool SpikedBalls::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
     {
         for (const SpikedBall & ball : m_balls)
         {
-            if (avatarRect.findIntersection(ball.sprite.getGlobalBounds()))
+            if (t_avatarRect.findIntersection(ball.sprite.getGlobalBounds()))
             {
                 return true;
             }
