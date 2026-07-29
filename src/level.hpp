@@ -39,7 +39,6 @@ namespace halloween
 
       private:
         void reset(Context & t_context);
-        void findFarthestHorizMapPixel();
         void appendVertLayers(Context & context);
         void populateVisibleVerts(const ScreenRegions & layout);
         void dumpInfo(const std::size_t levelNumber) const;

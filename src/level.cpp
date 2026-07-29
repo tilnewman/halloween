@@ -62,7 +62,7 @@ namespace halloween
             verifyLayerIndexCounts();
             appendVertLayers(t_context);
             t_context.avatar.setPosition(enter_rect);
-            findFarthestHorizMapPixel();
+            farthest_horiz_map_pixel = exit_rect.position.x;
             farthest_horiz_traveled = 0.0f;
             number = t_context.level_number;
             // dumpInfo(levelNumber);
@@ -70,7 +70,6 @@ namespace halloween
         }
         else
         {
-            reset(t_context);
             return false;
         }
     }
@@ -131,23 +130,6 @@ namespace halloween
         populateVisibleVerts(layout);
 
         return true;
-    }
-
-    void Level::findFarthestHorizMapPixel()
-    {
-        // TODO use the exit rect instaed of this silly nested mess
-        farthest_horiz_map_pixel = 0.0f;
-
-        for (const TileLayer & layer : tiles.layers)
-        {
-            for (const sf::Vertex & vertex : layer.verts)
-            {
-                if (vertex.position.x > farthest_horiz_map_pixel)
-                {
-                    farthest_horiz_map_pixel = vertex.position.x;
-                }
-            }
-        }
     }
 
     void Level::appendVertLayers(Context & context)
