@@ -236,9 +236,9 @@ namespace halloween
 
         if (isGliding)
         {
-            // TODO whats this gravity magic?  Something for gliding that should be in t_settings
             m_velocity +=
-                ((t_context.settings.gravity_acc * sf::Vector2f(1.0f, 0.1f)) * t_frameTimeSec);
+                ((t_context.settings.gravity_acc * t_context.settings.gravity_soaring_ratio) *
+                 t_frameTimeSec);
         }
         else
         {

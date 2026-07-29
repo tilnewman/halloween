@@ -35,6 +35,7 @@ namespace halloween
 
         // movement speeds and accelerations
         sf::Vector2f gravity_acc{ 0.0f, 25.0f };
+        sf::Vector2f gravity_soaring_ratio{ 1.0f, 0.1f };
         float jump_acc{ 900.0f };
         float walk_acc{ 15.0f };
         float walk_speed_limit{ 5.0f };
