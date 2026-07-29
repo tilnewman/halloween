@@ -39,7 +39,7 @@ namespace halloween
         , m_scoreDisplayed{ 0 }
     {}
 
-    void LevelCompleteState::onEnter(Context & t_context)
+    void LevelCompleteState::onEnter(const Context & t_context)
     {
         t_context.audio.play("level-complete");
 
@@ -121,7 +121,7 @@ namespace halloween
         util::centerInside(m_scoreText, t_context.layout.wholeRegion());
     }
 
-    void LevelCompleteState::onExit(Context & t_context) 
+    void LevelCompleteState::onExit(const Context & t_context) 
     { 
         if (t_context.level.number() < 3)
         {
@@ -133,7 +133,7 @@ namespace halloween
         }
     }
 
-    bool LevelCompleteState::handleEvent(Context & t_context, const sf::Event & t_event)
+    bool LevelCompleteState::handleEvent(const Context & t_context, const sf::Event & t_event)
     {
         if (StateBase::handleEvent(t_context, t_event))
         {
@@ -154,7 +154,7 @@ namespace halloween
         return false;
     }
 
-    bool LevelCompleteState::popAndDisplayNextBonus(Context & t_context)
+    bool LevelCompleteState::popAndDisplayNextBonus(const Context & t_context)
     {
         if (m_bonuses.empty())
         {
@@ -169,7 +169,7 @@ namespace halloween
         return true;
     }
 
-    void LevelCompleteState::update(Context & t_context, const float t_frameTimeSec)
+    void LevelCompleteState::update(const Context & t_context, const float t_frameTimeSec)
     {
         auto hasScoreFinishedUpdating = [&]() {
             return (m_scoreDisplayed == t_context.info_region.score());

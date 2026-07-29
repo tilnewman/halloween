@@ -28,10 +28,10 @@ namespace halloween
         explicit PlayState(const Context & t_context);
         ~PlayState() override = default;
 
-        void onEnter(Context & t_context) override;
-        void onExit(Context & t_context) override;
-        bool handleEvent(Context & t_context, const sf::Event & t_event) override;
-        void update(Context & t_context, const float t_frameTimeSec) override;
+        void onEnter(const Context & t_context) override;
+        void onExit(const Context & t_context) override;
+        bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
+        void update(const Context & t_context, const float t_frameTimeSec) override;
 
         void draw(
             const Context & t_context,

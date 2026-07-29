@@ -52,16 +52,16 @@ namespace halloween
         StateCredits();
         virtual ~StateCredits() final {}
 
-        void onEnter(Context & t_context) final;
-        void onExit(Context & t_context) final;
-        void update(Context & t_context, const float t_frameTimeSec) final;
+        void onEnter(const Context & t_context) final;
+        void onExit(const Context & t_context) final;
+        void update(const Context & t_context, const float t_frameTimeSec) final;
 
         void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
             sf::RenderStates & t_states) const final;
 
-        bool handleEvent(Context & t_context, const sf::Event & t_event) final;
+        bool handleEvent(const Context & t_context, const sf::Event & t_event) final;
 
       private:
         std::vector<Credit> m_credits;

@@ -36,7 +36,7 @@ namespace halloween
         util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "kunai.png"), true);
     }
 
-    void Darts::add(Context &, const sf::FloatRect & t_region)
+    void Darts::add(const Context &, const sf::FloatRect & t_region)
     {
         Dart & dart{ m_darts.emplace_back(m_texture) };
         dart.sprite.setScale(m_scale);
@@ -46,7 +46,7 @@ namespace halloween
 
     void Darts::clear() { m_darts.clear(); }
 
-    void Darts::update(Context &, const float t_frameTimeSec)
+    void Darts::update(const Context &, const float t_frameTimeSec)
     {
         bool wereAnyKilled{ false };
         for (DartAnim & anim : m_dartAnims)
@@ -111,7 +111,7 @@ namespace halloween
         }
     }
 
-    void Darts::collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect)
+    void Darts::collideWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         bool wereAnyCollected{ false };
         for (Dart & dart : m_darts)

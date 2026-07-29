@@ -84,15 +84,15 @@ namespace halloween
 
         virtual State state() const = 0;
         virtual State nextState() const = 0;
-        virtual void update(Context & t_context, const float t_frameTimeSec) = 0;
-        virtual bool handleEvent(Context & t_context, const sf::Event & t_event) = 0;
+        virtual void update(const Context & t_context, const float t_frameTimeSec) = 0;
+        virtual bool handleEvent(const Context & t_context, const sf::Event & t_event) = 0;
         virtual void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
             sf::RenderStates & t_states) const = 0;
 
-        virtual void onEnter(Context & t_context) = 0;
-        virtual void onExit(Context & t_context) = 0;
+        virtual void onEnter(const Context & t_context) = 0;
+        virtual void onExit(const Context & t_context) = 0;
 
       protected:
         virtual bool changeToNextState(const Context & t_context) = 0;
@@ -101,7 +101,7 @@ namespace halloween
             willIgnoreEvent(const Context & t_context, const sf::Event & t_event) const = 0;
 
         // returns true if the event was a 'quit' event and a state changed is pending
-        virtual bool handleQuitEvents(Context & t_context, const sf::Event & t_event) = 0;
+        virtual bool handleQuitEvents(const Context & t_context, const sf::Event & t_event) = 0;
     };
 
     using IStateUPtr_t = std::unique_ptr<IState>;
@@ -133,16 +133,16 @@ namespace halloween
 
         State state() const final { return m_state; }
         State nextState() const final { return m_nextState; }
-        void update(Context & t_context, const float t_frameTimeSec) override;
-        bool handleEvent(Context & t_context, const sf::Event & t_event) override;
+        void update(const Context & t_context, const float t_frameTimeSec) override;
+        bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
 
         void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
             sf::RenderStates & t_states) const override;
 
-        void onEnter(Context &) override {}
-        void onExit(Context &) override {}
+        void onEnter(const Context &) override {}
+        void onExit(const Context &) override {}
 
       protected:
         inline bool hasMinTimeElapsed() const
@@ -152,7 +152,7 @@ namespace halloween
 
         bool changeToNextState(const Context & t_context) override;
         bool willIgnoreEvent(const Context & t_context, const sf::Event & t_event) const override;
-        bool handleQuitEvents(Context & t_context, const sf::Event & t_event) override;
+        bool handleQuitEvents(const Context & t_context, const sf::Event & t_event) override;
         void setupText(const Context & t_context, const std::string & t_text);
 
       protected:
@@ -176,10 +176,10 @@ namespace halloween
 
         ~StartState() override = default;
 
-        void onEnter(Context & t_context) override;
-        void onExit(Context & t_context) override;
-        void update(Context &, const float) final {}
-        bool handleEvent(Context &, const sf::Event &) final { return false; }
+        void onEnter(const Context & t_context) override;
+        void onExit(const Context & t_context) override;
+        void update(const Context &, const float) final {}
+        bool handleEvent(const Context &, const sf::Event &) final { return false; }
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
     };
 
@@ -193,9 +193,9 @@ namespace halloween
 
         ~QuitState() override = default;
 
-        void onEnter(Context &) final {}
-        void update(Context &, const float) final {}
-        bool handleEvent(Context &, const sf::Event &) final { return false; }
+        void onEnter(const Context &) final {}
+        void update(const Context &, const float) final {}
+        bool handleEvent(const Context &, const sf::Event &) final { return false; }
         void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
     };
 
@@ -212,8 +212,8 @@ namespace halloween
 
         ~TimedMessageState() override = default;
 
-        void update(Context & t_context, const float t_frameTimeSec) override;
-        bool handleEvent(Context & t_context, const sf::Event & t_event) override;
+        void update(const Context & t_context, const float t_frameTimeSec) override;
+        bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
 
       protected:
         bool m_hasMouseClickedOrKeyPressed{ false };
@@ -226,7 +226,7 @@ namespace halloween
         explicit TitleState(const Context & t_context);
         ~TitleState() override = default;
 
-        void onEnter(Context & t_context) override;
+        void onEnter(const Context & t_context) override;
 
         void draw(
             const Context & t_context,
@@ -247,9 +247,9 @@ namespace halloween
         explicit PauseState(const Context & t_context);
         ~PauseState() override = default;
 
-        void onEnter(Context & t_context) override;
-        void onExit(Context & t_context) override;
-        void update(Context & t_context, const float t_frameTimeSec) override;
+        void onEnter(const Context & t_context) override;
+        void onExit(const Context & t_context) override;
+        void update(const Context & t_context, const float t_frameTimeSec) override;
 
         void draw(
             const Context & t_context,
@@ -266,8 +266,8 @@ namespace halloween
         explicit LoseState(const Context & t_context);
         ~LoseState() override = default;
 
-        void onEnter(Context & t_context) override;
-        void onExit(Context & t_context) override;
+        void onEnter(const Context & t_context) override;
+        void onExit(const Context & t_context) override;
 
         void draw(
             const Context & t_context,
@@ -285,8 +285,8 @@ namespace halloween
         explicit WinState(const Context & t_context);
         ~WinState() override = default;
 
-        void onEnter(Context & t_context) override;
-        void onExit(Context & t_context) override;
+        void onEnter(const Context & t_context) override;
+        void onExit(const Context & t_context) override;
 
         void draw(
             const Context & t_context,

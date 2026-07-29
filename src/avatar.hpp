@@ -35,32 +35,32 @@ namespace halloween
         void setup(const Settings & t_settings);
         void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
         void setSpawnPosForNewLevel(const sf::FloatRect & t_rect);
-        void update(Context & t_context, const float t_frameTimeSec);
+        void update(const Context & t_context, const float t_frameTimeSec);
         inline const sf::FloatRect bounds() const { return m_sprite.getGlobalBounds(); }
-        void handleHitByBoss(Context & t_context);
+        void handleHitByBoss(const Context & t_context);
         constexpr bool isDead() const noexcept { return (Action::Dead == m_action); }
 
       private:
         const sf::FloatRect collisionRect() const;
         const sf::FloatRect attackCollisionRect() const;
-        void moveMap(Context & t_context);
-        bool handleDeath(Context & t_context, const float t_frameTimeSec);
-        bool handleAttacking(Context & t_context, const float t_frameTimeSec);
-        bool handleThrowing(Context & t_context, const float t_frameTimeSec);
-        bool handleGliding(Context & t_context, const float t_frameTimeSec);
-        bool handleIdle(Context & t_context, const float t_frameTimeSec);
-        void sideToSideMotion(Context & t_context, const float t_frameTimeSec);
-        void jumping(Context & t_context, const float t_frameTimeSec);
-        void collisions(Context & t_context);
-        void killCollisions(Context & t_context);
-        void exitCollisions(Context & t_context) const;
-        void handleAttackingEnemies(Context & t_context);
-        void acidCollisions(Context & t_context);
-        void waterCollisions(Context & t_context);
+        void moveMap(const Context & t_context);
+        bool handleDeath(const Context & t_context, const float t_frameTimeSec);
+        bool handleAttacking(const Context & t_context, const float t_frameTimeSec);
+        bool handleThrowing(const Context & t_context, const float t_frameTimeSec);
+        bool handleGliding(const Context & t_context, const float t_frameTimeSec);
+        bool handleIdle(const Context & t_context, const float t_frameTimeSec);
+        void sideToSideMotion(const Context & t_context, const float t_frameTimeSec);
+        void jumping(const Context & t_context, const float t_frameTimeSec);
+        void collisions(const Context & t_context);
+        void killCollisions(const Context & t_context);
+        void exitCollisions(const Context & t_context) const;
+        void handleAttackingEnemies(const Context & t_context);
+        void acidCollisions(const Context & t_context);
+        void waterCollisions(const Context & t_context);
         void preventBacktracking(const Context & t_context);
-        void killIfOutOfBounds(Context & t_context);
-        void triggerDeath(Context & t_context);
-        void handleBossCollisions(Context & t_context);
+        void killIfOutOfBounds(const Context & t_context);
+        void triggerDeath(const Context & t_context);
+        void handleBossCollisions(const Context & t_context);
         void bounceAwayFromBoss(const Context & t_context);
 
       private:

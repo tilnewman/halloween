@@ -25,7 +25,9 @@ namespace halloween
         void setup(const Settings & t_settings);
 
         void start(
-            Context & t_context, const sf::Vector2f & t_position, const bool t_willSplashRight);
+            const Context & t_context,
+            const sf::Vector2f & t_position,
+            const bool t_willSplashRight);
 
         void update(const float t_frameTimeSec);
         void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;

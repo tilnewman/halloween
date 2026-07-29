@@ -81,7 +81,7 @@ namespace halloween
         m_deathAnims.clear();
     }
 
-    void Bats::add(Context & t_context, const sf::FloatRect & t_rect)
+    void Bats::add(const Context & t_context, const sf::FloatRect & t_rect)
     {
         Bat & bat{ m_bats.emplace_back(
             t_context.random.index(m_textures),
@@ -106,7 +106,7 @@ namespace halloween
         }
     }
 
-    void Bats::update(Context &, const float t_frameTimeSec)
+    void Bats::update(const Context &, const float t_frameTimeSec)
     {
         // animate bats
         m_elapsedTimeSec += t_frameTimeSec;
@@ -239,7 +239,7 @@ namespace halloween
         return false;
     }
 
-    bool Bats::attack(Context & t_context, const sf::FloatRect & t_attackRect)
+    bool Bats::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
     {
         bool wereAnyKilled{ false };
         for (Bat & bat : m_bats)

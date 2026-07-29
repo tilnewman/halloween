@@ -46,10 +46,10 @@ namespace halloween
         inline bool isChangePending() const final { return m_changePendingOpt.has_value(); }
         inline StateOpt_t getChangePending() const final { return m_changePendingOpt; }
         void setChangePending(const State t_state) final;
-        void changeIfPending(Context & t_context);
+        void changeIfPending(const Context & t_context);
 
       private:
-        static IStateUPtr_t makeState(Context & t_context, const State t_state);
+        static IStateUPtr_t makeState(const Context & t_context, const State t_state);
 
       private:
         IStateUPtr_t m_stateUPtr;

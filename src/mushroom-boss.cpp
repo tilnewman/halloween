@@ -59,7 +59,7 @@ namespace halloween
         m_hitPointsMax = t_settings.boss_hit_points;
     }
 
-    void MushroomBoss::add(Context &, const sf::FloatRect & t_rect)
+    void MushroomBoss::add(const Context &, const sf::FloatRect & t_rect)
     {
         m_region = t_rect;
         m_isThereABossOnThisLevel = true;
@@ -85,7 +85,7 @@ namespace halloween
         m_hitPoints = m_hitPointsMax;
     }
 
-    void MushroomBoss::update(Context & t_context, const float t_frameTimeSec)
+    void MushroomBoss::update(const Context & t_context, const float t_frameTimeSec)
     {
         if (!m_isThereABossOnThisLevel)
         {
@@ -168,7 +168,8 @@ namespace halloween
         m_region.position.x += t_move.x;
     }
 
-    void MushroomBoss::collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect)
+    void MushroomBoss::collideWithAvatar(
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         // this function only detects the player entering the fight region for the first time
         if (!m_isThereABossOnThisLevel || m_hasFightBegun)
@@ -282,7 +283,7 @@ namespace halloween
             rect.findIntersection(bossRects.bottom));
     }
 
-    bool MushroomBoss::attack(Context & context, const sf::FloatRect & attackRect)
+    bool MushroomBoss::attack(const Context & context, const sf::FloatRect & attackRect)
     {
         if (!doesCollide(attackRect))
         {
@@ -317,7 +318,7 @@ namespace halloween
         }
     }
 
-    void MushroomBoss::reactToThrow(Context & t_context)
+    void MushroomBoss::reactToThrow(const Context & t_context)
     {
         if (!m_isThereABossOnThisLevel || (BossState::Death == m_state) || !m_hasFightBegun)
         {

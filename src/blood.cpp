@@ -58,7 +58,7 @@ namespace halloween
     }
 
     void Blood::start(
-        Context & t_context, const sf::Vector2f & t_position, const bool t_willSplashRight)
+        const Context & t_context, const sf::Vector2f & t_position, const bool t_willSplashRight)
     {
         m_isFinished = false;
         m_elapsedTimeSec = 0.0f;

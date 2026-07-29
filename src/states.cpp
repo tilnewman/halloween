@@ -56,7 +56,7 @@ namespace halloween
             m_text, util::scaleRectInPlaceCopy(t_context.layout.wholeRegion(), 0.25f));
     }
 
-    void StateBase::update(Context &, const float t_frameTimeSec)
+    void StateBase::update(const Context &, const float t_frameTimeSec)
     {
         m_elapsedTimeSec += t_frameTimeSec;
     }
@@ -94,7 +94,7 @@ namespace halloween
         // clang-format on
     }
 
-    bool StateBase::handleQuitEvents(Context & t_context, const sf::Event & t_event)
+    bool StateBase::handleQuitEvents(const Context & t_context, const sf::Event & t_event)
     {
         if (t_event.is<sf::Event::Closed>())
         {
@@ -135,7 +135,7 @@ namespace halloween
         return false;
     }
 
-    bool StateBase::handleEvent(Context & t_context, const sf::Event & t_event)
+    bool StateBase::handleEvent(const Context & t_context, const sf::Event & t_event)
     {
         if (willIgnoreEvent(t_context, t_event))
         {
@@ -158,9 +158,9 @@ namespace halloween
 
     //
 
-    void StartState::onEnter(Context & t_context) { changeToNextState(t_context); }
+    void StartState::onEnter(const Context & t_context) { changeToNextState(t_context); }
 
-    void StartState::onExit(Context & t_context) { t_context.audio.play("respawn"); }
+    void StartState::onExit(const Context & t_context) { t_context.audio.play("respawn"); }
 
     //
 
@@ -178,7 +178,7 @@ namespace halloween
         util::centerInside(m_text, textBounds);
     }
 
-    bool TimedMessageState::handleEvent(Context & t_context, const sf::Event & t_event)
+    bool TimedMessageState::handleEvent(const Context & t_context, const sf::Event & t_event)
     {
         if (StateBase::handleEvent(t_context, t_event))
         {
@@ -204,7 +204,7 @@ namespace halloween
         return false;
     }
 
-    void TimedMessageState::update(Context & t_context, const float t_frameTimeSec)
+    void TimedMessageState::update(const Context & t_context, const float t_frameTimeSec)
     {
         StateBase::update(t_context, t_frameTimeSec);
 
@@ -226,7 +226,7 @@ namespace halloween
         , m_text4(util::SfmlDefaults::instance().font())
     {}
 
-    void TitleState::onEnter(Context & t_context)
+    void TitleState::onEnter(const Context & t_context)
     {
         m_text1.setFont(t_context.media.font);
         m_text1.setFillColor(sf::Color::White);
@@ -284,15 +284,15 @@ namespace halloween
         , screen{}
     {}
 
-    void PauseState::onEnter(Context & t_context)
+    void PauseState::onEnter(const Context & t_context)
     {
         t_context.audio.play("pause");
         screen.setup(t_context);
     }
 
-    void PauseState::onExit(Context & t_context) { t_context.audio.play("pause"); }
+    void PauseState::onExit(const Context & t_context) { t_context.audio.play("pause"); }
 
-    void PauseState::update(Context & t_context, const float t_frameTimeSec)
+    void PauseState::update(const Context & t_context, const float t_frameTimeSec)
     {
         m_elapsedTimeSec += t_frameTimeSec;
 
@@ -316,7 +316,7 @@ namespace halloween
         , m_scoreText{ util::SfmlDefaults::instance().font() }
     {}
 
-    void LoseState::onEnter(Context & t_context)
+    void LoseState::onEnter(const Context & t_context)
     {
         t_context.audio.play("game-over");
 
@@ -343,7 +343,7 @@ namespace halloween
         t_target.draw(m_scoreText, t_states);
     }
 
-    void LoseState::onExit(Context & t_context) { t_context.audio.stopAll(); }
+    void LoseState::onExit(const Context & t_context) { t_context.audio.stopAll(); }
 
     //
 
@@ -352,7 +352,7 @@ namespace halloween
         , m_scoreText{ util::SfmlDefaults::instance().font() }
     {}
 
-    void WinState::onEnter(Context & t_context)
+    void WinState::onEnter(const Context & t_context)
     {
         t_context.audio.play("winner");
 
@@ -379,6 +379,6 @@ namespace halloween
         t_target.draw(m_scoreText, t_states);
     }
 
-    void WinState::onExit(Context & t_context) { t_context.audio.stopAll(); }
+    void WinState::onExit(const Context & t_context) { t_context.audio.stopAll(); }
 
 } // namespace halloween

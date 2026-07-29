@@ -38,15 +38,15 @@ namespace halloween
 
         bool willDrawBeforeMap() const final { return true; }
         void setup(const Settings & t_settings) final;
-        void add(Context & t_context, const sf::FloatRect & t_region) final;
+        void add(const Context & t_context, const sf::FloatRect & t_region) final;
         void clear() final;
-        void update(Context & t_context, const float t_frameTimeSec) final;
+        void update(const Context & t_context, const float t_frameTimeSec) final;
 
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const final;
 
         void moveWithMap(const sf::Vector2f & t_move) final;
-        void collideWithAvatar(Context &, const sf::FloatRect &) final {}
+        void collideWithAvatar(const Context &, const sf::FloatRect &) final {}
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const final;
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 

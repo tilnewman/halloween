@@ -22,7 +22,7 @@ namespace halloween
       public:
         Level();
 
-        bool load(Context & t_context);
+        bool load(const Context & t_context);
         bool move(const ScreenRegions & t_layout, const float t_move);
 
         inline const std::vector<sf::FloatRect> & walkCollisions() const
@@ -101,8 +101,8 @@ namespace halloween
         }
 
       private:
-        void reset(Context & t_context);
-        void appendVertLayers(Context & t_context);
+        void reset(const Context & t_context);
+        void appendVertLayers(const Context & t_context);
         void populateVisibleVerts(const ScreenRegions & t_layout);
         void dumpInfo(const std::size_t t_levelNumber) const;
         void verifyLayerIndexCounts() const;

@@ -103,7 +103,7 @@ namespace halloween
         , m_credits{}
     {}
 
-    void StateCredits::onEnter(Context & t_context)
+    void StateCredits::onEnter(const Context & t_context)
     {
         t_context.music.start("credits.ogg", 20.0f);
 
@@ -151,9 +151,9 @@ namespace halloween
         spritesheetCredit.vertPosition(tilesetCredit.bottom() + vertSpacer);
     }
 
-    void StateCredits::onExit(Context & t_context) { t_context.music.stop("credits.ogg"); }
+    void StateCredits::onExit(const Context & t_context) { t_context.music.stop("credits.ogg"); }
 
-    void StateCredits::update(Context & t_context, const float t_frameTimeSec)
+    void StateCredits::update(const Context & t_context, const float t_frameTimeSec)
     {
         for (Credit & credit : m_credits)
         {
@@ -176,7 +176,7 @@ namespace halloween
         }
     }
 
-    bool StateCredits::handleEvent(Context & t_context, const sf::Event & t_event)
+    bool StateCredits::handleEvent(const Context & t_context, const sf::Event & t_event)
     {
         // any keypress or mouse click will exit
         if (t_event.is<sf::Event::MouseButtonPressed>() || t_event.is<sf::Event::KeyPressed>())

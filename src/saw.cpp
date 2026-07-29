@@ -34,7 +34,7 @@ namespace halloween
         util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "saw.png"), true);
     }
 
-    void Saws::add(Context &, const sf::FloatRect & t_region)
+    void Saws::add(const Context &, const sf::FloatRect & t_region)
     {
         Saw & saw{ m_saws.emplace_back(m_texture) };
         saw.sprite.setScale(m_scale);
@@ -44,7 +44,7 @@ namespace halloween
 
     void Saws::clear() { m_saws.clear(); }
 
-    void Saws::update(Context &, const float t_frameTimeSec)
+    void Saws::update(const Context &, const float t_frameTimeSec)
     {
         for (Saw & saw : m_saws)
         {

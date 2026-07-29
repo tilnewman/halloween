@@ -67,13 +67,13 @@ namespace halloween
         m_ghosts.clear();
     }
 
-    void Ghosts::add(Context & t_context, const sf::FloatRect & t_region)
+    void Ghosts::add(const Context & t_context, const sf::FloatRect & t_region)
     {
         m_spawnPoints.emplace_back(
             util::center(t_region), t_context.random.fromTo(m_spawnMinTimeSec, m_spawnMaxTimeSec));
     }
 
-    void Ghosts::update(Context & t_context, const float t_frameTimeSec)
+    void Ghosts::update(const Context & t_context, const float t_frameTimeSec)
     {
         for (GhostSpawnPoint & spawnPoint : m_spawnPoints)
         {

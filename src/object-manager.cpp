@@ -36,7 +36,7 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::updateAll(Context & t_context, const float t_frameTimeSec)
+    void ObjectManagerList::updateAll(const Context & t_context, const float t_frameTimeSec)
     {
         for (auto & manager : m_managers)
         {
@@ -77,7 +77,7 @@ namespace halloween
     }
 
     void ObjectManagerList::collideAllWithAvatar(
-        Context & t_context, const sf::FloatRect & t_avatarRect)
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         for (auto & manager : m_managers)
         {

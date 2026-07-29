@@ -19,9 +19,9 @@ namespace halloween
       public:
         InfoRegion();
 
-        void setup(Context & t_context);
-        void reset(Context & t_context);
-        void update(Context & t_context, const float t_frameTimeSec);
+        void setup(const Context & t_context);
+        void reset(const Context & t_context);
+        void update(const Context & t_context, const float t_frameTimeSec);
         void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
 
         constexpr int score() const noexcept { return m_score; }

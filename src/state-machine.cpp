@@ -29,7 +29,7 @@ namespace halloween
 
     void StateMachine::setChangePending(const State t_state) { m_changePendingOpt = t_state; }
 
-    void StateMachine::changeIfPending(Context & t_context)
+    void StateMachine::changeIfPending(const Context & t_context)
     {
         if (!m_changePendingOpt)
         {
@@ -44,7 +44,7 @@ namespace halloween
         m_stateUPtr->onEnter(t_context);
     }
 
-    IStateUPtr_t StateMachine::makeState(Context & t_context, const State t_state)
+    IStateUPtr_t StateMachine::makeState(const Context & t_context, const State t_state)
     {
         // clang-format off
         switch (t_state)

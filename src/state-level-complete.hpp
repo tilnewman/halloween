@@ -52,10 +52,10 @@ namespace halloween
         explicit LevelCompleteState(const Context & context);
         ~LevelCompleteState() override = default;
 
-        void onEnter(Context & t_context) final;
-        void onExit(Context & t_context) final;
-        bool handleEvent(Context & t_context, const sf::Event & t_event) final;
-        void update(Context & t_context, const float t_frameTimeSec) final;
+        void onEnter(const Context & t_context) final;
+        void onExit(const Context & t_context) final;
+        bool handleEvent(const Context & t_context, const sf::Event & t_event) final;
+        void update(const Context & t_context, const float t_frameTimeSec) final;
 
         void draw(
             const Context & t_context,
@@ -63,7 +63,7 @@ namespace halloween
             sf::RenderStates & t_states) const final;
 
       private:
-        bool popAndDisplayNextBonus(Context & t_context);
+        bool popAndDisplayNextBonus(const Context & t_context);
         void updateScoreText(const Context & t_context);
 
       private:

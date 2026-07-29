@@ -42,7 +42,7 @@ namespace halloween
         m_waterCollisions.reserve(100);
     }
 
-    void Level::reset(Context & t_context)
+    void Level::reset(const Context & t_context)
     {
         m_tiles.reset();
         m_walkCollisions.clear();
@@ -54,10 +54,10 @@ namespace halloween
         m_farthestHorizTraveled = 0.0f;
     }
 
-    bool Level::load(Context & t_context)
+    bool Level::load(const Context & t_context)
     {
         reset(t_context);
-        
+
         if (m_loader.load(t_context))
         {
             verifyLayerIndexCounts();
@@ -90,7 +90,6 @@ namespace halloween
                 ((layer.verts.size() % util::verts_per_quad) == 0),
                 "Error:  TileLayer " << layer.image << " verts.size()=" << layer.verts.size()
                                      << " which is not a multiple of " << util::verts_per_quad);
-
         }
     }
 
@@ -138,7 +137,7 @@ namespace halloween
         return true;
     }
 
-    void Level::appendVertLayers(Context & t_context)
+    void Level::appendVertLayers(const Context & t_context)
     {
         for (TileLayer & layer : m_tiles.layers)
         {

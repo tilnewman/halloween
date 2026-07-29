@@ -57,7 +57,7 @@ namespace halloween
         dart.sprite.setPosition(t_position);
     }
 
-    void Missiles::update(Context & t_context, const float t_frameTimeSec)
+    void Missiles::update(const Context & t_context, const float t_frameTimeSec)
     {
         bool wereAnyKilled{ false };
         for (Missile & missile : m_missiles)

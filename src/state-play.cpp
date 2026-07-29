@@ -39,7 +39,7 @@ namespace halloween
         : StateBase{ t_context, State::Play, State::Play }
     {}
 
-    void PlayState::onEnter(Context & t_context)
+    void PlayState::onEnter(const Context & t_context)
     {
         if (m_willLoadNewLevel)
         {
@@ -63,14 +63,14 @@ namespace halloween
         t_context.music.start("crickets.ogg");
     }
 
-    void PlayState::onExit(Context & t_context)
+    void PlayState::onExit(const Context & t_context)
     {
         t_context.audio.stopAll();
         t_context.owl_calls.stop();
         t_context.music.stop("crickets.ogg");
     }
 
-    void PlayState::update(Context & t_context, const float t_frameTimeSec)
+    void PlayState::update(const Context & t_context, const float t_frameTimeSec)
     {
         StateBase::update(t_context, t_frameTimeSec);
 
@@ -81,7 +81,7 @@ namespace halloween
         t_context.avatar.update(t_context, t_frameTimeSec);
     }
 
-    bool PlayState::handleEvent(Context & t_context, const sf::Event & t_event)
+    bool PlayState::handleEvent(const Context & t_context, const sf::Event & t_event)
     {
         if (StateBase::handleEvent(t_context, t_event))
         {

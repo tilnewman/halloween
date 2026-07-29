@@ -71,14 +71,14 @@ namespace halloween
         util::TextureLoader::load(m_texture, (t_settings.media_path / "image" / "coin.png"), true);
     }
 
-    void Coins::add(Context &, const sf::FloatRect & t_region)
+    void Coins::add(const Context &, const sf::FloatRect & t_region)
     {
         m_coins.emplace_back(m_texture, util::center(t_region));
     }
 
     void Coins::clear() { m_coins.clear(); }
 
-    void Coins::update(Context &, const float t_frameTimeSec)
+    void Coins::update(const Context &, const float t_frameTimeSec)
     {
         updateTextures(t_frameTimeSec);
         updateAnimations(t_frameTimeSec);
@@ -173,7 +173,7 @@ namespace halloween
         }
     }
 
-    void Coins::collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect)
+    void Coins::collideWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         bool wereAnyCollected{ false };
         for (Coin & coin : m_coins)

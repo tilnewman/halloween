@@ -33,7 +33,7 @@ namespace halloween
         , m_bgVerts{}
     {}
 
-    void InfoRegion::update(Context & t_context, const float t_frameTimeSec)
+    void InfoRegion::update(const Context & t_context, const float t_frameTimeSec)
     {
         if (m_score == m_visibleScore)
         {
@@ -60,7 +60,7 @@ namespace halloween
         }
     }
 
-    void InfoRegion::reset(Context & t_context)
+    void InfoRegion::reset(const Context & t_context)
     {
         m_elapsedTimeSec = 0.0f;
         m_score = 0;
@@ -71,7 +71,7 @@ namespace halloween
         updateText();
     }
 
-    void InfoRegion::setup(Context & t_context)
+    void InfoRegion::setup(const Context & t_context)
     {
         m_region = t_context.layout.infoRegion();
 

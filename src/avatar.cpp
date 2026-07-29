@@ -210,7 +210,7 @@ namespace halloween
         m_sprite.setPosition(position);
     }
 
-    void Avatar::update(Context & t_context, const float t_frameTimeSec)
+    void Avatar::update(const Context & t_context, const float t_frameTimeSec)
     {
         if (handleDeath(t_context, t_frameTimeSec))
         {
@@ -275,7 +275,7 @@ namespace halloween
         handleIdle(t_context, t_frameTimeSec);
     }
 
-    void Avatar::moveMap(Context & t_context)
+    void Avatar::moveMap(const Context & t_context)
     {
         const float posXAfter{ util::center(m_sprite.getGlobalBounds()).x };
         const float screenMiddle{ t_context.layout.mapRegion().size.x * 0.5f };
@@ -297,7 +297,7 @@ namespace halloween
         t_context.managers.moveAllWithMap(move);
     }
 
-    bool Avatar::handleDeath(Context & t_context, const float t_frameTimeSec)
+    bool Avatar::handleDeath(const Context & t_context, const float t_frameTimeSec)
     {
         if (Action::Dead != m_action)
         {
@@ -345,7 +345,7 @@ namespace halloween
         return true;
     }
 
-    bool Avatar::handleAttacking(Context & t_context, const float t_frameTimeSec)
+    bool Avatar::handleAttacking(const Context & t_context, const float t_frameTimeSec)
     {
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::F) && (Action::Attack != m_action) &&
@@ -387,7 +387,7 @@ namespace halloween
         return false;
     }
 
-    bool Avatar::handleThrowing(Context & t_context, const float t_frameTimeSec)
+    bool Avatar::handleThrowing(const Context & t_context, const float t_frameTimeSec)
     {
         m_timeSinceLastThrowSec += t_frameTimeSec;
 
@@ -447,7 +447,7 @@ namespace halloween
         return false;
     }
 
-    bool Avatar::handleGliding(Context & t_context, const float t_frameTimeSec)
+    bool Avatar::handleGliding(const Context & t_context, const float t_frameTimeSec)
     {
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) && (Action::Jump == m_action) &&
@@ -489,7 +489,7 @@ namespace halloween
         return false;
     }
 
-    bool Avatar::handleIdle(Context &, const float t_frameTimeSec)
+    bool Avatar::handleIdle(const Context &, const float t_frameTimeSec)
     {
         if (Action::Idle == m_action)
         {
@@ -506,14 +506,14 @@ namespace halloween
         }
     }
 
-    void Avatar::sideToSideMotion(Context & t_context, const float t_frameTimeSec)
+    void Avatar::sideToSideMotion(const Context & t_context, const float t_frameTimeSec)
     {
         if (Action::Jump == m_action)
         {
             // Allow moving side-to-side at a reduced rate while in the air.
             // It sounds wrong but feels so right.
             // What the hell, mario did it.
-            const float jumpMoveDivisor{ 3.0f };  // TODO move this to t_settings
+            const float jumpMoveDivisor{ 3.0f }; // TODO move this to t_settings
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
             {
@@ -598,7 +598,7 @@ namespace halloween
         }
     }
 
-    void Avatar::jumping(Context & t_context, const float t_frameTimeSec)
+    void Avatar::jumping(const Context & t_context, const float t_frameTimeSec)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) && m_hasLanded)
         {
@@ -611,7 +611,7 @@ namespace halloween
         }
     }
 
-    void Avatar::collisions(Context & t_context)
+    void Avatar::collisions(const Context & t_context)
     {
         const float tolerance{ 25.0f }; // this magic number brought to you by zTn 2021-8-2
 
@@ -702,7 +702,7 @@ namespace halloween
         }
     }
 
-    void Avatar::killCollisions(Context & t_context)
+    void Avatar::killCollisions(const Context & t_context)
     {
         const sf::FloatRect avatarRect{ collisionRect() };
 
@@ -716,7 +716,7 @@ namespace halloween
         }
     }
 
-    void Avatar::exitCollisions(Context & t_context) const
+    void Avatar::exitCollisions(const Context & t_context) const
     {
         if (collisionRect().findIntersection(t_context.level.exitRect()))
         {
@@ -739,7 +739,7 @@ namespace halloween
         }
     }
 
-    void Avatar::handleAttackingEnemies(Context & t_context)
+    void Avatar::handleAttackingEnemies(const Context & t_context)
     {
         if (Action::Attack != m_action)
         {
@@ -758,7 +758,7 @@ namespace halloween
         }
     }
 
-    void Avatar::acidCollisions(Context & t_context)
+    void Avatar::acidCollisions(const Context & t_context)
     {
         // this check prevents playing the sfx repeatedly while the player falls
         if (m_willDie)
@@ -779,7 +779,7 @@ namespace halloween
         }
     }
 
-    void Avatar::waterCollisions(Context & t_context)
+    void Avatar::waterCollisions(const Context & t_context)
     {
         // this check prevents playing the sfx repeatedly while the player falls
         if (m_willDie)
@@ -801,7 +801,7 @@ namespace halloween
         }
     }
 
-    void Avatar::killIfOutOfBounds(Context & t_context)
+    void Avatar::killIfOutOfBounds(const Context & t_context)
     {
         if (!t_context.layout.mapRegion().findIntersection(collisionRect()))
         {
@@ -809,7 +809,7 @@ namespace halloween
         }
     }
 
-    void Avatar::triggerDeath(Context & t_context)
+    void Avatar::triggerDeath(const Context & t_context)
     {
         if (Action::Dead == m_action)
         {
@@ -828,7 +828,7 @@ namespace halloween
         t_context.stats.coin_collected = 0;
     }
 
-    void Avatar::handleBossCollisions(Context & t_context)
+    void Avatar::handleBossCollisions(const Context & t_context)
     {
         if (!t_context.boss.doesCollide(collisionRect()))
         {
@@ -860,6 +860,6 @@ namespace halloween
         }
     }
 
-    void Avatar::handleHitByBoss(Context & t_context) { triggerDeath(t_context); }
+    void Avatar::handleHitByBoss(const Context & t_context) { triggerDeath(t_context); }
 
 } // namespace halloween

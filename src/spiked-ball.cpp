@@ -41,7 +41,7 @@ namespace halloween
             m_texture, (settings.media_path / "image" / "spiked-ball.png"), true);
     }
 
-    void SpikedBalls::add(Context &, const sf::FloatRect & t_region)
+    void SpikedBalls::add(const Context &, const sf::FloatRect & t_region)
     {
         SpikedBall & ball{ m_balls.emplace_back(m_texture) };
         ball.sprite.setScale(m_scale);
@@ -63,7 +63,7 @@ namespace halloween
 
     void SpikedBalls::clear() { m_balls.clear(); }
 
-    void SpikedBalls::update(Context &, const float t_frameTimeSec)
+    void SpikedBalls::update(const Context &, const float t_frameTimeSec)
     {
         for (SpikedBall & ball : m_balls)
         {
