@@ -96,7 +96,7 @@ namespace halloween
         {}
 
         const Settings & settings;
-        sf::Window & window;
+        const sf::Window & window;
         util::Random & random;
         util::SoundPlayer & audio;
         util::MusicPlayer & music;
