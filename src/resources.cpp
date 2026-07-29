@@ -53,22 +53,18 @@ namespace halloween
         util::TextureLoader::load(ground_texture.texture, (imagePath + "tile-ground.png"));
         ground_texture.which = TileImage::Ground;
         ground_texture.size = sf::Vector2i(ground_texture.texture.getSize());
-        ground_texture.gid = 1;
 
         util::TextureLoader::load(object_texture1.texture, (imagePath + "tile-object-1.png"));
         object_texture1.which = TileImage::Object1;
         object_texture1.size = sf::Vector2i(object_texture1.texture.getSize());
-        object_texture1.gid = 513;
 
         util::TextureLoader::load(object_texture2.texture, (imagePath + "tile-object-2.png"));
         object_texture2.which = TileImage::Object2;
         object_texture2.size = sf::Vector2i(object_texture2.texture.getSize());
-        object_texture2.gid = 257;
 
         util::TextureLoader::load(object_texture3.texture, (imagePath + "tile-object-3.png"));
         object_texture3.which = TileImage::Object3;
         object_texture3.size = sf::Vector2i(object_texture3.texture.getSize());
-        object_texture3.gid = 769;
     }
 
     const sf::Text Resources::makeText(
