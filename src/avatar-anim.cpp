@@ -15,35 +15,35 @@ namespace halloween
 {
 
     AvatarAnim::AvatarAnim()
-        : m_willLoop(false)
-        , m_isFinished(false)
-        , m_elapsedTimeSec(0.0f)
-        , m_timePerFrameSec(0.0f)
-        , m_index(0)
-        , m_frameCount(0)
-        , m_textures()
+        : m_willLoop{ false }
+        , m_isFinished{ false }
+        , m_elapsedTimeSec{ 0.0f }
+        , m_timePerFrameSec{ 0.0f }
+        , m_index{ 0 }
+        , m_frameCount{ 0 }
+        , m_textures{}
     {}
 
     void AvatarAnim::setup(
-        const std::filesystem::path & mediaPath,
-        const std::string & name,
-        const std::size_t frameCount,
-        const float timePerFrameSec,
-        const bool willLoop)
+        const std::filesystem::path & t_mediaPath,
+        const std::string & t_name,
+        const std::size_t t_frameCount,
+        const float t_timePerFrameSec,
+        const bool t_willLoop)
     {
-        m_timePerFrameSec = timePerFrameSec;
-        m_willLoop = willLoop;
+        m_timePerFrameSec = t_timePerFrameSec;
+        m_willLoop = t_willLoop;
 
-        for (std::size_t i{ 0 }; i < frameCount; ++i)
+        for (std::size_t i{ 0 }; i < t_frameCount; ++i)
         {
-            const std::string filename = (name + "-" + std::to_string(i).append(".png"));
-            const std::string filePath = (mediaPath / filename).string();
+            const std::string filename = (t_name + "-" + std::to_string(i).append(".png"));
+            const std::string filePath = (t_mediaPath / filename).string();
 
             sf::Texture & texture = m_textures.emplace_back();
             util::TextureLoader::load(texture, filePath, true);
         }
 
-        m_frameCount = frameCount;
+        m_frameCount = t_frameCount;
     }
 
     void AvatarAnim::restart()
@@ -53,9 +53,9 @@ namespace halloween
         m_isFinished = false;
     }
 
-    bool AvatarAnim::update(const float frameTimeSec)
+    bool AvatarAnim::update(const float t_frameTimeSec)
     {
-        m_elapsedTimeSec += frameTimeSec;
+        m_elapsedTimeSec += t_frameTimeSec;
         if (m_elapsedTimeSec < m_timePerFrameSec)
         {
             return false;

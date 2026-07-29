@@ -18,15 +18,15 @@ namespace halloween
         AvatarAnim();
 
         void setup(
-            const std::filesystem::path & mediaPath,
-            const std::string & name,
-            const std::size_t frameCount,
-            const float timePerFrameSec,
-            const bool willLoop);
+            const std::filesystem::path & t_mediaPath,
+            const std::string & t_name,
+            const std::size_t t_frameCount,
+            const float t_timePerFrameSec,
+            const bool t_willLoop);
 
         void restart();
         constexpr bool isFinished() const noexcept { return m_isFinished; }
-        bool update(const float frameTimeSec); // returns true if the texture changed
+        bool update(const float t_frameTimeSec); // returns true if the texture changed
         inline const sf::Texture & texture() const noexcept { return m_textures.at(m_index); }
         constexpr std::size_t index() const noexcept { return m_index; }
 
