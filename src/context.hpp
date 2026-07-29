@@ -44,60 +44,60 @@ namespace halloween
     struct Context
     {
         Context(
-            const Settings & set,
-            sf::Window & win,
-            util::Random & ran,
-            util::SoundPlayer & aud,
-            util::MusicPlayer & mus,
-            Bats & bat,
-            OwlCalls & owl,
-            LevelFileLoader & loa,
-            Resources & res,
-            ScreenRegions & scr,
-            Avatar & ava,
-            PauseScreen & pau,
-            IStatesPending & sta,
-            Level & lev,
-            Missiles & mis,
-            Coins & con,
-            Darts & dar,
-            SpikedBalls & spi,
-            FireSpouts & fir,
-            Saws & saw,
-            Slimes & sli,
-            Ghosts & gho,
-            InfoRegion & inf,
-            ObjectManagerList & man,
-            LevelStats & ls,
-            MushroomBoss & mb)
-            : settings(set)
-            , window(win)
-            , random(ran)
-            , audio(aud)
-            , music(mus)
-            , bats(bat)
-            , owl_calls(owl)
-            , loader(loa)
-            , media(res)
-            , layout(scr)
-            , avatar(ava)
-            , pause_screen(pau)
-            , state(sta)
-            , level(lev)
-            , missiles(mis)
-            , coins(con)
-            , darts(dar)
-            , balls(spi)
-            , spouts(fir)
-            , saws(saw)
-            , slimes(sli)
-            , ghosts(gho)
-            , info_region(inf)
-            , managers(man)
-            , stats(ls)
-            , boss(mb)
-            , will_quit(false)
-            , level_number(1)
+            const Settings & t_settings,
+            sf::Window & t_window,
+            util::Random & t_random,
+            util::SoundPlayer & t_soundPlayer,
+            util::MusicPlayer & t_musicPlayer,
+            Bats & t_bats,
+            OwlCalls & t_owlCalls,
+            LevelFileLoader & t_levelFileLoader,
+            Resources & t_resources,
+            ScreenRegions & t_screenReigons,
+            Avatar & t_avatar,
+            PauseScreen & t_pauseScreen,
+            IStatesPending & t_statesPending,
+            Level & t_level,
+            Missiles & t_missles,
+            Coins & t_coins,
+            Darts & t_darts,
+            SpikedBalls & t_spikedBalls,
+            FireSpouts & t_fireSpouts,
+            Saws & t_saw,
+            Slimes & t_slimes,
+            Ghosts & t_ghosts,
+            InfoRegion & t_infoRegion,
+            ObjectManagerList & t_objectManagerList,
+            LevelStats & t_levelStats,
+            MushroomBoss & t_mushrooomBoos)
+            : settings{ t_settings }
+            , window{ t_window }
+            , random{ t_random }
+            , audio{ t_soundPlayer }
+            , music{ t_musicPlayer }
+            , bats{ t_bats }
+            , owl_calls{ t_owlCalls }
+            , loader{ t_levelFileLoader }
+            , media{ t_resources }
+            , layout{ t_screenReigons }
+            , avatar{ t_avatar }
+            , pause_screen{ t_pauseScreen }
+            , state{ t_statesPending }
+            , level{ t_level }
+            , missiles{ t_missles }
+            , coins{ t_coins }
+            , darts{ t_darts }
+            , balls{ t_spikedBalls }
+            , spouts{ t_fireSpouts }
+            , saws{ t_saw }
+            , slimes{ t_slimes }
+            , ghosts{ t_ghosts }
+            , info_region{ t_infoRegion }
+            , managers{ t_objectManagerList }
+            , stats{ t_levelStats }
+            , boss{ t_mushrooomBoos }
+            , will_quit{ false }
+            , level_number{ 1 }
         {}
 
         const Settings & settings;
