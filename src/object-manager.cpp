@@ -12,13 +12,13 @@ namespace halloween
 {
 
     ObjectManagerList::ObjectManagerList()
-        : m_managers()
+        : m_managers{}
     {
         // probably no more than a dozen in one map
         m_managers.reserve(100);
     }
 
-    void ObjectManagerList::add(IObjectManager & manager) { m_managers.push_back(manager); }
+    void ObjectManagerList::add(IObjectManager & t_manager) { m_managers.push_back(t_manager); }
 
     void ObjectManagerList::clearAll()
     {
@@ -28,69 +28,69 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::setupAll(const Settings & settings)
+    void ObjectManagerList::setupAll(const Settings & t_settings)
     {
         for (auto & manager : m_managers)
         {
-            manager.get().setup(settings);
+            manager.get().setup(t_settings);
         }
     }
 
-    void ObjectManagerList::updateAll(Context & context, const float frameTimeSec)
+    void ObjectManagerList::updateAll(Context & t_context, const float t_frameTimeSec)
     {
         for (auto & manager : m_managers)
         {
-            manager.get().update(context, frameTimeSec);
+            manager.get().update(t_context, t_frameTimeSec);
         }
     }
 
     void ObjectManagerList::drawAllBeforeMap(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (auto & manager : m_managers)
         {
             if (manager.get().willDrawBeforeMap())
             {
-                manager.get().draw(context, target, states);
+                manager.get().draw(t_context, t_target, t_states);
             }
         }
     }
 
     void ObjectManagerList::drawAllAfterMap(
-        const Context & context, sf::RenderTarget & target, sf::RenderStates states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (auto & manager : m_managers)
         {
             if (!manager.get().willDrawBeforeMap())
             {
-                manager.get().draw(context, target, states);
+                manager.get().draw(t_context, t_target, t_states);
             }
         }
     }
 
-    void ObjectManagerList::moveAllWithMap(const sf::Vector2f & move)
+    void ObjectManagerList::moveAllWithMap(const sf::Vector2f & t_move)
     {
         for (auto & manager : m_managers)
         {
-            manager.get().moveWithMap(move);
+            manager.get().moveWithMap(t_move);
         }
     }
 
-    void
-        ObjectManagerList::collideAllWithAvatar(Context & context, const sf::FloatRect & avatarRect)
+    void ObjectManagerList::collideAllWithAvatar(
+        Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         for (auto & manager : m_managers)
         {
-            manager.get().collideWithAvatar(context, avatarRect);
+            manager.get().collideWithAvatar(t_context, t_avatarRect);
         }
     }
 
-    bool ObjectManagerList::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const
+    bool ObjectManagerList::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
     {
-        bool didAnyCollideAndCauseDeath = false;
+        bool didAnyCollideAndCauseDeath{ false };
         for (auto & manager : m_managers)
         {
-            if (manager.get().doesAvatarCollideWithAnyAndDie(avatarRect))
+            if (manager.get().doesAvatarCollideWithAnyAndDie(t_avatarRect))
             {
                 didAnyCollideAndCauseDeath = true;
             }
@@ -99,11 +99,11 @@ namespace halloween
         return didAnyCollideAndCauseDeath;
     }
 
-    void ObjectManagerList::appendAllCollisions(std::vector<sf::FloatRect> & rects) const
+    void ObjectManagerList::appendAllCollisions(std::vector<sf::FloatRect> & t_rects) const
     {
         for (auto & manager : m_managers)
         {
-            manager.get().appendCollisions(rects);
+            manager.get().appendCollisions(t_rects);
         }
     }
 

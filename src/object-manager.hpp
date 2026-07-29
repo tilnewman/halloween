@@ -25,14 +25,18 @@ namespace halloween
 
         virtual bool willDrawBeforeMap() const = 0;
         virtual void clear() = 0;
-        virtual void setup(const Settings & settings) = 0;
-        virtual void add(Context & context, const sf::FloatRect & region) = 0;
-        virtual void update(Context & context, const float frameTimeSec) = 0;
-        virtual void draw(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const = 0;
-        virtual void moveWithMap(const sf::Vector2f & move) = 0;
-        virtual void collideWithAvatar(Context & context, const sf::FloatRect & avatarRect) = 0;
-        virtual bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const = 0;
-        virtual void appendCollisions(std::vector<sf::FloatRect> & rects) const = 0;
+        virtual void setup(const Settings & t_settings) = 0;
+        virtual void add(Context & t_context, const sf::FloatRect & t_region) = 0;
+        virtual void update(Context & t_context, const float t_frameTimeSec) = 0;
+        virtual void moveWithMap(const sf::Vector2f & t_move) = 0;
+        virtual void collideWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect) = 0;
+        virtual bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const = 0;
+        virtual void appendCollisions(std::vector<sf::FloatRect> & t_rects) const = 0;
+
+        virtual void draw(
+            const Context & t_context,
+            sf::RenderTarget & t_target,
+            sf::RenderStates t_states) const = 0;
     };
 
     //
@@ -42,17 +46,26 @@ namespace halloween
       public:
         ObjectManagerList();
 
-        void add(IObjectManager & manager);
+        void add(IObjectManager & t_manager);
 
         void clearAll();
-        void setupAll(const Settings & settings);
-        void updateAll(Context & context, const float frameTimeSec);
-        void drawAllBeforeMap(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const;
-        void drawAllAfterMap(const Context & c, sf::RenderTarget & t, sf::RenderStates s) const;
-        void moveAllWithMap(const sf::Vector2f & move);
-        void collideAllWithAvatar(Context & context, const sf::FloatRect & avatarRect);
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & avatarRect) const;
-        void appendAllCollisions(std::vector<sf::FloatRect> & rects) const;
+        void setupAll(const Settings & t_settings);
+        void updateAll(Context & t_context, const float t_frameTimeSec);
+
+        void drawAllBeforeMap(
+            const Context & t_context,
+            sf::RenderTarget & t_target,
+            sf::RenderStates t_states) const;
+
+        void drawAllAfterMap(
+            const Context & t_context,
+            sf::RenderTarget & t_target,
+            sf::RenderStates t_states) const;
+
+        void moveAllWithMap(const sf::Vector2f & t_move);
+        void collideAllWithAvatar(Context & t_context, const sf::FloatRect & t_avatarRect);
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
+        void appendAllCollisions(std::vector<sf::FloatRect> & t_rects) const;
 
       private:
         std::vector<std::reference_wrapper<IObjectManager>> m_managers;
