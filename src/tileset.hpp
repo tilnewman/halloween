@@ -15,28 +15,28 @@
 namespace halloween
 {
 
-    enum class TileImage
+    enum class TileImage : unsigned char
     {
-        Ground = 0,
+        Ground,
         Object1,
         Object2,
         Object3
     };
 
-    inline std::ostream & operator<<(std::ostream & os, const TileImage image)
+    inline std::ostream & operator<<(std::ostream & t_os, const TileImage t_image)
     {
         // clang-format off
-        switch (image)
+        switch (t_image)
         {
-            case TileImage::Ground:  { os << "ground";   break; }
-            case TileImage::Object1: { os << "object-1"; break; }
-            case TileImage::Object2: { os << "object-2"; break; }
-            case TileImage::Object3: { os << "object-3"; break; }
-            default:        { os << "Unknown_TileImage"; break; }
+            case TileImage::Ground:  { t_os << "ground";   break; }
+            case TileImage::Object1: { t_os << "object-1"; break; }
+            case TileImage::Object2: { t_os << "object-2"; break; }
+            case TileImage::Object3: { t_os << "object-3"; break; }
+            default:        { t_os << "Unknown_TileImage"; break; }
         }
         // clang-format on
 
-        return os;
+        return t_os;
     }
 
     //
@@ -44,10 +44,10 @@ namespace halloween
     struct TileLayer
     {
         TileLayer()
-            : image(TileImage::Ground) // any works here
-            , indexes()
-            , verts()
-            , visibleVerts()
+            : image{ TileImage::Ground } // any works here
+            , indexes{}
+            , verts{}
+            , visibleVerts{}
         {
             // TODO these values need work
             indexes.reserve(10'000);
@@ -66,9 +66,9 @@ namespace halloween
     struct TileSet
     {
         TileSet()
-            : count()
-            , size()
-            , layers()
+            : count{}
+            , size{}
+            , layers{}
         {
             layers.reserve(32);
         }
