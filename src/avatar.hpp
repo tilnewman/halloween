@@ -63,6 +63,14 @@ namespace halloween
         void handleBossCollisions(const Context & t_context);
         void bounceAwayFromBoss(const Context & t_context);
 
+        void collide(
+            const Context & t_context,
+            const sf::FloatRect & t_collisionRect,
+            const sf::FloatRect & t_intersectionRect,
+            const sf::FloatRect & t_avatarRect,
+            const sf::FloatRect & t_footRect,
+            bool & t_hasHitSomething);
+
       private:
         Blood m_blood;
         AvatarAnim m_runAnim;
@@ -80,6 +88,7 @@ namespace halloween
         float m_deadDelaySec;
         bool m_willDie;
         float m_timeSinceLastThrowSec;
+        std::vector<sf::FloatRect> m_collisionRectCache;
     };
 
 } // namespace halloween

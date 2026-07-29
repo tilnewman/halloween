@@ -53,7 +53,10 @@ namespace halloween
         , m_deadDelaySec{ 0.0f }
         , m_willDie{ false }
         , m_timeSinceLastThrowSec{ 0.0f }
-    {}
+        , m_collisionRectCache{}
+    {
+        m_collisionRectCache.reserve(1'000);
+    }
 
     void Avatar::setup(const Settings & t_settings)
     {
@@ -614,93 +617,113 @@ namespace halloween
 
     void Avatar::collisions(const Context & t_context)
     {
-        const float tolerance{ 25.0f }; // this magic number brought to you by zTn 2021-8-2
-
         const sf::FloatRect avatarRect{ collisionRect() };
-        const sf::Vector2f avatarCenter{ util::center(avatarRect) };
 
         const float footRectHeightAdj{ avatarRect.size.y * 0.8f };
         sf::FloatRect footRect{ avatarRect };
         footRect.position.y += footRectHeightAdj;
         footRect.size.y -= footRectHeightAdj;
 
-        // TODO overahul this to
-        std::vector<sf::FloatRect> rects = t_context.level.walkCollisions();
-        t_context.managers.appendAllCollisions(rects);
-
         bool hasHitSomething{ false };
-        sf::FloatRect intersection;
-        for (const sf::FloatRect & collRect : rects)
+
+        for (const sf::FloatRect & collRect : t_context.level.walkCollisions())
         {
             const auto intersectionOpt{ avatarRect.findIntersection(collRect) };
             if (intersectionOpt)
             {
-                intersection = intersectionOpt.value();
+                collide(
+                    t_context,
+                    collRect,
+                    intersectionOpt.value(),
+                    avatarRect,
+                    footRect,
+                    hasHitSomething);
             }
-            else
+        }
+
+        m_collisionRectCache.clear();
+        t_context.managers.appendAllCollisions(m_collisionRectCache);
+        for (const sf::FloatRect & collRect : m_collisionRectCache)
+        {
+            const auto intersectionOpt{ avatarRect.findIntersection(collRect) };
+            if (intersectionOpt)
             {
-                continue;
+                collide(
+                    t_context,
+                    collRect,
+                    intersectionOpt.value(),
+                    avatarRect,
+                    footRect,
+                    hasHitSomething);
             }
-
-            hasHitSomething = true;
-            const sf::Vector2f collCenter{ util::center(collRect) };
-
-            // TODO overhaul how this works to match what we did in Bramblefore
-
-            // TODO make sure the falling from up high through the floor bug is fixed
-
-            if ((m_velocity.y < 0.0f) && (collCenter.y < avatarCenter.y))
-            {
-                // rising and hit something above
-
-                m_velocity.y = 0.0f;
-                m_sprite.move({ 0.0f, intersection.size.y });
-                continue;
-            }
-
-            const bool doesIntersectFeet = collRect.findIntersection(footRect).has_value();
-
-            if ((m_velocity.y > 0.0f) && (intersection.size.y < tolerance) && doesIntersectFeet)
-            {
-                // falling and hit something below
-
-                if (!m_hasLanded)
-                {
-                    t_context.audio.play("land");
-                    m_action = Action::Idle;
-                }
-
-                m_hasLanded = true;
-                m_velocity.y = 0.0f;
-                m_sprite.move({ 0.0f, -intersection.size.y });
-                continue;
-            }
-
-            // at this point we hit something from the side
-
-            if (intersection.size.x < tolerance)
-            {
-                if (m_velocity.x > 0.0f)
-                {
-                    m_velocity.x = 0.0f;
-                    m_sprite.move({ -intersection.size.x, 0.0f });
-                    continue;
-                }
-                else if (m_velocity.x < 0.0f)
-                {
-                    m_velocity.x = 0.0f;
-                    m_sprite.move({ intersection.size.x, 0.0f });
-                    continue;
-                }
-            }
-
-            hasHitSomething = false;
         }
 
         if (!hasHitSomething)
         {
             m_hasLanded = false;
         }
+    }
+
+    void Avatar::collide(
+        const Context & t_context,
+        const sf::FloatRect & t_collisionRect,
+        const sf::FloatRect & t_intersectionRect,
+        const sf::FloatRect & t_avatarRect,
+        const sf::FloatRect & t_footRect,
+        bool & t_hasHitSomething)
+    {
+        const float tolerance{ 25.0f }; // this magic number brought to you by zTn 2021-8-2
+        const sf::Vector2f avatarCenter{ util::center(t_avatarRect) };
+        const sf::Vector2f collCenter{ util::center(t_collisionRect) };
+
+        t_hasHitSomething = true;
+
+        if ((m_velocity.y < 0.0f) && (collCenter.y < avatarCenter.y))
+        {
+            // rising and hit something above
+
+            m_velocity.y = 0.0f;
+            m_sprite.move({ 0.0f, t_intersectionRect.size.y });
+            return;
+        }
+
+        const bool doesIntersectFeet{ t_collisionRect.findIntersection(t_footRect).has_value() };
+
+        if ((m_velocity.y > 0.0f) && (t_intersectionRect.size.y < tolerance) && doesIntersectFeet)
+        {
+            // falling and hit something below
+
+            if (!m_hasLanded)
+            {
+                t_context.audio.play("land");
+                m_action = Action::Idle;
+            }
+
+            m_hasLanded = true;
+            m_velocity.y = 0.0f;
+            m_sprite.move({ 0.0f, -t_intersectionRect.size.y });
+            return;
+        }
+
+        // at this point we hit something from the side
+
+        if (t_intersectionRect.size.x < tolerance)
+        {
+            if (m_velocity.x > 0.0f)
+            {
+                m_velocity.x = 0.0f;
+                m_sprite.move({ -t_intersectionRect.size.x, 0.0f });
+                return;
+            }
+            else if (m_velocity.x < 0.0f)
+            {
+                m_velocity.x = 0.0f;
+                m_sprite.move({ t_intersectionRect.size.x, 0.0f });
+                return;
+            }
+        }
+
+        t_hasHitSomething = false;
     }
 
     void Avatar::killCollisions(const Context & t_context)
@@ -747,7 +770,7 @@ namespace halloween
             return;
         }
 
-        const auto attackRect{ attackCollisionRect() };
+        const sf::FloatRect attackRect{ attackCollisionRect() };
         if (t_context.slimes.attack(t_context, attackRect) ||
             t_context.bats.attack(t_context, attackRect))
         {
