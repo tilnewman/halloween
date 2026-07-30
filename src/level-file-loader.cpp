@@ -103,27 +103,27 @@ namespace halloween
 
             if (filename == "ground.tsx")
             {
-                t_context.media.ground_texture.gid = gid;
+                t_context.media.setTileTextureGidGround(gid);
             }
             else if (filename == "object-1.tsx")
             {
-                t_context.media.object_texture1.gid = gid;
+                t_context.media.setTileTextureGidObject1(gid);
             }
             else if (filename == "object-2.tsx")
             {
-                t_context.media.object_texture2.gid = gid;
+                t_context.media.setTileTextureGidObject2(gid);
             }
             else if (filename == "object-3.tsx")
             {
-                t_context.media.object_texture3.gid = gid;
+                t_context.media.setTileTextureGidObject3(gid);
             }
             else if (filename == "object-4.tsj") // yes I see this is a .tsj...
             {
-                t_context.media.object_texture4.gid = gid;
+                t_context.media.setTileTextureGidObject4(gid);
             }
             else if (filename == "object-5.tsx")
             {
-                t_context.media.object_texture5.gid = gid;
+                t_context.media.setTileTextureGidObject5(gid);
             }
             else
             {
@@ -324,7 +324,8 @@ namespace halloween
         }
     }
 
-    const sf::FloatRect LevelFileLoader::parseAndConvertRect(const Context & t_context, Json & json) const
+    const sf::FloatRect
+        LevelFileLoader::parseAndConvertRect(const Context & t_context, Json & json) const
     {
         const sf::IntRect mapRect{ { json["x"], json["y"] }, { json["width"], json["height"] } };
 
