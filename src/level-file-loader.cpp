@@ -117,7 +117,7 @@ namespace halloween
             {
                 t_context.media.setTileTextureGidObject3(gid);
             }
-            else if (filename == "object-4.tsj") // yes I see this is a .tsj...
+            else if (filename == "object-4.tsx")
             {
                 t_context.media.setTileTextureGidObject4(gid);
             }
