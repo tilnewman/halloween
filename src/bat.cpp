@@ -81,8 +81,7 @@ namespace halloween
         m_deathAnims.clear();
     }
 
-    void Bats::add(
-        const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
+    void Bats::add(const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
     {
         Bat & bat{ m_bats.emplace_back(
             t_context.random.index(m_textures),
@@ -139,7 +138,7 @@ namespace halloween
                 if (bat.sprite.getGlobalBounds().position.x < bat.rect.position.x)
                 {
                     bat.is_moving_left = false;
-                    bat.sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
+                    bat.sprite.scale({ -1.0f, 1.0f });
                 }
             }
             else
@@ -149,7 +148,7 @@ namespace halloween
                 if (util::right(bat.sprite.getGlobalBounds()) > util::right(bat.rect))
                 {
                     bat.is_moving_left = true;
-                    bat.sprite.scale({ -1.0f, 1.0f }); // sfml trick to horiz flip image
+                    bat.sprite.scale({ -1.0f, 1.0f });
                 }
             }
         }
@@ -171,9 +170,11 @@ namespace halloween
                 }
             }
 
-            anim.sprite.scale({ 0.975f, 0.975f });
+            anim.scale *= anim.scale;
+            anim.sprite.scale({ anim.scale, anim.scale });
 
-            if (util::abs(anim.sprite.getScale().x) < 0.1f)
+            const sf::Vector2f size{ anim.sprite.getGlobalBounds().size };
+            if ((size.x * size.y) < 1.0f)
             {
                 anim.is_visible = false;
                 areAnyDeathAnimsFinished = true;
@@ -245,6 +246,7 @@ namespace halloween
             {
                 bat.is_alive = false;
                 wereAnyKilled = true;
+                bat.sprite.setColor(sf::Color::Red);
                 m_deathAnims.emplace_back(bat.bat_index, bat.sprite);
                 t_context.audio.play("metal-hit");
                 ++t_context.stats.enemy_killed;
@@ -256,6 +258,7 @@ namespace halloween
         // remove any dead
         if (wereAnyKilled)
         {
+            // TODO play bat death sfx
             std::erase_if(m_bats, [](const Bat & t_bat) { return !t_bat.is_alive; });
         }
 

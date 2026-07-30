@@ -34,13 +34,13 @@ namespace halloween
             const bool t_isMovingLeft,
             const sf::FloatRect & t_range,
             const float t_speed)
-            : is_alive(true)
-            , is_moving_left(t_isMovingLeft)
-            , bat_index(t_batIndex)
-            , texture_index(0)
-            , rect(t_range)
-            , speed(t_speed)
-            , sprite(util::SfmlDefaults::instance().texture())
+            : is_alive{ true }
+            , is_moving_left{ t_isMovingLeft }
+            , bat_index{ t_batIndex }
+            , texture_index{ 0 }
+            , rect{ t_range }
+            , speed{ t_speed }
+            , sprite{ util::SfmlDefaults::instance().texture() }
         {}
 
         bool is_alive;
@@ -57,11 +57,12 @@ namespace halloween
     struct BatDeathAnim
     {
         BatDeathAnim(const std::size_t t_batIndex, const sf::Sprite & t_sprite)
-            : is_visible(true)
-            , bat_index(t_batIndex)
-            , texture_index(0)
-            , elapsed_time_sec(0.0f)
-            , sprite(t_sprite)
+            : is_visible{ true }
+            , bat_index{ t_batIndex }
+            , texture_index{ 0 }
+            , elapsed_time_sec{ 0.0f }
+            , sprite{ t_sprite }
+            , scale{ 0.985f }
         {}
 
         bool is_visible;
@@ -69,6 +70,7 @@ namespace halloween
         std::size_t texture_index;
         float elapsed_time_sec;
         sf::Sprite sprite;
+        float scale;
     };
 
     //
