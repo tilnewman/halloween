@@ -455,14 +455,14 @@ namespace halloween
     {
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up) && (Action::Jump == m_action) &&
-            (m_velocity.y > -1.0f))
+            (m_velocity.y > 0.0f))
         {
             t_context.audio.play("parachute", 0.5f);
             m_action = Action::Glide;
             m_glideAnim.restart();
             m_sprite.setTexture(m_glideAnim.texture(), true);
 
-            const float maxGlideVertVelocity = 1.0f;
+            const float maxGlideVertVelocity{ 1.0f };
             if (m_velocity.y > maxGlideVertVelocity)
             {
                 m_velocity.y = maxGlideVertVelocity;
@@ -485,7 +485,8 @@ namespace halloween
             }
             else
             {
-                m_action = Action::Idle;
+                m_action = Action::Jump;
+                m_sprite.setTexture(m_jumpTexture, true);
                 return false;
             }
         }
