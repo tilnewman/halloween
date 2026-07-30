@@ -6,6 +6,8 @@
 #include "resources.hpp"
 
 #include "check-macros.hpp"
+#include "context.hpp"
+#include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "texture-loader.hpp"
@@ -19,31 +21,33 @@ namespace halloween
         , m_objectTexture1{}
         , m_objectTexture2{}
         , m_objectTexture3{}
-        , bg_texture1{}
-        , bg_texture2{}
-        , bg_texture3{}
-        , bg_sprite{ bg_texture1 }
+        , m_bgTexture1{}
+        , m_bgTexture2{}
+        , m_bgTexture3{}
+        , m_bgSprite{ m_bgTexture1 }
     {}
 
     void Resources::setup(const Settings & t_settings)
     {
         // font
-        if (!m_font.openFromFile((t_settings.media_path / "font" / "mops-antiqua.ttf").string()))
-        {
-            std::cout << "Failed to load font mops-antiqua.ttf!\n";
-        }
+        const std::string fontPathStr{
+            (t_settings.media_path / "font" / "mops-antiqua.ttf").string()
+        };
+
+        const bool fontLoadSuccess{ m_font.openFromFile(fontPathStr) };
+        M_CHECK(fontLoadSuccess, "Failed to load font: " << fontPathStr);
 
         // background image
         util::TextureLoader::load(
-            bg_texture1, (t_settings.media_path / "image" / "background-1.png"), true);
+            m_bgTexture1, (t_settings.media_path / "image" / "background-1.png"), true);
 
         util::TextureLoader::load(
-            bg_texture2, (t_settings.media_path / "image" / "background-2.png"), true);
+            m_bgTexture2, (t_settings.media_path / "image" / "background-2.png"), true);
 
         util::TextureLoader::load(
-            bg_texture3, (t_settings.media_path / "image" / "background-3.png"), true);
+            m_bgTexture3, (t_settings.media_path / "image" / "background-3.png"), true);
 
-        bg_sprite.setTexture(bg_texture1, true);
+        m_bgSprite.setTexture(m_bgTexture1, true);
 
         const std::string imagePath{ (t_settings.media_path / "image" / "map/").string() };
 
@@ -100,6 +104,32 @@ namespace halloween
             }
         }
         // clang-format on
+    }
+
+    void Resources::setupBackgroundSprite(const Context & t_context, const int t_bgImageNumber)
+    {
+        if (1 == t_bgImageNumber)
+        {
+            m_bgSprite.setTexture(m_bgTexture1);
+        }
+        else if (2 == t_bgImageNumber)
+        {
+            m_bgSprite.setTexture(m_bgTexture2);
+        }
+        else if (3 == t_bgImageNumber)
+        {
+            m_bgSprite.setTexture(m_bgTexture3);
+        }
+        else
+        {
+            M_LOG(
+                "Error: This map file has an invalid custom background property value="
+                << t_bgImageNumber << ", so the default background image 1 will be used.");
+
+            m_bgSprite.setTexture(m_bgTexture1);
+        }
+
+        util::growAndCenterInside(m_bgSprite, t_context.layout.wholeRegion());
     }
 
 } // namespace halloween

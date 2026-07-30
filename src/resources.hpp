@@ -14,6 +14,8 @@
 
 namespace halloween
 {
+
+    struct Context;
     struct Settings;
 
     //
@@ -56,6 +58,10 @@ namespace halloween
         constexpr void setTileTextureGidObject4(const int t_gid) { m_objectTexture4.gid = t_gid; }
         constexpr void setTileTextureGidObject5(const int t_gid) { m_objectTexture5.gid = t_gid; }
         
+        inline const sf::Sprite backgroundSprite() const { return m_bgSprite; }
+
+        void setupBackgroundSprite(const Context & t_context, const int t_bgImageNumber);
+
       private:
         sf::Font m_font;
         TileTexture m_groundTexture;
@@ -64,12 +70,10 @@ namespace halloween
         TileTexture m_objectTexture3;
         TileTexture m_objectTexture4;
         TileTexture m_objectTexture5;
-
-      public:
-        sf::Texture bg_texture1;
-        sf::Texture bg_texture2;
-        sf::Texture bg_texture3;
-        sf::Sprite bg_sprite;
+        sf::Texture m_bgTexture1;
+        sf::Texture m_bgTexture2;
+        sf::Texture m_bgTexture3;
+        sf::Sprite  m_bgSprite;
     };
 
 } // namespace halloween

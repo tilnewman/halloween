@@ -156,32 +156,12 @@ namespace halloween
         {
             std::cout << "Error: While parsing \"" << m_pathStr
                       << "\": This map file is missing the custom int property named "
-                         "\"background\", so the default background image #1 will be used.\n";
+                         "\"background\", so the default background image 1 will be used.\n";
 
             backgroundImageNumber = 1;
         }
 
-        if (1 == backgroundImageNumber)
-        {
-            t_context.media.bg_sprite.setTexture(t_context.media.bg_texture1);
-        }
-        else if (2 == backgroundImageNumber)
-        {
-            t_context.media.bg_sprite.setTexture(t_context.media.bg_texture2);
-        }
-        else if (3 == backgroundImageNumber)
-        {
-            t_context.media.bg_sprite.setTexture(t_context.media.bg_texture3);
-        }
-        else
-        {
-            std::cout << "Error: While parsing \"" << m_pathStr
-                      << "\": This map file has an invalid custom background property value="
-                      << backgroundImageNumber
-                      << ", so the default background image #1 will be used.\n";
-        }
-
-        util::growAndCenterInside(t_context.media.bg_sprite, t_context.layout.wholeRegion());
+        t_context.media.setupBackgroundSprite(t_context, backgroundImageNumber);
     }
 
     void LevelFileLoader::parseLayers(const Context & t_context, Json & jsonWholeFile) const
