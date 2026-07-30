@@ -9,6 +9,7 @@
 #include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
+#include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 
 #include <SFML/Graphics/Text.hpp>
@@ -17,7 +18,8 @@ namespace halloween
 {
 
     FramerateDisplay::FramerateDisplay()
-        : m_framesPerSecond{}
+        : m_text{ util::SfmlDefaults::instance().font() }
+        , m_framesPerSecond{}
         , m_graphDisplayUPtr{}
     {}
 
@@ -36,17 +38,13 @@ namespace halloween
             str = " fps: ";
             str += util::makeStats(m_framesPerSecond).toString();
 
-            t_context.media.fps_text.setString(str);
-
-            util::setOriginToPosition(t_context.media.fps_text);
-            t_context.media.fps_text.setFillColor(sf::Color(195, 160, 126));
+            m_text = t_context.media.makeText(60, str, sf::Color(195, 160, 126));
 
             util::fitAndCenterInside(
-                t_context.media.fps_text,
+                m_text,
                 util::scaleRectInPlaceCopy(t_context.layout.infoRegion(), { 1.0f, 0.375f }));
 
-            t_context.media.fps_text.setPosition(
-                { 0.0f, (t_context.layout.wholeSize().y - 50.0f) });
+            m_text.setPosition({ 0.0f, (t_context.layout.wholeSize().y - 50.0f) });
         }
 
         if (t_context.settings.will_display_fps_graph)
@@ -65,7 +63,7 @@ namespace halloween
     {
         if (t_context.settings.will_display_fps)
         {
-            t_target.draw(t_context.media.fps_text, t_states);
+            t_target.draw(m_text, t_states);
         }
 
         if (t_context.settings.will_display_fps_graph && m_graphDisplayUPtr)

@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/System/Clock.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 #include <vector>
 
@@ -29,6 +29,7 @@ namespace halloween
             const;
 
       private:
+        sf::Text m_text;
         std::vector<std::size_t> m_framesPerSecond;
         std::unique_ptr<util::GraphDisplay<std::size_t>> m_graphDisplayUPtr;
     };

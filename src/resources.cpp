@@ -15,7 +15,6 @@ namespace halloween
 
     Resources::Resources()
         : m_font{}
-        , fps_text{ m_font, "", 60 }
         , bg_texture1{}
         , bg_texture2{}
         , bg_texture3{}
@@ -33,8 +32,6 @@ namespace halloween
         {
             std::cout << "Failed to load font mops-antiqua.ttf!\n";
         }
-
-        fps_text.setFont(m_font);
 
         // background image
         util::TextureLoader::load(

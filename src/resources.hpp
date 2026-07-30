@@ -53,8 +53,6 @@ namespace halloween
         sf::Font m_font;
 
       public:
-        sf::Text fps_text;
-
         sf::Texture bg_texture1;
         sf::Texture bg_texture2;
         sf::Texture bg_texture3;
