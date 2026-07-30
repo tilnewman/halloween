@@ -10,6 +10,7 @@
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
@@ -42,17 +43,22 @@ namespace halloween
     struct SmokeAnim
     {
         SmokeAnim(
-            const SmokeType t_type, const sf::Sprite & t_sprite, const std::size_t t_frameIndex)
+            const SmokeType t_type,
+            const sf::Sprite & t_sprite,
+            const std::size_t t_frameIndex,
+            const sf::FloatRect & t_rect)
             : type{ t_type }
             , sprite{ t_sprite }
             , elapsed_time_sec{ 0.0f }
             , frame_index{ t_frameIndex }
+            , rect{ t_rect }
         {}
 
         SmokeType type;
         sf::Sprite sprite;
         float elapsed_time_sec;
         std::size_t frame_index;
+        sf::FloatRect rect;
     };
 
     //
@@ -63,7 +69,7 @@ namespace halloween
         Smoke();
         ~Smoke() final = default;
 
-        bool willDrawBeforeMap() const final { return false; }
+        bool willDrawBeforeMap() const final { return true; }
         void setup(const Context & t_context) final;
 
         void

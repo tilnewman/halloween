@@ -85,8 +85,12 @@ namespace halloween
 
     void Smoke::setup(const Context & t_context)
     {
-        const auto paths{ util::findFilesInDirectory(
-            (t_context.settings.media_path / "image" / "smoke"), ".png") };
+        const auto smokeImageDirPath{ t_context.settings.media_path / "image" / "smoke" };
+        const auto paths{ util::findFilesInDirectory(smokeImageDirPath, ".png") };
+
+        M_CHECK(
+            !paths.empty(),
+            "Failed to find any smoke particles at: " << smokeImageDirPath.string());
 
         for (const auto & path : paths)
         {
@@ -103,32 +107,43 @@ namespace halloween
         util::scaleAndCenterInside(sprite, t_region);
 
         const SmokeDetails details{ t_details };
-        sprite.setColor(sf::Color(255, 255, 255, details.alpha));
 
-        m_animations.emplace_back(details.type, sprite, frameIndex);
+        sf::Color smokeColor{ t_context.settings.smoke_color };
+        smokeColor.a = details.alpha;
+        sprite.setColor(smokeColor);
+
+        m_animations.emplace_back(details.type, sprite, frameIndex, t_region);
     }
 
-    void Smoke::update(const Context &, const float t_elapsedTimeSec)
+    void Smoke::update(const Context & t_context, const float t_elapsedTimeSec)
     {
+        const float timeBetweenFramesSec{ t_context.settings.smoke_animation_time_between_frames };
+
         for (SmokeAnim & anim : m_animations)
         {
-            if (SmokeType::Still == anim.type)
+            if ((SmokeType::Full == anim.type) || (SmokeType::Top == anim.type))
             {
-                continue;
-            }
-
-            anim.elapsed_time_sec += t_elapsedTimeSec;
-            const float timeBetweenFramesSec{ 0.0875f };
-            if (anim.elapsed_time_sec > timeBetweenFramesSec)
-            {
-                anim.elapsed_time_sec -= timeBetweenFramesSec;
-
-                if (++anim.frame_index >= m_textures.size())
+                anim.elapsed_time_sec += t_elapsedTimeSec;
+                if (anim.elapsed_time_sec > timeBetweenFramesSec)
                 {
-                    anim.frame_index = 0;
-                }
+                    anim.elapsed_time_sec -= timeBetweenFramesSec;
 
-                anim.sprite.setTexture(m_textures.at(anim.frame_index));
+                    if (++anim.frame_index >= m_textures.size())
+                    {
+                        anim.frame_index = 0;
+                    }
+
+                    anim.sprite.setTexture(m_textures.at(anim.frame_index));
+
+                    if (SmokeType::Top == anim.type)
+                    {
+                        const sf::IntRect offscreenRect(
+                            { 0, 0 }, { static_cast<int>(m_textures.at(0).getSize().x), 88 });
+
+                        anim.sprite.setTextureRect(offscreenRect);
+                        util::scaleAndCenterInside(anim.sprite, anim.rect);
+                    }
+                }
             }
         }
     }
@@ -151,6 +166,7 @@ namespace halloween
         for (SmokeAnim & anim : m_animations)
         {
             anim.sprite.move(t_move);
+            anim.rect.position += t_move;
         }
     }
 
