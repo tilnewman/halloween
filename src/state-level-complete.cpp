@@ -80,13 +80,13 @@ namespace halloween
         if (willPerfectBonus)
         {
             m_bonuses.emplace_back(
-                1000, t_context.media.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
+                200, t_context.media.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
         }
 
         if (willCoinBonus)
         {
             m_bonuses.emplace_back(
-                99,
+                100,
                 t_context.media.makeText(
                     bonusTextCharSize, "All Coins Found Bonus!", bonusTextColor));
         }
@@ -107,7 +107,7 @@ namespace halloween
                     bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
         }
 
-        if (m_bonuses.size() == 3)
+        if (m_bonuses.size() == 0)
         {
             m_bonuses.emplace_back(
                 0,
