@@ -74,14 +74,8 @@ namespace halloween
     void InfoRegion::setup(const Context & t_context)
     {
         m_region = t_context.layout.infoRegion();
-
         util::appendTriangleVerts(m_region, m_bgVerts, sf::Color(255, 255, 255, 8));
-
-        m_text.setFont(t_context.media.font);
-        m_text.setCharacterSize(99);
-        m_text.setFillColor(sf::Color(255, 255, 255, 64));
-        util::setOriginToPosition(m_text);
-
+        m_text = t_context.media.makeText(99, "", sf::Color(255, 255, 255, 64));
         reset(t_context);
     }
 

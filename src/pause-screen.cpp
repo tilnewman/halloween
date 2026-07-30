@@ -25,9 +25,7 @@ namespace halloween
 
     void PauseScreen::setup(const Context & t_context)
     {
-        m_text.setFont(t_context.media.font);
-        m_text.setString("PAUSED");
-        m_text.setCharacterSize(99);
+        m_text = t_context.media.makeText(99, "PAUSED", sf::Color::White);
 
         const sf::Vector2f windowSizeF{ t_context.window.getSize() };
         sf::FloatRect textRect;

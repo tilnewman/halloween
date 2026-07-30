@@ -8,8 +8,6 @@
 
 namespace halloween
 {
-    struct Context;
-    struct Resources;
 
     class ScreenRegions
     {

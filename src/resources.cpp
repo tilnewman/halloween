@@ -14,8 +14,8 @@ namespace halloween
 {
 
     Resources::Resources()
-        : font{}
-        , fps_text{ font, "", 60 }
+        : m_font{}
+        , fps_text{ m_font, "", 60 }
         , bg_texture1{}
         , bg_texture2{}
         , bg_texture3{}
@@ -29,12 +29,12 @@ namespace halloween
     void Resources::setup(const Settings & t_settings)
     {
         // font
-        if (!font.openFromFile((t_settings.media_path / "font" / "mops-antiqua.ttf").string()))
+        if (!m_font.openFromFile((t_settings.media_path / "font" / "mops-antiqua.ttf").string()))
         {
             std::cout << "Failed to load font mops-antiqua.ttf!\n";
         }
 
-        fps_text.setFont(font);
+        fps_text.setFont(m_font);
 
         // background image
         util::TextureLoader::load(
@@ -80,7 +80,7 @@ namespace halloween
         const std::string & t_message,
         const sf::Color & t_color) const
     {
-        sf::Text text(font, t_message, t_charSize);
+        sf::Text text(m_font, t_message, t_charSize);
         text.setFillColor(t_color);
         util::setOriginToPosition(text);
         return text;

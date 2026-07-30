@@ -35,8 +35,9 @@ namespace halloween
 
     //
 
-    struct Resources
+    class Resources
     {
+      public:
         Resources();
 
         void setup(const Settings & t_settings);
@@ -48,7 +49,10 @@ namespace halloween
 
         const TileTexture & tileTexture(const TileImage t_image) const;
 
-        sf::Font font;
+      private:
+        sf::Font m_font;
+
+      public:
         sf::Text fps_text;
 
         sf::Texture bg_texture1;

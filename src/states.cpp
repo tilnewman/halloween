@@ -43,10 +43,7 @@ namespace halloween
 
     void StateBase::setupText(const Context & t_context, const std::string & t_message)
     {
-        m_text.setString(t_message);
-        m_text.setCharacterSize(99);
-        m_text.setFont(t_context.media.font);
-        m_text.setFillColor(m_textColorDefault);
+        m_text = t_context.media.makeText(99, t_message, m_textColorDefault);
 
         util::fitAndCenterInside(
             m_text, util::scaleRectInPlaceCopy(t_context.layout.wholeRegion(), 0.25f));
@@ -228,10 +225,7 @@ namespace halloween
     {
         TimedMessageState::onEnter(t_context);
 
-        m_text1.setFont(t_context.media.font);
-        m_text1.setFillColor(sf::Color::White);
-        m_text1.setCharacterSize(99);
-        m_text1.setString("Super Lucky");
+        m_text1 = t_context.media.makeText(99, "Super Lucky", sf::Color::White);
 
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 

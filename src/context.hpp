@@ -30,7 +30,7 @@ namespace halloween
     class Missiles;
     class OwlCalls;
     struct Settings;
-    struct Resources;
+    class Resources;
     class InfoRegion;
     class FireSpouts;
     struct LevelStats;
