@@ -200,15 +200,14 @@ namespace halloween
 
                 ++t_context.stats.enemy_killed;
                 t_context.info_region.scoreAdjust(t_context.settings.kill_slime_score);
-
-                break;
             }
         }
 
         // remove any dead
         if (wereAnyKilled)
         {
-            t_context.audio.play("squish");
+            t_context.audio.play("metal-hit");
+            t_context.audio.play("slime-death");
             std::erase_if(m_slimes, [](const Slime & t_slime) { return !t_slime.is_alive; });
         }
 

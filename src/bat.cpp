@@ -246,19 +246,20 @@ namespace halloween
             {
                 bat.is_alive = false;
                 wereAnyKilled = true;
+
                 bat.sprite.setColor(sf::Color::Red);
                 m_deathAnims.emplace_back(bat.bat_index, bat.sprite);
-                t_context.audio.play("metal-hit");
+                
                 ++t_context.stats.enemy_killed;
                 t_context.info_region.scoreAdjust(t_context.settings.kill_bat_score);
-                break;
             }
         }
 
         // remove any dead
         if (wereAnyKilled)
         {
-            // TODO play bat death sfx
+            t_context.audio.play("metal-hit");
+            t_context.audio.play("bat-death");
             std::erase_if(m_bats, [](const Bat & t_bat) { return !t_bat.is_alive; });
         }
 
