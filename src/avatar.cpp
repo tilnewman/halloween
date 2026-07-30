@@ -62,17 +62,16 @@ namespace halloween
     {
         m_blood.setup(t_settings);
 
-        m_runAnim.setup((t_settings.media_path / "image" / "avatar"), "Run", 10, 0.045f, true);
-        m_attackAnim.setup(
-            (t_settings.media_path / "image" / "avatar"), "Attack", 10, 0.03f, false);
+        const auto avatarPath{ t_settings.media_path / "image" / "avatar" };
 
-        m_deathAnim.setup((t_settings.media_path / "image" / "avatar"), "Dead", 10, 0.05f, false);
-        m_throwAnim.setup((t_settings.media_path / "image" / "avatar"), "Throw", 10, 0.02f, false);
-        m_glideAnim.setup((t_settings.media_path / "image" / "avatar"), "Glide", 10, 0.33f, true);
-        m_idleAnim.setup((t_settings.media_path / "image" / "avatar"), "Idle", 10, 0.1f, true);
+        m_runAnim.setup(avatarPath, "Run", 10, 0.045f, true);
+        m_attackAnim.setup(avatarPath, "Attack", 10, 0.03f, false);
+        m_deathAnim.setup(avatarPath, "Dead", 10, 0.05f, false);
+        m_throwAnim.setup(avatarPath, "Throw", 10, 0.02f, false);
+        m_glideAnim.setup(avatarPath, "Glide", 10, 0.33f, true);
+        m_idleAnim.setup (avatarPath, "Idle", 10, 0.1f, true);
 
-        util::TextureLoader::load(
-            m_jumpTexture, (t_settings.media_path / "image" / "avatar" / "Jump-6.png"));
+        util::TextureLoader::load(m_jumpTexture, (avatarPath / "Jump-6.png"));
 
         m_idleAnim.restart();
         m_sprite.setTexture(m_idleAnim.texture(), true);
@@ -282,23 +281,40 @@ namespace halloween
 
     void Avatar::moveMap(const Context & t_context)
     {
-        const float posXAfter{ util::center(m_sprite.getGlobalBounds()).x };
-        const float screenMiddle{ t_context.layout.mapRegion().size.x * 0.5f };
-
-        if ((m_velocity.x < 0.0f) || (posXAfter < screenMiddle))
+        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+        const sf::Vector2f avatarPos{ util::center(m_sprite.getGlobalBounds()) };
+        
+        if (const sf::Vector2f screenMiddle{ t_context.layout.mapRegion().size * 0.5f };
+            (m_velocity.x > 0.0f) && (avatarPos.x > screenMiddle.x))
         {
-            return;
+            const sf::Vector2f move{ (screenMiddle.x - avatarPos.x), 0.0f };
+            if (t_context.level.move(t_context, move))
+            {
+                m_sprite.move(move);
+            }
         }
 
-        const sf::Vector2f move{ (screenMiddle - posXAfter), 0.0f };
-
-        if (!t_context.level.move(t_context.layout, move))
+        // moving up creates a positive move.y
+        if (const float riseMovePoint{ mapRect.size.y * 0.12f };
+            (m_velocity.y < 0.0f) && (avatarPos.y < riseMovePoint))
         {
-            return;
+            const sf::Vector2f move{ 0.0f, (riseMovePoint - avatarPos.y) };
+            if (t_context.level.move(t_context, move))
+            {
+                m_sprite.move(move);
+            }
         }
 
-        m_sprite.move(move);
-        t_context.managers.moveAllWithMap(move);
+        // moving down creates a negative move.y
+        if (const float fallMovePoint{ mapRect.size.y * 0.5f };
+            (m_velocity.y > 0.0f) && (avatarPos.y > fallMovePoint))
+        {
+            const sf::Vector2f move{ 0.0f, (fallMovePoint - avatarPos.y) };
+            if (t_context.level.move(t_context, move))
+            {
+                m_sprite.move(move);
+            }
+        }
     }
 
     bool Avatar::handleDeath(const Context & t_context, const float t_frameTimeSec)
