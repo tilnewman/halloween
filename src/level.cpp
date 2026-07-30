@@ -32,7 +32,7 @@ namespace halloween
         , m_exitRect{}
         , m_farthestHorizMapPixel{ 0.0f }
         , m_farthestHorizTraveled{ 0.0f }
-        , m_number{ 1 }
+        , m_number{ 0 }
         , m_loader{}
     {
         m_walkCollisions.reserve(1000);

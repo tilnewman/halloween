@@ -117,9 +117,13 @@ namespace halloween
             {
                 t_context.media.object_texture3.gid = gid;
             }
-            else if (filename == "object-4.tsj")
+            else if (filename == "object-4.tsj") // yes I see this is a .tsj...
             {
                 t_context.media.object_texture4.gid = gid;
+            }
+            else if (filename == "object-5.tsx")
+            {
+                t_context.media.object_texture5.gid = gid;
             }
             else
             {
@@ -205,6 +209,10 @@ namespace halloween
             else if (layerName == "object-4")
             {
                 parseTileLayer(t_context, TileImage::Object4, jsonLayer);
+            }
+            else if (layerName == "object-5")
+            {
+                parseTileLayer(t_context, TileImage::Object5, jsonLayer);
             }
             else if (layerName == "collision")
             {

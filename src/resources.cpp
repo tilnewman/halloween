@@ -69,6 +69,10 @@ namespace halloween
         util::TextureLoader::load(object_texture4.texture, (imagePath + "tile-object-4.png"));
         object_texture4.which = TileImage::Object4;
         object_texture4.size = sf::Vector2i(object_texture4.texture.getSize());
+
+        util::TextureLoader::load(object_texture5.texture, (imagePath + "tile-object-5.png"));
+        object_texture5.which = TileImage::Object5;
+        object_texture5.size = sf::Vector2i(object_texture5.texture.getSize());
     }
 
     const sf::Text Resources::makeText(
@@ -92,6 +96,7 @@ namespace halloween
             case TileImage::Object2: { return object_texture2; }
             case TileImage::Object3: { return object_texture3; }
             case TileImage::Object4: { return object_texture4; }
+            case TileImage::Object5: { return object_texture5; }
             default:
             {
                 throw std::runtime_error("Resources::tileTexture() given an invalid TileImage enum.");

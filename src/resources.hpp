@@ -61,6 +61,7 @@ namespace halloween
         TileTexture object_texture2;
         TileTexture object_texture3;
         TileTexture object_texture4;
+        TileTexture object_texture5;
     };
 
 } // namespace halloween
