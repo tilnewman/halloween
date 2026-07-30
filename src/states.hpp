@@ -12,7 +12,9 @@
 #include <string_view>
 #include <vector>
 
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 //
 
@@ -281,6 +283,8 @@ namespace halloween
 
       private:
         sf::Text m_scoreText;
+        sf::Texture m_accentTexture;
+        sf::Sprite m_accentSprite;
     };
 
     //

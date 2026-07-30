@@ -7,22 +7,27 @@
 
 #include "coin.hpp"
 #include "context.hpp"
+#include "filesystem-util.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "missile.hpp"
 #include "pause-screen.hpp"
 #include "resources.hpp"
 #include "screen-regions.hpp"
+#include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
 #include "state-machine.hpp"
+#include "texture-loader.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Window.hpp>
+
+#include <filesystem>
 
 namespace halloween
 {
@@ -309,6 +314,8 @@ namespace halloween
     LoseState::LoseState()
         : TimedMessageState{ State::Lose, State::Credits, "You Lose\n", 4.5f }
         , m_scoreText{ util::SfmlDefaults::instance().font() }
+        , m_accentTexture{}
+        , m_accentSprite{ m_accentTexture }
     {}
 
     void LoseState::onEnter(const Context & t_context)
@@ -317,6 +324,11 @@ namespace halloween
 
         t_context.audio.play("game-over");
 
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
+        const float vertOffset{ wholeRect.size.y * 0.2f };
+        m_text.move({ 0.0f, -vertOffset });
+
+        // score text
         m_scoreText = m_text;
         m_scoreText.scale({ 0.35f, 0.35f });
 
@@ -328,9 +340,20 @@ namespace halloween
         util::setOriginToPosition(m_scoreText);
 
         m_scoreText.setPosition(
-            { ((t_context.layout.wholeSize().x * 0.5f) -
-               (m_scoreText.getGlobalBounds().size.x * 0.5f)),
-              util::bottom(m_text) - (m_text.getGlobalBounds().size.y * 0.4f) });
+            { ((wholeRect.size.x * 0.5f) - (m_scoreText.getGlobalBounds().size.x * 0.5f)),
+              util::bottom(m_text) - (m_text.getGlobalBounds().size.y * 0.5f) });
+
+        // accent image
+        const auto accentImageDirPath{ t_context.settings.media_path / "image" / "accent" };
+        const auto accentImagePaths{ util::findFilesInDirectory(accentImageDirPath, ".png") };
+        const auto accentImagePath{ t_context.random.from(accentImagePaths) };
+        util::TextureLoader::load(m_accentTexture, accentImagePath, true);
+        m_accentSprite.setTexture(m_accentTexture, true);
+        m_accentSprite.setColor(sf::Color(255, 255, 255, 192));
+
+        m_accentSprite.setPosition(
+            { (util::center(wholeRect).x - util::center(m_accentSprite.getGlobalBounds()).x),
+              (util::bottom(m_scoreText) + wholeRect.size.y * 0.1f) });
     }
 
     void LoseState::draw(
@@ -338,6 +361,7 @@ namespace halloween
     {
         t_target.draw(m_text, t_states);
         t_target.draw(m_scoreText, t_states);
+        t_target.draw(m_accentSprite, t_states);
     }
 
     void LoseState::onExit(const Context & t_context) { t_context.audio.stopAll(); }
