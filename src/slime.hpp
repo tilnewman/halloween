@@ -46,10 +46,12 @@ namespace halloween
         explicit SlimeDeathAnim(const sf::Sprite & t_sprite)
             : is_visible{ true }
             , sprite{ t_sprite }
+            , scale{ 0.999f }
         {}
 
         bool is_visible;
         sf::Sprite sprite;
+        float scale;
     };
 
     //

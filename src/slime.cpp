@@ -124,7 +124,8 @@ namespace halloween
         bool areAnyDeathAnimsFinished = false;
         for (SlimeDeathAnim & anim : m_deathAnims)
         {
-            anim.sprite.scale({ 0.975f, 0.975f });
+            anim.scale *= anim.scale;
+            anim.sprite.scale({ anim.scale, anim.scale });
 
             if (anim.sprite.getScale().x < 0.1f)
             {
@@ -197,7 +198,6 @@ namespace halloween
                 auto & anim{ m_deathAnims.emplace_back(slime.sprite) };
                 anim.sprite.setColor(sf::Color::Red);
 
-                t_context.audio.play("squish");
                 ++t_context.stats.enemy_killed;
                 t_context.info_region.scoreAdjust(t_context.settings.kill_slime_score);
 
@@ -208,6 +208,7 @@ namespace halloween
         // remove any dead
         if (wereAnyKilled)
         {
+            t_context.audio.play("squish");
             std::erase_if(m_slimes, [](const Slime & t_slime) { return !t_slime.is_alive; });
         }
 
