@@ -64,7 +64,8 @@ namespace halloween
         m_hitPointsMax = t_context.settings.boss_hit_points;
     }
 
-    void MushroomBoss::add(const Context &, const sf::FloatRect & t_rect)
+    void MushroomBoss::add(
+        const Context &, const sf::FloatRect & t_rect, const std::string &)
     {
         m_region = t_rect;
         m_isThereABossOnThisLevel = true;

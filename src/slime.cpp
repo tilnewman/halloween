@@ -56,7 +56,8 @@ namespace halloween
 
     void Slimes::clear() { m_slimes.clear(); }
 
-    void Slimes::add(const Context & t_context, const sf::FloatRect & t_rect)
+    void Slimes::add(
+        const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
     {
         const float speed{ t_context.random.fromTo(20.0f, 75.0f) };
 

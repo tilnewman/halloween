@@ -40,6 +40,7 @@ namespace halloween
         , m_statsUPtr{}
         , m_bossUPtr{}
         , m_framerateDisplayUPtr{}
+        , m_smokeUPtr{}
         , m_contextUPtr{}
     {}
 
@@ -95,6 +96,7 @@ namespace halloween
         m_ghostsUPtr = std::make_unique<Ghosts>();
         m_managersUPtr = std::make_unique<ObjectManagerList>();
         m_statsUPtr = std::make_unique<LevelStats>();
+        m_smokeUPtr = std::make_unique<Smoke>();
 
         m_audioUPtr->mediaPath(m_settings.media_path / "sfx");
         m_audioUPtr->loadAll();
@@ -126,7 +128,8 @@ namespace halloween
             *m_infoRegionUPtr,
             *m_managersUPtr,
             *m_statsUPtr,
-            *m_bossUPtr);
+            *m_bossUPtr,
+            *m_smokeUPtr);
 
         m_layoutUPtr->setup(m_windowUPtr->getSize());
         m_mediaUPtr->setup(m_settings);
@@ -141,6 +144,7 @@ namespace halloween
         m_managersUPtr->add(*m_slimesUPtr);
         m_managersUPtr->add(*m_batsUPtr);
         m_managersUPtr->add(*m_bossUPtr);
+        m_managersUPtr->add(*m_smokeUPtr);
         //
         m_managersUPtr->setupAll(*m_contextUPtr);
 
@@ -154,6 +158,7 @@ namespace halloween
 
         m_managersUPtr.reset();
 
+        m_smokeUPtr.reset();
         m_statsUPtr.reset();
         m_ghostsUPtr.reset();
         m_slimesUPtr.reset();

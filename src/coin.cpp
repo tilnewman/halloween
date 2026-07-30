@@ -72,7 +72,7 @@ namespace halloween
             m_texture, (t_context.settings.media_path / "image" / "coin.png"), true);
     }
 
-    void Coins::add(const Context &, const sf::FloatRect & t_region)
+    void Coins::add(const Context &, const sf::FloatRect & t_region, const std::string &)
     {
         m_coins.emplace_back(m_texture, util::center(t_region));
     }

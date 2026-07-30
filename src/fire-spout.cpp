@@ -52,7 +52,8 @@ namespace halloween
         }
     }
 
-    void FireSpouts::add(const Context & t_context, const sf::FloatRect & t_region)
+    void FireSpouts::add(
+        const Context & t_context, const sf::FloatRect & t_region, const std::string &)
     {
         FireSpout & spout{ m_fireSpouts.emplace_back(m_spoutTexture, m_fireTextures.at(0)) };
 

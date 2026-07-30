@@ -81,7 +81,8 @@ namespace halloween
         m_deathAnims.clear();
     }
 
-    void Bats::add(const Context & t_context, const sf::FloatRect & t_rect)
+    void Bats::add(
+        const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
     {
         Bat & bat{ m_bats.emplace_back(
             t_context.random.index(m_textures),

@@ -17,6 +17,7 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "slime.hpp"
+#include "smoke.hpp"
 #include "spiked-ball.hpp"
 
 #include <exception>
@@ -65,7 +66,7 @@ namespace halloween
         return true;
     }
 
-    void LevelFileLoader::parseLevelDetails(const Context & t_context, Json & json)
+    void LevelFileLoader::parseLevelDetails(const Context & t_context, Json & json) const
     {
         // parse level tile size and counts
         const sf::Vector2i tileCount{ json["width"], json["height"] };
@@ -87,11 +88,10 @@ namespace halloween
 
         const sf::Vector2f mapPosition{ 0.0f, heightOffset };
 
-        t_context.level.setLevelDetails(
-            tileCount, tileSizeOnMap, tileSizeOnScreen, mapPosition);
+        t_context.level.setLevelDetails(tileCount, tileSizeOnMap, tileSizeOnScreen, mapPosition);
     }
 
-    void LevelFileLoader::parseObjectTextureGIDs(const Context & t_context, Json & wholeJson)
+    void LevelFileLoader::parseObjectTextureGIDs(const Context & t_context, Json & wholeJson) const
     {
         for (Json & json : wholeJson["tilesets"])
         {
@@ -126,7 +126,7 @@ namespace halloween
         }
     }
 
-    void LevelFileLoader::parseBackgroundImageNumber(const Context & t_context, Json & json)
+    void LevelFileLoader::parseBackgroundImageNumber(const Context & t_context, Json & json) const
     {
         int backgroundImageNumber = 0;
         for (Json & propJson : json["properties"])
@@ -176,7 +176,7 @@ namespace halloween
         util::growAndCenterInside(t_context.media.bg_sprite, t_context.layout.wholeRegion());
     }
 
-    void LevelFileLoader::parseLayers(const Context & t_context, Json & jsonWholeFile)
+    void LevelFileLoader::parseLayers(const Context & t_context, Json & jsonWholeFile) const
     {
         for (Json & jsonLayer : jsonWholeFile["layers"])
         {
@@ -266,6 +266,10 @@ namespace halloween
             {
                 parseObjectLayerRects(t_context.boss, t_context, jsonLayer);
             }
+            else if (layerName == "smoke")
+            {
+                parseObjectLayerRects(t_context.smoke, t_context, jsonLayer);
+            }
             else
             {
                 std::cout << "WARNING:  While parsing level file \"" << m_pathStr
@@ -275,7 +279,7 @@ namespace halloween
     }
 
     void LevelFileLoader::parseTileLayer(
-        const Context & t_context, const TileImage image, Json & json)
+        const Context & t_context, const TileImage image, Json & json) const
     {
         TileLayer layer;
 
@@ -294,7 +298,7 @@ namespace halloween
     }
 
     void LevelFileLoader::parseRectLayer(
-        const Context & t_context, Json & json, std::vector<sf::FloatRect> & rects)
+        const Context & t_context, Json & json, std::vector<sf::FloatRect> & rects) const
     {
         rects.clear();
 
@@ -304,7 +308,7 @@ namespace halloween
         }
     }
 
-    const sf::FloatRect LevelFileLoader::parseAndConvertRect(const Context & t_context, Json & json)
+    const sf::FloatRect LevelFileLoader::parseAndConvertRect(const Context & t_context, Json & json) const
     {
         const sf::IntRect mapRect{ { json["x"], json["y"] }, { json["width"], json["height"] } };
 
@@ -320,7 +324,7 @@ namespace halloween
         return screenRect;
     }
 
-    void LevelFileLoader::parseSpawnLayer(const Context & t_context, Json & json)
+    void LevelFileLoader::parseSpawnLayer(const Context & t_context, Json & json) const
     {
         sf::FloatRect enterRect{ { 0.0f, 0.0f }, { 0.0f, 0.0f } };
         sf::FloatRect exitRect{ { 0.0f, 0.0f }, { 0.0f, 0.0f } };

@@ -69,7 +69,12 @@ namespace halloween
 
         bool willDrawBeforeMap() const final { return false; }
         void setup(const Context & t_context) final;
-        void add(const Context & t_context, const sf::FloatRect & t_rect) final;
+
+        void
+            add(const Context & t_context,
+                const sf::FloatRect & t_rect,
+                const std::string & t_details) final;
+
         void clear() final;
         void update(const Context & t_context, const float t_frameTimeSec) final;
 

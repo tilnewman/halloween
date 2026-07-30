@@ -20,6 +20,7 @@ namespace halloween
 {
     class Bats;
     class Saws;
+    class Smoke;
     class Level;
     class Coins;
     class Darts;
@@ -65,7 +66,8 @@ namespace halloween
             InfoRegion & t_infoRegion,
             ObjectManagerList & t_objectManagerList,
             LevelStats & t_levelStats,
-            MushroomBoss & t_mushrooomBoos)
+            MushroomBoss & t_mushrooomBoos,
+            Smoke & t_smoke)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -90,6 +92,7 @@ namespace halloween
             , managers{ t_objectManagerList }
             , stats{ t_levelStats }
             , boss{ t_mushrooomBoos }
+            , smoke{t_smoke}
         {}
 
         const Settings & settings;
@@ -116,6 +119,7 @@ namespace halloween
         ObjectManagerList & managers;
         LevelStats & stats;
         MushroomBoss & boss;
+        Smoke & smoke;
     };
 
 } // namespace halloween

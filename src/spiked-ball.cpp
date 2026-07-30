@@ -40,7 +40,8 @@ namespace halloween
             m_texture, (t_context.settings.media_path / "image" / "spiked-ball.png"));
     }
 
-    void SpikedBalls::add(const Context &, const sf::FloatRect & t_region)
+    void SpikedBalls::add(
+        const Context &, const sf::FloatRect & t_region, const std::string &)
     {
         SpikedBall & ball{ m_balls.emplace_back(m_texture) };
         ball.sprite.setScale(m_scale);

@@ -17,21 +17,25 @@ namespace halloween
 
     //
 
-    class IObjectManager
+    struct IObjectManager
     {
-      public:
         virtual ~IObjectManager() = default;
 
         virtual bool willDrawBeforeMap() const = 0;
         virtual void clear() = 0;
         virtual void setup(const Context & t_context) = 0;
-        virtual void add(const Context & t_context, const sf::FloatRect & t_region) = 0;
+
+        virtual void
+            add(const Context & t_context,
+                const sf::FloatRect & t_region,
+                const std::string & t_details = "") = 0;
+
         virtual void update(const Context & t_context, const float t_frameTimeSec) = 0;
         virtual void moveWithMap(const sf::Vector2f & t_move) = 0;
 
         virtual void
             collideWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect) = 0;
-        
+
         virtual bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const = 0;
         virtual void appendCollisions(std::vector<sf::FloatRect> & t_rects) const = 0;
 

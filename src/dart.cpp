@@ -37,7 +37,7 @@ namespace halloween
             m_texture, (t_context.settings.media_path / "image" / "kunai.png"));
     }
 
-    void Darts::add(const Context &, const sf::FloatRect & t_region)
+    void Darts::add(const Context &, const sf::FloatRect & t_region, const std::string &)
     {
         Dart & dart{ m_darts.emplace_back(m_texture) };
         dart.sprite.setScale(m_scale);

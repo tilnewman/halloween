@@ -26,6 +26,7 @@
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "slime.hpp"
+#include "smoke.hpp"
 #include "sound-player.hpp"
 #include "spiked-ball.hpp"
 #include "state-machine.hpp"
@@ -83,6 +84,7 @@ namespace halloween
         std::unique_ptr<LevelStats> m_statsUPtr;
         std::unique_ptr<MushroomBoss> m_bossUPtr;
         std::unique_ptr<FramerateDisplay> m_framerateDisplayUPtr;
+        std::unique_ptr<Smoke> m_smokeUPtr;
 
         std::unique_ptr<Context> m_contextUPtr;
     };

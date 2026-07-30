@@ -1079,9 +1079,42 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":22,
+         "name":"smoke",
+         "objects":[
+                {
+                 "height":79,
+                 "id":92,
+                 "name":"top,255",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":448,
+                 "x":1504,
+                 "y":1248
+                }, 
+                {
+                 "height":384,
+                 "id":93,
+                 "name":"still,64",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":1280,
+                 "x":2880,
+                 "y":928
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":22,
- "nextobjectid":92,
+ "nextlayerid":23,
+ "nextobjectid":94,
  "orientation":"orthogonal",
  "properties":[
         {

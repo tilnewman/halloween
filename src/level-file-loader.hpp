@@ -27,26 +27,26 @@ namespace halloween
         bool load(const Context & t_context);
 
       private:
-        void parseLevelDetails(const Context & t_context, Json & json);
-        void parseObjectTextureGIDs(const Context & t_context, Json & json);
-        void parseBackgroundImageNumber(const Context & t_context, Json & json);
-        void parseLayers(const Context & t_context, Json & json);
-        void parseTileLayer(const Context & t_context, const TileImage image, Json & json);
-        
+        void parseLevelDetails(const Context & t_context, Json & json) const;
+        void parseObjectTextureGIDs(const Context & t_context, Json & json) const;
+        void parseBackgroundImageNumber(const Context & t_context, Json & json) const;
+        void parseLayers(const Context & t_context, Json & json) const;
+        void parseTileLayer(const Context & t_context, const TileImage image, Json & json) const;
+
         void parseRectLayer(
-            const Context & t_context, Json & json, std::vector<sf::FloatRect> & rects);
-        
-        const sf::FloatRect parseAndConvertRect(const Context & t_context, Json & json);
-        void parseSpawnLayer(const Context & t_context, Json & json);
+            const Context & t_context, Json & json, std::vector<sf::FloatRect> & rects) const;
+
+        const sf::FloatRect parseAndConvertRect(const Context & t_context, Json & json) const;
+        void parseSpawnLayer(const Context & t_context, Json & json) const;
 
         template <typename T>
-        void parseObjectLayerRects(T & manager, const Context & t_context, Json & json)
+        void parseObjectLayerRects(T & manager, const Context & t_context, Json & json) const
         {
-            manager.clear();
-
             for (Json & j : json["objects"])
             {
-                manager.add(t_context, parseAndConvertRect(t_context, j));
+                const std::string details = j["name"];
+                const sf::FloatRect rect{ parseAndConvertRect(t_context, j) };
+                manager.add(t_context, rect, details);
             }
         }
 

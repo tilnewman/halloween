@@ -55,7 +55,12 @@ namespace halloween
         bool willDrawBeforeMap() const final { return false; }
         void setup(const Context & t_context) final;
         void clear() final;
-        void add(const Context & t_context, const sf::FloatRect & t_region) final;
+
+        void
+            add(const Context & t_context,
+                const sf::FloatRect & t_region,
+                const std::string & t_details) final;
+        
         void update(const Context & t_context, const float t_frameTimeSec) final;
 
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
