@@ -117,6 +117,10 @@ namespace halloween
             {
                 t_context.media.object_texture3.gid = gid;
             }
+            else if (filename == "object-4.tsj")
+            {
+                t_context.media.object_texture4.gid = gid;
+            }
             else
             {
                 std::cout << "Warning: While parsing \"" << m_pathStr
@@ -197,6 +201,10 @@ namespace halloween
             else if (layerName == "object-3")
             {
                 parseTileLayer(t_context, TileImage::Object3, jsonLayer);
+            }
+            else if (layerName == "object-4")
+            {
+                parseTileLayer(t_context, TileImage::Object4, jsonLayer);
             }
             else if (layerName == "collision")
             {
