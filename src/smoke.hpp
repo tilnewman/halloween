@@ -46,12 +46,14 @@ namespace halloween
             const SmokeType t_type,
             const sf::Sprite & t_sprite,
             const std::size_t t_frameIndex,
-            const sf::FloatRect & t_rect)
+            const sf::FloatRect & t_rect,
+            const bool t_isFacingRight)
             : type{ t_type }
             , sprite{ t_sprite }
             , elapsed_time_sec{ 0.0f }
             , frame_index{ t_frameIndex }
             , rect{ t_rect }
+            , is_facing_right{ t_isFacingRight }
         {}
 
         SmokeType type;
@@ -59,6 +61,7 @@ namespace halloween
         float elapsed_time_sec;
         std::size_t frame_index;
         sf::FloatRect rect;
+        bool is_facing_right;
     };
 
     //

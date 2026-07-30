@@ -106,13 +106,20 @@ namespace halloween
         sf::Sprite sprite{ m_textures.at(frameIndex) };
         util::scaleAndCenterInside(sprite, t_region);
 
+        const bool isFacingRight{ t_context.random.boolean() };
+        if (!isFacingRight)
+        {
+            sprite.scale({-1.0f, 1.0f});
+            sprite.move({ sprite.getGlobalBounds().size.x, 0.0f });
+        }
+
         const SmokeDetails details{ t_details };
 
         sf::Color smokeColor{ t_context.settings.smoke_color };
         smokeColor.a = details.alpha;
         sprite.setColor(smokeColor);
 
-        m_animations.emplace_back(details.type, sprite, frameIndex, t_region);
+        m_animations.emplace_back(details.type, sprite, frameIndex, t_region, isFacingRight);
     }
 
     void Smoke::update(const Context & t_context, const float t_elapsedTimeSec)
@@ -142,6 +149,12 @@ namespace halloween
 
                         anim.sprite.setTextureRect(offscreenRect);
                         util::scaleAndCenterInside(anim.sprite, anim.rect);
+
+                        if (!anim.is_facing_right)
+                        {
+                            anim.sprite.scale({ -1.0f, 1.0f });
+                            anim.sprite.move({ anim.sprite.getGlobalBounds().size.x, 0.0f });
+                        }
                     }
                 }
             }
