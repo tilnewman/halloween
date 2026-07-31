@@ -117,15 +117,15 @@ namespace halloween
             {
                 t_context.media.setGidObject3(gid);
             }
-            else if (filename == "tile-jungle-trees.tsj")
+            else if (filename == "jungle-trees.tsj")
             {
                 t_context.media.setGidJungleTrees(gid);
             }
-            else if (filename == "tile-jungle-trees-flip.tsj")
+            else if (filename == "jungle-trees-flip.tsj")
             {
                 t_context.media.setGidJungleTreesFlip(gid);
             }
-            else if (filename == "tile-jungle-misc.tsj")
+            else if (filename == "jungle-misc.tsj")
             {
                 t_context.media.setGidJungleMisc(gid);
             }

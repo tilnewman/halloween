@@ -535,15 +535,15 @@
         }, 
         {
          "firstgid":769,
-         "source":"..\/tiled\/tile-jungle-trees.tsj"
+         "source":"..\/tiled\/jungle-trees.tsj"
         }, 
         {
          "firstgid":1793,
-         "source":"..\/tiled\/tile-jungle-trees-flip.tsj"
+         "source":"..\/tiled\/jungle-trees-flip.tsj"
         }, 
         {
          "firstgid":2817,
-         "source":"..\/tiled\/tile-jungle-misc.tsj"
+         "source":"..\/tiled\/jungle-misc.tsj"
         }],
  "tilewidth":32,
  "type":"map",
