@@ -150,8 +150,6 @@ namespace halloween
         m_avatarUPtr->setup(m_settings);
         m_infoRegionUPtr->setup(*m_contextUPtr);
         m_levelUPtr->setup(*m_contextUPtr);
-
-        m_stateMachineUPtr->setChangePending(State::Credits);
     }
 
     void GameLoop::teardown()
