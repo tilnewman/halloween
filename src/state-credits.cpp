@@ -150,6 +150,15 @@ namespace halloween
             t_context, "Ninja Girl Free Sprites", "www.gameart2d.com", "", "") };
 
         spritesheetCredit.vertPosition(tilesetCredit.bottom() + vertSpacer);
+
+        Credit & forestPlatformCredit{ m_credits.emplace_back(
+            t_context,
+            "2d Platformer Forest Kit",
+            "www.opengameart.org/content/2d-platformer-forest-kit",
+            "Thanks to ArtByte for this great looking art!",
+            "") };
+
+        forestPlatformCredit.vertPosition(spritesheetCredit.bottom() + vertSpacer);
     }
 
     void StateCredits::onExit(const Context & t_context) { t_context.music.stop("credits.ogg"); }
