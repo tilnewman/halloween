@@ -68,9 +68,9 @@ namespace halloween
 
     //
 
-    struct TileSet
+    struct MapTiles
     {
-        TileSet()
+        MapTiles()
             : count{}
             , size{}
             , layers{}

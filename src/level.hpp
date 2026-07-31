@@ -65,11 +65,11 @@ namespace halloween
             m_waterCollisions = t_rects;
         }
 
-        inline const std::vector<TileLayer> & tileLayers() const { return m_tiles.layers; }
+        inline const std::vector<TileLayer> & tileLayers() const { return m_mapTiles.layers; }
 
         void appendTileLayer(const TileLayer & t_tileLayer)
         {
-            m_tiles.layers.push_back(t_tileLayer);
+            m_mapTiles.layers.push_back(t_tileLayer);
         }
 
         inline const sf::Vector2f mapPosition() const { return m_mapPosition; }
@@ -92,8 +92,8 @@ namespace halloween
             const sf::Vector2f & t_tileSizeScreen,
             const sf::Vector2f & t_mapPosition)
         {
-            m_tiles.count = t_tileCount;
-            m_tiles.size = t_tileSizeOnMap;
+            m_mapTiles.count = t_tileCount;
+            m_mapTiles.size = t_tileSizeOnMap;
             m_tileSizeScreen = t_tileSizeScreen;
             m_mapPosition = t_mapPosition;
         }
@@ -113,7 +113,7 @@ namespace halloween
             TileLayer & t_layer) const;
 
       private:
-        TileSet m_tiles;
+        MapTiles m_mapTiles;
         sf::Vector2f m_mapPosition;
         sf::Vector2f m_tileSizeScreen;
         std::vector<sf::FloatRect> m_walkCollisions;
