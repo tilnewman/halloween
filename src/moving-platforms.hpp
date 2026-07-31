@@ -18,32 +18,19 @@ namespace halloween
 
     //
 
-    enum class PlatformMoveType
-    {
-        Horizontal,
-        Vertical,
-        Circular
-    };
-
-    //
-
     struct PlatformAnim
     {
         PlatformAnim(
             const Context & t_context,
-            const PlatformMoveType t_type,
             const sf::Texture & t_texture,
             const sf::FloatRect & t_rect);
 
         [[nodiscard]] inline const sf::FloatRect collisionRect() const;
 
-        PlatformMoveType type;
+        bool is_horiz;
         sf::Sprite sprite;
-        float elapsed_time_sec;
-        bool is_facing_right;
         sf::FloatRect rect;
-        util::SliderRatio<float> horiz_slider;
-        util::SliderRatio<float> vert_slider;
+        util::SliderOscillator<float> slider;
     };
 
     //

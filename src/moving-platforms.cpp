@@ -14,40 +14,31 @@ namespace halloween
 
     PlatformAnim::PlatformAnim(
         const Context & t_context,
-        const PlatformMoveType t_type,
         const sf::Texture & t_texture,
         const sf::FloatRect & t_rect)
-        : type{ t_type }
+        : is_horiz{ t_rect.size.x > t_rect.size.y }
         , sprite{ t_texture }
-        , elapsed_time_sec{ 0.0f }
-        , is_facing_right{ t_context.random.boolean() }
         , rect{ t_rect }
-        , horiz_slider{ 1.0f }
-        , vert_slider{ 1.0f }
+        , slider{ 0.0f, 1.0f, t_context.random.fromTo(0.2f, 0.5f) }
     {
-        if (!is_facing_right)
-        {
-            sprite.scale({ -1.0f, 1.0f });
-            sprite.move({ sprite.getGlobalBounds().size.x, 0.0f });
-        }
-
-        if (PlatformMoveType::Horizontal == type)
+        if (is_horiz)
         {
             sprite.setPosition(
                 { t_rect.position.x,
                   (util::center(t_rect).y - (sprite.getGlobalBounds().size.y * 0.5f)) });
-        }
-        else if (PlatformMoveType::Vertical == type)
-        {
-            sprite.setPosition(
-                { (util::center(t_rect).x - (sprite.getGlobalBounds().size.y * 0.5f)),
-                  util::bottom(t_rect) });
         }
         else
         {
             sprite.setPosition(
-                { t_rect.position.x,
-                  (util::center(t_rect).y - (sprite.getGlobalBounds().size.y * 0.5f)) });
+                { (util::center(t_rect).x - (sprite.getGlobalBounds().size.y * 0.5f)),
+                  t_rect.position.y });
+        }
+
+        util::setOriginToCenter(sprite);
+
+        if (t_context.random.boolean())
+        {
+            sprite.scale({ -1.0f, 1.0f });
         }
     }
 
@@ -77,36 +68,34 @@ namespace halloween
     void MovingPlatforms::add(
         const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
     {
-        const PlatformMoveType type = [&]() {
-            if (t_rect.size.x > t_rect.size.y)
-            {
-                return PlatformMoveType::Horizontal;
-            }
-            else if (t_rect.size.y > t_rect.size.x)
-            {
-                return PlatformMoveType::Vertical;
-            }
-            else
-            {
-                return PlatformMoveType::Circular;
-            }
-        }();
-
-        m_anims.emplace_back(t_context, type, m_texture, t_rect);
+        m_anims.emplace_back(t_context, m_texture, t_rect);
     }
 
-    void MovingPlatforms::update(const Context & t_context, const float t_frameTimeSec)
+    void MovingPlatforms::update(const Context &, const float t_elapsedTimeSec)
     {
         for (PlatformAnim & anim : m_anims)
         {
-            if (PlatformMoveType::Horizontal == anim.type)
+            if (anim.is_horiz)
             {
+                const float span{ anim.rect.size.x - anim.sprite.getGlobalBounds().size.x };
+                const float ratio{ anim.slider.update(t_elapsedTimeSec) };
+
+                const float posHoriz{ (
+                    anim.rect.position.x + (anim.sprite.getGlobalBounds().size.x * 0.5f) +
+                    (ratio * span)) };
+
+                anim.sprite.setPosition({ posHoriz, anim.sprite.getPosition().y });
             }
-            else if (PlatformMoveType::Vertical == anim.type)
+            else
             {
-            }
-            else if (PlatformMoveType::Circular == anim.type)
-            {
+                const float span{ anim.rect.size.y - anim.sprite.getGlobalBounds().size.y };
+                const float ratio{ anim.slider.update(t_elapsedTimeSec) };
+
+                const float posVert{ anim.rect.position.y +
+                                     (anim.sprite.getGlobalBounds().size.y * 0.5f) +
+                                     (ratio * span) };
+
+                anim.sprite.setPosition({ anim.sprite.getPosition().x, posVert });
             }
         }
     }
@@ -120,11 +109,9 @@ namespace halloween
         }
     }
 
-    void MovingPlatforms::collideWithAvatar(
-        const Context & t_context, const sf::FloatRect & t_avatarRect)
-    {}
+    void MovingPlatforms::collideWithAvatar(const Context &, const sf::FloatRect &) {}
 
-    bool MovingPlatforms::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool MovingPlatforms::doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const
     {
         return false;
     }
