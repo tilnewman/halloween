@@ -28,7 +28,7 @@ namespace halloween
         JungleMisc
     };
 
-    // these names must be the names in the Tiled level/map layers
+    // these names must match the layer names in Tiled, and the files in media/tiled
     constexpr const std::string_view toString(const TileImage t_image) noexcept
     {
         // clang-format off
