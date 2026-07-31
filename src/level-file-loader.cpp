@@ -103,27 +103,31 @@ namespace halloween
 
             if (filename == "ground.tsx")
             {
-                t_context.media.setTileTextureGidGround(gid);
+                t_context.media.setGidGround(gid);
             }
             else if (filename == "object-1.tsx")
             {
-                t_context.media.setTileTextureGidObject1(gid);
+                t_context.media.setGidObject1(gid);
             }
             else if (filename == "object-2.tsx")
             {
-                t_context.media.setTileTextureGidObject2(gid);
+                t_context.media.setGidObject2(gid);
             }
             else if (filename == "object-3.tsx")
             {
-                t_context.media.setTileTextureGidObject3(gid);
+                t_context.media.setGidObject3(gid);
             }
-            else if (filename == "object-4.tsx")
+            else if (filename == "tile-jungle-trees.tsj")
             {
-                t_context.media.setTileTextureGidObject4(gid);
+                t_context.media.setGidJungleTrees(gid);
             }
-            else if (filename == "object-5.tsx")
+            else if (filename == "tile-jungle-trees-flip.tsj")
             {
-                t_context.media.setTileTextureGidObject5(gid);
+                t_context.media.setGidJungleTreesFlip(gid);
+            }
+            else if (filename == "tile-jungle-misc.tsj")
+            {
+                t_context.media.setGidJungleMisc(gid);
             }
             else
             {
@@ -186,13 +190,17 @@ namespace halloween
             {
                 parseTileLayer(t_context, TileImage::Object3, jsonLayer);
             }
-            else if (layerName == "object-4")
+            else if (layerName == "jungle-trees")
             {
-                parseTileLayer(t_context, TileImage::Object4, jsonLayer);
+                parseTileLayer(t_context, TileImage::JungleTrees, jsonLayer);
             }
-            else if (layerName == "object-5")
+            else if (layerName == "jungle-trees-flip")
             {
-                parseTileLayer(t_context, TileImage::Object5, jsonLayer);
+                parseTileLayer(t_context, TileImage::JungleTreesFlip, jsonLayer);
+            }
+            else if (layerName == "jungle-misc")
+            {
+                parseTileLayer(t_context, TileImage::JungleMisc, jsonLayer);
             }
             else if (layerName == "collision")
             {

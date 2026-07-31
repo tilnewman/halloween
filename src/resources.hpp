@@ -51,13 +51,14 @@ namespace halloween
 
         const TileTexture & tileTexture(const TileImage t_image) const;
 
-        constexpr void setTileTextureGidGround(const int t_gid) { m_groundTexture.gid = t_gid; }
-        constexpr void setTileTextureGidObject1(const int t_gid) { m_objectTexture1.gid = t_gid; }
-        constexpr void setTileTextureGidObject2(const int t_gid) { m_objectTexture2.gid = t_gid; }
-        constexpr void setTileTextureGidObject3(const int t_gid) { m_objectTexture3.gid = t_gid; }
-        constexpr void setTileTextureGidObject4(const int t_gid) { m_objectTexture4.gid = t_gid; }
-        constexpr void setTileTextureGidObject5(const int t_gid) { m_objectTexture5.gid = t_gid; }
-        
+        constexpr void setGidGround(const int t_gid) { m_groundTexture.gid = t_gid; }
+        constexpr void setGidObject1(const int t_gid) { m_objectTexture1.gid = t_gid; }
+        constexpr void setGidObject2(const int t_gid) { m_objectTexture2.gid = t_gid; }
+        constexpr void setGidObject3(const int t_gid) { m_objectTexture3.gid = t_gid; }
+        constexpr void setGidJungleTrees(const int t_gid) { m_tileJungleTrees.gid = t_gid; }
+        constexpr void setGidJungleTreesFlip(const int t_gid) { m_tileJungleTreesFlip.gid = t_gid; }
+        constexpr void setGidJungleMisc(const int t_gid) { m_tileJungleMisc.gid = t_gid; }
+
         inline const sf::Sprite backgroundSprite() const { return m_bgSprite; }
 
         void setupBackgroundSprite(const Context & t_context, const int t_bgImageNumber);
@@ -68,12 +69,13 @@ namespace halloween
         TileTexture m_objectTexture1;
         TileTexture m_objectTexture2;
         TileTexture m_objectTexture3;
-        TileTexture m_objectTexture4;
-        TileTexture m_objectTexture5;
+        TileTexture m_tileJungleTrees;
+        TileTexture m_tileJungleTreesFlip;
+        TileTexture m_tileJungleMisc;
         sf::Texture m_bgTexture1;
         sf::Texture m_bgTexture2;
         sf::Texture m_bgTexture3;
-        sf::Sprite  m_bgSprite;
+        sf::Sprite m_bgSprite;
     };
 
 } // namespace halloween

@@ -21,6 +21,9 @@ namespace halloween
         , m_objectTexture1{}
         , m_objectTexture2{}
         , m_objectTexture3{}
+        , m_tileJungleTrees{}
+        , m_tileJungleTreesFlip{}
+        , m_tileJungleMisc{}
         , m_bgTexture1{}
         , m_bgTexture2{}
         , m_bgTexture3{}
@@ -67,13 +70,19 @@ namespace halloween
         m_objectTexture3.which = TileImage::Object3;
         m_objectTexture3.size = sf::Vector2i(m_objectTexture3.texture.getSize());
 
-        util::TextureLoader::load(m_objectTexture4.texture, (imagePath + "tile-object-4.png"));
-        m_objectTexture4.which = TileImage::Object4;
-        m_objectTexture4.size = sf::Vector2i(m_objectTexture4.texture.getSize());
+        util::TextureLoader::load(m_tileJungleTrees.texture, (imagePath + "tile-jungle-trees.png"));
+        m_tileJungleTrees.which = TileImage::JungleTrees;
+        m_tileJungleTrees.size = sf::Vector2i(m_tileJungleTrees.texture.getSize());
 
-        util::TextureLoader::load(m_objectTexture5.texture, (imagePath + "tile-object-5.png"));
-        m_objectTexture5.which = TileImage::Object5;
-        m_objectTexture5.size = sf::Vector2i(m_objectTexture5.texture.getSize());
+        util::TextureLoader::load(m_tileJungleMisc.texture, (imagePath + "tile-jungle-misc.png"));
+        m_tileJungleMisc.which = TileImage::JungleMisc;
+        m_tileJungleMisc.size = sf::Vector2i(m_tileJungleMisc.texture.getSize());
+
+        util::TextureLoader::load(
+            m_tileJungleTreesFlip.texture, (imagePath + "tile-jungle-trees-flip.png"));
+
+        m_tileJungleTreesFlip.which = TileImage::JungleTreesFlip;
+        m_tileJungleTreesFlip.size = sf::Vector2i(m_tileJungleTreesFlip.texture.getSize());
     }
 
     const sf::Text Resources::makeText(
@@ -92,12 +101,13 @@ namespace halloween
         // clang-format off
         switch (image)
         {
-            case TileImage::Ground:  { return m_groundTexture;  }
-            case TileImage::Object1: { return m_objectTexture1; }
-            case TileImage::Object2: { return m_objectTexture2; }
-            case TileImage::Object3: { return m_objectTexture3; }
-            case TileImage::Object4: { return m_objectTexture4; }
-            case TileImage::Object5: { return m_objectTexture5; }
+            case TileImage::Ground:          { return m_groundTexture;       }
+            case TileImage::Object1:         { return m_objectTexture1;      }
+            case TileImage::Object2:         { return m_objectTexture2;      }
+            case TileImage::Object3:         { return m_objectTexture3;      }
+            case TileImage::JungleTrees:     { return m_tileJungleTrees;     }
+            case TileImage::JungleTreesFlip: { return m_tileJungleTreesFlip; }
+            case TileImage::JungleMisc:      { return m_tileJungleMisc;      }
             default:
             {
                 throw std::runtime_error("Resources::tileTexture() given an invalid TileImage enum.");

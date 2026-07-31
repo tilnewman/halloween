@@ -591,14 +591,6 @@
         {
          "firstgid":769,
          "source":"..\/tiled\/object-1.tsx"
-        }, 
-        {
-         "firstgid":1025,
-         "source":"..\/tiled\/object-4.tsx"
-        }, 
-        {
-         "firstgid":1281,
-         "source":"..\/tiled\/object-5.tsx"
         }],
  "tilewidth":32,
  "type":"map",

@@ -21,8 +21,9 @@ namespace halloween
         Object1,
         Object2,
         Object3,
-        Object4,
-        Object5
+        JungleTrees,
+        JungleTreesFlip,
+        JungleMisc
     };
 
     inline std::ostream & operator<<(std::ostream & t_os, const TileImage t_image)
@@ -30,13 +31,14 @@ namespace halloween
         // clang-format off
         switch (t_image)
         {
-            case TileImage::Ground:  { t_os << "ground";   break; }
-            case TileImage::Object1: { t_os << "object-1"; break; }
-            case TileImage::Object2: { t_os << "object-2"; break; }
-            case TileImage::Object3: { t_os << "object-3"; break; }
-            case TileImage::Object4: { t_os << "object-4"; break; }
-            case TileImage::Object5: { t_os << "object-5"; break; }
-            default:        { t_os << "Unknown_TileImage"; break; }
+            case TileImage::Ground:          { t_os << "ground";   break; }
+            case TileImage::Object1:         { t_os << "object-1"; break; }
+            case TileImage::Object2:         { t_os << "object-2"; break; }
+            case TileImage::Object3:         { t_os << "object-3"; break; }
+            case TileImage::JungleTrees:     { t_os << "jungle-trees"; break; }
+            case TileImage::JungleTreesFlip: { t_os << "jungle-trees-flip"; break; }
+            case TileImage::JungleMisc:      { t_os << "jungle-misc"; break; }
+            default:                         { t_os << "Unknown_TileImage"; break; }
         }
         // clang-format on
 
