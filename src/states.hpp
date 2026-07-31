@@ -50,31 +50,28 @@ namespace halloween
 
     //
 
-    namespace state // TODO we don't need this anymore right?
+    inline constexpr std::string_view toString(const State t_state) noexcept
     {
-        inline constexpr std::string_view toString(const State t_state) noexcept
+        // clang-format off
+        switch (t_state)
         {
-            // clang-format off
-            switch (t_state)
-            {
-                case State::Start:     { return "Start";           }
-                case State::Title:     { return "Title";           }
-                case State::Play:      { return "Play";            }
-                case State::Pause:     { return "Pause";           }
-                case State::Level:     { return "Level";           }
-                case State::Lose:      { return "Lose";            }
-                case State::Win:       { return "Win";             }
-                case State::Credits:   { return "Credits";         }
-                case State::Quit:      { return "Quit";            }
-                default:               { return "Unknown_State";   }
-            }
-            // clang-format on
+            case State::Start:     { return "Start";         }
+            case State::Title:     { return "Title";         }
+            case State::Play:      { return "Play";          }
+            case State::Pause:     { return "Pause";         }
+            case State::Level:     { return "Level";         }
+            case State::Lose:      { return "Lose";          }
+            case State::Win:       { return "Win";           }
+            case State::Credits:   { return "Credits";       }
+            case State::Quit:      { return "Quit";          }
+            default:               { return "Unknown_State"; }
         }
-    } // namespace state
+        // clang-format on
+    }
 
     inline std::ostream & operator<<(std::ostream & t_os, const State t_state)
     {
-        t_os << state::toString(t_state);
+        t_os << toString(t_state);
         return t_os;
     }
 
