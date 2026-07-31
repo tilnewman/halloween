@@ -12,10 +12,12 @@
 #include "level.hpp"
 #include "object-manager.hpp"
 #include "screen-regions.hpp"
+#include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
 #include "state-machine.hpp"
 #include "state-play.hpp"
+#include "texture-loader.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -27,6 +29,10 @@ namespace halloween
 
     LevelCompleteState::LevelCompleteState()
         : StateBase{ State::Level, State::Play }
+        , m_strawMatTexture{}
+        , m_strawMatSprite{ m_strawMatTexture }
+        , m_panelTexture{}
+        , m_panelSprite{ m_panelTexture }
         , m_levelCompleteText{ util::SfmlDefaults::instance().font() }
         , m_scoreText{ util::SfmlDefaults::instance().font() }
         , m_bonusText{ util::SfmlDefaults::instance().font() }
@@ -45,11 +51,45 @@ namespace halloween
 
         t_context.audio.play("level-complete");
 
-        m_levelCompleteText =
-            t_context.fonts.makeText(99, "Level Complete!\n\n", m_textColorDefault);
+        //
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 
-        util::fitAndCenterInside(
-            m_levelCompleteText, util::scaleRectInPlaceCopy(t_context.layout.wholeRegion(), 0.25f));
+        util::TextureLoader::load(
+            m_strawMatTexture, (t_context.settings.media_path / "image" / "straw-mat.png"), true);
+
+        m_strawMatTexture.setRepeated(true);
+
+        m_strawMatSprite.setTexture(m_strawMatTexture, true);
+        m_strawMatSprite.setTextureRect({ { 0, 0 }, sf::Vector2i{ wholeRect.size } });
+        m_strawMatSprite.setColor(sf::Color(255, 255, 255, 127));
+
+        //
+        util::TextureLoader::load(
+            m_panelTexture, (t_context.settings.media_path / "image" / "wood-panel.png"), true);
+
+        m_panelTexture.setRepeated(true);
+
+        m_panelSprite.setTexture(m_panelTexture, true);
+
+        sf::IntRect panelRect;
+        panelRect.position.x = 0;
+        panelRect.position.y = 0;
+        panelRect.size.x = static_cast<int>(wholeRect.size.x);
+        panelRect.size.y = static_cast<int>(m_panelTexture.getSize().y);
+        m_panelSprite.setTextureRect(panelRect);
+
+        m_panelSprite.setPosition({ 0.0f, static_cast<float>(m_panelTexture.getSize().y * 2) });
+
+        //
+        const sf::FloatRect panelContextRect{ { 0.0f, (m_panelSprite.getPosition().y + 30.0f) },
+                                              { wholeRect.size.x, 210.0f } };
+
+        //
+        m_levelCompleteText = t_context.fonts.makeText(99, "Level Complete!", m_textColorDefault);
+
+        m_levelCompleteText.setPosition(
+            { (util::center(wholeRect).x - util::center(m_levelCompleteText.getGlobalBounds()).x),
+              (panelContextRect.position.y + 5.0f) });
 
         m_scoreDisplayed = t_context.info_region.score();
 
@@ -58,12 +98,12 @@ namespace halloween
         updateScoreText(t_context);
 
         m_bonusTextRegion.position.x = 0.0f;
-        m_bonusTextRegion.position.y = util::bottom(m_scoreText);
-        m_bonusTextRegion.size.x = t_context.layout.wholeRegion().size.x;
 
-        m_bonusTextRegion.size.y =
-            ((t_context.layout.wholeRegion().size.y - m_bonusTextRegion.position.y) -
-             (t_context.layout.wholeSize().y * 0.25f));
+        m_bonusTextRegion.position.y =
+            (util::bottom(panelContextRect) - m_levelCompleteText.getGlobalBounds().size.y);
+
+        m_bonusTextRegion.size.x = t_context.layout.wholeRegion().size.x;
+        m_bonusTextRegion.size.y = m_levelCompleteText.getGlobalBounds().size.y;
 
         const unsigned bonusTextCharSize{ 70 };
         const sf::Color bonusTextColor{ 255, 255, 153 };
@@ -121,6 +161,7 @@ namespace halloween
         scoreStr += std::to_string(m_scoreDisplayed);
         m_scoreText.setString(scoreStr);
         util::centerInside(m_scoreText, t_context.layout.wholeRegion());
+        m_scoreText.move({ 0.0f, -(t_context.layout.wholeRegion().size.y * 0.025f) });
     }
 
     void LevelCompleteState::onExit(const Context & t_context)
@@ -237,6 +278,8 @@ namespace halloween
     void LevelCompleteState::draw(
         const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
+        t_target.draw(m_strawMatSprite, t_states);
+        t_target.draw(m_panelSprite, t_states);
         t_target.draw(m_levelCompleteText, t_states);
         t_target.draw(m_scoreText, t_states);
         t_target.draw(m_bonusText, t_states);

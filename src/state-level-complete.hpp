@@ -67,12 +67,17 @@ namespace halloween
         void updateScoreText(const Context & t_context);
 
       private:
+        sf::Texture m_strawMatTexture;
+        sf::Sprite m_strawMatSprite;
+        sf::Texture m_panelTexture;
+        sf::Sprite m_panelSprite;
+
         sf::Text m_levelCompleteText;
         sf::Text m_scoreText;
         sf::Text m_bonusText;
         std::vector<Bonus> m_bonuses;
         sf::FloatRect m_bonusTextRegion;
-
+        
         bool m_isPreWaiting;
         bool m_isShowingBonuses;
         bool m_isPostWaiting;
