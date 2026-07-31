@@ -16,6 +16,7 @@
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
 #include "state-machine.hpp"
+#include "texture-loader.hpp"
 
 #include <string>
 
@@ -102,12 +103,27 @@ namespace halloween
     StateCredits::StateCredits()
         : StateBase{ State::Credits, State::Quit }
         , m_credits{}
+        , m_bgTexture{}
+        , m_bgSprite{ m_bgTexture }
     {}
 
     void StateCredits::onEnter(const Context & t_context)
     {
         t_context.music.start("credits.ogg", 20.0f);
 
+        //
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
+
+        util::TextureLoader::load(
+            m_bgTexture, (t_context.settings.media_path / "image" / "straw-mat.png"), true);
+
+        m_bgTexture.setRepeated(true);
+
+        m_bgSprite.setTexture(m_bgTexture, true);
+        m_bgSprite.setTextureRect({ { 0, 0 }, sf::Vector2i{ wholeRect.size } });
+        m_bgSprite.setColor(sf::Color(255, 255, 255, 64));
+
+        //
         const sf::FloatRect screenRect{ t_context.layout.wholeRegion() };
 
         Credit & softwareCredit{ m_credits.emplace_back(
@@ -159,6 +175,15 @@ namespace halloween
             "") };
 
         forestPlatformCredit.vertPosition(spritesheetCredit.bottom() + vertSpacer);
+
+        Credit & texturesCredit{ m_credits.emplace_back(
+            t_context,
+            "Ryzom Selected Textures",
+            "Credit to Nevrax SARL / Winch Gate Properties Ltd. Ryzom",
+            "https://atys.wiki.ryzom.com/wiki/Ryzom_Commons:About",
+            "") };
+
+        texturesCredit.vertPosition(forestPlatformCredit.bottom() + vertSpacer);
     }
 
     void StateCredits::onExit(const Context & t_context) { t_context.music.stop("credits.ogg"); }
@@ -180,6 +205,8 @@ namespace halloween
     void StateCredits::draw(
         const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
+        t_target.draw(m_bgSprite, t_states);
+
         for (const Credit & credit : m_credits)
         {
             t_target.draw(credit, t_states);

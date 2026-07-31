@@ -65,6 +65,8 @@ namespace halloween
 
       private:
         std::vector<Credit> m_credits;
+        sf::Texture m_bgTexture;
+        sf::Sprite m_bgSprite;
     };
 
 } // namespace halloween
