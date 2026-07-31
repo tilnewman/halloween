@@ -174,31 +174,31 @@ namespace halloween
         {
             const std::string layerName = jsonLayer["name"];
 
-            if (layerName == "ground")
+            if (layerName == toString(TileImage::Ground))
             {
                 parseTileLayer(t_context, TileImage::Ground, jsonLayer);
             }
-            else if (layerName == "object-1")
+            else if (layerName == toString(TileImage::Object1))
             {
                 parseTileLayer(t_context, TileImage::Object1, jsonLayer);
             }
-            else if (layerName == "object-2")
+            else if (layerName == toString(TileImage::Object2))
             {
                 parseTileLayer(t_context, TileImage::Object2, jsonLayer);
             }
-            else if (layerName == "object-3")
+            else if (layerName == toString(TileImage::Object3))
             {
                 parseTileLayer(t_context, TileImage::Object3, jsonLayer);
             }
-            else if (layerName == "jungle-trees")
+            else if (layerName == toString(TileImage::JungleTrees))
             {
                 parseTileLayer(t_context, TileImage::JungleTrees, jsonLayer);
             }
-            else if (layerName == "jungle-trees-flip")
+            else if (layerName == toString(TileImage::JungleTreesFlip))
             {
                 parseTileLayer(t_context, TileImage::JungleTreesFlip, jsonLayer);
             }
-            else if (layerName == "jungle-misc")
+            else if (layerName == toString(TileImage::JungleMisc))
             {
                 parseTileLayer(t_context, TileImage::JungleMisc, jsonLayer);
             }
