@@ -214,9 +214,18 @@ namespace halloween
         void onEnter(const Context & t_context) override;
         void update(const Context & t_context, const float t_frameTimeSec) override;
         bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
+        void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
 
       protected:
         bool m_hasMouseClickedOrKeyPressed{ false };
+        const sf::FloatRect panelContentRect() const noexcept { return m_panelContentRect; }
+
+      private:
+        sf::Texture m_strawMatTexture;
+        sf::Sprite m_strawMatSprite;
+        sf::Texture m_panelTexture;
+        sf::Sprite m_panelSprite;
+        sf::FloatRect m_panelContentRect;
     };
 
     //
@@ -233,12 +242,6 @@ namespace halloween
             const Context & t_context,
             sf::RenderTarget & t_target,
             sf::RenderStates & t_states) const final;
-
-      private:
-        sf::Text m_text1;
-        sf::Text m_text2;
-        sf::Text m_text3;
-        sf::Text m_text4;
     };
 
     //
@@ -280,8 +283,10 @@ namespace halloween
 
       private:
         sf::Text m_scoreText;
-        sf::Texture m_accentTexture;
-        sf::Sprite m_accentSprite;
+        sf::Texture m_accentTexture1;
+        sf::Texture m_accentTexture2;
+        sf::Sprite m_accentSprite1;
+        sf::Sprite m_accentSprite2;
     };
 
     //

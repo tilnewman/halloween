@@ -49,9 +49,6 @@ namespace halloween
     void StateBase::setupText(const Context & t_context, const std::string & t_message)
     {
         m_text = t_context.fonts.makeText(99, t_message, m_textColorDefault);
-
-        util::fitAndCenterInside(
-            m_text, util::scaleRectInPlaceCopy(t_context.layout.wholeRegion(), 0.25f));
     }
 
     void StateBase::update(const Context &, const float t_frameTimeSec)
@@ -168,16 +165,63 @@ namespace halloween
         const std::string & t_message,
         const float t_minDurationSec)
         : StateBase{ t_state, t_nextState, t_message, t_minDurationSec }
+        , m_strawMatTexture{}
+        , m_strawMatSprite{ m_strawMatTexture }
+        , m_panelTexture{}
+        , m_panelSprite{ m_panelTexture }
     {}
 
     void TimedMessageState::onEnter(const Context & t_context)
     {
         StateBase::onEnter(t_context);
 
-        const sf::FloatRect textBounds{ util::scaleRectInPlaceCopy(
-            t_context.layout.mapRegion(), 0.9f) };
+        //
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 
-        util::centerInside(m_text, textBounds);
+        util::TextureLoader::load(
+            m_strawMatTexture, (t_context.settings.media_path / "image" / "straw-mat.png"), true);
+
+        m_strawMatTexture.setRepeated(true);
+
+        m_strawMatSprite.setTexture(m_strawMatTexture, true);
+        m_strawMatSprite.setTextureRect({ { 0, 0 }, sf::Vector2i{ wholeRect.size } });
+        m_strawMatSprite.setColor(sf::Color(255, 255, 255, 127));
+
+        //
+        util::TextureLoader::load(
+            m_panelTexture, (t_context.settings.media_path / "image" / "wood-panel.png"), true);
+
+        m_panelTexture.setRepeated(true);
+
+        m_panelSprite.setTexture(m_panelTexture, true);
+
+        sf::IntRect panelRect;
+        panelRect.position.x = 0;
+        panelRect.position.y = 0;
+        panelRect.size.x = static_cast<int>(wholeRect.size.x);
+        panelRect.size.y = static_cast<int>(m_panelTexture.getSize().y);
+        m_panelSprite.setTextureRect(panelRect);
+
+        m_panelSprite.setPosition({ 0.0f, static_cast<float>(m_panelTexture.getSize().y * 2) });
+
+        //
+        m_text.setPosition(
+            { (util::center(wholeRect).x - util::center(m_text.getGlobalBounds()).x),
+              (util::center(m_panelSprite).y - util::center(m_text.getGlobalBounds()).y) });
+
+        //
+        m_panelContentRect.position.x = 0.0f;
+        m_panelContentRect.position.y = (m_panelSprite.getPosition().y + 30.0f);
+        m_panelContentRect.size.x = wholeRect.size.x;
+        m_panelContentRect.size.y = 210.0f;
+    }
+
+    void TimedMessageState::draw(
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+    {
+        t_target.draw(m_strawMatSprite, t_states);
+        t_target.draw(m_panelSprite, t_states);
+        t_target.draw(m_text, t_states);
     }
 
     bool TimedMessageState::handleEvent(const Context & t_context, const sf::Event & t_event)
@@ -219,61 +263,23 @@ namespace halloween
     //
 
     TitleState::TitleState()
-        : TimedMessageState{ State::Title, State::Play, "", (m_defaultMinDurationSec * 2.0f) }
-        , m_text1{ util::SfmlDefaults::instance().font() }
-        , m_text2{ util::SfmlDefaults::instance().font() }
-        , m_text3{ util::SfmlDefaults::instance().font() }
-        , m_text4{ util::SfmlDefaults::instance().font() }
+        : TimedMessageState{ State::Title,
+                             State::Play,
+                             "Super Lucky Ninja Girl Halloween Nightmare",
+                             (m_defaultMinDurationSec * 3.0f) }
     {}
 
     void TitleState::onEnter(const Context & t_context)
     {
         TimedMessageState::onEnter(t_context);
 
-        m_text1 = t_context.fonts.makeText(99, "Super Lucky", sf::Color::White);
-
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
-
-        util::fitAndCenterInside(m_text1, util::scaleRectInPlaceCopy(wholeRect, 0.25f));
-
-        m_text2 = m_text1;
-        m_text2.setString("Ninja Girl");
-        util::setOriginToPosition(m_text2);
-
-        m_text3 = m_text1;
-        m_text3.setString("Halloween");
-        util::setOriginToPosition(m_text3);
-
-        m_text4 = m_text1;
-        m_text4.setString("Nightmare");
-        util::setOriginToPosition(m_text4);
-
-        const float vertPad{ wholeRect.size.y * 0.015f };
-
-        m_text1.setPosition(
-            { (wholeRect.size.x * 0.5f) - (m_text1.getGlobalBounds().size.x * 0.5f),
-              (wholeRect.size.y * 0.25f) });
-
-        m_text2.setPosition(
-            { (wholeRect.size.x * 0.5f) - (m_text2.getGlobalBounds().size.x * 0.5f),
-              (util::bottom(m_text1) + vertPad) });
-
-        m_text3.setPosition(
-            { (wholeRect.size.x * 0.5f) - (m_text3.getGlobalBounds().size.x * 0.5f),
-              (util::bottom(m_text2) + vertPad) });
-
-        m_text4.setPosition(
-            { (wholeRect.size.x * 0.5f) - (m_text4.getGlobalBounds().size.x * 0.5f),
-              (util::bottom(m_text3) + vertPad) });
     }
 
     void TitleState::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        t_target.draw(m_text1, t_states);
-        t_target.draw(m_text2, t_states);
-        t_target.draw(m_text3, t_states);
-        t_target.draw(m_text4, t_states);
+        TimedMessageState::draw(t_context, t_target, t_states);
     }
 
     //
@@ -314,8 +320,10 @@ namespace halloween
     LoseState::LoseState()
         : TimedMessageState{ State::Lose, State::Credits, "You Lose\n", 4.5f }
         , m_scoreText{ util::SfmlDefaults::instance().font() }
-        , m_accentTexture{}
-        , m_accentSprite{ m_accentTexture }
+        , m_accentTexture1{}
+        , m_accentTexture2{}
+        , m_accentSprite1{ m_accentTexture1 }
+        , m_accentSprite2{ m_accentTexture2 }
     {}
 
     void LoseState::onEnter(const Context & t_context)
@@ -325,19 +333,17 @@ namespace halloween
         t_context.audio.play("game-over");
 
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
-        const float vertOffset{ wholeRect.size.y * 0.2f };
-        m_text.move({ 0.0f, -vertOffset });
 
         // score text
         m_scoreText = m_text;
-        m_scoreText.scale({ 0.35f, 0.35f });
 
         std::string str{ "Score: " };
         str += std::to_string(t_context.info_region.score());
         m_scoreText.setString(str);
-        m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
+        m_scoreText.scale({ 0.35f, 0.35f });
         util::setOriginToPosition(m_scoreText);
+        m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
         m_scoreText.setPosition(
             { ((wholeRect.size.x * 0.5f) - (m_scoreText.getGlobalBounds().size.x * 0.5f)),
@@ -346,22 +352,35 @@ namespace halloween
         // accent image
         const auto accentImageDirPath{ t_context.settings.media_path / "image" / "accent" };
         const auto accentImagePaths{ util::findFilesInDirectory(accentImageDirPath, ".png") };
-        const auto accentImagePath{ t_context.random.from(accentImagePaths) };
-        util::TextureLoader::load(m_accentTexture, accentImagePath, true);
-        m_accentSprite.setTexture(m_accentTexture, true);
-        m_accentSprite.setColor(sf::Color(255, 255, 255, 127));
 
-        m_accentSprite.setPosition(
-            { (util::center(wholeRect).x - util::center(m_accentSprite.getGlobalBounds()).x),
-              (util::bottom(m_scoreText) + wholeRect.size.y * 0.1f) });
+        util::TextureLoader::load(m_accentTexture1, t_context.random.from(accentImagePaths), true);
+        util::TextureLoader::load(m_accentTexture2, t_context.random.from(accentImagePaths), true);
+
+        m_accentSprite1.setTexture(m_accentTexture1, true);
+        m_accentSprite1.setColor(sf::Color(255, 255, 255, 192));
+
+        m_accentSprite2.setTexture(m_accentTexture2, true);
+        m_accentSprite2.setColor(sf::Color(255, 255, 255, 192));
+
+        const sf::FloatRect panelRect{ panelContentRect() };
+
+        util::fitAndCenterInside(m_accentSprite1, panelRect);
+        util::fitAndCenterInside(m_accentSprite2, panelRect);
+
+        m_accentSprite1.setPosition({ 20.0f, m_accentSprite1.getPosition().y });
+
+        m_accentSprite2.setPosition(
+            { (wholeRect.size.x - (m_accentSprite2.getGlobalBounds().size.x + 20.0f)),
+              m_accentSprite2.getPosition().y });
     }
 
     void LoseState::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        t_target.draw(m_text, t_states);
+        TimedMessageState::draw(t_context, t_target, t_states);
         t_target.draw(m_scoreText, t_states);
-        t_target.draw(m_accentSprite, t_states);
+        t_target.draw(m_accentSprite1, t_states);
+        t_target.draw(m_accentSprite2, t_states);
     }
 
     void LoseState::onExit(const Context & t_context) { t_context.audio.stopAll(); }
@@ -396,8 +415,9 @@ namespace halloween
     }
 
     void WinState::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
+        TimedMessageState::draw(t_context, t_target, t_states);
         t_target.draw(m_text, t_states);
         t_target.draw(m_scoreText, t_states);
     }
