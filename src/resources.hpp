@@ -46,10 +46,6 @@ namespace halloween
             m_mapTextureJungleTreesFlip.gid = t_gid;
         }
 
-        inline const sf::Sprite backgroundSprite() const { return m_bgSprite; }
-
-        void setupBackgroundSprite(const Context & t_context, const int t_bgImageNumber);
-
       private:
         sf::Font m_font;
         MapTexture m_mapTextureGround;
@@ -59,10 +55,6 @@ namespace halloween
         MapTexture m_mapTextureJungleTrees;
         MapTexture m_mapTextureJungleTreesFlip;
         MapTexture m_mapTextureJungleMisc;
-        sf::Texture m_bgTexture1;
-        sf::Texture m_bgTexture2;
-        sf::Texture m_bgTexture3;
-        sf::Sprite m_bgSprite;
     };
 
 } // namespace halloween

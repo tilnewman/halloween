@@ -108,6 +108,10 @@ namespace halloween
             m_mapPosition = t_mapPosition;
         }
 
+        constexpr int backgroundImage() const noexcept { return m_backgroundImage; }
+
+        inline void backgroundImage(const int t_number) { m_backgroundImage = t_number; }
+
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const;
 
@@ -140,6 +144,7 @@ namespace halloween
         std::size_t m_number;
         LevelFileLoader m_loader;
         float m_traveledVert;
+        int m_backgroundImage;
     };
 
 } // namespace halloween

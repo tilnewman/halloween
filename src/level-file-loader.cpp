@@ -173,7 +173,7 @@ namespace halloween
             backgroundImageNumber = 1;
         }
 
-        t_context.media.setupBackgroundSprite(t_context, backgroundImageNumber);
+        t_context.level.backgroundImage(backgroundImageNumber);
     }
 
     void LevelFileLoader::parseLayers(const Context & t_context, Json & jsonWholeFile) const

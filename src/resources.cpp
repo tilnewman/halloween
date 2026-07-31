@@ -24,10 +24,6 @@ namespace halloween
         , m_mapTextureJungleTrees{}
         , m_mapTextureJungleTreesFlip{}
         , m_mapTextureJungleMisc{}
-        , m_bgTexture1{}
-        , m_bgTexture2{}
-        , m_bgTexture3{}
-        , m_bgSprite{ m_bgTexture1 }
     {}
 
     void Resources::setup(const Settings & t_settings)
@@ -39,18 +35,6 @@ namespace halloween
 
         const bool fontLoadSuccess{ m_font.openFromFile(fontPathStr) };
         M_CHECK(fontLoadSuccess, "Failed to load font: " << fontPathStr);
-
-        // background image
-        util::TextureLoader::load(
-            m_bgTexture1, (t_settings.media_path / "image" / "background-1.png"), true);
-
-        util::TextureLoader::load(
-            m_bgTexture2, (t_settings.media_path / "image" / "background-2.png"), true);
-
-        util::TextureLoader::load(
-            m_bgTexture3, (t_settings.media_path / "image" / "background-3.png"), true);
-
-        m_bgSprite.setTexture(m_bgTexture1, true);
 
         //
         const auto imagePath{ t_settings.media_path / "image" / "map" };
@@ -92,32 +76,6 @@ namespace halloween
             }
         }
         // clang-format on
-    }
-
-    void Resources::setupBackgroundSprite(const Context & t_context, const int t_bgImageNumber)
-    {
-        if (1 == t_bgImageNumber)
-        {
-            m_bgSprite.setTexture(m_bgTexture1);
-        }
-        else if (2 == t_bgImageNumber)
-        {
-            m_bgSprite.setTexture(m_bgTexture2);
-        }
-        else if (3 == t_bgImageNumber)
-        {
-            m_bgSprite.setTexture(m_bgTexture3);
-        }
-        else
-        {
-            M_LOG(
-                "Error: This map file has an invalid custom background property value="
-                << t_bgImageNumber << ", so the default background image 1 will be used.");
-
-            m_bgSprite.setTexture(m_bgTexture1);
-        }
-
-        util::growAndCenterInside(m_bgSprite, t_context.layout.wholeRegion());
     }
 
 } // namespace halloween

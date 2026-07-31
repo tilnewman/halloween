@@ -3,6 +3,7 @@
 //
 // state-play.hpp
 //
+#include "background-image.hpp"
 #include "states.hpp"
 
 //
@@ -39,6 +40,9 @@ namespace halloween
             sf::RenderStates & t_states) const override;
 
         inline static bool m_willLoadNewLevel{ true };
+
+      private:
+        BackgroundImage m_backgroundImage;
     };
 
 } // namespace halloween

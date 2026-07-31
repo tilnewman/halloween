@@ -37,6 +37,7 @@ namespace halloween
 
     PlayState::PlayState()
         : StateBase{ State::Play, State::Play }
+        , m_backgroundImage{}
     {}
 
     void PlayState::onEnter(const Context & t_context)
@@ -52,6 +53,8 @@ namespace halloween
                 t_context.stats = LevelStats();
                 t_context.stats.coin_total = t_context.coins.count();
                 t_context.stats.enemy_total = (t_context.slimes.count() + t_context.bats.count());
+
+                m_backgroundImage.setup(t_context, t_context.level.backgroundImage());
             }
             else
             {
@@ -117,8 +120,7 @@ namespace halloween
     void PlayState::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
     {
-        t_target.draw(t_context.media.backgroundSprite(), t_states);
-
+        m_backgroundImage.draw(t_target, t_states);
         t_context.managers.drawAllBeforeMap(t_context, t_target, t_states);
         t_context.level.draw(t_context, t_target, t_states);
         t_context.managers.drawAllAfterMap(t_context, t_target, t_states);

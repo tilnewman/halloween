@@ -38,6 +38,7 @@ namespace halloween
         , m_number{ 0 }
         , m_loader{}
         , m_traveledVert{ 0.0f }
+        , m_backgroundImage{ 0 }
     {
         m_walkCollisions.reserve(1000);
         m_killCollisions.reserve(100);
@@ -56,6 +57,7 @@ namespace halloween
         m_farthestHorizMapPixel = 0.0f;
         m_farthestHorizTraveled = 0.0f;
         m_traveledVert = 0.0f;
+        m_backgroundImage = 0;
     }
 
     bool Level::load(const Context & t_context)
