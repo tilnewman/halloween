@@ -10,6 +10,16 @@
 
 #include <SFML/Graphics/Rect.hpp>
 
+//
+
+namespace sf
+{
+    class RenderTarget;
+    struct RenderStates;
+} // namespace sf
+
+//
+
 namespace halloween
 {
     struct Context;
@@ -97,6 +107,9 @@ namespace halloween
             m_tileSizeScreen = t_tileSizeScreen;
             m_mapPosition = t_mapPosition;
         }
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const;
 
       private:
         void reset(const Context & t_context);

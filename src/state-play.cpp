@@ -120,26 +120,7 @@ namespace halloween
         t_target.draw(t_context.media.backgroundSprite(), t_states);
 
         t_context.managers.drawAllBeforeMap(t_context, t_target, t_states);
-
-        //TODO move this to the Level class
-        for (const TileLayer & layer : t_context.level.tileLayers())
-        {
-            if (layer.visibleVerts.empty())
-            {
-                continue;
-            }
-
-            t_states.texture = &t_context.media.mapTexture(layer.image).texture;
-
-            t_target.draw(
-                &layer.visibleVerts[0],
-                layer.visibleVerts.size(),
-                sf::PrimitiveType::Triangles,
-                t_states);
-            
-            t_states.texture = nullptr;
-        }
-
+        t_context.level.draw(t_context, t_target, t_states);
         t_context.managers.drawAllAfterMap(t_context, t_target, t_states);
         t_context.missiles.draw(t_target, t_states);
         t_context.info_region.draw(t_target, t_states);
