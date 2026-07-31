@@ -30,9 +30,9 @@ namespace halloween
     class Missiles;
     class OwlCalls;
     struct Settings;
-    class Resources;
     class InfoRegion;
     class FireSpouts;
+    class FontManager;
     struct LevelStats;
     class SpikedBalls;
     class StateMachine;
@@ -50,7 +50,7 @@ namespace halloween
             util::MusicPlayer & t_musicPlayer,
             Bats & t_bats,
             OwlCalls & t_owlCalls,
-            Resources & t_resources,
+            FontManager & t_fontManager,
             ScreenRegions & t_screenReigons,
             Avatar & t_avatar,
             StateMachine & t_stateMachine,
@@ -75,7 +75,7 @@ namespace halloween
             , music{ t_musicPlayer }
             , bats{ t_bats }
             , owl_calls{ t_owlCalls }
-            , media{ t_resources }
+            , fonts{ t_fontManager }
             , layout{ t_screenReigons }
             , avatar{ t_avatar }
             , state{ t_stateMachine }
@@ -92,7 +92,7 @@ namespace halloween
             , managers{ t_objectManagerList }
             , stats{ t_levelStats }
             , boss{ t_mushrooomBoos }
-            , smoke{t_smoke}
+            , smoke{ t_smoke }
         {}
 
         const Settings & settings;
@@ -102,7 +102,7 @@ namespace halloween
         util::MusicPlayer & music;
         Bats & bats;
         OwlCalls & owl_calls;
-        Resources & media;
+        FontManager & fonts;
         ScreenRegions & layout;
         Avatar & avatar;
         StateMachine & state;

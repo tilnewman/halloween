@@ -6,11 +6,11 @@
 #include "state-level-complete.hpp"
 
 #include "context.hpp"
+#include "fonts.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
 #include "level.hpp"
 #include "object-manager.hpp"
-#include "resources.hpp"
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
@@ -46,14 +46,14 @@ namespace halloween
         t_context.audio.play("level-complete");
 
         m_levelCompleteText =
-            t_context.media.makeText(99, "Level Complete!\n\n", m_textColorDefault);
+            t_context.fonts.makeText(99, "Level Complete!\n\n", m_textColorDefault);
 
         util::fitAndCenterInside(
             m_levelCompleteText, util::scaleRectInPlaceCopy(t_context.layout.wholeRegion(), 0.25f));
 
         m_scoreDisplayed = t_context.info_region.score();
 
-        m_scoreText = t_context.media.makeText(50, "", sf::Color(160, 160, 160));
+        m_scoreText = t_context.fonts.makeText(50, "", sf::Color(160, 160, 160));
 
         updateScoreText(t_context);
 
@@ -80,14 +80,14 @@ namespace halloween
         if (willPerfectBonus)
         {
             m_bonuses.emplace_back(
-                200, t_context.media.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
+                200, t_context.fonts.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
         }
 
         if (willCoinBonus)
         {
             m_bonuses.emplace_back(
                 100,
-                t_context.media.makeText(
+                t_context.fonts.makeText(
                     bonusTextCharSize, "All Coins Found Bonus!", bonusTextColor));
         }
 
@@ -95,7 +95,7 @@ namespace halloween
         {
             m_bonuses.emplace_back(
                 50,
-                t_context.media.makeText(
+                t_context.fonts.makeText(
                     bonusTextCharSize, "All Enemies Killed Bonus!", bonusTextColor));
         }
 
@@ -103,7 +103,7 @@ namespace halloween
         {
             m_bonuses.emplace_back(
                 75,
-                t_context.media.makeText(
+                t_context.fonts.makeText(
                     bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
         }
 
@@ -111,7 +111,7 @@ namespace halloween
         {
             m_bonuses.emplace_back(
                 0,
-                t_context.media.makeText(bonusTextCharSize, "No bonuses, lame.", bonusTextColor));
+                t_context.fonts.makeText(bonusTextCharSize, "No bonuses, lame.", bonusTextColor));
         }
     }
 
@@ -123,8 +123,8 @@ namespace halloween
         util::centerInside(m_scoreText, t_context.layout.wholeRegion());
     }
 
-    void LevelCompleteState::onExit(const Context & t_context) 
-    { 
+    void LevelCompleteState::onExit(const Context & t_context)
+    {
         if (t_context.level.number() < 3)
         {
             PlayState::m_willLoadNewLevel = true;

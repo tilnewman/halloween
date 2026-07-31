@@ -6,7 +6,7 @@
 #include "framerate-display.hpp"
 
 #include "context.hpp"
-#include "resources.hpp"
+#include "fonts.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
@@ -38,7 +38,7 @@ namespace halloween
             str = " fps: ";
             str += util::makeStats(m_framesPerSecond).toString();
 
-            m_text = t_context.media.makeText(60, str, sf::Color(195, 160, 126));
+            m_text = t_context.fonts.makeText(60, str, sf::Color(195, 160, 126));
 
             util::fitAndCenterInside(
                 m_text,

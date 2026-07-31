@@ -7,7 +7,6 @@
 
 #include "check-macros.hpp"
 #include "context.hpp"
-#include "resources.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
 

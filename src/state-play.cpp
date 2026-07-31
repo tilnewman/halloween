@@ -16,7 +16,6 @@
 #include "music-player.hpp"
 #include "owl-calls.hpp"
 #include "pause-screen.hpp"
-#include "resources.hpp"
 #include "screen-regions.hpp"
 #include "sfml-util.hpp"
 #include "slime.hpp"

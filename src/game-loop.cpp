@@ -22,7 +22,7 @@ namespace halloween
         , m_batsUPtr{}
         , m_owlCallsUPtr{}
         , m_windowUPtr{}
-        , m_mediaUPtr{}
+        , m_fontManagerUPtr{}
         , m_layoutUPtr{}
         , m_avatarUPtr{}
         , m_stateMachineUPtr{}
@@ -73,6 +73,7 @@ namespace halloween
         //
         util::SfmlDefaults::instance().setup();
 
+        m_fontManagerUPtr = std::make_unique<FontManager>();
         m_avatarUPtr = std::make_unique<Avatar>();
         m_stateMachineUPtr = std::make_unique<StateMachine>();
         m_infoRegionUPtr = std::make_unique<InfoRegion>();
@@ -83,7 +84,6 @@ namespace halloween
         m_musicUPtr = std::make_unique<util::MusicPlayer>();
         m_batsUPtr = std::make_unique<Bats>();
         m_owlCallsUPtr = std::make_unique<OwlCalls>();
-        m_mediaUPtr = std::make_unique<Resources>();
         m_layoutUPtr = std::make_unique<ScreenRegions>();
         m_levelUPtr = std::make_unique<Level>();
         m_missilesUPtr = std::make_unique<Missiles>();
@@ -112,7 +112,7 @@ namespace halloween
             *m_musicUPtr,
             *m_batsUPtr,
             *m_owlCallsUPtr,
-            *m_mediaUPtr,
+            *m_fontManagerUPtr,
             *m_layoutUPtr,
             *m_avatarUPtr,
             *m_stateMachineUPtr,
@@ -132,7 +132,7 @@ namespace halloween
             *m_smokeUPtr);
 
         m_layoutUPtr->setup(m_windowUPtr->getSize());
-        m_mediaUPtr->setup(m_settings);
+        m_fontManagerUPtr->setup(m_settings);
         m_missilesUPtr->setup(m_settings);
 
         m_managersUPtr->add(*m_coinsUPtr);
@@ -145,7 +145,6 @@ namespace halloween
         m_managersUPtr->add(*m_batsUPtr);
         m_managersUPtr->add(*m_bossUPtr);
         m_managersUPtr->add(*m_smokeUPtr);
-        //
         m_managersUPtr->setupAll(*m_contextUPtr);
 
         m_avatarUPtr->setup(m_settings);
@@ -176,7 +175,7 @@ namespace halloween
         m_infoRegionUPtr.reset();
         m_stateMachineUPtr.reset();
         m_avatarUPtr.reset();
-        m_mediaUPtr.reset();
+        m_fontManagerUPtr.reset();
         m_layoutUPtr.reset();
         m_audioUPtr.reset();
         m_musicUPtr.reset();

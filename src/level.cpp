@@ -10,7 +10,6 @@
 #include "context.hpp"
 #include "level-file-loader.hpp"
 #include "object-manager.hpp"
-#include "resources.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"

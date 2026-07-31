@@ -1,5 +1,5 @@
-#ifndef RESOURCES_HPP_INCLUDED
-#define RESOURCES_HPP_INCLUDED
+#ifndef FONTS_HPP_INCLUDED
+#define FONTS_HPP_INCLUDED
 //
 // resources.hpp
 //
@@ -7,10 +7,9 @@
 
 #include <string>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/Texture.hpp>
 
 namespace halloween
 {
@@ -20,10 +19,10 @@ namespace halloween
 
     //
 
-    class Resources
+    class FontManager
     {
       public:
-        Resources();
+        FontManager();
 
         void setup(const Settings & t_settings);
 
@@ -38,4 +37,4 @@ namespace halloween
 
 } // namespace halloween
 
-#endif // RESOURCES_HPP_INCLUDED
+#endif // FONTS_HPP_INCLUDED

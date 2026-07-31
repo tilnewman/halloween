@@ -5,6 +5,7 @@
 #include "check-macros.hpp"
 #include "color-range.hpp"
 #include "context.hpp"
+#include "fonts.hpp"
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
@@ -25,7 +26,7 @@ namespace halloween
 
     void PauseScreen::setup(const Context & t_context)
     {
-        m_text = t_context.media.makeText(99, "PAUSED", sf::Color::White);
+        m_text = t_context.fonts.makeText(99, "PAUSED", sf::Color::White);
 
         const sf::Vector2f windowSizeF{ t_context.window.getSize() };
         sf::FloatRect textRect;

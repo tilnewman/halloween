@@ -10,6 +10,7 @@
 #include "context.hpp"
 #include "dart.hpp"
 #include "fire-spout.hpp"
+#include "fonts.hpp"
 #include "framerate-display.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
@@ -21,7 +22,6 @@
 #include "object-manager.hpp"
 #include "owl-calls.hpp"
 #include "random.hpp"
-#include "resources.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -66,7 +66,7 @@ namespace halloween
         std::unique_ptr<Bats> m_batsUPtr;
         std::unique_ptr<OwlCalls> m_owlCallsUPtr;
         std::unique_ptr<sf::RenderWindow> m_windowUPtr;
-        std::unique_ptr<Resources> m_mediaUPtr;
+        std::unique_ptr<FontManager> m_fontManagerUPtr;
         std::unique_ptr<ScreenRegions> m_layoutUPtr;
         std::unique_ptr<Avatar> m_avatarUPtr;
         std::unique_ptr<StateMachine> m_stateMachineUPtr;

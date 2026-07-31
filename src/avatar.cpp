@@ -14,7 +14,6 @@
 #include "level.hpp"
 #include "missile.hpp"
 #include "mushroom-boss.hpp"
-#include "resources.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -69,7 +68,7 @@ namespace halloween
         m_deathAnim.setup(avatarPath, "Dead", 10, 0.05f, false);
         m_throwAnim.setup(avatarPath, "Throw", 10, 0.02f, false);
         m_glideAnim.setup(avatarPath, "Glide", 10, 0.33f, true);
-        m_idleAnim.setup (avatarPath, "Idle", 10, 0.1f, true);
+        m_idleAnim.setup(avatarPath, "Idle", 10, 0.1f, true);
 
         util::TextureLoader::load(m_jumpTexture, (avatarPath / "Jump-6.png"));
 
@@ -283,7 +282,7 @@ namespace halloween
     {
         const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
         const sf::Vector2f avatarPos{ util::center(m_sprite.getGlobalBounds()) };
-        
+
         if (const sf::Vector2f screenMiddle{ t_context.layout.mapRegion().size * 0.5f };
             (m_velocity.x > 0.0f) && (avatarPos.x > screenMiddle.x))
         {

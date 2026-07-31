@@ -1,27 +1,24 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 //
-// resources.cpp
+// fonts.cpp
 //
-#include "resources.hpp"
+#include "fonts.hpp"
 
 #include "check-macros.hpp"
 #include "context.hpp"
-#include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
-#include "texture-loader.hpp"
 
 namespace halloween
 {
 
-    Resources::Resources()
+    FontManager::FontManager()
         : m_font{}
     {}
 
-    void Resources::setup(const Settings & t_settings)
+    void FontManager::setup(const Settings & t_settings)
     {
-        // font
         const std::string fontPathStr{
             (t_settings.media_path / "font" / "mops-antiqua.ttf").string()
         };
@@ -30,7 +27,7 @@ namespace halloween
         M_CHECK(fontLoadSuccess, "Failed to load font: " << fontPathStr);
     }
 
-    const sf::Text Resources::makeText(
+    const sf::Text FontManager::makeText(
         const unsigned int t_charSize,
         const std::string & t_message,
         const sf::Color & t_color) const

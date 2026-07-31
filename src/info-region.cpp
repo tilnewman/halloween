@@ -7,7 +7,7 @@
 
 #include "check-macros.hpp"
 #include "context.hpp"
-#include "resources.hpp"
+#include "fonts.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
@@ -75,7 +75,7 @@ namespace halloween
     {
         m_region = t_context.layout.infoRegion();
         util::appendTriangleVerts(m_region, m_bgVerts, sf::Color(255, 255, 255, 8));
-        m_text = t_context.media.makeText(99, "", sf::Color(255, 255, 255, 64));
+        m_text = t_context.fonts.makeText(99, "", sf::Color(255, 255, 255, 64));
         reset(t_context);
     }
 

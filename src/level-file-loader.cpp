@@ -11,7 +11,6 @@
 #include "ghost.hpp"
 #include "level.hpp"
 #include "mushroom-boss.hpp"
-#include "resources.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
