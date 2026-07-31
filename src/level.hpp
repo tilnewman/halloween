@@ -37,6 +37,13 @@ namespace halloween
         bool load(const Context & t_context);
         bool move(const Context & t_context, const sf::Vector2f & t_move);
 
+        inline const std::vector<sf::FloatRect> & platformRects() const { return m_platformRects; }
+
+        void setPlatformRects(const std::vector<sf::FloatRect> & t_rects)
+        {
+            m_platformRects = t_rects;
+        }
+
         inline const std::vector<sf::FloatRect> & walkCollisions() const
         {
             return m_walkCollisions;
@@ -110,7 +117,7 @@ namespace halloween
             m_mapPosition = t_mapPosition;
         }
 
-        inline void setMapTextureGid(const TileImage t_image, const int t_gid) 
+        inline void setMapTextureGid(const TileImage t_image, const int t_gid)
         {
             m_mapTextures.setGid(t_image, t_gid);
         }
@@ -145,6 +152,7 @@ namespace halloween
         std::vector<sf::FloatRect> m_killCollisions;
         std::vector<sf::FloatRect> m_acidCollisions;
         std::vector<sf::FloatRect> m_waterCollisions;
+        std::vector<sf::FloatRect> m_platformRects;
         sf::FloatRect m_enterRect;
         sf::FloatRect m_exitRect;
         float m_farthestHorizMapPixel;

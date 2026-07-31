@@ -10,6 +10,7 @@
 #include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "level.hpp"
+#include "moving-platforms.hpp"
 #include "mushroom-boss.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
@@ -212,34 +213,38 @@ namespace halloween
             else if (layerName == "collision")
             {
                 std::vector<sf::FloatRect> rects;
-                rects.reserve(1'000);
+                rects.reserve(100);
                 parseRectLayer(t_context, jsonLayer, rects);
                 t_context.level.setWalkCollisions(rects);
             }
             else if (layerName == "kill")
             {
                 std::vector<sf::FloatRect> rects;
-                rects.reserve(100);
+                rects.reserve(32);
                 parseRectLayer(t_context, jsonLayer, rects);
                 t_context.level.setKillCollisions(rects);
             }
             else if (layerName == "acid")
             {
                 std::vector<sf::FloatRect> rects;
-                rects.reserve(100);
+                rects.reserve(32);
                 parseRectLayer(t_context, jsonLayer, rects);
                 t_context.level.setAcidCollisions(rects);
             }
             else if (layerName == "water")
             {
                 std::vector<sf::FloatRect> rects;
-                rects.reserve(100);
+                rects.reserve(32);
                 parseRectLayer(t_context, jsonLayer, rects);
                 t_context.level.setWaterCollisions(rects);
             }
             else if (layerName == "spawn")
             {
                 parseSpawnLayer(t_context, jsonLayer);
+            }
+            else if (layerName == "moving-platform")
+            {
+                parseObjectLayerRects(t_context.platforms, t_context, jsonLayer);
             }
             else if (layerName == "coin")
             {

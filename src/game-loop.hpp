@@ -17,6 +17,7 @@
 #include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
+#include "moving-platforms.hpp"
 #include "mushroom-boss.hpp"
 #include "music-player.hpp"
 #include "object-manager.hpp"
@@ -85,6 +86,7 @@ namespace halloween
         std::unique_ptr<MushroomBoss> m_bossUPtr;
         std::unique_ptr<FramerateDisplay> m_framerateDisplayUPtr;
         std::unique_ptr<Smoke> m_smokeUPtr;
+        std::unique_ptr<MovingPlatforms> m_movingPlatformsUPtr;
 
         std::unique_ptr<Context> m_contextUPtr;
     };

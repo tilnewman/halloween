@@ -433,6 +433,50 @@
         }, 
         {
          "draworder":"topdown",
+         "id":19,
+         "name":"moving-platform",
+         "objects":[
+                {
+                 "height":128,
+                 "id":64,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":960,
+                 "x":4896,
+                 "y":800
+                }, 
+                {
+                 "height":544,
+                 "id":65,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":224,
+                 "x":4896,
+                 "y":192
+                }, 
+                {
+                 "height":544,
+                 "id":67,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":544,
+                 "x":5504,
+                 "y":224
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":15,
          "name":"water",
          "objects":[
@@ -497,8 +541,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":19,
- "nextobjectid":63,
+ "nextlayerid":20,
+ "nextobjectid":68,
  "orientation":"orthogonal",
  "properties":[
         {

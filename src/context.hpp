@@ -38,8 +38,9 @@ namespace halloween
     class StateMachine;
     class MushroomBoss;
     class ScreenRegions;
+    class MovingPlatforms;
     class ObjectManagerList;
-
+    
     struct Context
     {
         Context(
@@ -67,7 +68,8 @@ namespace halloween
             ObjectManagerList & t_objectManagerList,
             LevelStats & t_levelStats,
             MushroomBoss & t_mushrooomBoos,
-            Smoke & t_smoke)
+            Smoke & t_smoke,
+            MovingPlatforms & t_movingPlatforms)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -93,6 +95,7 @@ namespace halloween
             , stats{ t_levelStats }
             , boss{ t_mushrooomBoos }
             , smoke{ t_smoke }
+            , platforms{ t_movingPlatforms }
         {}
 
         const Settings & settings;
@@ -120,6 +123,7 @@ namespace halloween
         LevelStats & stats;
         MushroomBoss & boss;
         Smoke & smoke;
+        MovingPlatforms & platforms;
     };
 
 } // namespace halloween
