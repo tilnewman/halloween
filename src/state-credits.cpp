@@ -203,7 +203,7 @@ namespace halloween
     }
 
     void StateCredits::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         t_target.draw(m_bgSprite, t_states);
 

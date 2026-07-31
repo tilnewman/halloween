@@ -117,7 +117,7 @@ namespace halloween
     }
 
     void PlayState::draw(
-        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         m_backgroundImage.draw(t_target, t_states);
         t_context.managers.drawAllBeforeMap(t_context, t_target, t_states);

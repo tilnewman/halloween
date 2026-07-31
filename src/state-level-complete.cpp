@@ -276,7 +276,7 @@ namespace halloween
     }
 
     void LevelCompleteState::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         t_target.draw(m_strawMatSprite, t_states);
         t_target.draw(m_panelSprite, t_states);

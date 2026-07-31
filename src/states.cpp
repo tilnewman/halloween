@@ -146,7 +146,7 @@ namespace halloween
     }
 
     void StateBase::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         t_target.draw(m_text, t_states);
     }
@@ -217,7 +217,7 @@ namespace halloween
     }
 
     void TimedMessageState::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         t_target.draw(m_strawMatSprite, t_states);
         t_target.draw(m_panelSprite, t_states);
@@ -272,12 +272,10 @@ namespace halloween
     void TitleState::onEnter(const Context & t_context)
     {
         TimedMessageState::onEnter(t_context);
-
-        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
     }
 
     void TitleState::draw(
-        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         TimedMessageState::draw(t_context, t_target, t_states);
     }
@@ -309,7 +307,7 @@ namespace halloween
     }
 
     void PauseState::draw(
-        const Context & t_context, sf::RenderTarget & target, sf::RenderStates & states) const
+        const Context & t_context, sf::RenderTarget & target, sf::RenderStates states) const
     {
         StateBase::draw(t_context, target, states);
         m_screen.draw(target, states);
@@ -375,7 +373,7 @@ namespace halloween
     }
 
     void LoseState::draw(
-        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         TimedMessageState::draw(t_context, t_target, t_states);
         t_target.draw(m_scoreText, t_states);
@@ -415,7 +413,7 @@ namespace halloween
     }
 
     void WinState::draw(
-        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates & t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         TimedMessageState::draw(t_context, t_target, t_states);
         t_target.draw(m_text, t_states);

@@ -89,7 +89,7 @@ namespace halloween
         virtual void draw(
             const Context & t_context,
             sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const = 0;
+            sf::RenderStates t_states) const = 0;
 
         virtual void onEnter(const Context & t_context) = 0;
         virtual void onExit(const Context & t_context) = 0;
@@ -132,10 +132,8 @@ namespace halloween
         void update(const Context & t_context, const float t_frameTimeSec) override;
         bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
 
-        void draw(
-            const Context & t_context,
-            sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const override;
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const override;
 
         void onEnter(const Context &) override;
         void onExit(const Context &) override {}
@@ -178,7 +176,7 @@ namespace halloween
         void onExit(const Context & t_context) final;
         void update(const Context &, const float) final {}
         bool handleEvent(const Context &, const sf::Event &) final { return false; }
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
+        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const final {}
     };
 
     //
@@ -195,7 +193,7 @@ namespace halloween
         void onEnter(const Context &) final {}
         void update(const Context &, const float) final {}
         bool handleEvent(const Context &, const sf::Event &) final { return false; }
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const final {}
+        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const final {}
     };
 
     //
@@ -214,7 +212,7 @@ namespace halloween
         void onEnter(const Context & t_context) override;
         void update(const Context & t_context, const float t_frameTimeSec) override;
         bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates &) const override;
+        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const override;
 
       protected:
         bool m_hasMouseClickedOrKeyPressed{ false };
@@ -238,10 +236,8 @@ namespace halloween
 
         void onEnter(const Context & t_context) final;
 
-        void draw(
-            const Context & t_context,
-            sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const final;
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
     };
 
     //
@@ -256,10 +252,8 @@ namespace halloween
         void onExit(const Context & t_context) final;
         void update(const Context & t_context, const float t_frameTimeSec) final;
 
-        void draw(
-            const Context & t_context,
-            sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const final;
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
 
       private:
         PauseScreen m_screen;
@@ -276,10 +270,8 @@ namespace halloween
         void onEnter(const Context & t_context) final;
         void onExit(const Context & t_context) final;
 
-        void draw(
-            const Context & t_context,
-            sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const final;
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
 
       private:
         sf::Text m_scoreText;
@@ -300,10 +292,8 @@ namespace halloween
         void onEnter(const Context & t_context) final;
         void onExit(const Context & t_context) final;
 
-        void draw(
-            const Context & t_context,
-            sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const final;
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
 
       private:
         sf::Text m_scoreText;

@@ -34,10 +34,8 @@ namespace halloween
         bool handleEvent(const Context & t_context, const sf::Event & t_event) override;
         void update(const Context & t_context, const float t_frameTimeSec) override;
 
-        void draw(
-            const Context & t_context,
-            sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const override;
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const override;
 
         inline static bool m_willLoadNewLevel{ true };
 

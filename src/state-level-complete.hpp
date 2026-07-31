@@ -46,7 +46,7 @@ namespace halloween
 
     //
 
-    class LevelCompleteState final: public StateBase
+    class LevelCompleteState final : public StateBase
     {
       public:
         LevelCompleteState();
@@ -57,10 +57,8 @@ namespace halloween
         bool handleEvent(const Context & t_context, const sf::Event & t_event) final;
         void update(const Context & t_context, const float t_frameTimeSec) final;
 
-        void draw(
-            const Context & t_context,
-            sf::RenderTarget & t_target,
-            sf::RenderStates & t_states) const final;
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
 
       private:
         bool popAndDisplayNextBonus(const Context & t_context);
@@ -77,7 +75,7 @@ namespace halloween
         sf::Text m_bonusText;
         std::vector<Bonus> m_bonuses;
         sf::FloatRect m_bonusTextRegion;
-        
+
         bool m_isPreWaiting;
         bool m_isShowingBonuses;
         bool m_isPostWaiting;
