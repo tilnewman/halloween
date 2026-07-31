@@ -4,8 +4,9 @@
 // tileset.hpp
 //
 #include <cassert>
+#include <filesystem>
 #include <ostream>
-#include <string>
+#include <string_view>
 #include <vector>
 
 #include <SFML/Graphics/Rect.hpp>
@@ -27,35 +28,31 @@ namespace halloween
         JungleMisc
     };
 
-    inline std::ostream & operator<<(std::ostream & t_os, const TileImage t_image)
+    // these names must be the names in the Tiled level/map layers
+    constexpr const std::string_view toString(const TileImage t_image) noexcept
     {
         // clang-format off
         switch (t_image)
         {
-            case TileImage::Ground:          { t_os << "ground";   break; }
-            case TileImage::Object1:         { t_os << "object-1"; break; }
-            case TileImage::Object2:         { t_os << "object-2"; break; }
-            case TileImage::Object3:         { t_os << "object-3"; break; }
-            case TileImage::JungleTrees:     { t_os << "jungle-trees"; break; }
-            case TileImage::JungleTreesFlip: { t_os << "jungle-trees-flip"; break; }
-            case TileImage::JungleMisc:      { t_os << "jungle-misc"; break; }
-            default:                         { t_os << "Unknown_TileImage"; break; }
+            case TileImage::Ground:          { return "ground";             }
+            case TileImage::Object1:         { return "object-1";           }
+            case TileImage::Object2:         { return "object-2";           }
+            case TileImage::Object3:         { return "object-3";           }
+            case TileImage::JungleTrees:     { return "jungle-trees";       }
+            case TileImage::JungleTreesFlip: { return "jungle-trees-flip";  }
+            case TileImage::JungleMisc:      { return "jungle-misc";        }
+            default:                   { return "ERROR_Unknown_TileImage";  }
         }
         // clang-format on
-
-        return t_os;
     }
 
     //
 
     struct MapTexture
     {
-        MapTexture()
-            : which{ TileImage::Ground } // any default works here
-            , size{}
-            , texture{}
-            , gid{ 0 }
-        {}
+        MapTexture();
+
+        void setup(const TileImage t_image, const std::filesystem::path & t_mapPath);
 
         TileImage which;
         sf::Vector2i size;

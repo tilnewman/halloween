@@ -52,43 +52,15 @@ namespace halloween
 
         m_bgSprite.setTexture(m_bgTexture1, true);
 
-        const std::string imagePath{ (t_settings.media_path / "image" / "map/").string() };
-
-        util::TextureLoader::load(m_mapTextureGround.texture, (imagePath + "tile-ground.png"));
-        m_mapTextureGround.which = TileImage::Ground;
-        m_mapTextureGround.size = sf::Vector2i(m_mapTextureGround.texture.getSize());
-
-        util::TextureLoader::load(m_mapTextureObject1.texture, (imagePath + "tile-object-1.png"));
-        m_mapTextureObject1.which = TileImage::Object1;
-        m_mapTextureObject1.size = sf::Vector2i(m_mapTextureObject1.texture.getSize());
-
-        util::TextureLoader::load(m_mapTextureObject2.texture, (imagePath + "tile-object-2.png"));
-        m_mapTextureObject2.which = TileImage::Object2;
-        m_mapTextureObject2.size = sf::Vector2i(m_mapTextureObject2.texture.getSize());
-
-        util::TextureLoader::load(m_mapTextureObject3.texture, (imagePath + "tile-object-3.png"));
-        m_mapTextureObject3.which = TileImage::Object3;
-        m_mapTextureObject3.size = sf::Vector2i(m_mapTextureObject3.texture.getSize());
-
-        util::TextureLoader::load(
-            m_mapTextureJungleTrees.texture, (imagePath + "tile-jungle-trees.png"));
-
-        m_mapTextureJungleTrees.which = TileImage::JungleTrees;
-        m_mapTextureJungleTrees.size = sf::Vector2i(m_mapTextureJungleTrees.texture.getSize());
-
-        util::TextureLoader::load(
-            m_mapTextureJungleMisc.texture, (imagePath + "tile-jungle-misc.png"));
-
-        m_mapTextureJungleMisc.which = TileImage::JungleMisc;
-        m_mapTextureJungleMisc.size = sf::Vector2i(m_mapTextureJungleMisc.texture.getSize());
-
-        util::TextureLoader::load(
-            m_mapTextureJungleTreesFlip.texture, (imagePath + "tile-jungle-trees-flip.png"));
-
-        m_mapTextureJungleTreesFlip.which = TileImage::JungleTreesFlip;
-
-        m_mapTextureJungleTreesFlip.size =
-            sf::Vector2i(m_mapTextureJungleTreesFlip.texture.getSize());
+        //
+        const auto imagePath{ t_settings.media_path / "image" / "map" };
+        m_mapTextureGround.setup(TileImage::Ground, imagePath);
+        m_mapTextureObject1.setup(TileImage::Object1, imagePath);
+        m_mapTextureObject2.setup(TileImage::Object2, imagePath);
+        m_mapTextureObject3.setup(TileImage::Object3, imagePath);
+        m_mapTextureJungleTrees.setup(TileImage::JungleTrees, imagePath);
+        m_mapTextureJungleTreesFlip.setup(TileImage::JungleTreesFlip, imagePath);
+        m_mapTextureJungleMisc.setup(TileImage::JungleMisc, imagePath);
     }
 
     const sf::Text Resources::makeText(

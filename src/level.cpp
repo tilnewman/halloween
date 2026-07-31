@@ -15,13 +15,16 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 
+#include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+
 #include <iostream>
 
 namespace halloween
 {
 
     Level::Level()
-        : m_tiles{}
+        : m_mapTiles{}
         , m_mapPosition{}
         , m_tileSizeScreen{}
         , m_walkCollisions{}
@@ -44,7 +47,7 @@ namespace halloween
 
     void Level::reset(const Context & t_context)
     {
-        m_tiles.reset();
+        m_mapTiles.reset();
         m_walkCollisions.clear();
         m_killCollisions.clear();
         m_acidCollisions.clear();
@@ -66,7 +69,7 @@ namespace halloween
             t_context.avatar.setSpawnPosForNewLevel(m_enterRect);
             m_farthestHorizMapPixel = m_exitRect.position.x;
             m_farthestHorizTraveled = 0.0f;
-            // dumpInfo(levelNumber);
+            // dumpInfo(m_number);
             return true;
         }
         else
@@ -77,19 +80,20 @@ namespace halloween
 
     void Level::verifyLayerIndexCounts() const
     {
-        for (const TileLayer & layer : m_tiles.layers)
+        for (const TileLayer & layer : m_mapTiles.layers)
         {
-            const std::size_t totalCount{ static_cast<std::size_t>(m_tiles.count.x) *
-                                          static_cast<std::size_t>(m_tiles.count.y) };
+            const std::size_t totalCount{ static_cast<std::size_t>(m_mapTiles.count.x) *
+                                          static_cast<std::size_t>(m_mapTiles.count.y) };
 
             M_CHECK(
                 (totalCount == layer.indexes.size()),
                 "index_count=" << layer.indexes.size() << " does not equal tile_count="
-                               << totalCount << " in layer " << layer.image);
+                               << totalCount << " in layer " << toString(layer.image));
 
             M_CHECK(
                 ((layer.verts.size() % util::verts_per_quad) == 0),
-                "Error:  TileLayer " << layer.image << " verts.size()=" << layer.verts.size()
+                "Error:  TileLayer " << toString(layer.image)
+                                     << " verts.size()=" << layer.verts.size()
                                      << " which is not a multiple of " << util::verts_per_quad);
         }
     }
@@ -142,7 +146,7 @@ namespace halloween
                 rect.position += move;
             }
 
-            for (TileLayer & layer : m_tiles.layers)
+            for (TileLayer & layer : m_mapTiles.layers)
             {
                 for (sf::Vertex & vertex : layer.verts)
                 {
@@ -163,13 +167,13 @@ namespace halloween
 
     void Level::appendVertLayers(const Context & t_context)
     {
-        for (TileLayer & layer : m_tiles.layers)
+        for (TileLayer & layer : m_mapTiles.layers)
         {
             appendVertLayer(
-                m_tiles.count,
-                m_tiles.size,
+                m_mapTiles.count,
+                m_mapTiles.size,
                 m_tileSizeScreen,
-                t_context.media.tileTexture(layer.image),
+                t_context.media.mapTexture(layer.image),
                 layer);
         }
 
@@ -180,11 +184,11 @@ namespace halloween
         const sf::Vector2i & t_tileCount,
         const sf::Vector2i & t_tileSizeOnMap,
         const sf::Vector2f & t_tileSizeOnScreen,
-        const TileTexture & t_tileTexture,
+        const MapTexture & t_mapTexture,
         TileLayer & t_layer) const
     {
         const sf::Vector2i sizeOnScreenI{ t_tileSizeOnScreen };
-        const sf::Vector2i textureTileCount{ t_tileTexture.size / m_tiles.size };
+        const sf::Vector2i textureTileCount{ t_mapTexture.size / m_mapTiles.size };
 
         std::size_t textureIndex{ 0 };
         for (int y{ 0 }; y < t_tileCount.y; ++y)
@@ -197,7 +201,7 @@ namespace halloween
                     continue; // zero means no image at this location
                 }
 
-                const int index{ textureIndexOrig - t_tileTexture.gid };
+                const int index{ textureIndexOrig - t_mapTexture.gid };
 
                 const int texturePosX{ (index % textureTileCount.x) * t_tileSizeOnMap.x };
                 const int texturePosY{ (index / textureTileCount.x) * t_tileSizeOnMap.y };
@@ -220,7 +224,7 @@ namespace halloween
     {
         const sf::FloatRect mapRect{ t_layout.mapRegion() };
 
-        for (TileLayer & layer : m_tiles.layers)
+        for (TileLayer & layer : m_mapTiles.layers)
         {
             layer.visibleVerts.clear();
 
@@ -253,13 +257,36 @@ namespace halloween
         }
     }
 
+    void Level::draw(
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
+    {
+        for (const TileLayer & layer : t_context.level.tileLayers())
+        {
+            if (layer.visibleVerts.empty())
+            {
+                continue;
+            }
+
+            t_states.texture = &t_context.media.mapTexture(layer.image).texture;
+
+            t_target.draw(
+                &layer.visibleVerts[0],
+                layer.visibleVerts.size(),
+                sf::PrimitiveType::Triangles,
+                t_states);
+
+            t_states.texture = nullptr;
+        }
+    }
+
     void Level::dumpInfo(const std::size_t levelNumber) const
     {
         std::cout << "Level " << levelNumber << " Graphics Info\n";
 
-        for (const TileLayer & layer : m_tiles.layers)
+        for (const TileLayer & layer : m_mapTiles.layers)
         {
-            std::cout << "\tLayer Tiles:  " << layer.image << ", possible=" << layer.indexes.size()
+            std::cout << "\tLayer Tiles:  " << toString(layer.image)
+                      << ", possible=" << layer.indexes.size()
                       << ", actual=" << (layer.verts.size() / util::verts_per_quad)
                       << ", visible=" << (layer.visibleVerts.size() / util::verts_per_quad) << "\n";
         }

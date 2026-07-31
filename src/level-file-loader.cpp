@@ -294,9 +294,9 @@ namespace halloween
 
         M_CHECK(
             !layer.indexes.empty(),
-            "Error Parsing Level File "
-                << m_pathStr << ":  Failed to read tileset layer indexes for image " << image
-                << ".");
+            "Error Parsing Level File " << m_pathStr
+                                        << ":  Failed to read tileset layer indexes for image "
+                                        << toString(image) << ".");
 
         t_context.level.appendTileLayer(layer);
     }
