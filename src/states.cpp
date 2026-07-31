@@ -266,7 +266,7 @@ namespace halloween
         : TimedMessageState{ State::Title,
                              State::Play,
                              "Super Lucky Ninja Girl Halloween Nightmare",
-                             (m_defaultMinDurationSec * 3.0f) }
+                             (m_defaultMinDurationSec * 4.0f) }
     {}
 
     void TitleState::onEnter(const Context & t_context)
