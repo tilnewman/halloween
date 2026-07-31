@@ -50,7 +50,7 @@ namespace halloween
 
     //
 
-    inline constexpr std::string_view toString(const State t_state) noexcept
+    constexpr std::string_view toString(const State t_state) noexcept
     {
         // clang-format off
         switch (t_state)
