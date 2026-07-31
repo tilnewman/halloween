@@ -121,6 +121,7 @@ namespace halloween
 
         t_context.managers.drawAllBeforeMap(t_context, t_target, t_states);
 
+        //TODO move this to the Level class
         for (const TileLayer & layer : t_context.level.tileLayers())
         {
             if (layer.visibleVerts.empty())
@@ -128,7 +129,7 @@ namespace halloween
                 continue;
             }
 
-            t_states.texture = &t_context.media.tileTexture(layer.image).texture;
+            t_states.texture = &t_context.media.mapTexture(layer.image).texture;
 
             t_target.draw(
                 &layer.visibleVerts[0],

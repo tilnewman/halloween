@@ -109,7 +109,7 @@ namespace halloween
             const sf::Vector2i & t_tileCount,
             const sf::Vector2i & t_tileSizeOnMap,
             const sf::Vector2f & t_tileSizeOnScreen,
-            const TileTexture & t_tileTexture,
+            const MapTexture & t_mapTexture,
             TileLayer & t_layer) const;
 
       private:

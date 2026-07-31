@@ -9,6 +9,7 @@
 #include <vector>
 
 #include <SFML/Graphics/Rect.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -44,6 +45,23 @@ namespace halloween
 
         return t_os;
     }
+
+    //
+
+    struct MapTexture
+    {
+        MapTexture()
+            : which{ TileImage::Ground } // any default works here
+            , size{}
+            , texture{}
+            , gid{ 0 }
+        {}
+
+        TileImage which;
+        sf::Vector2i size;
+        sf::Texture texture;
+        int gid;
+    };
 
     //
 

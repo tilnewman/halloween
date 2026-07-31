@@ -17,13 +17,13 @@ namespace halloween
 
     Resources::Resources()
         : m_font{}
-        , m_groundTexture{}
-        , m_objectTexture1{}
-        , m_objectTexture2{}
-        , m_objectTexture3{}
-        , m_tileJungleTrees{}
-        , m_tileJungleTreesFlip{}
-        , m_tileJungleMisc{}
+        , m_mapTextureGround{}
+        , m_mapTextureObject1{}
+        , m_mapTextureObject2{}
+        , m_mapTextureObject3{}
+        , m_mapTextureJungleTrees{}
+        , m_mapTextureJungleTreesFlip{}
+        , m_mapTextureJungleMisc{}
         , m_bgTexture1{}
         , m_bgTexture2{}
         , m_bgTexture3{}
@@ -54,35 +54,41 @@ namespace halloween
 
         const std::string imagePath{ (t_settings.media_path / "image" / "map/").string() };
 
-        util::TextureLoader::load(m_groundTexture.texture, (imagePath + "tile-ground.png"));
-        m_groundTexture.which = TileImage::Ground;
-        m_groundTexture.size = sf::Vector2i(m_groundTexture.texture.getSize());
+        util::TextureLoader::load(m_mapTextureGround.texture, (imagePath + "tile-ground.png"));
+        m_mapTextureGround.which = TileImage::Ground;
+        m_mapTextureGround.size = sf::Vector2i(m_mapTextureGround.texture.getSize());
 
-        util::TextureLoader::load(m_objectTexture1.texture, (imagePath + "tile-object-1.png"));
-        m_objectTexture1.which = TileImage::Object1;
-        m_objectTexture1.size = sf::Vector2i(m_objectTexture1.texture.getSize());
+        util::TextureLoader::load(m_mapTextureObject1.texture, (imagePath + "tile-object-1.png"));
+        m_mapTextureObject1.which = TileImage::Object1;
+        m_mapTextureObject1.size = sf::Vector2i(m_mapTextureObject1.texture.getSize());
 
-        util::TextureLoader::load(m_objectTexture2.texture, (imagePath + "tile-object-2.png"));
-        m_objectTexture2.which = TileImage::Object2;
-        m_objectTexture2.size = sf::Vector2i(m_objectTexture2.texture.getSize());
+        util::TextureLoader::load(m_mapTextureObject2.texture, (imagePath + "tile-object-2.png"));
+        m_mapTextureObject2.which = TileImage::Object2;
+        m_mapTextureObject2.size = sf::Vector2i(m_mapTextureObject2.texture.getSize());
 
-        util::TextureLoader::load(m_objectTexture3.texture, (imagePath + "tile-object-3.png"));
-        m_objectTexture3.which = TileImage::Object3;
-        m_objectTexture3.size = sf::Vector2i(m_objectTexture3.texture.getSize());
-
-        util::TextureLoader::load(m_tileJungleTrees.texture, (imagePath + "tile-jungle-trees.png"));
-        m_tileJungleTrees.which = TileImage::JungleTrees;
-        m_tileJungleTrees.size = sf::Vector2i(m_tileJungleTrees.texture.getSize());
-
-        util::TextureLoader::load(m_tileJungleMisc.texture, (imagePath + "tile-jungle-misc.png"));
-        m_tileJungleMisc.which = TileImage::JungleMisc;
-        m_tileJungleMisc.size = sf::Vector2i(m_tileJungleMisc.texture.getSize());
+        util::TextureLoader::load(m_mapTextureObject3.texture, (imagePath + "tile-object-3.png"));
+        m_mapTextureObject3.which = TileImage::Object3;
+        m_mapTextureObject3.size = sf::Vector2i(m_mapTextureObject3.texture.getSize());
 
         util::TextureLoader::load(
-            m_tileJungleTreesFlip.texture, (imagePath + "tile-jungle-trees-flip.png"));
+            m_mapTextureJungleTrees.texture, (imagePath + "tile-jungle-trees.png"));
 
-        m_tileJungleTreesFlip.which = TileImage::JungleTreesFlip;
-        m_tileJungleTreesFlip.size = sf::Vector2i(m_tileJungleTreesFlip.texture.getSize());
+        m_mapTextureJungleTrees.which = TileImage::JungleTrees;
+        m_mapTextureJungleTrees.size = sf::Vector2i(m_mapTextureJungleTrees.texture.getSize());
+
+        util::TextureLoader::load(
+            m_mapTextureJungleMisc.texture, (imagePath + "tile-jungle-misc.png"));
+
+        m_mapTextureJungleMisc.which = TileImage::JungleMisc;
+        m_mapTextureJungleMisc.size = sf::Vector2i(m_mapTextureJungleMisc.texture.getSize());
+
+        util::TextureLoader::load(
+            m_mapTextureJungleTreesFlip.texture, (imagePath + "tile-jungle-trees-flip.png"));
+
+        m_mapTextureJungleTreesFlip.which = TileImage::JungleTreesFlip;
+
+        m_mapTextureJungleTreesFlip.size =
+            sf::Vector2i(m_mapTextureJungleTreesFlip.texture.getSize());
     }
 
     const sf::Text Resources::makeText(
@@ -96,18 +102,18 @@ namespace halloween
         return text;
     }
 
-    const TileTexture & Resources::tileTexture(const TileImage image) const
+    const MapTexture & Resources::mapTexture(const TileImage image) const
     {
         // clang-format off
         switch (image)
         {
-            case TileImage::Ground:          { return m_groundTexture;       }
-            case TileImage::Object1:         { return m_objectTexture1;      }
-            case TileImage::Object2:         { return m_objectTexture2;      }
-            case TileImage::Object3:         { return m_objectTexture3;      }
-            case TileImage::JungleTrees:     { return m_tileJungleTrees;     }
-            case TileImage::JungleTreesFlip: { return m_tileJungleTreesFlip; }
-            case TileImage::JungleMisc:      { return m_tileJungleMisc;      }
+            case TileImage::Ground:          { return m_mapTextureGround;          }
+            case TileImage::Object1:         { return m_mapTextureObject1;         }
+            case TileImage::Object2:         { return m_mapTextureObject2;         }
+            case TileImage::Object3:         { return m_mapTextureObject3;         }
+            case TileImage::JungleTrees:     { return m_mapTextureJungleTrees;     }
+            case TileImage::JungleTreesFlip: { return m_mapTextureJungleTreesFlip; }
+            case TileImage::JungleMisc:      { return m_mapTextureJungleMisc;      }
             default:
             {
                 throw std::runtime_error("Resources::tileTexture() given an invalid TileImage enum.");

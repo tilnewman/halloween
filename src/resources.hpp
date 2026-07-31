@@ -20,23 +20,6 @@ namespace halloween
 
     //
 
-    struct TileTexture
-    {
-        TileTexture()
-            : which{ TileImage::Ground } // any default works here
-            , size{}
-            , texture{}
-            , gid{ 0 }
-        {}
-
-        TileImage which;
-        sf::Vector2i size;
-        sf::Texture texture;
-        int gid;
-    };
-
-    //
-
     class Resources
     {
       public:
@@ -49,15 +32,19 @@ namespace halloween
             const std::string & t_message,
             const sf::Color & t_color) const;
 
-        const TileTexture & tileTexture(const TileImage t_image) const;
+        const MapTexture & mapTexture(const TileImage t_image) const;
 
-        constexpr void setGidGround(const int t_gid) { m_groundTexture.gid = t_gid; }
-        constexpr void setGidObject1(const int t_gid) { m_objectTexture1.gid = t_gid; }
-        constexpr void setGidObject2(const int t_gid) { m_objectTexture2.gid = t_gid; }
-        constexpr void setGidObject3(const int t_gid) { m_objectTexture3.gid = t_gid; }
-        constexpr void setGidJungleTrees(const int t_gid) { m_tileJungleTrees.gid = t_gid; }
-        constexpr void setGidJungleTreesFlip(const int t_gid) { m_tileJungleTreesFlip.gid = t_gid; }
-        constexpr void setGidJungleMisc(const int t_gid) { m_tileJungleMisc.gid = t_gid; }
+        constexpr void setGidGround(const int t_gid) { m_mapTextureGround.gid = t_gid; }
+        constexpr void setGidObject1(const int t_gid) { m_mapTextureObject1.gid = t_gid; }
+        constexpr void setGidObject2(const int t_gid) { m_mapTextureObject2.gid = t_gid; }
+        constexpr void setGidObject3(const int t_gid) { m_mapTextureObject3.gid = t_gid; }
+        constexpr void setGidJungleMisc(const int t_gid) { m_mapTextureJungleMisc.gid = t_gid; }
+        constexpr void setGidJungleTrees(const int t_gid) { m_mapTextureJungleTrees.gid = t_gid; }
+
+        constexpr void setGidJungleTreesFlip(const int t_gid)
+        {
+            m_mapTextureJungleTreesFlip.gid = t_gid;
+        }
 
         inline const sf::Sprite backgroundSprite() const { return m_bgSprite; }
 
@@ -65,13 +52,13 @@ namespace halloween
 
       private:
         sf::Font m_font;
-        TileTexture m_groundTexture;
-        TileTexture m_objectTexture1;
-        TileTexture m_objectTexture2;
-        TileTexture m_objectTexture3;
-        TileTexture m_tileJungleTrees;
-        TileTexture m_tileJungleTreesFlip;
-        TileTexture m_tileJungleMisc;
+        MapTexture m_mapTextureGround;
+        MapTexture m_mapTextureObject1;
+        MapTexture m_mapTextureObject2;
+        MapTexture m_mapTextureObject3;
+        MapTexture m_mapTextureJungleTrees;
+        MapTexture m_mapTextureJungleTreesFlip;
+        MapTexture m_mapTextureJungleMisc;
         sf::Texture m_bgTexture1;
         sf::Texture m_bgTexture2;
         sf::Texture m_bgTexture3;
