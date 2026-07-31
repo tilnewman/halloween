@@ -438,17 +438,6 @@
          "objects":[
                 {
                  "height":128,
-                 "id":64,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":960,
-                 "x":4896,
-                 "y":768
-                }, 
-                {
-                 "height":128,
                  "id":68,
                  "name":"",
                  "rotation":0,
@@ -457,17 +446,6 @@
                  "width":960,
                  "x":4896,
                  "y":928
-                }, 
-                {
-                 "height":128,
-                 "id":69,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":960,
-                 "x":4896,
-                 "y":1088
                 }, 
                 {
                  "height":320,
