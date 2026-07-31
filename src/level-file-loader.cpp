@@ -93,6 +93,14 @@ namespace halloween
 
     void LevelFileLoader::parseObjectTextureGIDs(const Context & t_context, Json & wholeJson) const
     {
+        const auto makeTilesetFilenameTsx = [&](const TileImage t_image) {
+            return std::string{ toString(t_image) }.append(".tsx");
+        };
+
+        const auto makeTilesetFilenameTsj = [&](const TileImage t_image) {
+            return std::string{ toString(t_image) }.append(".tsj");
+        };
+
         for (Json & json : wholeJson["tilesets"])
         {
             const std::string sourceStr{ json["source"] };
@@ -101,31 +109,31 @@ namespace halloween
 
             const int gid{ json["firstgid"] };
 
-            if (filename == "ground.tsx")
+            if (filename == makeTilesetFilenameTsx(TileImage::Ground))
             {
                 t_context.media.setGidGround(gid);
             }
-            else if (filename == "object-1.tsx")
+            else if (filename == makeTilesetFilenameTsx(TileImage::Object1))
             {
                 t_context.media.setGidObject1(gid);
             }
-            else if (filename == "object-2.tsx")
+            else if (filename == makeTilesetFilenameTsx(TileImage::Object2))
             {
                 t_context.media.setGidObject2(gid);
             }
-            else if (filename == "object-3.tsx")
+            else if (filename == makeTilesetFilenameTsx(TileImage::Object3))
             {
                 t_context.media.setGidObject3(gid);
             }
-            else if (filename == "jungle-trees.tsj")
+            else if (filename == makeTilesetFilenameTsj(TileImage::JungleTrees))
             {
                 t_context.media.setGidJungleTrees(gid);
             }
-            else if (filename == "jungle-trees-flip.tsj")
+            else if (filename == makeTilesetFilenameTsj(TileImage::JungleTreesFlip))
             {
                 t_context.media.setGidJungleTreesFlip(gid);
             }
-            else if (filename == "jungle-misc.tsj")
+            else if (filename == makeTilesetFilenameTsj(TileImage::JungleMisc))
             {
                 t_context.media.setGidJungleMisc(gid);
             }
