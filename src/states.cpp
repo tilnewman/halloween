@@ -349,7 +349,7 @@ namespace halloween
         const auto accentImagePath{ t_context.random.from(accentImagePaths) };
         util::TextureLoader::load(m_accentTexture, accentImagePath, true);
         m_accentSprite.setTexture(m_accentTexture, true);
-        m_accentSprite.setColor(sf::Color(255, 255, 255, 192));
+        m_accentSprite.setColor(sf::Color(255, 255, 255, 127));
 
         m_accentSprite.setPosition(
             { (util::center(wholeRect).x - util::center(m_accentSprite.getGlobalBounds()).x),
