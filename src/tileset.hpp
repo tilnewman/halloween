@@ -4,28 +4,26 @@
 // tileset.hpp
 //
 #include <cassert>
-#include <filesystem>
 #include <ostream>
 #include <string_view>
 #include <vector>
 
 #include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Vertex.hpp>
-#include <SFML/System/Vector2.hpp>
 
 namespace halloween
 {
 
     enum class TileImage : unsigned char
     {
-        Ground,
+        Ground = 0,
         Object1,
         Object2,
         Object3,
         JungleTrees,
         JungleTreesFlip,
-        JungleMisc
+        JungleMisc,
+        Count
     };
 
     // these names must match the layer names in Tiled, and the files in media/tiled
@@ -41,24 +39,11 @@ namespace halloween
             case TileImage::JungleTrees:     { return "jungle-trees";       }
             case TileImage::JungleTreesFlip: { return "jungle-trees-flip";  }
             case TileImage::JungleMisc:      { return "jungle-misc";        }
+            case TileImage::Count:
             default:                   { return "ERROR_Unknown_TileImage";  }
         }
         // clang-format on
     }
-
-    //
-
-    struct MapTexture
-    {
-        MapTexture();
-
-        void setup(const TileImage t_image, const std::filesystem::path & t_mapPath);
-
-        TileImage which;
-        sf::Vector2i size;
-        sf::Texture texture;
-        int gid;
-    };
 
     //
 

@@ -4,6 +4,7 @@
 // level.hpp
 //
 #include "level-file-loader.hpp"
+#include "map-textures.hpp"
 #include "tileset.hpp"
 
 #include <vector>
@@ -32,6 +33,7 @@ namespace halloween
       public:
         Level();
 
+        void setup(const Context & t_context);
         bool load(const Context & t_context);
         bool move(const Context & t_context, const sf::Vector2f & t_move);
 
@@ -108,6 +110,11 @@ namespace halloween
             m_mapPosition = t_mapPosition;
         }
 
+        inline void setMapTextureGid(const TileImage t_image, const int t_gid) 
+        {
+            m_mapTextures.setGid(t_image, t_gid);
+        }
+
         constexpr int backgroundImage() const noexcept { return m_backgroundImage; }
 
         inline void backgroundImage(const int t_number) { m_backgroundImage = t_number; }
@@ -131,6 +138,7 @@ namespace halloween
 
       private:
         MapTiles m_mapTiles;
+        MapTextureManager m_mapTextures;
         sf::Vector2f m_mapPosition;
         sf::Vector2f m_tileSizeScreen;
         std::vector<sf::FloatRect> m_walkCollisions;

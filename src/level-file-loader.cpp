@@ -111,31 +111,31 @@ namespace halloween
 
             if (filename == makeTilesetFilenameTsx(TileImage::Ground))
             {
-                t_context.media.setGidGround(gid);
+                t_context.level.setMapTextureGid(TileImage::Ground, gid);
             }
             else if (filename == makeTilesetFilenameTsx(TileImage::Object1))
             {
-                t_context.media.setGidObject1(gid);
+                t_context.level.setMapTextureGid(TileImage::Object1, gid);
             }
             else if (filename == makeTilesetFilenameTsx(TileImage::Object2))
             {
-                t_context.media.setGidObject2(gid);
+                t_context.level.setMapTextureGid(TileImage::Object2, gid);
             }
             else if (filename == makeTilesetFilenameTsx(TileImage::Object3))
             {
-                t_context.media.setGidObject3(gid);
+                t_context.level.setMapTextureGid(TileImage::Object3, gid);
             }
             else if (filename == makeTilesetFilenameTsj(TileImage::JungleTrees))
             {
-                t_context.media.setGidJungleTrees(gid);
+                t_context.level.setMapTextureGid(TileImage::JungleTrees, gid);
             }
             else if (filename == makeTilesetFilenameTsj(TileImage::JungleTreesFlip))
             {
-                t_context.media.setGidJungleTreesFlip(gid);
+                t_context.level.setMapTextureGid(TileImage::JungleTreesFlip, gid);
             }
             else if (filename == makeTilesetFilenameTsj(TileImage::JungleMisc))
             {
-                t_context.media.setGidJungleMisc(gid);
+                t_context.level.setMapTextureGid(TileImage::JungleMisc, gid);
             }
             else
             {

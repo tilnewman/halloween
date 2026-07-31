@@ -25,6 +25,7 @@ namespace halloween
 
     Level::Level()
         : m_mapTiles{}
+        , m_mapTextures{}
         , m_mapPosition{}
         , m_tileSizeScreen{}
         , m_walkCollisions{}
@@ -40,11 +41,13 @@ namespace halloween
         , m_traveledVert{ 0.0f }
         , m_backgroundImage{ 0 }
     {
-        m_walkCollisions.reserve(1000);
-        m_killCollisions.reserve(100);
-        m_acidCollisions.reserve(100);
-        m_waterCollisions.reserve(100);
+        m_walkCollisions.reserve(100);
+        m_killCollisions.reserve(32);
+        m_acidCollisions.reserve(32);
+        m_waterCollisions.reserve(32);
     }
+
+    void Level::setup(const Context & t_context) { m_mapTextures.setup(t_context); }
 
     void Level::reset(const Context & t_context)
     {
@@ -175,7 +178,7 @@ namespace halloween
                 m_mapTiles.count,
                 m_mapTiles.size,
                 m_tileSizeScreen,
-                t_context.media.mapTexture(layer.image),
+                m_mapTextures.mapTexture(layer.image),
                 layer);
         }
 
@@ -269,7 +272,7 @@ namespace halloween
                 continue;
             }
 
-            t_states.texture = &t_context.media.mapTexture(layer.image).texture;
+            t_states.texture = &m_mapTextures.mapTexture(layer.image).texture;
 
             t_target.draw(
                 &layer.visibleVerts[0],
