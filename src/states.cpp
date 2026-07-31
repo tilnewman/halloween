@@ -25,7 +25,6 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
-#include <SFML/Window/Window.hpp>
 
 #include <filesystem>
 
@@ -272,6 +271,7 @@ namespace halloween
     void TitleState::onEnter(const Context & t_context)
     {
         TimedMessageState::onEnter(t_context);
+        m_text.setFillColor(sf::Color::Black);
     }
 
     void TitleState::draw(
