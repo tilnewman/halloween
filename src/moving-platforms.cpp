@@ -19,7 +19,7 @@ namespace halloween
         : is_horiz{ t_rect.size.x > t_rect.size.y }
         , sprite{ t_texture }
         , rect{ t_rect }
-        , slider{ 0.0f, 1.0f, t_context.random.fromTo(0.2f, 0.5f) }
+        , slider{ 0.0f, 1.0f, t_context.random.fromTo(0.2f, 0.35f) }
     {
         if (is_horiz)
         {
