@@ -41,7 +41,7 @@ namespace halloween
         for (std::size_t i{ 1 }; i <= fireTextureCount; ++i)
         {
             std::string filePath{
-                (t_context.settings.media_path / "image" / "fire" / "fire-").string()
+                (t_context.settings.media_path / "image" / "fire-small" / "fire-").string()
             };
 
             filePath += std::to_string(i);
@@ -57,7 +57,7 @@ namespace halloween
     {
         FireSpout & spout{ m_fireSpouts.emplace_back(m_spoutTexture, m_fireTextures.at(0)) };
 
-        const int randomSpoutNum{ t_context.random.fromTo(1,3) };
+        const int randomSpoutNum{ t_context.random.fromTo(1, 3) };
         if (1 == randomSpoutNum)
         {
             spout.spout_sprite.setTextureRect({ { 0, 10 }, { 35, 22 } });
