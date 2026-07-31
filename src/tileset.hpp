@@ -55,10 +55,9 @@ namespace halloween
             , verts{}
             , visibleVerts{}
         {
-            // TODO these values need work
             indexes.reserve(10'000);
-            verts.reserve(10'000);
-            visibleVerts.reserve(10'000);
+            verts.reserve(2'000);
+            visibleVerts.reserve(1'000);
         }
 
         TileImage image;
