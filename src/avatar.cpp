@@ -634,13 +634,9 @@ namespace halloween
     void Avatar::collisions(const Context & t_context)
     {
         const sf::FloatRect avatarRect{ collisionRect() };
+        const sf::Vector2f avatarCenter{ util::center(avatarRect) };
 
-        const float footRectHeightAdj{ avatarRect.size.y * 0.8f };
-        sf::FloatRect footRect{ avatarRect };
-        footRect.position.y += footRectHeightAdj;
-        footRect.size.y -= footRectHeightAdj;
-
-        bool hasHitSomething{ false };
+        bool detectLanding{ false };
 
         for (const sf::FloatRect & collRect : t_context.level.walkCollisions())
         {
@@ -649,11 +645,9 @@ namespace halloween
             {
                 collide(
                     t_context,
-                    collRect,
                     intersectionOpt.value(),
-                    avatarRect,
-                    footRect,
-                    hasHitSomething);
+                    avatarCenter,
+                    detectLanding);
             }
         }
 
@@ -666,15 +660,13 @@ namespace halloween
             {
                 collide(
                     t_context,
-                    collRect,
                     intersectionOpt.value(),
-                    avatarRect,
-                    footRect,
-                    hasHitSomething);
+                    avatarCenter,
+                    detectLanding);
             }
         }
 
-        if (!hasHitSomething)
+        if (!detectLanding)
         {
             m_hasLanded = false;
         }
@@ -682,30 +674,23 @@ namespace halloween
 
     void Avatar::collide(
         const Context & t_context,
-        const sf::FloatRect & t_collisionRect,
         const sf::FloatRect & t_intersectionRect,
-        const sf::FloatRect & t_avatarRect,
-        const sf::FloatRect & t_footRect,
-        bool & t_hasHitSomething)
+        const sf::Vector2f & t_avatarCenter,
+        bool & t_detectLanding)
     {
         const float tolerance{ 25.0f }; // this magic number brought to you by zTn 2021-8-2
-        const sf::Vector2f avatarCenter{ util::center(t_avatarRect) };
-        const sf::Vector2f collCenter{ util::center(t_collisionRect) };
+        const sf::Vector2f intersectCenter{ util::center(t_intersectionRect) };
 
-        t_hasHitSomething = true;
-
-        if ((m_velocity.y < 0.0f) && (collCenter.y < avatarCenter.y))
+        if ((m_velocity.y < 0.0f) && (t_intersectionRect.size.y < tolerance) &&
+            (intersectCenter.y < t_avatarCenter.y))
         {
-            // rising and hit something above
-
+            // rising and hit something abov
             m_velocity.y = 0.0f;
             m_sprite.move({ 0.0f, t_intersectionRect.size.y });
-            return;
         }
-
-        const bool doesIntersectFeet{ t_collisionRect.findIntersection(t_footRect).has_value() };
-
-        if ((m_velocity.y > 0.0f) && (t_intersectionRect.size.y < tolerance) && doesIntersectFeet)
+        else if (
+            (m_velocity.y > 0.0f) && (t_intersectionRect.size.y < tolerance) &&
+            (intersectCenter.y > t_avatarCenter.y))
         {
             // falling and hit something below
 
@@ -716,30 +701,24 @@ namespace halloween
             }
 
             m_hasLanded = true;
+            t_detectLanding = true;
             m_velocity.y = 0.0f;
             m_sprite.move({ 0.0f, -t_intersectionRect.size.y });
-            return;
         }
-
-        // at this point we hit something from the side
-
-        if (t_intersectionRect.size.x < tolerance)
+        else if (t_intersectionRect.size.x < tolerance)
         {
-            if (m_velocity.x > 0.0f)
+            // hit something from the side
+            m_velocity.x = 0.0f;
+
+            if (intersectCenter.x < t_avatarCenter.x)
             {
-                m_velocity.x = 0.0f;
-                m_sprite.move({ -t_intersectionRect.size.x, 0.0f });
-                return;
-            }
-            else if (m_velocity.x < 0.0f)
-            {
-                m_velocity.x = 0.0f;
                 m_sprite.move({ t_intersectionRect.size.x, 0.0f });
-                return;
+            }
+            else
+            {
+                m_sprite.move({ -t_intersectionRect.size.x, 0.0f });
             }
         }
-
-        t_hasHitSomething = false;
     }
 
     void Avatar::killCollisions(const Context & t_context)

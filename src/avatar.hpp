@@ -65,11 +65,9 @@ namespace halloween
 
         void collide(
             const Context & t_context,
-            const sf::FloatRect & t_collisionRect,
             const sf::FloatRect & t_intersectionRect,
-            const sf::FloatRect & t_avatarRect,
-            const sf::FloatRect & t_footRect,
-            bool & t_hasHitSomething);
+            const sf::Vector2f & t_avatarCenter,
+            bool & t_detectLanding);
 
       private:
         Blood m_blood;
