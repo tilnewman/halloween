@@ -23,6 +23,7 @@ namespace halloween
         JungleTrees,
         JungleTreesFlip,
         JungleMisc,
+        PineTreesDead,
         Count
     };
 
@@ -39,6 +40,7 @@ namespace halloween
             case TileImage::JungleTrees:     { return "jungle-trees";       }
             case TileImage::JungleTreesFlip: { return "jungle-trees-flip";  }
             case TileImage::JungleMisc:      { return "jungle-misc";        }
+            case TileImage::PineTreesDead:   { return "pine-trees-dead";    }
             case TileImage::Count:
             default:                   { return "ERROR_Unknown_TileImage";  }
         }

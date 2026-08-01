@@ -139,6 +139,10 @@ namespace halloween
             {
                 t_context.level.setMapTextureGid(TileImage::JungleMisc, gid);
             }
+            else if (filename == makeTilesetFilenameTsj(TileImage::PineTreesDead))
+            {
+                t_context.level.setMapTextureGid(TileImage::PineTreesDead, gid);
+            }
             else
             {
                 std::cout << "Warning: While parsing \"" << m_pathStr
@@ -211,6 +215,10 @@ namespace halloween
             else if (layerName == toString(TileImage::JungleMisc))
             {
                 parseTileLayer(t_context, TileImage::JungleMisc, jsonLayer);
+            }
+            else if (layerName == toString(TileImage::PineTreesDead))
+            {
+                parseTileLayer(t_context, TileImage::PineTreesDead, jsonLayer);
             }
             else if (layerName == "collision")
             {
