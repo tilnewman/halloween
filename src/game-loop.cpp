@@ -32,6 +32,7 @@ namespace halloween
         , m_dartsUPtr{}
         , m_spikedBallsUPtr{}
         , m_fireSpoutsUPtr{}
+        , m_fireSpoutLargeManagerUPtr{}
         , m_sawsUPtr{}
         , m_slimesUPtr{}
         , m_ghostsUPtr{}
@@ -92,6 +93,7 @@ namespace halloween
         m_dartsUPtr = std::make_unique<Darts>();
         m_spikedBallsUPtr = std::make_unique<SpikedBalls>();
         m_fireSpoutsUPtr = std::make_unique<FireSpouts>();
+        m_fireSpoutLargeManagerUPtr = std::make_unique<FireSpoutLargeManager>();
         m_sawsUPtr = std::make_unique<Saws>();
         m_slimesUPtr = std::make_unique<Slimes>();
         m_ghostsUPtr = std::make_unique<Ghosts>();
@@ -132,7 +134,8 @@ namespace halloween
             *m_statsUPtr,
             *m_bossUPtr,
             *m_smokeUPtr,
-            *m_movingPlatformsUPtr);
+            *m_movingPlatformsUPtr,
+            *m_fireSpoutLargeManagerUPtr);
 
         m_layoutUPtr->setup(m_windowUPtr->getSize());
         m_fontManagerUPtr->setup(m_settings);
@@ -149,6 +152,7 @@ namespace halloween
         m_managersUPtr->add(*m_bossUPtr);
         m_managersUPtr->add(*m_smokeUPtr);
         m_managersUPtr->add(*m_movingPlatformsUPtr);
+        m_managersUPtr->add(*m_fireSpoutLargeManagerUPtr);
         m_managersUPtr->setupAll(*m_contextUPtr);
 
         m_avatarUPtr->setup(m_settings);
@@ -163,6 +167,7 @@ namespace halloween
         m_managersUPtr.reset();
 
         m_movingPlatformsUPtr.reset();
+        m_fireSpoutLargeManagerUPtr.reset();
         m_smokeUPtr.reset();
         m_statsUPtr.reset();
         m_ghostsUPtr.reset();

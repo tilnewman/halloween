@@ -40,7 +40,8 @@ namespace halloween
     class ScreenRegions;
     class MovingPlatforms;
     class ObjectManagerList;
-    
+    class FireSpoutLargeManager;
+
     struct Context
     {
         Context(
@@ -69,7 +70,8 @@ namespace halloween
             LevelStats & t_levelStats,
             MushroomBoss & t_mushrooomBoos,
             Smoke & t_smoke,
-            MovingPlatforms & t_movingPlatforms)
+            MovingPlatforms & t_movingPlatforms,
+            FireSpoutLargeManager & t_fireSpoutLargeManager)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -87,6 +89,7 @@ namespace halloween
             , darts{ t_darts }
             , balls{ t_spikedBalls }
             , spouts{ t_fireSpouts }
+            , spouts_large{ t_fireSpoutLargeManager }
             , saws{ t_saw }
             , slimes{ t_slimes }
             , ghosts{ t_ghosts }
@@ -115,6 +118,7 @@ namespace halloween
         Darts & darts;
         SpikedBalls & balls;
         FireSpouts & spouts;
+        FireSpoutLargeManager & spouts_large;
         Saws & saws;
         Slimes & slimes;
         Ghosts & ghosts;

@@ -9,6 +9,7 @@
 #include "coin.hpp"
 #include "context.hpp"
 #include "dart.hpp"
+#include "fire-spout-large.hpp"
 #include "fire-spout.hpp"
 #include "fonts.hpp"
 #include "framerate-display.hpp"
@@ -77,6 +78,7 @@ namespace halloween
         std::unique_ptr<Darts> m_dartsUPtr;
         std::unique_ptr<SpikedBalls> m_spikedBallsUPtr;
         std::unique_ptr<FireSpouts> m_fireSpoutsUPtr;
+        std::unique_ptr<FireSpoutLargeManager> m_fireSpoutLargeManagerUPtr;
         std::unique_ptr<Saws> m_sawsUPtr;
         std::unique_ptr<Slimes> m_slimesUPtr;
         std::unique_ptr<Ghosts> m_ghostsUPtr;
@@ -87,7 +89,7 @@ namespace halloween
         std::unique_ptr<FramerateDisplay> m_framerateDisplayUPtr;
         std::unique_ptr<Smoke> m_smokeUPtr;
         std::unique_ptr<MovingPlatforms> m_movingPlatformsUPtr;
-
+        
         std::unique_ptr<Context> m_contextUPtr;
     };
 

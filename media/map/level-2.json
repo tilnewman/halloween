@@ -466,6 +466,39 @@
         }, 
         {
          "draworder":"topdown",
+         "id":20,
+         "name":"fire-spout2",
+         "objects":[
+                {
+                 "height":64,
+                 "id":70,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":736,
+                 "y":1152
+                }, 
+                {
+                 "height":64,
+                 "id":71,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":544,
+                 "y":1152
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":15,
          "name":"water",
          "objects":[
@@ -530,8 +563,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":20,
- "nextobjectid":70,
+ "nextlayerid":21,
+ "nextobjectid":72,
  "orientation":"orthogonal",
  "properties":[
         {

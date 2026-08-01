@@ -7,6 +7,7 @@
 #include "coin.hpp"
 #include "context.hpp"
 #include "dart.hpp"
+#include "fire-spout-large.hpp"
 #include "fire-spout.hpp"
 #include "ghost.hpp"
 #include "level.hpp"
@@ -269,6 +270,10 @@ namespace halloween
             else if (layerName == "fire-spout")
             {
                 parseObjectLayerRects(t_context.spouts, t_context, jsonLayer);
+            }
+            else if (layerName == "fire-spout2")
+            {
+                parseObjectLayerRects(t_context.spouts_large, t_context, jsonLayer);
             }
             else if (layerName == "saw")
             {
