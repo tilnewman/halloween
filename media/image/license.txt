@@ -1,0 +1,10 @@
+straw-mat.png and wood-panel.png
+	Both found on www.opengameart.com:
+	www.opengameart.org/content/ryzom-selected-textures
+	CC-BY-SA-3.0
+	Credit to: Nevrax SARL / Winch Gate Properties Ltd. Ryzom:
+	atys.wiki.ryzom.com/wiki/Ryzom_Commons:About
+
+All other images are CC0
+zTn
+2026-8-1
