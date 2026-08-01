@@ -26,7 +26,7 @@ namespace halloween
 
     void PauseScreen::setup(const Context & t_context)
     {
-        m_text = t_context.fonts.makeText(99, "PAUSED", sf::Color::White);
+        m_text = t_context.fonts.makeText(120, "PAUSED", sf::Color(220, 220, 220));
 
         const sf::Vector2f windowSizeF{ t_context.window.getSize() };
         sf::FloatRect textRect;
@@ -43,31 +43,8 @@ namespace halloween
         }
 
         m_texture.update(t_context.window);
-        sf::Image image{ m_texture.copyToImage() };
-
-        for (unsigned int y{ 0 }; y < image.getSize().y; ++y)
-        {
-            for (unsigned int x{ 0 }; x < image.getSize().x; ++x)
-            {
-                // brighten all colors
-                const auto color{ image.getPixel({ x, y }) + sf::Color(40, 40, 40) };
-
-                // convert to grayscale
-                const float lumen{ colors::brightness::Hsl(color) };
-                const auto grayValue{ static_cast<std::uint8_t>(util::mapRatioTo(lumen, 0, 255)) };
-
-                // reduce the number of colors
-                const auto reducedValue{ static_cast<std::uint8_t>((grayValue / 35) * 35) };
-
-                image.setPixel({ x, y }, sf::Color(reducedValue, reducedValue, reducedValue));
-            }
-        }
-
-        if (m_texture.loadFromImage(image))
-        {
-            m_sprite.setTexture(m_texture, true);
-            m_sprite.setColor(t_context.settings.pause_screen_color);
-        }
+        m_sprite.setTexture(m_texture, true);
+        m_sprite.setColor(t_context.settings.pause_screen_color);
     }
 
     void PauseScreen::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
