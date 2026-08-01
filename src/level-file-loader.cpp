@@ -306,8 +306,11 @@ namespace halloween
 
         layer.image = image;
 
-        const std::vector<int> indexes = json["data"];
-        layer.indexes = indexes;
+        layer.indexes.clear();
+        for (const int index : json["data"])
+        {
+            layer.indexes.push_back(index);
+        }
 
         M_CHECK(
             !layer.indexes.empty(),
