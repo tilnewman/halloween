@@ -5,7 +5,6 @@
 //
 #include "states.hpp"
 
-#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -21,27 +20,24 @@ namespace halloween
 
     //
 
-    class Credit : public sf::Drawable
+    struct CreditAnim
     {
-      public:
-        Credit(
+        CreditAnim(
             const Context & t_context,
+            const std::string & t_imageFilePath,
+            const float t_imageScale,
             const std::string & t_name,
-            const std::string & t_desc,
-            const std::string & t_license = "",
-            const std::string & t_extra = "");
+            const std::string & t_description,
+            const float t_vertPos);
 
-        void update(const Context & t_context, const float t_frameTimeSec);
-        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const override;
-        void vertPosition(const float t_position);
-        float bottom() const;
+        void move(const float t_amount);
+        [[nodiscard]] float bottom() const;
+        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
 
-      private:
-        sf::Text m_nameText;
-        sf::Text m_descText;
-        sf::Text m_licenseText;
-        sf::Text m_extraText;
-        inline static const float m_vertPad{ 10.0f };
+        sf::Texture texture;
+        sf::Sprite sprite;
+        sf::Text name;
+        sf::Text description;
     };
 
     //
@@ -62,7 +58,8 @@ namespace halloween
         bool handleEvent(const Context & t_context, const sf::Event & t_event) final;
 
       private:
-        std::vector<Credit> m_credits;
+        sf::Text m_titleText;
+        std::vector<CreditAnim> m_credits;
         sf::Texture m_bgTexture;
         sf::Sprite m_bgSprite;
     };

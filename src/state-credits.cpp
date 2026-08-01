@@ -25,178 +25,81 @@
 namespace halloween
 {
 
-    Credit::Credit(
+    CreditAnim::CreditAnim(
         const Context & t_context,
+        const std::string & t_imageFilePath,
+        const float t_imageScale,
         const std::string & t_name,
-        const std::string & t_desc,
-        const std::string & t_license,
-        const std::string & t_extra)
-        : m_nameText{ util::SfmlDefaults::instance().font() }
-        , m_descText{ util::SfmlDefaults::instance().font() }
-        , m_licenseText{ util::SfmlDefaults::instance().font() }
-        , m_extraText{ util::SfmlDefaults::instance().font() }
+        const std::string & t_description,
+        const float t_vertPos)
+        : texture{}
+        , sprite{ texture }
+        , name{ t_context.fonts.makeText(Font::Title, 60, t_name, sf::Color(220, 220, 220)) }
+        , description{ t_context.fonts.makeText(
+              Font::General, 30, t_description, sf::Color(160, 160, 160)) }
     {
+        util::TextureLoader::load(texture, t_imageFilePath, true);
+
+        sprite.setTexture(texture, true);
+        sprite.scale({ t_imageScale, t_imageScale });
+
         const sf::FloatRect screenRect{ t_context.layout.wholeRegion() };
 
-        const sf::Color textColor(220, 220, 220);
+        sprite.setPosition(
+            { (util::center(screenRect).x - (sprite.getGlobalBounds().size.x * 0.5f)), t_vertPos });
 
-        m_nameText = t_context.fonts.makeText(Font::Title, 55, t_name, textColor);
+        //
 
-        m_nameText.setPosition(
-            { ((screenRect.size.x * 0.5f) - (m_nameText.getGlobalBounds().size.x * 0.5f)),
-              screenRect.size.y });
+        // this is the vertical empty space between images and lines of text
+        const float vertPad{ screenRect.size.y * 0.015f };
 
-        m_descText = t_context.fonts.makeText(Font::General,40, t_desc, textColor);
+        name.setPosition(
+            { (util::center(screenRect).x - (name.getGlobalBounds().size.x * 0.5f)),
+              (util::bottom(sprite) + vertPad) });
 
-        m_descText.setPosition(
-            { ((screenRect.size.x * 0.5f) - (m_descText.getGlobalBounds().size.x * 0.5f)),
-              util::bottom(m_nameText) + m_vertPad });
-
-        m_licenseText = t_context.fonts.makeText(Font::General, 25, t_license, textColor);
-
-        m_licenseText.setPosition(
-            { ((screenRect.size.x * 0.5f) - (m_licenseText.getGlobalBounds().size.x * 0.5f)),
-              util::bottom(m_descText) + m_vertPad });
-
-        m_extraText = t_context.fonts.makeText(Font::General, 25, t_extra, textColor);
-
-        m_extraText.setPosition(
-            { ((screenRect.size.x * 0.5f) - (m_extraText.getGlobalBounds().size.x * 0.5f)),
-              util::bottom(m_licenseText) + m_vertPad });
+        description.setPosition(
+            { (util::center(screenRect).x - (description.getGlobalBounds().size.x * 0.5f)),
+              (util::bottom(name) + (vertPad * 0.35f)) });
     }
 
-    void Credit::update(const Context & t_context, const float t_frameTimeSec)
+    void CreditAnim::move(const float t_amount)
     {
-        const float scrollSpeed{ t_context.settings.credits_scroll_speed };
-        m_nameText.move({ 0.0f, -(t_frameTimeSec * scrollSpeed) });
-        m_descText.move({ 0.0f, -(t_frameTimeSec * scrollSpeed) });
-        m_licenseText.move({ 0.0f, -(t_frameTimeSec * scrollSpeed) });
-        m_extraText.move({ 0.0f, -(t_frameTimeSec * scrollSpeed) });
+        sprite.move({ 0.0f, t_amount });
+        name.move({ 0.0f, t_amount });
+        description.move({ 0.0f, t_amount });
     }
 
-    void Credit::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
+    float CreditAnim::bottom() const { return util::bottom(description); }
+
+    void CreditAnim::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        t_target.draw(m_nameText, t_states);
-        t_target.draw(m_descText, t_states);
-        t_target.draw(m_licenseText, t_states);
-        t_target.draw(m_extraText, t_states);
+        t_target.draw(sprite, t_states);
+        t_target.draw(name, t_states);
+        t_target.draw(description, t_states);
     }
-
-    void Credit::vertPosition(const float t_position)
-    {
-        m_nameText.setPosition({ m_nameText.getGlobalBounds().position.x, t_position });
-
-        m_descText.setPosition(
-            { m_descText.getGlobalBounds().position.x, util::bottom(m_nameText) + m_vertPad });
-
-        m_licenseText.setPosition(
-            { m_licenseText.getGlobalBounds().position.x, util::bottom(m_descText) + m_vertPad });
-
-        m_extraText.setPosition(
-            { m_extraText.getGlobalBounds().position.x, util::bottom(m_licenseText) + m_vertPad });
-    }
-
-    float Credit::bottom() const { return util::bottom(m_licenseText); }
 
     //
 
     StateCredits::StateCredits()
         : StateBase{ State::Credits, State::Quit }
+        , m_titleText{ util::SfmlDefaults::instance().font() }
         , m_credits{}
         , m_bgTexture{}
         , m_bgSprite{ m_bgTexture }
     {}
 
-    void StateCredits::onEnter(const Context & t_context)
-    {
-        t_context.music.start("credits.ogg", 20.0f);
-
-        //
-        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
-
-        util::TextureLoader::load(
-            m_bgTexture, (t_context.settings.media_path / "image" / "straw-mat.png"), true);
-
-        m_bgTexture.setRepeated(true);
-
-        m_bgSprite.setTexture(m_bgTexture, true);
-        m_bgSprite.setTextureRect({ { 0, 0 }, sf::Vector2i{ wholeRect.size } });
-        m_bgSprite.setColor(sf::Color(255, 255, 255, 64));
-
-        //
-        const sf::FloatRect screenRect{ t_context.layout.wholeRegion() };
-
-        Credit & softwareCredit{ m_credits.emplace_back(
-            t_context, "Ziesche Til Newman", "Software") };
-
-        Credit & fontCredit{ m_credits.emplace_back(
-            t_context,
-            "Mops Antiqua",
-            "Font",
-            "SIL Open Font License 1.1",
-            "www.scripts.sil.org/ofl") };
-
-        const float vertSpacer{ screenRect.size.y * 0.125f };
-        fontCredit.vertPosition(softwareCredit.bottom() + vertSpacer);
-
-        Credit & sfmlCredit{ m_credits.emplace_back(
-            t_context,
-            "SFML",
-            "Simple Fast Multimedia Library",
-            "Special thanks to Laurent Gomila for this excellent library!",
-            "www.sfml-dev.org") };
-
-        sfmlCredit.vertPosition(fontCredit.bottom() + vertSpacer);
-
-        Credit & tiledCredit{ m_credits.emplace_back(
-            t_context,
-            "Tiled",
-            "An amazing free 2D level editor that is easy and intuitive.",
-            "www.mapeditor.org",
-            "") };
-
-        tiledCredit.vertPosition(sfmlCredit.bottom() + vertSpacer);
-
-        Credit & tilesetCredit{ m_credits.emplace_back(
-            t_context, "Free Graveyard Tileset", "www.gameart2d.com", "", "") };
-
-        tilesetCredit.vertPosition(tiledCredit.bottom() + vertSpacer);
-
-        Credit & spritesheetCredit{ m_credits.emplace_back(
-            t_context, "Ninja Girl Free Sprites", "www.gameart2d.com", "", "") };
-
-        spritesheetCredit.vertPosition(tilesetCredit.bottom() + vertSpacer);
-
-        Credit & forestPlatformCredit{ m_credits.emplace_back(
-            t_context,
-            "2d Platformer Forest Kit",
-            "www.opengameart.org/content/2d-platformer-forest-kit",
-            "Thanks to ArtByte for this great looking art!",
-            "") };
-
-        forestPlatformCredit.vertPosition(spritesheetCredit.bottom() + vertSpacer);
-
-        Credit & texturesCredit{ m_credits.emplace_back(
-            t_context,
-            "Ryzom Selected Textures",
-            "Credit to Nevrax SARL / Winch Gate Properties Ltd. Ryzom",
-            "https://atys.wiki.ryzom.com/wiki/Ryzom_Commons:About",
-            "") };
-
-        texturesCredit.vertPosition(forestPlatformCredit.bottom() + vertSpacer);
-    }
-
-    void StateCredits::onExit(const Context & t_context) { t_context.music.stop("credits.ogg"); }
-
     void StateCredits::update(const Context & t_context, const float t_frameTimeSec)
     {
-        for (Credit & credit : m_credits)
+        const float speed{ 45.0f };
+        const float moveAmount{ -1.0f * speed * t_frameTimeSec };
+        m_titleText.move({ 0.0f, moveAmount });
+
+        for (CreditAnim & anim : m_credits)
         {
-            credit.update(t_context, t_frameTimeSec);
+            anim.move(moveAmount);
         }
 
-        Credit & lastCredit{ m_credits.back() };
-        if (lastCredit.bottom() < 0.0f)
+        if (m_credits.back().bottom() < -50.0f)
         {
             t_context.state.setChangePending(State::Quit);
         }
@@ -206,22 +109,134 @@ namespace halloween
         const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         t_target.draw(m_bgSprite, t_states);
+        t_target.draw(m_titleText, t_states);
 
-        for (const Credit & credit : m_credits)
+        for (const CreditAnim & anim : m_credits)
         {
-            t_target.draw(credit, t_states);
+            anim.draw(t_target, t_states);
         }
     }
 
     bool StateCredits::handleEvent(const Context & t_context, const sf::Event & t_event)
     {
-        // any keypress or mouse click will exit
-        if (t_event.is<sf::Event::MouseButtonPressed>() || t_event.is<sf::Event::KeyPressed>())
+        if (t_event.is<sf::Event::KeyPressed>())
         {
             t_context.state.setChangePending(State::Quit);
         }
 
-        return false;
+        return t_context.state.isChangePending();
     }
 
+    void StateCredits::onEnter(const Context & t_context)
+    {
+        const sf::FloatRect screenRect{ t_context.layout.wholeRegion() };
+
+        //
+        util::TextureLoader::load(
+            m_bgTexture, (t_context.settings.media_path / "image" / "straw-mat.png"), true);
+
+        m_bgTexture.setRepeated(true);
+
+        m_bgSprite.setTexture(m_bgTexture, true);
+        m_bgSprite.setTextureRect(sf::IntRect({ 0, 0 }, sf::Vector2i{ screenRect.size }));
+        m_bgSprite.setColor(sf::Color(255, 255, 255, 92));
+
+        //
+        const float vertPad{ screenRect.size.y * 0.11f };
+
+        m_titleText =
+            t_context.fonts.makeText(Font::Title, 120, "Credits", sf::Color(220, 220, 220));
+
+        m_titleText.setPosition(
+            { (util::center(screenRect).x - (m_titleText.getGlobalBounds().size.x * 0.5f)),
+              screenRect.size.y });
+
+        //
+        m_credits.reserve(16);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "cpp.png").string(),
+            0.5f,
+            "Ziesche Til Newman",
+            "Software (C++, SFML, CMake)",
+            (util::bottom(m_titleText) + vertPad));
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "sfml.png").string(),
+            0.85f,
+            "Simple Fast Multimedia Library",
+            "Thanks to Laurent Gomila for this amazing library!",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "ninja-girl-sprites.png")
+                .string(),
+            0.9f,
+            "www.gameart2d.com",
+            "A free sprite set with all kinds of spunky energy.",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "graveyard-tiles.png").string(),
+            0.9f,
+            "www.gameart2d.com",
+            "A free spooky graveyard tileset I made heavy use of.",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "tiled.png").string(),
+            0.9f,
+            "www.mapeditor.org",
+            "A simple, easy, and free map editor.",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "freesound.png").string(),
+            0.95f,
+            "www.freesound.org Website",
+            "My secret weapon in the hunt for sound effects.",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "2d-platformer-kit.png").string(),
+            0.75f,
+            "2d Platformer Forest Kit",
+            "I used a bunch of images from this excellent kit.",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "ryzom-textures.png").string(),
+            0.75f,
+            "Ryzom Textures Pack",
+            "I used two of these fantastic seamless tile images.",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "font.png").string(),
+            0.5f,
+            "Mops Antiqua Font",
+            "Uwe Borchert (SIL Open Font License)",
+            m_credits.back().bottom() + vertPad);
+
+        m_credits.emplace_back(
+            t_context,
+            (t_context.settings.media_path / "image" / "credit" / "font.png").string(),
+            0.5f,
+            "Gentium Plus",
+            "J. Victor Gaultney, Annie Olsen, Iska Routamaa, Becca Hirsbrunner (SIL Open Font)",
+            m_credits.back().bottom() + vertPad);
+
+        t_context.music.start("credits.ogg");
+    }
+
+    void StateCredits::onExit(const Context &) {}
 } // namespace halloween
