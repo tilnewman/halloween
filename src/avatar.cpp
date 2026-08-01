@@ -737,11 +737,11 @@ namespace halloween
 
     void Avatar::exitCollisions(const Context & t_context) const
     {
+        // let the player walk a little past the screen edge before exiting
         if (util::right(collisionRect()) > util::right(t_context.level.exitRect()))
         {
             t_context.audio.stopAllLooped();
             t_context.state.setChangePending(State::Level);
-            return;
         }
     }
 
