@@ -39,10 +39,10 @@ namespace halloween
         inline const sf::FloatRect bounds() const { return m_sprite.getGlobalBounds(); }
         void handleHitByBoss(const Context & t_context);
         constexpr bool isDead() const noexcept { return (Action::Dead == m_action); }
-
-      private:
         const sf::FloatRect collisionRect() const;
         const sf::FloatRect attackCollisionRect() const;
+
+      private:
         void moveMap(const Context & t_context);
         bool handleDeath(const Context & t_context, const float t_frameTimeSec);
         bool handleAttacking(const Context & t_context, const float t_frameTimeSec);

@@ -5,6 +5,7 @@
 //
 #include "bat.hpp"
 
+#include "avatar.hpp"
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "info-region.hpp"
@@ -28,8 +29,8 @@ namespace halloween
         : m_batCount{ 5 }
         , m_textures{}
         , m_bats{}
-        , m_timePerFrameBeforeSec{ 0.0333f }
-        , m_timePerFrameAfterSec{ 0.0225f }
+        , m_timePerFrameBeforeSec{ 0.0275f }
+        , m_timePerFrameAfterSec{ 0.0175f }
         , m_deathAnims{}
     {
         // probably never more than one dozen in a level
@@ -106,15 +107,21 @@ namespace halloween
         }
     }
 
-    void Bats::update(const Context &, const float t_frameTimeSec)
+    void Bats::update(const Context & t_context, const float t_frameTimeSec)
     {
+        const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
+
         // move bats
         for (Bat & bat : m_bats)
         {
             bat.elpased_time_sec += t_frameTimeSec;
-            if (bat.elpased_time_sec > m_timePerFrameBeforeSec)
+
+            const float timePerFrameSec{ (bat.has_spotted_player) ? m_timePerFrameAfterSec
+                                                                  : m_timePerFrameBeforeSec };
+
+            if (bat.elpased_time_sec > timePerFrameSec)
             {
-                bat.elpased_time_sec -= m_timePerFrameBeforeSec;
+                bat.elpased_time_sec -= timePerFrameSec;
 
                 if (++bat.texture_index >= m_textures.at(bat.bat_index).flying.size())
                 {
@@ -124,7 +131,27 @@ namespace halloween
                 bat.sprite.setTexture(m_textures.at(bat.bat_index).flying.at(bat.texture_index));
             }
 
-            const float stride{ bat.speed * t_frameTimeSec };
+            if (!bat.has_spotted_player)
+            {
+                if (avatarRect.findIntersection(bat.rect))
+                {
+                    bat.has_spotted_player = true;
+
+                    const bool isAvatarLeft{ util::center(avatarRect).x <
+                                              util::center(bat.sprite.getGlobalBounds()).x };
+
+                    if (isAvatarLeft != bat.is_moving_left)
+                    {
+                        bat.is_moving_left = !bat.is_moving_left;
+                        bat.sprite.scale({ -1.0f, 1.0f });
+                    }
+
+                    t_context.audio.play("bat-sees-player");
+                }
+            }
+
+            const float stride{ bat.speed * t_frameTimeSec *
+                                ((bat.has_spotted_player) ? 2.0f : 1.0f) };
 
             if (bat.is_moving_left)
             {
