@@ -210,8 +210,7 @@ namespace halloween
                 const int texturePosX{ (index % textureTileCount.x) * t_tileSizeOnMap.x };
                 const int texturePosY{ (index / textureTileCount.x) * t_tileSizeOnMap.y };
 
-                const sf::Vector2i texturePos{ texturePosX, texturePosY };
-                const sf::IntRect textureRect{ texturePos, t_tileSizeOnMap };
+                const sf::IntRect textureRect{ { texturePosX, texturePosY }, t_tileSizeOnMap };
 
                 const float posX{ static_cast<float>(x * sizeOnScreenI.x) };
                 const float posY{ static_cast<float>(y * sizeOnScreenI.y) };
