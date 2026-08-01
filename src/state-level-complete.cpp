@@ -169,7 +169,7 @@ namespace halloween
 
     void LevelCompleteState::onExit(const Context & t_context)
     {
-        if (t_context.level.number() < 3)
+        if (t_context.level.number() < 4)
         {
             PlayState::m_willLoadNewLevel = true;
         }
