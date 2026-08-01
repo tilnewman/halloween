@@ -268,10 +268,7 @@ namespace halloween
                              (m_defaultMinDurationSec * 4.0f) }
     {}
 
-    void TitleState::onEnter(const Context & t_context)
-    {
-        TimedMessageState::onEnter(t_context);
-    }
+    void TitleState::onEnter(const Context & t_context) { TimedMessageState::onEnter(t_context); }
 
     void TitleState::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
@@ -363,10 +360,12 @@ namespace halloween
         util::fitAndCenterInside(m_accentSprite1, panelRect);
         util::fitAndCenterInside(m_accentSprite2, panelRect);
 
-        m_accentSprite1.setPosition({ 20.0f, m_accentSprite1.getPosition().y });
+        m_accentSprite1.setPosition(
+            { ((m_text.getPosition().x * 0.5f) - (m_accentSprite1.getGlobalBounds().size.x * 0.5f)),
+              m_accentSprite1.getPosition().y });
 
         m_accentSprite2.setPosition(
-            { (wholeRect.size.x - (m_accentSprite2.getGlobalBounds().size.x + 20.0f)),
+            { (util::right(m_text.getGlobalBounds()) + m_accentSprite1.getPosition().x),
               m_accentSprite2.getPosition().y });
     }
 
@@ -408,7 +407,6 @@ namespace halloween
         m_scoreText.setPosition(
             { ((wholeRect.size.x * 0.5f) - (m_scoreText.getGlobalBounds().size.x * 0.5f)),
               util::bottom(m_text) - (m_text.getGlobalBounds().size.y * 0.5f) });
-
     }
 
     void WinState::draw(
