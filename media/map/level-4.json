@@ -435,7 +435,40 @@
          "draworder":"topdown",
          "id":13,
          "name":"bat",
-         "objects":[],
+         "objects":[
+                {
+                 "height":96,
+                 "id":74,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":512,
+                 "x":768,
+                 "y":1120
+                }, 
+                {
+                 "height":96,
+                 "id":75,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":512,
+                 "x":1376,
+                 "y":1120
+                }, 
+                {
+                 "height":96,
+                 "id":76,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":480,
+                 "x":1984,
+                 "y":1120
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -443,7 +476,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":74,
+ "nextobjectid":77,
  "orientation":"orthogonal",
  "properties":[
         {

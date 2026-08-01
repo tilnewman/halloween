@@ -28,8 +28,8 @@ namespace halloween
         : m_batCount{ 5 }
         , m_textures{}
         , m_bats{}
-        , m_timePerTextureSec{ 0.0333f }
-        , m_elapsedTimeSec{ 0.0f }
+        , m_timePerFrameBeforeSec{ 0.0333f }
+        , m_timePerFrameAfterSec{ 0.0225f }
         , m_deathAnims{}
     {
         // probably never more than one dozen in a level
@@ -108,27 +108,22 @@ namespace halloween
 
     void Bats::update(const Context &, const float t_frameTimeSec)
     {
-        // animate bats
-        m_elapsedTimeSec += t_frameTimeSec;
-        if (m_elapsedTimeSec > m_timePerTextureSec)
+        // move bats
+        for (Bat & bat : m_bats)
         {
-            m_elapsedTimeSec -= m_timePerTextureSec;
-
-            for (Bat & bat : m_bats)
+            bat.elpased_time_sec += t_frameTimeSec;
+            if (bat.elpased_time_sec > m_timePerFrameBeforeSec)
             {
-                ++bat.texture_index;
-                if (bat.texture_index >= m_textures.at(bat.bat_index).flying.size())
+                bat.elpased_time_sec -= m_timePerFrameBeforeSec;
+
+                if (++bat.texture_index >= m_textures.at(bat.bat_index).flying.size())
                 {
                     bat.texture_index = 0;
                 }
 
                 bat.sprite.setTexture(m_textures.at(bat.bat_index).flying.at(bat.texture_index));
             }
-        }
 
-        // move bats
-        for (Bat & bat : m_bats)
-        {
             const float stride{ bat.speed * t_frameTimeSec };
 
             if (bat.is_moving_left)
@@ -157,13 +152,12 @@ namespace halloween
         bool areAnyDeathAnimsFinished = false;
         for (BatDeathAnim & anim : m_deathAnims)
         {
-            anim.elapsed_time_sec += t_frameTimeSec;
-            if (anim.elapsed_time_sec > (m_timePerTextureSec * 5.0f))
+            anim.death_elapsed_time_sec += t_frameTimeSec;
+            if (anim.death_elapsed_time_sec > (m_timePerFrameBeforeSec * 5.0f))
             {
-                anim.elapsed_time_sec -= m_timePerTextureSec;
+                anim.death_elapsed_time_sec -= (m_timePerFrameBeforeSec * 5.0f);
 
-                ++anim.texture_index;
-                if (anim.texture_index < m_textures.at(anim.bat_index).dying.size())
+                if (++anim.texture_index < m_textures.at(anim.bat_index).dying.size())
                 {
                     anim.sprite.setTexture(
                         m_textures.at(anim.bat_index).dying.at(anim.texture_index));
@@ -249,7 +243,7 @@ namespace halloween
 
                 bat.sprite.setColor(sf::Color::Red);
                 m_deathAnims.emplace_back(bat.bat_index, bat.sprite);
-                
+
                 ++t_context.stats.enemy_killed;
                 t_context.info_region.scoreAdjust(t_context.settings.kill_bat_score);
             }

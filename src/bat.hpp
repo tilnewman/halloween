@@ -41,6 +41,8 @@ namespace halloween
             , rect{ t_range }
             , speed{ t_speed }
             , sprite{ util::SfmlDefaults::instance().texture() }
+            , has_spotted_player{ false }
+            , elpased_time_sec{ 0.0f }
         {}
 
         bool is_alive;
@@ -50,6 +52,8 @@ namespace halloween
         sf::FloatRect rect;
         float speed;
         sf::Sprite sprite;
+        bool has_spotted_player;
+        float elpased_time_sec;
     };
 
     //
@@ -60,7 +64,7 @@ namespace halloween
             : is_visible{ true }
             , bat_index{ t_batIndex }
             , texture_index{ 0 }
-            , elapsed_time_sec{ 0.0f }
+            , death_elapsed_time_sec{ 0.0f }
             , sprite{ t_sprite }
             , scale{ 0.985f }
         {}
@@ -68,7 +72,7 @@ namespace halloween
         bool is_visible;
         std::size_t bat_index;
         std::size_t texture_index;
-        float elapsed_time_sec;
+        float death_elapsed_time_sec;
         sf::Sprite sprite;
         float scale;
     };
@@ -107,8 +111,8 @@ namespace halloween
         std::size_t m_batCount;
         std::vector<BatTextures> m_textures;
         std::vector<Bat> m_bats;
-        float m_timePerTextureSec;
-        float m_elapsedTimeSec;
+        float m_timePerFrameBeforeSec;
+        float m_timePerFrameAfterSec;
         std::vector<BatDeathAnim> m_deathAnims;
     };
 
