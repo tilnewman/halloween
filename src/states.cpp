@@ -316,7 +316,7 @@ namespace halloween
     //
 
     LoseState::LoseState()
-        : TimedMessageState{ State::Lose, State::Credits, "You Lose\n", 4.5f }
+        : TimedMessageState{ State::Lose, State::Credits, "You Lose\n", 6.5f }
         , m_scoreText{ util::SfmlDefaults::instance().font() }
         , m_accentTexture1{}
         , m_accentTexture2{}
