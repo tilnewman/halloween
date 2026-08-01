@@ -67,11 +67,11 @@ namespace halloween
         return true;
     }
 
-    void LevelFileLoader::parseLevelDetails(const Context & t_context, Json & json) const
+    void LevelFileLoader::parseLevelDetails(const Context & t_context, Json & t_json) const
     {
         // parse level tile size and counts
-        const sf::Vector2i tileCount{ json["width"], json["height"] };
-        const sf::Vector2i tileSizeOnMap{ json["tilewidth"], json["tileheight"] };
+        const sf::Vector2i tileCount{ t_json["width"], t_json["height"] };
+        const sf::Vector2i tileSizeOnMap{ t_json["tilewidth"], t_json["tileheight"] };
 
         sf::Vector2f tileSizeOnScreen{ sf::Vector2f{ tileSizeOnMap } *
                                        t_context.settings.tile_scale };
@@ -92,7 +92,8 @@ namespace halloween
         t_context.level.setLevelDetails(tileCount, tileSizeOnMap, tileSizeOnScreen, mapPosition);
     }
 
-    void LevelFileLoader::parseObjectTextureGIDs(const Context & t_context, Json & wholeJson) const
+    void
+        LevelFileLoader::parseObjectTextureGIDs(const Context & t_context, Json & t_wholeJson) const
     {
         const auto makeTilesetFilenameTsx = [&](const TileImage t_image) {
             return std::string{ toString(t_image) }.append(".tsx");
@@ -102,7 +103,7 @@ namespace halloween
             return std::string{ toString(t_image) }.append(".tsj");
         };
 
-        for (Json & json : wholeJson["tilesets"])
+        for (Json & json : t_wholeJson["tilesets"])
         {
             const std::string sourceStr{ json["source"] };
             const std::filesystem::path path{ sourceStr };
@@ -147,10 +148,10 @@ namespace halloween
         }
     }
 
-    void LevelFileLoader::parseBackgroundImageNumber(const Context & t_context, Json & json) const
+    void LevelFileLoader::parseBackgroundImageNumber(const Context & t_context, Json & t_json) const
     {
         int backgroundImageNumber = 0;
-        for (Json & propJson : json["properties"])
+        for (Json & propJson : t_json["properties"])
         {
             const std::string propName = propJson["name"];
             if ("background" == propName)
@@ -177,9 +178,9 @@ namespace halloween
         t_context.level.backgroundImage(backgroundImageNumber);
     }
 
-    void LevelFileLoader::parseLayers(const Context & t_context, Json & jsonWholeFile) const
+    void LevelFileLoader::parseLayers(const Context & t_context, Json & t_jsonWholeFile) const
     {
-        for (Json & jsonLayer : jsonWholeFile["layers"])
+        for (Json & jsonLayer : t_jsonWholeFile["layers"])
         {
             const std::string layerName = jsonLayer["name"];
 
@@ -300,14 +301,14 @@ namespace halloween
     }
 
     void LevelFileLoader::parseTileLayer(
-        const Context & t_context, const TileImage image, Json & json) const
+        const Context & t_context, const TileImage image, Json & t_json) const
     {
         TileLayer layer;
 
         layer.image = image;
 
         layer.indexes.clear();
-        for (const int index : json["data"])
+        for (const int index : t_json["data"])
         {
             layer.indexes.push_back(index);
         }
@@ -322,20 +323,21 @@ namespace halloween
     }
 
     void LevelFileLoader::parseRectLayer(
-        const Context & t_context, Json & json, std::vector<sf::FloatRect> & rects) const
+        const Context & t_context, Json & t_json, std::vector<sf::FloatRect> & t_rects) const
     {
-        rects.clear();
+        t_rects.clear();
 
-        for (Json & collJson : json["objects"])
+        for (Json & collJson : t_json["objects"])
         {
-            rects.emplace_back(parseAndConvertRect(t_context, collJson));
+            t_rects.emplace_back(parseAndConvertRect(t_context, collJson));
         }
     }
 
     const sf::FloatRect
-        LevelFileLoader::parseAndConvertRect(const Context & t_context, Json & json) const
+        LevelFileLoader::parseAndConvertRect(const Context & t_context, Json & t_json) const
     {
-        const sf::IntRect mapRect{ { json["x"], json["y"] }, { json["width"], json["height"] } };
+        const sf::IntRect mapRect{ { t_json["x"], t_json["y"] },
+                                   { t_json["width"], t_json["height"] } };
 
         // convert from map to screen coordinates
         sf::FloatRect screenRect{ mapRect };
@@ -349,12 +351,12 @@ namespace halloween
         return screenRect;
     }
 
-    void LevelFileLoader::parseSpawnLayer(const Context & t_context, Json & json) const
+    void LevelFileLoader::parseSpawnLayer(const Context & t_context, Json & t_json) const
     {
-        sf::FloatRect enterRect{ { 0.0f, 0.0f }, { 0.0f, 0.0f } };
-        sf::FloatRect exitRect{ { 0.0f, 0.0f }, { 0.0f, 0.0f } };
+        sf::FloatRect enterRect;
+        sf::FloatRect exitRect;
 
-        for (Json & spawnJson : json["objects"])
+        for (Json & spawnJson : t_json["objects"])
         {
             const std::string name{ spawnJson["name"] };
             const sf::FloatRect rect{ parseAndConvertRect(t_context, spawnJson) };
