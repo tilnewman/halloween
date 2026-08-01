@@ -52,8 +52,6 @@ namespace halloween
                 t_context.stats = LevelStats();
                 t_context.stats.coin_total = t_context.coins.count();
                 t_context.stats.enemy_total = (t_context.slimes.count() + t_context.bats.count());
-
-                m_backgroundImage.setup(t_context, t_context.level.backgroundImage());
             }
             else
             {
@@ -65,6 +63,8 @@ namespace halloween
 
         t_context.owl_calls.start(t_context);
         t_context.music.start("crickets.ogg");
+
+        m_backgroundImage.setup(t_context, t_context.level.backgroundImage());
     }
 
     void PlayState::onExit(const Context & t_context)
