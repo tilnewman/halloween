@@ -34,7 +34,7 @@ namespace halloween
     {
         spout_sprite.setTextureRect({ { 72, 19 }, { 39, 13 } });
 
-        const float spoutScale{ 1.5f };
+        const float spoutScale{ 1.75f };
         spout_sprite.setScale({ spoutScale, spoutScale });
 
         spout_sprite.setPosition(

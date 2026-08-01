@@ -57,18 +57,13 @@ namespace halloween
     {
         FireSpout & spout{ m_fireSpouts.emplace_back(m_spoutTexture, m_fireTextures.at(0)) };
 
-        const int randomSpoutNum{ t_context.random.fromTo(1, 3) };
-        if (1 == randomSpoutNum)
+        if (t_context.random.boolean())
         {
             spout.spout_sprite.setTextureRect({ { 0, 10 }, { 35, 22 } });
         }
-        else if (2 == randomSpoutNum)
-        {
-            spout.spout_sprite.setTextureRect({ { 35, 15 }, { 35, 17 } });
-        }
         else
         {
-            spout.spout_sprite.setTextureRect({ { 72, 19 }, { 39, 13 } });
+            spout.spout_sprite.setTextureRect({ { 35, 15 }, { 35, 17 } });
         }
 
         spout.spout_sprite.setScale({ 2.0f, 2.0f });
