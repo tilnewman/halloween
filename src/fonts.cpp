@@ -14,25 +14,45 @@ namespace halloween
 {
 
     FontManager::FontManager()
-        : m_font{}
+        : m_titleFont{}
+        , m_generalFont{}
     {}
 
     void FontManager::setup(const Settings & t_settings)
     {
-        const std::string fontPathStr{
+        const std::string titlePath{
             (t_settings.media_path / "font" / "mops-antiqua.ttf").string()
         };
 
-        const bool fontLoadSuccess{ m_font.openFromFile(fontPathStr) };
-        M_CHECK(fontLoadSuccess, "Failed to load font: " << fontPathStr);
+        const bool titleSuccess{ m_titleFont.openFromFile(titlePath) };
+        M_CHECK(titleSuccess, "Failed to load the title font: " << titlePath);
+
+        const std::string generalPath{
+            (t_settings.media_path / "font" / "gentium-plus.ttf").string()
+        };
+
+        const bool generalSuccess{ m_generalFont.openFromFile(generalPath) };
+        M_CHECK(generalSuccess, "Failed to load the general font: " << generalPath);
     }
 
     const sf::Text FontManager::makeText(
+        const Font t_font,
         const unsigned int t_charSize,
         const std::string & t_message,
         const sf::Color & t_color) const
     {
-        sf::Text text(m_font, t_message, t_charSize);
+        sf::Text text =
+            [&]() {
+                if (Font::Title == t_font)
+                {
+                   return sf::Text(m_titleFont, t_message, t_charSize);
+                }
+                else
+                {
+                    return sf::Text(m_generalFont, t_message, t_charSize);
+                }
+        }();
+        
         text.setFillColor(t_color);
         util::setOriginToPosition(text);
         return text;

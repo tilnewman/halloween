@@ -75,7 +75,7 @@ namespace halloween
     {
         m_region = t_context.layout.infoRegion();
         util::appendTriangleVerts(m_region, m_bgVerts, sf::Color(255, 255, 255, 8));
-        m_text = t_context.fonts.makeText(99, "", sf::Color(255, 255, 255, 64));
+        m_text = t_context.fonts.makeText(Font::Title, 99, "", sf::Color(255, 255, 255, 64));
         reset(t_context);
     }
 

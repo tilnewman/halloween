@@ -47,7 +47,7 @@ namespace halloween
 
     void StateBase::setupText(const Context & t_context, const std::string & t_message)
     {
-        m_text = t_context.fonts.makeText(99, t_message, m_textColorDefault);
+        m_text = t_context.fonts.makeText(Font::Title, 99, t_message, m_textColorDefault);
     }
 
     void StateBase::update(const Context &, const float t_frameTimeSec)
@@ -329,13 +329,10 @@ namespace halloween
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 
         // score text
-        m_scoreText = m_text;
-
         std::string str{ "Score: " };
         str += std::to_string(t_context.info_region.score());
-        m_scoreText.setString(str);
 
-        m_scoreText.scale({ 0.5f, 0.5f });
+        m_scoreText = t_context.fonts.makeText(Font::General, 40, str, sf::Color::Black);
         util::setOriginToPosition(m_scoreText);
 
         m_scoreText.setPosition(
@@ -393,13 +390,10 @@ namespace halloween
 
         t_context.audio.play("winner");
 
-        m_scoreText = m_text;
-        m_scoreText.scale({ 0.5f, 0.5f });
-
         std::string str{ "Score: " };
         str += std::to_string(t_context.info_region.score());
-        m_scoreText.setString(str);
 
+        m_scoreText = t_context.fonts.makeText(Font::General, 40, str, sf::Color::Black);
         util::setOriginToPosition(m_scoreText);
 
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };

@@ -38,7 +38,7 @@ namespace halloween
             str = " fps: ";
             str += util::makeStats(m_framesPerSecond).toString();
 
-            m_text = t_context.fonts.makeText(60, str, sf::Color(195, 160, 126));
+            m_text = t_context.fonts.makeText(Font::General, 60, str, sf::Color(195, 160, 126));
 
             util::fitAndCenterInside(
                 m_text,

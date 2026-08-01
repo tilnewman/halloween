@@ -40,25 +40,25 @@ namespace halloween
 
         const sf::Color textColor(220, 220, 220);
 
-        m_nameText = t_context.fonts.makeText(55, t_name, textColor);
+        m_nameText = t_context.fonts.makeText(Font::Title, 55, t_name, textColor);
 
         m_nameText.setPosition(
             { ((screenRect.size.x * 0.5f) - (m_nameText.getGlobalBounds().size.x * 0.5f)),
               screenRect.size.y });
 
-        m_descText = t_context.fonts.makeText(40, t_desc, textColor);
+        m_descText = t_context.fonts.makeText(Font::General,40, t_desc, textColor);
 
         m_descText.setPosition(
             { ((screenRect.size.x * 0.5f) - (m_descText.getGlobalBounds().size.x * 0.5f)),
               util::bottom(m_nameText) + m_vertPad });
 
-        m_licenseText = t_context.fonts.makeText(25, t_license, textColor);
+        m_licenseText = t_context.fonts.makeText(Font::General, 25, t_license, textColor);
 
         m_licenseText.setPosition(
             { ((screenRect.size.x * 0.5f) - (m_licenseText.getGlobalBounds().size.x * 0.5f)),
               util::bottom(m_descText) + m_vertPad });
 
-        m_extraText = t_context.fonts.makeText(25, t_extra, textColor);
+        m_extraText = t_context.fonts.makeText(Font::General, 25, t_extra, textColor);
 
         m_extraText.setPosition(
             { ((screenRect.size.x * 0.5f) - (m_extraText.getGlobalBounds().size.x * 0.5f)),

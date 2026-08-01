@@ -85,7 +85,8 @@ namespace halloween
                                               { wholeRect.size.x, 210.0f } };
 
         //
-        m_levelCompleteText = t_context.fonts.makeText(99, "Level Complete!", m_textColorDefault);
+        m_levelCompleteText =
+            t_context.fonts.makeText(Font::Title, 99, "Level Complete!", m_textColorDefault);
 
         m_levelCompleteText.setPosition(
             { (util::center(wholeRect).x - util::center(m_levelCompleteText.getGlobalBounds()).x),
@@ -93,7 +94,7 @@ namespace halloween
 
         m_scoreDisplayed = t_context.info_region.score();
 
-        m_scoreText = t_context.fonts.makeText(50, "", sf::Color::Black);
+        m_scoreText = t_context.fonts.makeText(Font::General, 40, "", sf::Color::Black);
 
         updateScoreText(t_context);
 
@@ -120,7 +121,9 @@ namespace halloween
         if (willPerfectBonus)
         {
             m_bonuses.emplace_back(
-                200, t_context.fonts.makeText(bonusTextCharSize, "Perfect!", bonusTextColor));
+                200,
+                t_context.fonts.makeText(
+                    Font::Title, bonusTextCharSize, "Perfect!", bonusTextColor));
         }
 
         if (willCoinBonus)
@@ -128,7 +131,7 @@ namespace halloween
             m_bonuses.emplace_back(
                 100,
                 t_context.fonts.makeText(
-                    bonusTextCharSize, "All Coins Found Bonus!", bonusTextColor));
+                    Font::Title, bonusTextCharSize, "All Coins Found Bonus!", bonusTextColor));
         }
 
         if (willEnemyBonus)
@@ -136,7 +139,7 @@ namespace halloween
             m_bonuses.emplace_back(
                 50,
                 t_context.fonts.makeText(
-                    bonusTextCharSize, "All Enemies Killed Bonus!", bonusTextColor));
+                    Font::Title, bonusTextCharSize, "All Enemies Killed Bonus!", bonusTextColor));
         }
 
         if (willSurviveBonus)
@@ -144,14 +147,14 @@ namespace halloween
             m_bonuses.emplace_back(
                 75,
                 t_context.fonts.makeText(
-                    bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
+                    Font::Title, bonusTextCharSize, "You Didn't Die Bonus!", bonusTextColor));
         }
 
         if (m_bonuses.size() == 0)
         {
             m_bonuses.emplace_back(
                 0,
-                t_context.fonts.makeText(bonusTextCharSize, "No bonuses. Lame.", bonusTextColor));
+                t_context.fonts.makeText(Font::Title, bonusTextCharSize, "No bonuses. Lame.", bonusTextColor));
         }
     }
 

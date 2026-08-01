@@ -14,8 +14,15 @@
 namespace halloween
 {
 
-    struct Context;
     struct Settings;
+
+    //
+
+    enum class Font
+    {
+        Title,
+        General
+    };
 
     //
 
@@ -27,12 +34,14 @@ namespace halloween
         void setup(const Settings & t_settings);
 
         const sf::Text makeText(
+            const Font t_font,
             const unsigned int t_charSize,
             const std::string & t_message,
-            const sf::Color & t_color) const;
+            const sf::Color & t_color = sf::Color::White) const;
 
       private:
-        sf::Font m_font;
+        sf::Font m_titleFont;
+        sf::Font m_generalFont;
     };
 
 } // namespace halloween
