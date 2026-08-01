@@ -105,7 +105,8 @@ namespace halloween
                 newGhost.sprite.setTexture(m_texture3, true);
             }
 
-            newGhost.sprite.setScale(t_context.settings.ghost_scale);
+            const float scale{ t_context.random.fromTo(0.3f, 0.5f) };
+            newGhost.sprite.setScale({ scale, scale });
             util::setOriginToCenter(newGhost.sprite);
             newGhost.sprite.setPosition(spawnPoint.position);
             newGhost.sprite.setColor(sf::Color(255, 255, 255, 0));
