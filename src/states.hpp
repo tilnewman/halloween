@@ -157,7 +157,7 @@ namespace halloween
         std::string m_message;
         sf::Text m_text;
 
-        static inline const sf::Color m_textColorDefault{ sf::Color(220, 220, 220) };
+        static inline const sf::Color m_textColorDefault{ sf::Color::Black };
         static inline const float m_defaultMinDurationSec{ 1.5f };
     };
 

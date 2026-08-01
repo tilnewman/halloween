@@ -271,7 +271,6 @@ namespace halloween
     void TitleState::onEnter(const Context & t_context)
     {
         TimedMessageState::onEnter(t_context);
-        m_text.setFillColor(sf::Color::Black);
     }
 
     void TitleState::draw(
@@ -339,9 +338,8 @@ namespace halloween
         str += std::to_string(t_context.info_region.score());
         m_scoreText.setString(str);
 
-        m_scoreText.scale({ 0.35f, 0.35f });
+        m_scoreText.scale({ 0.5f, 0.5f });
         util::setOriginToPosition(m_scoreText);
-        m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
         m_scoreText.setPosition(
             { ((wholeRect.size.x * 0.5f) - (m_scoreText.getGlobalBounds().size.x * 0.5f)),
@@ -397,19 +395,20 @@ namespace halloween
         t_context.audio.play("winner");
 
         m_scoreText = m_text;
-        m_scoreText.scale({ 0.35f, 0.35f });
+        m_scoreText.scale({ 0.5f, 0.5f });
 
         std::string str{ "Score: " };
         str += std::to_string(t_context.info_region.score());
         m_scoreText.setString(str);
-        m_scoreText.setFillColor(sf::Color(127, 127, 127));
 
         util::setOriginToPosition(m_scoreText);
 
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
+
         m_scoreText.setPosition(
-            { ((t_context.layout.wholeSize().x * 0.5f) -
-               (m_scoreText.getGlobalBounds().size.x * 0.5f)),
-              util::bottom(m_text) - (m_text.getGlobalBounds().size.y * 0.4f) });
+            { ((wholeRect.size.x * 0.5f) - (m_scoreText.getGlobalBounds().size.x * 0.5f)),
+              util::bottom(m_text) - (m_text.getGlobalBounds().size.y * 0.5f) });
+
     }
 
     void WinState::draw(

@@ -93,7 +93,7 @@ namespace halloween
 
         m_scoreDisplayed = t_context.info_region.score();
 
-        m_scoreText = t_context.fonts.makeText(50, "", sf::Color(160, 160, 160));
+        m_scoreText = t_context.fonts.makeText(50, "", sf::Color::Black);
 
         updateScoreText(t_context);
 
@@ -106,7 +106,7 @@ namespace halloween
         m_bonusTextRegion.size.y = m_levelCompleteText.getGlobalBounds().size.y;
 
         const unsigned bonusTextCharSize{ 70 };
-        const sf::Color bonusTextColor{ 255, 255, 153 };
+        const sf::Color bonusTextColor{ 255, 255, 153, 127 };
 
         const bool willCoinBonus{ (t_context.stats.coin_total > 0) &&
                                   (t_context.stats.coin_total == t_context.stats.coin_collected) };
@@ -151,7 +151,7 @@ namespace halloween
         {
             m_bonuses.emplace_back(
                 0,
-                t_context.fonts.makeText(bonusTextCharSize, "No bonuses, lame.", bonusTextColor));
+                t_context.fonts.makeText(bonusTextCharSize, "No bonuses. Lame.", bonusTextColor));
         }
     }
 
