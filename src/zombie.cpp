@@ -131,6 +131,8 @@ namespace halloween
 
     void Zombie::update(const Context & t_context, const float t_frameTimeSec)
     {
+        const bool isPlayerDead{ t_context.avatar.isDead() };
+
         // update animation
         m_animElpasedSec += t_frameTimeSec;
 
@@ -146,11 +148,23 @@ namespace halloween
 
                 if (ZombieAnim::Attack == m_anim)
                 {
-                    startChasing(t_context);
+                    if (isPlayerDead)
+                    {
+                        setupTask(ZombieTask::Stare, ZombieAnim::Idle);
+                    }
+                    else
+                    {
+                        startChasing(t_context);
+                    }
                 }
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex), true);
+        }
+
+        if (isPlayerDead)
+        {
+            return;
         }
 
         // notice when the player gets witihin range
