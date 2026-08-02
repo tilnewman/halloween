@@ -17,6 +17,24 @@ namespace halloween
 
     //
 
+    [[nodiscard]] constexpr float timePerFrame(const ZombieAnim t_action) noexcept
+    {
+        // clang-format off
+        switch(t_action)
+        {
+            case ZombieAnim::Idle:   { return 0.09f;  }
+            case ZombieAnim::Walk:   { return 0.05f;  }
+            case ZombieAnim::Attack: { return 0.03f;  }
+            case ZombieAnim::Die:    { return 0.05f;  }
+            case ZombieAnim::Hit:      
+            case ZombieAnim::Count:    
+            default:                 { return 0.025f; }
+        }
+        // clang-format on
+    }
+
+    //
+
     class Zombie
     {
       public:

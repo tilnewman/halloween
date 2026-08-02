@@ -62,14 +62,23 @@ namespace halloween
     void Zombie::update(const Context & t_context, const float t_frameTimeSec)
     {
         m_animElpasedTimeSec += t_frameTimeSec;
-        if (m_animElpasedTimeSec > 0.075f)
+        const float timePerFrameSec{ timePerFrame(m_anim) };
+        if (m_animElpasedTimeSec > timePerFrameSec)
         {
-            m_animElpasedTimeSec -= 0.075f;
+            m_animElpasedTimeSec -= timePerFrameSec;
 
             const auto & textures{ t_context.zombie_textures.textures(m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
+
+                std::size_t animIndex{ static_cast<std::size_t>(m_anim) };
+                if (++animIndex >= static_cast<std::size_t>(ZombieAnim::Count))
+                {
+                    animIndex = 0;
+                }
+
+                m_anim = static_cast<ZombieAnim>(animIndex);
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex), true);
