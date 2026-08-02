@@ -9,6 +9,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 namespace halloween
 {
@@ -35,6 +36,30 @@ namespace halloween
 
     //
 
+    enum class ZombieTask
+    {
+        Stare,
+        Wander,
+        Chase,
+        Attack
+    };
+
+    [[nodiscard]] constexpr std::string_view toString(const ZombieTask t_task) noexcept
+    {
+        // clang-format off
+        switch(t_task)
+        {
+            case ZombieTask::Stare:  { return "Stare";  }
+            case ZombieTask::Wander: { return "wander"; }
+            case ZombieTask::Chase:  { return "chase";  }
+            case ZombieTask::Attack:    
+            default:                 { return "attack"; }
+        }
+        // clang-format on
+    }
+
+    //
+
     class Zombie
     {
       public:
@@ -47,13 +72,23 @@ namespace halloween
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const;
 
+        private:
+        void turn();
+          void setupTask(const ZombieTask t_task, const ZombieAnim t_anim);
+          void startWanderingOrStaring(const Context & t_context);
+
       private:
-        sf::Sprite m_sprite;
         ZombieAnim m_anim;
+        ZombieTask m_task;
+        sf::Sprite m_sprite;
         sf::FloatRect m_rect;
         bool m_isFacingRight;
-        float m_animElpasedTimeSec;
+        float m_animElpasedSec;
+        float m_taskElapsedSec;
+        float m_taskDurationSec;
         std::size_t m_frameIndex;
+        float m_wanderTarget;
+        mutable sf::Text m_debugText;
     };
 
 } // namespace halloween

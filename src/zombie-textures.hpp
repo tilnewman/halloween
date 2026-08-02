@@ -21,18 +21,18 @@ namespace halloween
         Count
     };
 
-    [[nodiscard]] constexpr std::string_view toString(const ZombieAnim t_action) noexcept
+    [[nodiscard]] constexpr std::string_view toString(const ZombieAnim t_anim) noexcept
     {
         // clang-format off
-        switch(t_action)
+        switch(t_anim)
         {
-            case ZombieAnim::Idle:     { return "idle";   }
-            case ZombieAnim::Walk:     { return "walk";   }
-            case ZombieAnim::Attack:   { return "attack"; }
-            case ZombieAnim::Die:      { return "die";    }
-            case ZombieAnim::Hit:      { return "hit";    }
+            case ZombieAnim::Idle:   { return "idle";   }
+            case ZombieAnim::Walk:   { return "walk";   }
+            case ZombieAnim::Attack: { return "attack"; }
+            case ZombieAnim::Die:    { return "die";    }
+            case ZombieAnim::Hit:    { return "hit";    }
             case ZombieAnim::Count:    
-            default:     { return "unknown_zombieaction"; }
+            default:     { return "unknown_zombieanim"; }
         }
         // clang-format on
     }
