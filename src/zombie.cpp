@@ -5,6 +5,7 @@
 //
 #include "zombie.hpp"
 
+#include "avatar.hpp"
 #include "context.hpp"
 #include "fonts.hpp"
 #include "random.hpp"
@@ -12,6 +13,7 @@
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
+#include "sound-player.hpp"
 
 namespace halloween
 {
@@ -26,6 +28,7 @@ namespace halloween
         , m_taskElapsedSec{ 0.0f }
         , m_frameIndex{ 0 }
         , m_wanderTarget{ 0.0f }
+        , m_walkSpeed{ 30.0f }
         , m_debugText{ util::SfmlDefaults::instance().font() }
     {
         m_sprite.setTexture(t_context.zombie_textures.textures(m_anim).at(0), true);
@@ -75,19 +78,68 @@ namespace halloween
         return rect;
     }
 
+    const sf::FloatRect Zombie::attackRect() const
+    {
+        if (ZombieAnim::Attack != m_anim)
+        {
+            return {};
+        }
+
+        sf::FloatRect rect{ m_sprite.getGlobalBounds() };
+        util::scaleRectInPlace(rect, 0.4f);
+        rect.position.x += (rect.size.x * 0.5f);
+        rect.position.y -= (rect.size.y * 0.6f);
+        util::scaleRectInPlace(rect, { 1.25f, 1.0f });
+
+        if (m_frameIndex < 14)
+        {
+            rect.position.x -= (rect.size.x * 0.5f);
+            rect.position.y -= (rect.size.y * 0.25f);
+            rect.size.y *= 0.5f;
+        }
+
+        if (!m_isFacingRight)
+        {
+            rect.position.x -= rect.size.x;
+        }
+
+        return rect;
+    }
+
     void Zombie::setupTask(const ZombieTask t_task, const ZombieAnim t_anim)
     {
         m_task = t_task;
         m_anim = t_anim;
+        m_frameIndex = 0;
         m_animElpasedSec = 0.0f;
         m_taskElapsedSec = 0.0f;
+    }
+
+    float Zombie::calcTimePerFrame() const
+    {
+        float timePerFrameSec{ timePerFrame(m_anim) };
+
+        if ((ZombieTask::Chase == m_task) && (ZombieAnim::Walk == m_anim))
+        {
+            timePerFrameSec *= 0.5f;
+        }
+
+        return timePerFrameSec;
+    }
+
+    void Zombie::startChasing(const Context & t_context)
+    {
+        t_context.audio.play("zombie-alert");
+        setupTask(ZombieTask::Chase, ZombieAnim::Walk);
+        m_taskDurationSec = t_context.random.fromTo(0.5f, 2.0f);
     }
 
     void Zombie::update(const Context & t_context, const float t_frameTimeSec)
     {
         // update animation
         m_animElpasedSec += t_frameTimeSec;
-        const float timePerFrameSec{ timePerFrame(m_anim) };
+
+        const float timePerFrameSec{ calcTimePerFrame() };
         if (m_animElpasedSec > timePerFrameSec)
         {
             m_animElpasedSec -= timePerFrameSec;
@@ -96,9 +148,23 @@ namespace halloween
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
+
+                if (ZombieAnim::Attack == m_anim)
+                {
+                    startChasing(t_context);
+                }
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex), true);
+        }
+
+        // notice when the player gets witihin range
+        if ((ZombieTask::Stare == m_task) || (ZombieTask::Wander == m_task))
+        {
+            if (m_rect.findIntersection(t_context.avatar.collisionRect()))
+            {
+                startChasing(t_context);
+            }
         }
 
         // update tasks
@@ -113,7 +179,7 @@ namespace halloween
         }
         else if (ZombieTask::Wander == m_task)
         {
-            const float walkSpeed{ 30.0f * ((m_isFacingRight) ? 1.0f : -1.0f) };
+            const float walkSpeed{ m_walkSpeed * ((m_isFacingRight) ? 1.0f : -1.0f) };
             m_sprite.move({ (walkSpeed * t_frameTimeSec), 0.0f });
 
             const sf::FloatRect collRect{ collisionRect() };
@@ -131,6 +197,46 @@ namespace halloween
             {
                 startWanderingOrStaring(t_context);
             }
+        }
+        else if (ZombieTask::Chase == m_task)
+        {
+            // stop chasing if time has come
+            if (m_taskElapsedSec > m_taskDurationSec)
+            {
+                setupTask(ZombieTask::Attack, ZombieAnim::Attack);
+            }
+            else
+            {
+                // turn towards the player
+                const bool isPlayerRight{ util::center(collisionRect()).x <
+                                          util::center(t_context.avatar.collisionRect()).x };
+
+                if (isPlayerRight != m_isFacingRight)
+                {
+                    turn();
+                }
+
+                // move toward player
+                const float chaseSpeed{ m_walkSpeed * ((m_isFacingRight) ? 2.0f : -2.0f) };
+                const float moveHoriz{ chaseSpeed * t_frameTimeSec };
+                m_sprite.move({ moveHoriz, 0.0f });
+
+                // move back if going out of bounds
+                const sf::FloatRect collRect{ collisionRect() };
+                if (collRect.position.x < m_rect.position.x)
+                {
+                    m_sprite.move({ moveHoriz, 0.0f });
+                    startWanderingOrStaring(t_context);
+                }
+                else if (util::right(collRect) > util::right(m_rect))
+                {
+                    m_sprite.move({ -moveHoriz, 0.0f });
+                    startWanderingOrStaring(t_context);
+                }
+            }
+        }
+        else if (ZombieTask::Attack == m_task)
+        {
         }
     }
 
@@ -182,9 +288,10 @@ namespace halloween
             m_debugText.setString(str);
             util::setOriginToPosition(m_debugText);
             m_debugText.setPosition({ util::right(collisionRect()), collisionRect().position.y });
-            //t_target.draw(m_debugText, t_states);
+            // t_target.draw(m_debugText, t_states);
 
-            //util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
+            util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
+            util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
         }
     }
 

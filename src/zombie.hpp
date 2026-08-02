@@ -66,6 +66,7 @@ namespace halloween
         Zombie(const Context & t_context, const sf::FloatRect & t_rect);
 
         const sf::FloatRect collisionRect() const;
+        const sf::FloatRect attackRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
 
@@ -76,6 +77,8 @@ namespace halloween
         void turn();
           void setupTask(const ZombieTask t_task, const ZombieAnim t_anim);
           void startWanderingOrStaring(const Context & t_context);
+          void startChasing(const Context & t_context);
+          [[nodiscard]] float calcTimePerFrame() const;
 
       private:
         ZombieAnim m_anim;
@@ -88,6 +91,7 @@ namespace halloween
         float m_taskDurationSec;
         std::size_t m_frameIndex;
         float m_wanderTarget;
+        float m_walkSpeed;
         mutable sf::Text m_debugText;
     };
 
