@@ -154,7 +154,7 @@ namespace halloween
 
     void StartState::onEnter(const Context & t_context) { changeToNextState(t_context); }
 
-    void StartState::onExit(const Context & t_context) { t_context.audio.play("respawn"); }
+    void StartState::onExit(const Context &) {}
 
     //
 
@@ -265,10 +265,26 @@ namespace halloween
         : TimedMessageState{ State::Title,
                              State::Play,
                              "Super Lucky Ninja Girl Halloween Nightmare",
-                             (m_defaultMinDurationSec * 4.0f) }
+                             (m_defaultMinDurationSec * 3.0f) }
+        , m_pauseElapsedTimeSec{ 0.0f }
     {}
 
     void TitleState::onEnter(const Context & t_context) { TimedMessageState::onEnter(t_context); }
+
+    void TitleState::update(const Context & t_context, const float t_frameTimeSec)
+    {
+        TimedMessageState::update(t_context, t_frameTimeSec);
+
+        if (not(m_pauseElapsedTimeSec < 0.0f))
+        {
+            m_pauseElapsedTimeSec += t_frameTimeSec;
+            if (m_pauseElapsedTimeSec > 0.75f)
+            {
+                t_context.audio.play("respawn");
+                m_pauseElapsedTimeSec = -1.0f;
+            }
+        }
+    }
 
     void TitleState::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const

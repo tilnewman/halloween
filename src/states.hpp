@@ -235,9 +235,12 @@ namespace halloween
         ~TitleState() final = default;
 
         void onEnter(const Context & t_context) final;
-
+        void update(const Context & t_context, const float t_frameTimeSec) final;
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const final;
+
+        private:
+        float m_pauseElapsedTimeSec;
     };
 
     //
