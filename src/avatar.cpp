@@ -57,7 +57,7 @@ namespace halloween
         m_collisionRectCache.reserve(1'000);
     }
 
-    void Avatar::resetForNewLevel()
+    void Avatar::resetForNewLevel(const sf::FloatRect & t_rect)
     {
         m_action = Action::Idle;
         m_idleAnim.restart();
@@ -65,6 +65,11 @@ namespace halloween
         m_hasLanded = false;
         m_isFacingRight = true;
         m_timeSinceLastThrowSec = 0.0f;
+
+        // spawn just above the enterRect so that the player falls a little
+        sf::Vector2f position{ util::center(t_rect) };
+        position.y = (util::bottom(t_rect) - m_sprite.getGlobalBounds().size.y);
+        m_sprite.setPosition(position);
     }
 
     void Avatar::setup(const Settings & t_settings)
@@ -213,14 +218,6 @@ namespace halloween
         }
 
         return rect;
-    }
-
-    void Avatar::setSpawnPosForNewLevel(const sf::FloatRect & t_rect)
-    {
-        // spawn just above the enterRect so that the player falls a little
-        sf::Vector2f position{ util::center(t_rect) };
-        position.y = (util::bottom(t_rect) - m_sprite.getGlobalBounds().size.y);
-        m_sprite.setPosition(position);
     }
 
     void Avatar::update(const Context & t_context, const float t_frameTimeSec)

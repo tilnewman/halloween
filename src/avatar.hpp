@@ -32,10 +32,9 @@ namespace halloween
       public:
         Avatar();
 
-        void resetForNewLevel();
+        void resetForNewLevel(const sf::FloatRect & t_rect);
         void setup(const Settings & t_settings);
         void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
-        void setSpawnPosForNewLevel(const sf::FloatRect & t_rect);
         void update(const Context & t_context, const float t_frameTimeSec);
         inline const sf::FloatRect bounds() const { return m_sprite.getGlobalBounds(); }
         void handleHitByBoss(const Context & t_context);
