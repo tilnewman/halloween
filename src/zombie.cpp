@@ -351,7 +351,7 @@ namespace halloween
             }
             else
             {
-                //t_context.audio.play("zombie-hit");
+                t_context.audio.play("zombie-hit");
                 setupTask(ZombieTask::Hit, ZombieAnim::Hit);
             }
         }
