@@ -264,10 +264,6 @@ namespace halloween
             {
                 parseObjectLayerRects(t_context.ghosts, t_context, jsonLayer);
             }
-            else if (layerName == "slime")
-            {
-                parseObjectLayerRects(t_context.slimes, t_context, jsonLayer);
-            }
             else if (layerName == "dart")
             {
                 parseObjectLayerRects(t_context.darts, t_context, jsonLayer);
@@ -288,13 +284,9 @@ namespace halloween
             {
                 parseObjectLayerRects(t_context.saws, t_context, jsonLayer);
             }
-            else if (layerName == "bat")
+            else if (layerName == "enemy")
             {
-                parseObjectLayerRects(t_context.bats, t_context, jsonLayer);
-            }
-            else if (layerName == "boss")
-            {
-                parseObjectLayerRects(t_context.boss, t_context, jsonLayer);
+                parseEnemyLayerRects(t_context, jsonLayer);
             }
             else if (layerName == "smoke")
             {
@@ -304,6 +296,38 @@ namespace halloween
             {
                 std::cout << "WARNING:  While parsing level file \"" << m_pathStr
                           << "\".  Ignored unknown layer named \"" << layerName << "\".\n";
+            }
+        }
+    }
+
+    void LevelFileLoader::parseEnemyLayerRects(const Context & t_context, Json & t_json) const
+    {
+        for (Json & objJson : t_json["objects"])
+        {
+            const std::string name = objJson["name"];
+            const sf::FloatRect rect{ parseAndConvertRect(t_context, objJson) };
+
+            if ("slime" == name)
+            {
+                t_context.slimes.add(t_context, rect, name);
+            }
+            else if ("bat" == name)
+            {
+                t_context.bats.add(t_context, rect, name);
+            }
+            else if ("mushroom" == name)
+            {
+                t_context.boss.add(t_context, rect, name);
+            }
+            else if ("zombie" == name)
+            {
+                //TODO
+                //t_context.zombies.add(t_context, rect, name);
+            }
+            else
+            {
+                std::cout << "WARNING:  While parsing level file \"" << m_pathStr
+                          << "\".  Ignored unknown enemy rect named \"" << name << "\".\n";
             }
         }
     }

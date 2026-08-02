@@ -39,6 +39,8 @@ namespace halloween
         const sf::FloatRect parseAndConvertRect(const Context & t_context, Json & t_json) const;
         void parseSpawnLayer(const Context & t_context, Json & t_json) const;
 
+        void parseEnemyLayerRects(const Context & t_context, Json & t_json) const;
+
         template <typename T>
         void parseObjectLayerRects(T & t_manager, const Context & t_context, Json & t_json) const
         {

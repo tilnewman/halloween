@@ -279,28 +279,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":20,
-         "name":"bat",
-         "objects":[
-                {
-                 "height":64,
-                 "id":90,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":832,
-                 "x":3136,
-                 "y":736
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":18,
          "name":"saw",
          "objects":[
@@ -498,7 +476,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":800,
+                 "width":480,
                  "x":5696,
                  "y":1280
                 }],
@@ -1028,18 +1006,29 @@
         {
          "draworder":"topdown",
          "id":11,
-         "name":"slime",
+         "name":"enemy",
          "objects":[
                 {
                  "height":64,
                  "id":65,
-                 "name":"",
+                 "name":"slime",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":384,
                  "x":4096,
                  "y":960
+                }, 
+                {
+                 "height":64,
+                 "id":94,
+                 "name":"bat",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":832,
+                 "x":3136,
+                 "y":736
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1114,7 +1103,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":94,
+ "nextobjectid":95,
  "orientation":"orthogonal",
  "properties":[
         {

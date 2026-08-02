@@ -279,28 +279,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":8,
-         "name":"kill",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":7,
-         "name":"coin",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":2,
          "name":"collision",
          "objects":[
@@ -367,17 +345,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":20,
-         "name":"fire-spout2",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":15,
          "name":"water",
          "objects":[
@@ -434,39 +401,39 @@
         {
          "draworder":"topdown",
          "id":13,
-         "name":"bat",
+         "name":"enemy",
          "objects":[
                 {
                  "height":96,
                  "id":74,
-                 "name":"",
+                 "name":"zombie",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":512,
-                 "x":768,
+                 "width":832,
+                 "x":704,
                  "y":1120
                 }, 
                 {
                  "height":96,
                  "id":75,
-                 "name":"",
+                 "name":"zombie",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":512,
-                 "x":1376,
+                 "width":384,
+                 "x":1536,
                  "y":1120
                 }, 
                 {
                  "height":96,
                  "id":76,
-                 "name":"",
+                 "name":"zombie",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":480,
-                 "x":1984,
+                 "width":352,
+                 "x":1920,
                  "y":1120
                 }],
          "opacity":1,

@@ -334,28 +334,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":8,
-         "name":"kill",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":7,
-         "name":"coin",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":2,
          "name":"collision",
          "objects":[
@@ -488,17 +466,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":20,
-         "name":"fire-spout2",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":15,
          "name":"water",
          "objects":[
@@ -546,17 +513,6 @@
                  "x":8320,
                  "y":0
                 }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":13,
-         "name":"bat",
-         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
