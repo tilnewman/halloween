@@ -97,10 +97,12 @@ namespace halloween
             rect.position.y -= (rect.size.y * 0.25f);
             rect.size.y *= 0.5f;
         }
-
-        if (!m_isFacingRight)
+        else
         {
-            rect.position.x -= rect.size.x;
+            if (!m_isFacingRight)
+            {
+                rect.position.x -= rect.size.x;
+            }
         }
 
         return rect;
@@ -125,13 +127,6 @@ namespace halloween
         }
 
         return timePerFrameSec;
-    }
-
-    void Zombie::startChasing(const Context & t_context)
-    {
-        t_context.audio.play("zombie-alert");
-        setupTask(ZombieTask::Chase, ZombieAnim::Walk);
-        m_taskDurationSec = t_context.random.fromTo(0.5f, 2.0f);
     }
 
     void Zombie::update(const Context & t_context, const float t_frameTimeSec)
@@ -193,7 +188,7 @@ namespace halloween
             }
 
             const float pos{ util::center(collisionRect()).x };
-            if (std::abs(pos - m_wanderTarget) < 10.0f) // five pixels is close enough
+            if (std::abs(pos - m_wanderTarget) < 10.0f) // close enough
             {
                 startWanderingOrStaring(t_context);
             }
@@ -223,12 +218,12 @@ namespace halloween
 
                 // move back if going out of bounds
                 const sf::FloatRect collRect{ collisionRect() };
-                if (collRect.position.x < m_rect.position.x)
+                if (not m_isFacingRight && (collRect.position.x < m_rect.position.x))
                 {
                     m_sprite.move({ moveHoriz, 0.0f });
                     startWanderingOrStaring(t_context);
                 }
-                else if (util::right(collRect) > util::right(m_rect))
+                else if (m_isFacingRight && (util::right(collRect) > util::right(m_rect)))
                 {
                     m_sprite.move({ -moveHoriz, 0.0f });
                     startWanderingOrStaring(t_context);
@@ -265,6 +260,13 @@ namespace halloween
         }
     }
 
+    void Zombie::startChasing(const Context & t_context)
+    {
+        t_context.audio.play("zombie-alert");
+        setupTask(ZombieTask::Chase, ZombieAnim::Walk);
+        m_taskDurationSec = t_context.random.fromTo(0.5f, 2.0f);
+    }
+
     void Zombie::moveWithMap(const sf::Vector2f & t_move)
     {
         m_sprite.move(t_move);
@@ -290,8 +292,8 @@ namespace halloween
             m_debugText.setPosition({ util::right(collisionRect()), collisionRect().position.y });
             // t_target.draw(m_debugText, t_states);
 
-            util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
-            util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
+            // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
+            // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
         }
     }
 
