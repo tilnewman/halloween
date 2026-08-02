@@ -57,6 +57,16 @@ namespace halloween
         m_collisionRectCache.reserve(1'000);
     }
 
+    void Avatar::resetForNewLevel()
+    {
+        m_action = Action::Idle;
+        m_idleAnim.restart();
+        m_sprite.setTexture(m_idleAnim.texture(), true);
+        m_hasLanded = false;
+        m_isFacingRight = true;
+        m_timeSinceLastThrowSec = 0.0f;
+    }
+
     void Avatar::setup(const Settings & t_settings)
     {
         m_blood.setup(t_settings);
@@ -643,11 +653,7 @@ namespace halloween
             const auto intersectionOpt{ avatarRect.findIntersection(collRect) };
             if (intersectionOpt)
             {
-                collide(
-                    t_context,
-                    intersectionOpt.value(),
-                    avatarCenter,
-                    detectLanding);
+                collide(t_context, intersectionOpt.value(), avatarCenter, detectLanding);
             }
         }
 
@@ -658,11 +664,7 @@ namespace halloween
             const auto intersectionOpt{ avatarRect.findIntersection(collRect) };
             if (intersectionOpt)
             {
-                collide(
-                    t_context,
-                    intersectionOpt.value(),
-                    avatarCenter,
-                    detectLanding);
+                collide(t_context, intersectionOpt.value(), avatarCenter, detectLanding);
             }
         }
 

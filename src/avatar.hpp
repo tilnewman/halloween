@@ -32,6 +32,7 @@ namespace halloween
       public:
         Avatar();
 
+        void resetForNewLevel();
         void setup(const Settings & t_settings);
         void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
         void setSpawnPosForNewLevel(const sf::FloatRect & t_rect);
