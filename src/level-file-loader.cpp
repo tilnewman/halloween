@@ -20,6 +20,7 @@
 #include "slime.hpp"
 #include "smoke.hpp"
 #include "spiked-ball.hpp"
+#include "zombies.hpp"
 
 #include <exception>
 #include <filesystem>
@@ -321,8 +322,7 @@ namespace halloween
             }
             else if ("zombie" == name)
             {
-                //TODO
-                //t_context.zombies.add(t_context, rect, name);
+                t_context.zombies.add(t_context, rect, name);
             }
             else
             {

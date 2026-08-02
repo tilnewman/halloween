@@ -40,6 +40,7 @@ namespace halloween
     class ScreenRegions;
     class MovingPlatforms;
     class ObjectManagerList;
+    class ZombieObjectManager;
     class FireSpoutLargeManager;
 
     struct Context
@@ -71,7 +72,8 @@ namespace halloween
             MushroomBoss & t_mushrooomBoos,
             Smoke & t_smoke,
             MovingPlatforms & t_movingPlatforms,
-            FireSpoutLargeManager & t_fireSpoutLargeManager)
+            FireSpoutLargeManager & t_fireSpoutLargeManager,
+            ZombieObjectManager & t_zombieObjectManager)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -99,6 +101,7 @@ namespace halloween
             , boss{ t_mushrooomBoos }
             , smoke{ t_smoke }
             , platforms{ t_movingPlatforms }
+            , zombies{ t_zombieObjectManager }
         {}
 
         const Settings & settings;
@@ -128,6 +131,7 @@ namespace halloween
         MushroomBoss & boss;
         Smoke & smoke;
         MovingPlatforms & platforms;
+        ZombieObjectManager & zombies;
     };
 
 } // namespace halloween

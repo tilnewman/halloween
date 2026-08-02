@@ -43,6 +43,7 @@ namespace halloween
         , m_framerateDisplayUPtr{}
         , m_smokeUPtr{}
         , m_movingPlatformsUPtr{}
+        , m_zombiesUPtr{}
         , m_contextUPtr{}
     {}
 
@@ -101,6 +102,7 @@ namespace halloween
         m_statsUPtr = std::make_unique<LevelStats>();
         m_smokeUPtr = std::make_unique<Smoke>();
         m_movingPlatformsUPtr = std::make_unique<MovingPlatforms>();
+        m_zombiesUPtr = std::make_unique<ZombieObjectManager>();
 
         m_audioUPtr->mediaPath(m_settings.media_path / "sfx");
         m_audioUPtr->loadAll();
@@ -135,7 +137,8 @@ namespace halloween
             *m_bossUPtr,
             *m_smokeUPtr,
             *m_movingPlatformsUPtr,
-            *m_fireSpoutLargeManagerUPtr);
+            *m_fireSpoutLargeManagerUPtr,
+            *m_zombiesUPtr);
 
         m_layoutUPtr->setup(m_windowUPtr->getSize());
         m_fontManagerUPtr->setup(m_settings);
@@ -153,6 +156,7 @@ namespace halloween
         m_managersUPtr->add(*m_smokeUPtr);
         m_managersUPtr->add(*m_movingPlatformsUPtr);
         m_managersUPtr->add(*m_fireSpoutLargeManagerUPtr);
+        m_managersUPtr->add(*m_zombiesUPtr);
         m_managersUPtr->setupAll(*m_contextUPtr);
 
         m_avatarUPtr->setup(m_settings);
@@ -184,6 +188,7 @@ namespace halloween
         m_bossUPtr.reset();
         m_infoRegionUPtr.reset();
         m_stateMachineUPtr.reset();
+        m_zombiesUPtr.reset();
         m_avatarUPtr.reset();
         m_fontManagerUPtr.reset();
         m_layoutUPtr.reset();

@@ -1,0 +1,56 @@
+#ifndef ZOMBIES_HPP_INCLUDED
+#define ZOMBIES_HPP_INCLUDED
+//
+// zombies.hpp
+//
+#include "object-manager.hpp"
+
+#include <SFML/Graphics/Rect.hpp>
+
+#include <vector>
+
+namespace halloween
+{
+
+    struct Context;
+
+    class Zombie
+    {
+      public:
+        const sf::FloatRect collisionRect() const { return {}; }
+        void update(const Context &, const float) {}
+        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const {}
+        void moveWithMap(const sf::Vector2f &) {}
+    };
+
+    class ZombieObjectManager final : public IObjectManager
+    {
+      public:
+        ZombieObjectManager();
+        ~ZombieObjectManager() final = default;
+
+        bool willDrawBeforeMap() const final { return false; }
+        void clear() final { m_zombies.clear(); }
+        void setup(const Context & t_context) final;
+
+        void
+            add(const Context & t_context,
+                const sf::FloatRect & t_region,
+                const std::string & t_details = "") final;
+
+        void update(const Context & t_context, const float t_frameTimeSec) final;
+        void moveWithMap(const sf::Vector2f & t_move) final;
+        void collideWithAvatar(const Context &, const sf::FloatRect &) final {}
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
+        void appendCollisions(std::vector<sf::FloatRect> & t_rects) const final;
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const final;
+
+      private:
+        std::vector<Zombie> m_zombies;
+    };
+
+} // namespace halloween
+
+#endif // ZOMBIES_HPP_INCLUDED
