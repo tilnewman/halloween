@@ -35,7 +35,9 @@ namespace halloween
     {
         // probably never more than one dozen in a level
         m_bats.reserve(100);
-        m_deathAnims.reserve(100);
+
+        // probably no more than ten dying at once
+        m_deathAnims.reserve(10);
     }
 
     void Bats::setup(const Context & t_context)
@@ -138,7 +140,7 @@ namespace halloween
                     bat.has_spotted_player = true;
 
                     const bool isAvatarLeft{ util::center(avatarRect).x <
-                                              util::center(bat.sprite.getGlobalBounds()).x };
+                                             util::center(bat.sprite.getGlobalBounds()).x };
 
                     if (isAvatarLeft != bat.is_moving_left)
                     {
