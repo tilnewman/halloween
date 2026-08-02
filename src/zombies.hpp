@@ -4,6 +4,7 @@
 // zombies.hpp
 //
 #include "object-manager.hpp"
+#include "zombie.hpp"
 
 #include <SFML/Graphics/Rect.hpp>
 
@@ -13,15 +14,6 @@ namespace halloween
 {
 
     struct Context;
-
-    class Zombie
-    {
-      public:
-        const sf::FloatRect collisionRect() const { return {}; }
-        void update(const Context &, const float) {}
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const {}
-        void moveWithMap(const sf::Vector2f &) {}
-    };
 
     class ZombieObjectManager final : public IObjectManager
     {

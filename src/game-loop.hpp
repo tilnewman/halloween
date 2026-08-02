@@ -33,6 +33,7 @@
 #include "spiked-ball.hpp"
 #include "state-machine.hpp"
 #include "states.hpp"
+#include "zombie-textures.hpp"
 #include "zombies.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -91,7 +92,8 @@ namespace halloween
         std::unique_ptr<Smoke> m_smokeUPtr;
         std::unique_ptr<MovingPlatforms> m_movingPlatformsUPtr;
         std::unique_ptr<ZombieObjectManager> m_zombiesUPtr;
-        
+        std::unique_ptr<ZombieTextureManager> m_zombieTexturesUPtr;
+
         std::unique_ptr<Context> m_contextUPtr;
     };
 

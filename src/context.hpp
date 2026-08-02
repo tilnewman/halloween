@@ -41,6 +41,7 @@ namespace halloween
     class MovingPlatforms;
     class ObjectManagerList;
     class ZombieObjectManager;
+    class ZombieTextureManager;
     class FireSpoutLargeManager;
 
     struct Context
@@ -73,7 +74,8 @@ namespace halloween
             Smoke & t_smoke,
             MovingPlatforms & t_movingPlatforms,
             FireSpoutLargeManager & t_fireSpoutLargeManager,
-            ZombieObjectManager & t_zombieObjectManager)
+            ZombieObjectManager & t_zombieObjectManager,
+            ZombieTextureManager & t_zombieTextureManager)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -102,6 +104,7 @@ namespace halloween
             , smoke{ t_smoke }
             , platforms{ t_movingPlatforms }
             , zombies{ t_zombieObjectManager }
+            , zombie_textures{ t_zombieTextureManager }
         {}
 
         const Settings & settings;
@@ -132,6 +135,7 @@ namespace halloween
         Smoke & smoke;
         MovingPlatforms & platforms;
         ZombieObjectManager & zombies;
+        ZombieTextureManager & zombie_textures;
     };
 
 } // namespace halloween
