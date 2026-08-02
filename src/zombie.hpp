@@ -69,16 +69,17 @@ namespace halloween
         const sf::FloatRect attackRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
 
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const;
 
-        private:
+      private:
         void turn();
-          void setupTask(const ZombieTask t_task, const ZombieAnim t_anim);
-          void startWanderingOrStaring(const Context & t_context);
-          void startChasing(const Context & t_context);
-          [[nodiscard]] float calcTimePerFrame() const;
+        void setupTask(const ZombieTask t_task, const ZombieAnim t_anim);
+        void startWanderingOrStaring(const Context & t_context);
+        void startChasing(const Context & t_context);
+        [[nodiscard]] float calcTimePerFrame() const;
 
       private:
         ZombieAnim m_anim;

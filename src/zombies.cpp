@@ -55,4 +55,17 @@ namespace halloween
         }
     }
 
+    bool ZombieObjectManager::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const 
+    {
+        for (const Zombie & zombie : m_zombies)
+        {
+            if (zombie.doesAvatarCollideWithAnyAndDie(t_avatarRect))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 } // namespace halloween

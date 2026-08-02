@@ -230,9 +230,6 @@ namespace halloween
                 }
             }
         }
-        else if (ZombieTask::Attack == m_task)
-        {
-        }
     }
 
     void Zombie::startWanderingOrStaring(const Context & t_context)
@@ -294,6 +291,18 @@ namespace halloween
 
             // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
             // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
+        }
+    }
+
+    bool Zombie::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    {
+        if (ZombieAnim::Attack == m_anim)
+        {
+            return t_avatarRect.findIntersection(attackRect()).has_value();
+        }
+        else
+        {
+            return false;
         }
     }
 
