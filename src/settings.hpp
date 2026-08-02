@@ -52,9 +52,10 @@ namespace halloween
 
         bool will_show_coin_animations{ true };
 
-        int kill_slime_score{ 10 };
-        int kill_bat_score{ 8 };
-        int kill_boss_score{ 99 };
+        int kill_slime_score{ 8 };
+        int kill_bat_score{ 12 };
+        int kill_boss_score{ 50 };
+        int kill_zombie_score{ 25 };
 
         sf::Color pause_screen_color{ 120, 110, 215 };
 

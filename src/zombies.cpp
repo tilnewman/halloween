@@ -6,6 +6,10 @@
 #include "zombies.hpp"
 
 #include "context.hpp"
+#include "info-region.hpp"
+#include "level-stats.hpp"
+#include "settings.hpp"
+#include "sound-player.hpp"
 
 namespace halloween
 {
@@ -42,7 +46,10 @@ namespace halloween
     {
         for (const Zombie & zombie : m_zombies)
         {
-            t_rects.push_back(zombie.collisionRect());
+            if (zombie.isAlive())
+            {
+                t_rects.push_back(zombie.collisionRect());
+            }
         }
     }
 
@@ -55,7 +62,8 @@ namespace halloween
         }
     }
 
-    bool ZombieObjectManager::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const 
+    bool ZombieObjectManager::doesAvatarCollideWithAnyAndDie(
+        const sf::FloatRect & t_avatarRect) const
     {
         for (const Zombie & zombie : m_zombies)
         {
@@ -66,6 +74,28 @@ namespace halloween
         }
 
         return false;
+    }
+
+    bool ZombieObjectManager::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
+    {
+        bool wereAnyKilled{ false };
+        for (Zombie & zombie : m_zombies)
+        {
+            if (zombie.isAlive() and not zombie.isBeingHit() and
+                zombie.collisionRect().findIntersection(t_attackRect))
+            {
+                zombie.hit(t_context);
+                if (not zombie.isAlive())
+                {
+                    wereAnyKilled = true;
+
+                    ++t_context.stats.enemy_killed;
+                    t_context.info_region.scoreAdjust(t_context.settings.kill_zombie_score);
+                }
+            }
+        }
+
+        return wereAnyKilled;
     }
 
 } // namespace halloween

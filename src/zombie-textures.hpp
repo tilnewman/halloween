@@ -16,7 +16,7 @@ namespace halloween
         Idle = 0,
         Walk,
         Attack,
-        Die,
+        Death,
         Hit,
         Count
     };
@@ -29,7 +29,7 @@ namespace halloween
             case ZombieAnim::Idle:   { return "idle";   }
             case ZombieAnim::Walk:   { return "walk";   }
             case ZombieAnim::Attack: { return "attack"; }
-            case ZombieAnim::Die:    { return "die";    }
+            case ZombieAnim::Death:  { return "death";  }
             case ZombieAnim::Hit:    { return "hit";    }
             case ZombieAnim::Count:    
             default:     { return "unknown_zombieanim"; }

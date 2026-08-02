@@ -29,6 +29,8 @@ namespace halloween
         , m_frameIndex{ 0 }
         , m_wanderTarget{ 0.0f }
         , m_walkSpeed{ 30.0f }
+        , m_hitPoints{ 3 }
+        , m_hasFinishedDeathAnim{ false }
         , m_debugText{ util::SfmlDefaults::instance().font() }
     {
         m_sprite.setTexture(t_context.zombie_textures.textures(m_anim).at(0), true);
@@ -131,6 +133,11 @@ namespace halloween
 
     void Zombie::update(const Context & t_context, const float t_frameTimeSec)
     {
+        if (m_hasFinishedDeathAnim)
+        {
+            return;
+        }
+
         const bool isPlayerDead{ t_context.avatar.isDead() };
 
         // update animation
@@ -157,12 +164,21 @@ namespace halloween
                         startChasing(t_context);
                     }
                 }
+                else if (ZombieAnim::Death == m_anim)
+                {
+                    m_hasFinishedDeathAnim = true;
+                    return;
+                }
+                else if (ZombieAnim::Hit == m_anim)
+                {
+                    startChasing(t_context);
+                }
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex), true);
         }
 
-        if (isPlayerDead)
+        if (isPlayerDead || not isAlive())
         {
             return;
         }
@@ -296,12 +312,12 @@ namespace halloween
             str += ", ";
             str += toString(m_anim);
             str += ", ";
-            str += ((m_isFacingRight) ? "right" : "left");
+            str += std::to_string(m_hitPoints);
 
             m_debugText.setString(str);
             util::setOriginToPosition(m_debugText);
             m_debugText.setPosition({ util::right(collisionRect()), collisionRect().position.y });
-            // t_target.draw(m_debugText, t_states);
+            t_target.draw(m_debugText, t_states);
 
             // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
             // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
@@ -317,6 +333,27 @@ namespace halloween
         else
         {
             return false;
+        }
+    }
+
+    void Zombie::hit(const Context & t_context)
+    {
+        t_context.audio.play("metal-hit");
+
+        if (m_hitPoints > 0)
+        {
+            --m_hitPoints;
+
+            if (0 == m_hitPoints)
+            {
+                t_context.audio.play("zombie-death");
+                setupTask(ZombieTask::Hit, ZombieAnim::Death);
+            }
+            else
+            {
+                //t_context.audio.play("zombie-hit");
+                setupTask(ZombieTask::Hit, ZombieAnim::Hit);
+            }
         }
     }
 

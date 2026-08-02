@@ -25,6 +25,7 @@
 #include "state-machine.hpp"
 #include "states.hpp"
 #include "texture-loader.hpp"
+#include "zombies.hpp"
 
 #include <cassert>
 
@@ -63,8 +64,13 @@ namespace halloween
         m_idleAnim.restart();
         m_sprite.setTexture(m_idleAnim.texture(), true);
         m_hasLanded = false;
-        m_isFacingRight = true;
         m_timeSinceLastThrowSec = 0.0f;
+
+        if (!m_isFacingRight)
+        {
+            m_isFacingRight = true;
+            m_sprite.scale({ -1.0f, 1.0f });
+        }
 
         // spawn just above the enterRect so that the player falls a little
         sf::Vector2f position{ util::center(t_rect) };
@@ -765,12 +771,12 @@ namespace halloween
         }
 
         const sf::FloatRect attackRect{ attackCollisionRect() };
-        if (t_context.slimes.attack(t_context, attackRect) ||
-            t_context.bats.attack(t_context, attackRect))
-        {
-            // TODO what is this empty logic block?
-        }
-        else if (t_context.boss.attack(t_context, attackRect))
+
+        t_context.slimes.attack(t_context, attackRect);
+        t_context.bats.attack(t_context, attackRect);
+        t_context.zombies.attack(t_context, attackRect);
+
+        if (t_context.boss.attack(t_context, attackRect))
         {
             bounceAwayFromBoss(t_context);
         }

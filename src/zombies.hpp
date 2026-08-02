@@ -30,6 +30,7 @@ namespace halloween
                 const sf::FloatRect & t_region,
                 const std::string & t_details = "") final;
 
+        bool attack(const Context & t_context, const sf::FloatRect & t_attackRect);
         void update(const Context & t_context, const float t_frameTimeSec) final;
         void moveWithMap(const sf::Vector2f & t_move) final;
         void collideWithAvatar(const Context &, const sf::FloatRect &) final {}
