@@ -113,7 +113,7 @@ namespace halloween
         }
         else if (ZombieTask::Wander == m_task)
         {
-            const float walkSpeed{ 600.0f * ((m_isFacingRight) ? 1.0f : -1.0f) };
+            const float walkSpeed{ 30.0f * ((m_isFacingRight) ? 1.0f : -1.0f) };
             m_sprite.move({ (walkSpeed * t_frameTimeSec), 0.0f });
 
             const sf::FloatRect collRect{ collisionRect() };
@@ -136,7 +136,7 @@ namespace halloween
 
     void Zombie::startWanderingOrStaring(const Context & t_context)
     {
-        if (true)
+        if (t_context.random.boolean())
         {
             setupTask(ZombieTask::Wander, ZombieAnim::Walk);
 
@@ -182,12 +182,9 @@ namespace halloween
             m_debugText.setString(str);
             util::setOriginToPosition(m_debugText);
             m_debugText.setPosition({ util::right(collisionRect()), collisionRect().position.y });
-            t_target.draw(m_debugText, t_states);
+            //t_target.draw(m_debugText, t_states);
 
-            const sf::FloatRect rect({ m_wanderTarget, util::center(collisionRect()).y }, { 1, 1 });
-            util::drawRectangleShape(t_target, rect, false, sf::Color::Green);
-
-            util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
+            //util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
         }
     }
 
