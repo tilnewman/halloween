@@ -76,14 +76,14 @@ namespace halloween
         return false;
     }
 
-    const Harm ZombieObjectManager::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
+    const Harm
+        ZombieObjectManager::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
     {
         Harm harm;
 
         for (Zombie & zombie : m_zombies)
         {
-            if (zombie.isAlive() and not zombie.isBeingHit() and
-                zombie.collisionRect().findIntersection(t_attackRect))
+            if (zombie.isAlive() and zombie.collisionRect().findIntersection(t_attackRect))
             {
                 harm.did_hit = true;
                 zombie.hit(t_context);

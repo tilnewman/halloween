@@ -101,8 +101,6 @@ namespace halloween
         float m_walkSpeed;
         std::size_t m_hitPoints;
         bool m_hasFinishedDeathAnim;
-
-        mutable sf::Text m_debugText;
     };
 
 } // namespace halloween

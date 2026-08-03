@@ -31,7 +31,6 @@ namespace halloween
         , m_walkSpeed{ 30.0f }
         , m_hitPoints{ 3 }
         , m_hasFinishedDeathAnim{ false }
-        , m_debugText{ util::SfmlDefaults::instance().font() }
     {
         m_sprite.setTexture(t_context.zombie_textures.textures(m_anim).at(0), true);
 
@@ -54,8 +53,6 @@ namespace halloween
         {
             m_sprite.scale({ -1.0f, 1.0f });
         }
-
-        m_debugText = t_context.fonts.makeText(Font::General, 16, "");
     }
 
     void Zombie::turn()
@@ -307,18 +304,6 @@ namespace halloween
         if (t_context.layout.wholeRegion().findIntersection(m_sprite.getGlobalBounds()))
         {
             t_target.draw(m_sprite, t_states);
-
-            std::string str{ toString(m_task) };
-            str += ", ";
-            str += toString(m_anim);
-            str += ", ";
-            str += std::to_string(m_hitPoints);
-
-            m_debugText.setString(str);
-            util::setOriginToPosition(m_debugText);
-            m_debugText.setPosition({ util::right(collisionRect()), collisionRect().position.y });
-            t_target.draw(m_debugText, t_states);
-
             // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
             // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
         }
