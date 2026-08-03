@@ -30,7 +30,7 @@ namespace halloween
         }
     }
 
-    void FrogObjectManager::moveWithMap(const sf::Vector2f & t_move) 
+    void FrogObjectManager::moveWithMap(const sf::Vector2f & t_move)
     {
         for (Frog & frog : m_frogs)
         {
@@ -38,21 +38,20 @@ namespace halloween
         }
     }
 
-    void FrogObjectManager::collideWithAvatar(
-        const Context & t_context, const sf::FloatRect & t_avatarRect)
+    bool FrogObjectManager::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
     {
-        for (Frog & frog : m_frogs)
+        for (const Frog & frog : m_frogs)
         {
-            frog.collideWithAvatar(t_context, t_avatarRect);
+            if (frog.doesAvatarCollideWithAnyAndDie(t_avatarRect))
+            {
+                return true;
+            }
         }
-    }
 
-    bool FrogObjectManager::doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const
-    {
         return false;
     }
 
-    void FrogObjectManager::appendCollisions(std::vector<sf::FloatRect> & t_rects) const 
+    void FrogObjectManager::appendCollisions(std::vector<sf::FloatRect> & t_rects) const
     {
         for (const Frog & frog : m_frogs)
         {

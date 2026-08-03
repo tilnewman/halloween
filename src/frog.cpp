@@ -196,7 +196,7 @@ namespace halloween
             }
         }
 
-        // only update tasks after an animation finishes repeating
+        // only update tasks after an animation finishes
         if (m_animRepeatCount > 0)
         {
             return;
@@ -263,7 +263,25 @@ namespace halloween
         m_rect.position += t_move;
     }
 
-    void Frog::collideWithAvatar(const Context &, const sf::FloatRect &) {}
+    bool Frog::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    {
+        if (not attackRect(m_anim).findIntersection(t_avatarRect))
+        {
+            return false;
+        }
+
+        if ((FrogAnim::AttackBite == m_anim) and (m_frameIndex >= 11) and (m_frameIndex <= 15))
+        {
+            return true;
+        }
+        else if (
+            (FrogAnim::AttackTounge == m_anim) and (m_frameIndex >= 14) and (m_frameIndex <= 18))
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     void Frog::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const

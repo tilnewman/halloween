@@ -49,7 +49,7 @@ namespace halloween
         {
             case FrogAnim::Hop:          { return 0.06f;  }
             case FrogAnim::AttackTounge: { return 0.06f;  }
-            case FrogAnim::AttackBite:   { return 0.065f; }
+            case FrogAnim::AttackBite:   { return 0.06f; }
             case FrogAnim::Death:        { return 0.085f; }
             case FrogAnim::Hit:          { return 0.1f;   }
             case FrogAnim::Roar:         { return 0.045f;  }
@@ -71,10 +71,9 @@ namespace halloween
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         [[nodiscard]] const sf::FloatRect attackRect(const FrogAnim t_anim) const;
-
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
-        void collideWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect);
+        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
 
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const;
