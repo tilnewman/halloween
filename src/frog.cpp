@@ -34,7 +34,6 @@ namespace halloween
         , m_animRepeatCount{ 0 }
         , m_hitPoints{ 3 }
         , m_hasFinishedDeathAnim{ false }
-        , m_debugText{ t_context.fonts.makeText(Font::General, 20, "") }
     {
         m_sprite.setTexture(t_context.frog_textures.textures(m_anim).at(0), true);
         m_sprite.setOrigin(m_sprite.getLocalBounds().size * 0.5f);
@@ -315,18 +314,7 @@ namespace halloween
         if (t_context.layout.wholeRegion().findIntersection(m_sprite.getGlobalBounds()))
         {
             t_target.draw(m_sprite, t_states);
-
-            const sf::FloatRect collRect{ collisionRect() };
-
-            std::string str{ toString(m_task) };
-            str += ", ";
-            str += toString(m_anim);
-            m_debugText.setString(str);
-            util::setOriginToPosition(m_debugText);
-            m_debugText.setPosition({ util::right(collRect), collRect.position.y });
-            t_target.draw(m_debugText, t_states);
-
-            // util::drawRectangleShape(t_target, collRect, false, sf::Color::Red);
+            // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
             // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
         }
     }

@@ -86,6 +86,7 @@ namespace halloween
         float m_deadDelaySec;
         bool m_willDie;
         float m_timeSinceLastThrowSec;
+        bool m_hasAttackedAlready;
         std::vector<sf::FloatRect> m_collisionRectCache;
     };
 

@@ -290,6 +290,11 @@ namespace halloween
 
         // this one must come last, after all possible sets to m_action
         handleIdle(t_context, t_frameTimeSec);
+
+        if (Action::Attack != m_action)
+        {
+            m_hasAttackedAlready = false;
+        }
     }
 
     void Avatar::moveMap(const Context & t_context)
@@ -766,20 +771,24 @@ namespace halloween
 
     void Avatar::handleAttackingEnemies(const Context & t_context)
     {
-        if (Action::Attack != m_action)
+        if (m_hasAttackedAlready or (Action::Attack != m_action))
         {
             return;
         }
 
         const sf::FloatRect attackRect{ attackCollisionRect() };
 
-        t_context.slimes.attack(t_context, attackRect);
-        t_context.bats.attack(t_context, attackRect);
-        t_context.zombies.attack(t_context, attackRect);
-        t_context.frogs.attack(t_context, attackRect);
+        if (t_context.slimes.attack(t_context, attackRect).wasAnyHarm() ||
+            t_context.bats.attack(t_context, attackRect).wasAnyHarm() ||
+            t_context.zombies.attack(t_context, attackRect).wasAnyHarm() ||
+            t_context.frogs.attack(t_context, attackRect).wasAnyHarm())
+        {
+            m_hasAttackedAlready = true;
+        }
 
         if (t_context.boss.attack(t_context, attackRect).wasAnyHarm())
         {
+            m_hasAttackedAlready = true;
             bounceAwayFromBoss(t_context);
         }
     }
