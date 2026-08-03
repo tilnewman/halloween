@@ -426,7 +426,7 @@ namespace halloween
         // first frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D) && (Action::Attack != m_action) &&
             (Action::Throw != m_action) && (t_context.info_region.darts() > 0) &&
-            (m_timeSinceLastThrowSec > 0.1f))
+            (m_timeSinceLastThrowSec > t_context.settings.throw_dart_delay_sec))
         {
             m_timeSinceLastThrowSec = 0.0f;
 

@@ -44,6 +44,8 @@ namespace halloween
         float walk_speed_throw_reduction_ratio{ 0.8f };
         float jump_move_ratio{ 0.333f };
 
+        float throw_dart_delay_sec{ 0.1f };
+
         float mushroom_boss_walk_speed{ 20.0f };
         float credits_scroll_speed{ 30.0f };
 
