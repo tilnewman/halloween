@@ -406,12 +406,23 @@
                 {
                  "height":224,
                  "id":74,
-                 "name":"zombie",
+                 "name":"frog",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":832,
-                 "x":704,
+                 "width":1728,
+                 "x":544,
+                 "y":992
+                }, 
+                {
+                 "height":224,
+                 "id":77,
+                 "name":"frog",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":2624,
+                 "x":2272,
                  "y":992
                 }],
          "opacity":1,
@@ -421,7 +432,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":77,
+ "nextobjectid":78,
  "orientation":"orthogonal",
  "properties":[
         {

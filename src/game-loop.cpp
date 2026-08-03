@@ -46,6 +46,7 @@ namespace halloween
         , m_zombiesUPtr{}
         , m_zombieTexturesUPtr{}
         , m_frogTexturesUPtr{}
+        , m_frogsUPtr{}
         , m_contextUPtr{}
     {}
 
@@ -107,6 +108,7 @@ namespace halloween
         m_zombiesUPtr = std::make_unique<ZombieObjectManager>();
         m_zombieTexturesUPtr = std::make_unique<ZombieTextureManager>();
         m_frogTexturesUPtr = std::make_unique<FrogTextureManager>();
+        m_frogsUPtr = std::make_unique<FrogObjectManager>();
 
         m_audioUPtr->mediaPath(m_settings.media_path / "sfx");
         m_audioUPtr->loadAll();
@@ -144,7 +146,8 @@ namespace halloween
             *m_fireSpoutLargeManagerUPtr,
             *m_zombiesUPtr,
             *m_zombieTexturesUPtr,
-            *m_frogTexturesUPtr);
+            *m_frogTexturesUPtr,
+            *m_frogsUPtr);
 
         m_layoutUPtr->setup(m_windowUPtr->getSize());
         m_fontManagerUPtr->setup(m_settings);
@@ -163,6 +166,7 @@ namespace halloween
         m_managersUPtr->add(*m_movingPlatformsUPtr);
         m_managersUPtr->add(*m_fireSpoutLargeManagerUPtr);
         m_managersUPtr->add(*m_zombiesUPtr);
+        m_managersUPtr->add(*m_frogsUPtr);
         m_managersUPtr->setupAll(*m_contextUPtr);
 
         m_avatarUPtr->setup(m_settings);
@@ -181,6 +185,7 @@ namespace halloween
 
         m_managersUPtr.reset();
 
+        m_frogsUPtr.reset();
         m_frogTexturesUPtr.reset();
         m_zombieTexturesUPtr.reset();
         m_movingPlatformsUPtr.reset();

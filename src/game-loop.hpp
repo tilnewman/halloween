@@ -14,6 +14,7 @@
 #include "fonts.hpp"
 #include "framerate-display.hpp"
 #include "frog-textures.hpp"
+#include "frogs.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
@@ -95,6 +96,7 @@ namespace halloween
         std::unique_ptr<ZombieObjectManager> m_zombiesUPtr;
         std::unique_ptr<ZombieTextureManager> m_zombieTexturesUPtr;
         std::unique_ptr<FrogTextureManager> m_frogTexturesUPtr;
+        std::unique_ptr<FrogObjectManager> m_frogsUPtr;
 
         std::unique_ptr<Context> m_contextUPtr;
     };
