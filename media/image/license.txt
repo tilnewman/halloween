@@ -5,6 +5,13 @@ straw-mat.png and wood-panel.png
 	Credit to: Nevrax SARL / Winch Gate Properties Ltd. Ryzom:
 	atys.wiki.ryzom.com/wiki/Ryzom_Commons:About
 
+
+spiderweb.png
+	Credit: SkyshipDev
+	www.opengameart.org/content/hand-drawn-spider-web-0
+	CC-BY-4.0
+
+
 All other images are CC0
 zTn
 2026-8-1
