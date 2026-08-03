@@ -23,7 +23,8 @@ namespace halloween
         Idle,
         Roar,
         Attack,
-        Chase
+        Chase,
+        Hit
     };
 
     [[nodiscard]] constexpr std::string_view toString(const FrogTask t_task) noexcept
@@ -34,6 +35,7 @@ namespace halloween
             case FrogTask::Idle:   { return "idle";   }
             case FrogTask::Roar:   { return "roar";   }
             case FrogTask::Chase:  { return "chase";  }
+            case FrogTask::Hit:    { return "hit";  }
             case FrogTask::Attack:
             default:               { return "attack"; }
         }
@@ -74,6 +76,8 @@ namespace halloween
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
+        [[nodiscard]] constexpr bool isAlive() const noexcept { return (m_hitPoints > 0); }
+        void hit(const Context & t_context);
 
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const;
@@ -93,6 +97,8 @@ namespace halloween
         sf::FloatRect m_rect;
         bool m_isFacingRight;
         std::size_t m_animRepeatCount;
+        std::size_t m_hitPoints;
+        bool m_hasFinishedDeathAnim;
 
         mutable sf::Text m_debugText;
     };

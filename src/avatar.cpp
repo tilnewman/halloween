@@ -8,6 +8,7 @@
 #include "context.hpp"
 #include "dart.hpp"
 #include "fire-spout.hpp"
+#include "frogs.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
@@ -775,6 +776,7 @@ namespace halloween
         t_context.slimes.attack(t_context, attackRect);
         t_context.bats.attack(t_context, attackRect);
         t_context.zombies.attack(t_context, attackRect);
+        t_context.frogs.attack(t_context, attackRect);
 
         if (t_context.boss.attack(t_context, attackRect).wasAnyHarm())
         {

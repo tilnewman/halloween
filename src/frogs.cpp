@@ -6,6 +6,8 @@
 #include "frogs.hpp"
 
 #include "context.hpp"
+#include "info-region.hpp"
+#include "level-stats.hpp"
 #include "settings.hpp"
 
 namespace halloween
@@ -66,6 +68,31 @@ namespace halloween
         {
             frog.draw(t_context, t_target, t_states);
         }
+    }
+
+    const Harm
+        FrogObjectManager::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
+    {
+        Harm harm;
+
+        for (Frog & frog : m_frogs)
+        {
+            if (frog.isAlive() and frog.collisionRect().findIntersection(t_attackRect))
+            {
+                harm.did_hit = true;
+                frog.hit(t_context);
+
+                if (not frog.isAlive())
+                {
+                    harm.did_kill = true;
+
+                    ++t_context.stats.enemy_killed;
+                    t_context.info_region.scoreAdjust(t_context.settings.kill_frog_score);
+                }
+            }
+        }
+
+        return harm;
     }
 
 } // namespace halloween

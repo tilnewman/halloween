@@ -13,6 +13,7 @@
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
+#include "sound-player.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 
@@ -31,6 +32,8 @@ namespace halloween
         , m_rect{ t_rect }
         , m_isFacingRight{ t_context.random.boolean() }
         , m_animRepeatCount{ 0 }
+        , m_hitPoints{ 3 }
+        , m_hasFinishedDeathAnim{ false }
         , m_debugText{ t_context.fonts.makeText(Font::General, 20, "") }
     {
         m_sprite.setTexture(t_context.frog_textures.textures(m_anim).at(0), true);
@@ -59,6 +62,11 @@ namespace halloween
 
     const sf::FloatRect Frog::collisionRect() const
     {
+        if (not isAlive())
+        {
+            return {};
+        }
+
         sf::FloatRect rect{ m_sprite.getGlobalBounds() };
         rect.position.y += (rect.size.y * 0.55f);
         rect.size.y -= (rect.size.y * 0.5f);
@@ -150,6 +158,11 @@ namespace halloween
 
     void Frog::update(const Context & t_context, const float t_frameTimeSec)
     {
+        if (m_hasFinishedDeathAnim)
+        {
+            return;
+        }
+
         // update movement
         if ((FrogTask::Chase == m_task) and (FrogAnim::Hop == m_anim))
         {
@@ -179,6 +192,17 @@ namespace halloween
                 if (m_animRepeatCount > 0)
                 {
                     --m_animRepeatCount;
+                }
+                
+                if (FrogAnim::Death == m_anim)
+                {
+                    m_hasFinishedDeathAnim = true;
+                    return;
+                }
+                
+                if (FrogTask::Hit == m_task)
+                {
+                    return;
                 }
             }
 
@@ -223,7 +247,9 @@ namespace halloween
         {
             setupTask(FrogTask::Chase, FrogAnim::Hop, 1);
         }
-        else if ((FrogTask::Chase == m_task) or (FrogTask::Attack == m_task))
+        else if (
+            (FrogTask::Chase == m_task) or (FrogTask::Attack == m_task) or
+            (FrogTask::Hit == m_task))
         {
             turnToFace(util::center(t_context.avatar.collisionRect()));
 
@@ -302,6 +328,30 @@ namespace halloween
 
             // util::drawRectangleShape(t_target, collRect, false, sf::Color::Red);
             // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
+        }
+    }
+
+    void Frog::hit(const Context & t_context)
+    {
+        t_context.audio.play("metal-hit");
+
+        if (m_hitPoints > 0)
+        {
+            --m_hitPoints;
+
+            turnToFace(util::center(t_context.avatar.collisionRect()));
+
+            if (0 == m_hitPoints)
+            {
+                //t_context.audio.play("frog-death");
+                setupTask(FrogTask::Hit, FrogAnim::Death, 1);
+                m_sprite.setColor(sf::Color(100, 0, 0));
+            }
+            else
+            {
+                //t_context.audio.play("frog-hit");
+                setupTask(FrogTask::Hit, FrogAnim::Hit, 1);
+            }
         }
     }
 

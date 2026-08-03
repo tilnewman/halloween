@@ -7,6 +7,7 @@
 
 #include "bat.hpp"
 #include "context.hpp"
+#include "frogs.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
 #include "level.hpp"
@@ -85,7 +86,8 @@ namespace halloween
             if (t_context.slimes.attack(t_context, missileRect).did_hit ||
                 t_context.bats.attack(t_context, missileRect).did_hit ||
                 t_context.boss.attack(t_context, missileRect).did_hit ||
-                t_context.zombies.attack(t_context, missileRect).did_hit)
+                t_context.zombies.attack(t_context, missileRect).did_hit ||
+                t_context.frogs.attack(t_context, missileRect).did_hit)
             {
                 wereAnyKilled = true;
                 missile.is_alive = false;
