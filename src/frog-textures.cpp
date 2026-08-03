@@ -1,9 +1,9 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 //
-// zombie-textures.cpp
+// frog-textures.cpp
 //
-#include "zombie-textures.hpp"
+#include "frog-textures.hpp"
 
 #include "check-macros.hpp"
 #include "context.hpp"
@@ -16,22 +16,22 @@
 namespace halloween
 {
 
-    ZombieTextureManager::ZombieTextureManager()
+    FrogTextureManager::FrogTextureManager()
         : m_texturesVec{}
     {}
 
-    void ZombieTextureManager::setup(const Context & t_context)
+    void FrogTextureManager::setup(const Context & t_context)
     {
         m_texturesVec.clear();
 
-        const std::size_t actionCount{ static_cast<std::size_t>(ZombieAnim::Count) };
+        const std::size_t actionCount{ static_cast<std::size_t>(FrogAnim::Count) };
         m_texturesVec.reserve(actionCount); // prevent any reallocations
 
         for (std::size_t actionIndex{ 0 }; actionIndex < actionCount; ++actionIndex)
         {
-            const ZombieAnim action{ static_cast<ZombieAnim>(actionIndex) };
+            const FrogAnim action{ static_cast<FrogAnim>(actionIndex) };
 
-            const auto path{ t_context.settings.media_path / "image" / "zombie" /
+            const auto path{ t_context.settings.media_path / "image" / "frog" /
                              toString(action) };
 
             const auto imagePaths{ util::findFilesInDirectory(path, ".png") };
@@ -50,7 +50,7 @@ namespace halloween
         }
     }
 
-    void ZombieTextureManager::teardown()
+    void FrogTextureManager::teardown()
     {
         for (std::vector<sf::Texture> & textures : m_texturesVec)
         {
@@ -58,7 +58,7 @@ namespace halloween
         }
     }
 
-    const std::vector<sf::Texture> & ZombieTextureManager::textures(const ZombieAnim t_action) const
+    const std::vector<sf::Texture> & FrogTextureManager::textures(const FrogAnim t_action) const
     {
         const std::size_t actionIndex{ static_cast<std::size_t>(t_action) };
 

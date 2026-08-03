@@ -40,6 +40,7 @@ namespace halloween
     class ScreenRegions;
     class MovingPlatforms;
     class ObjectManagerList;
+    class FrogTextureManager;
     class ZombieObjectManager;
     class ZombieTextureManager;
     class FireSpoutLargeManager;
@@ -75,7 +76,8 @@ namespace halloween
             MovingPlatforms & t_movingPlatforms,
             FireSpoutLargeManager & t_fireSpoutLargeManager,
             ZombieObjectManager & t_zombieObjectManager,
-            ZombieTextureManager & t_zombieTextureManager)
+            ZombieTextureManager & t_zombieTextureManager,
+            FrogTextureManager & t_frogTextureManager)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -105,6 +107,7 @@ namespace halloween
             , platforms{ t_movingPlatforms }
             , zombies{ t_zombieObjectManager }
             , zombie_textures{ t_zombieTextureManager }
+            , frog_textures{ t_frogTextureManager }
         {}
 
         const Settings & settings;
@@ -136,6 +139,7 @@ namespace halloween
         MovingPlatforms & platforms;
         ZombieObjectManager & zombies;
         ZombieTextureManager & zombie_textures;
+        FrogTextureManager & frog_textures;
     };
 
 } // namespace halloween
