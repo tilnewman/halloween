@@ -185,15 +185,18 @@ namespace halloween
         return false;
     }
 
-    bool Slimes::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
+    const Harm Slimes::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
     {
-        bool wereAnyKilled{ false };
+        Harm harm;
+
         for (Slime & slime : m_slimes)
         {
             if (slime.sprite.getGlobalBounds().findIntersection(t_attackRect))
             {
                 slime.is_alive = false;
-                wereAnyKilled = true;
+
+                harm.did_hit = true;
+                harm.did_kill = true;
 
                 auto & anim{ m_deathAnims.emplace_back(slime.sprite) };
                 anim.sprite.setColor(sf::Color::Red);
@@ -204,14 +207,14 @@ namespace halloween
         }
 
         // remove any dead
-        if (wereAnyKilled)
+        if (harm.did_kill)
         {
             t_context.audio.play("metal-hit");
             t_context.audio.play("slime-death");
             std::erase_if(m_slimes, [](const Slime & t_slime) { return !t_slime.is_alive; });
         }
 
-        return wereAnyKilled;
+        return harm;
     }
 
 } // namespace halloween

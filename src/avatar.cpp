@@ -776,7 +776,7 @@ namespace halloween
         t_context.bats.attack(t_context, attackRect);
         t_context.zombies.attack(t_context, attackRect);
 
-        if (t_context.boss.attack(t_context, attackRect))
+        if (t_context.boss.attack(t_context, attackRect).wasAnyHarm())
         {
             bounceAwayFromBoss(t_context);
         }

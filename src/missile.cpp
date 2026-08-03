@@ -17,6 +17,7 @@
 #include "slime.hpp"
 #include "sound-player.hpp"
 #include "texture-loader.hpp"
+#include "zombies.hpp"
 
 #include <algorithm>
 
@@ -81,15 +82,10 @@ namespace halloween
                 continue;
             }
 
-            if (t_context.slimes.attack(t_context, missileRect) ||
-                t_context.bats.attack(t_context, missileRect))
-            {
-                wereAnyKilled = true;
-                missile.is_alive = false;
-                continue;
-            }
-
-            if (t_context.boss.attack(t_context, missileRect))
+            if (t_context.slimes.attack(t_context, missileRect).did_hit ||
+                t_context.bats.attack(t_context, missileRect).did_hit ||
+                t_context.boss.attack(t_context, missileRect).did_hit ||
+                t_context.zombies.attack(t_context, missileRect).did_hit)
             {
                 wereAnyKilled = true;
                 missile.is_alive = false;

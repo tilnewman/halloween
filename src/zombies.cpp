@@ -76,18 +76,20 @@ namespace halloween
         return false;
     }
 
-    bool ZombieObjectManager::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
+    const Harm ZombieObjectManager::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
     {
-        bool wereAnyKilled{ false };
+        Harm harm;
+
         for (Zombie & zombie : m_zombies)
         {
             if (zombie.isAlive() and not zombie.isBeingHit() and
                 zombie.collisionRect().findIntersection(t_attackRect))
             {
+                harm.did_hit = true;
                 zombie.hit(t_context);
                 if (not zombie.isAlive())
                 {
-                    wereAnyKilled = true;
+                    harm.did_kill = true;
 
                     ++t_context.stats.enemy_killed;
                     t_context.info_region.scoreAdjust(t_context.settings.kill_zombie_score);
@@ -95,7 +97,7 @@ namespace halloween
             }
         }
 
-        return wereAnyKilled;
+        return harm;
     }
 
 } // namespace halloween

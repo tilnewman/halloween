@@ -17,6 +17,15 @@ namespace halloween
 
     //
 
+    struct Harm
+    {
+        [[nodiscard]] constexpr bool wasAnyHarm() const noexcept { return (did_hit or did_kill); }
+        bool did_hit{ false };
+        bool did_kill{ false };
+    };
+
+    //
+
     struct IObjectManager
     {
         virtual ~IObjectManager() = default;

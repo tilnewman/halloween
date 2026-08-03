@@ -290,16 +290,25 @@ namespace halloween
             rect.findIntersection(bossRects.bottom));
     }
 
-    bool MushroomBoss::attack(const Context & context, const sf::FloatRect & attackRect)
+    const Harm MushroomBoss::attack(const Context & context, const sf::FloatRect & attackRect)
     {
+        Harm harm;
+
         if (!doesCollide(attackRect))
         {
-            return false;
+            return harm;
         }
+
+        harm.did_hit = true;
 
         if (m_hitPoints > 0)
         {
             --m_hitPoints;
+
+            if (0 == m_hitPoints)
+            {
+                harm.did_kill = true;
+            }
         }
 
         setState(BossState::Hit);
@@ -308,7 +317,7 @@ namespace halloween
         m_sprite.move({ 15.0f, 0.0f });
         keepInRegion();
 
-        return true;
+        return harm;
     }
 
     void MushroomBoss::keepInRegion()

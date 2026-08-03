@@ -260,15 +260,18 @@ namespace halloween
         return false;
     }
 
-    bool Bats::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
+    const Harm Bats::attack(const Context & t_context, const sf::FloatRect & t_attackRect)
     {
-        bool wereAnyKilled{ false };
+        Harm harm;
+
         for (Bat & bat : m_bats)
         {
             if (bat.sprite.getGlobalBounds().findIntersection(t_attackRect))
             {
                 bat.is_alive = false;
-                wereAnyKilled = true;
+
+                harm.did_hit = true;
+                harm.did_kill = true;
 
                 bat.sprite.setColor(sf::Color::Red);
                 m_deathAnims.emplace_back(bat.bat_index, bat.sprite);
@@ -279,14 +282,14 @@ namespace halloween
         }
 
         // remove any dead
-        if (wereAnyKilled)
+        if (harm.did_kill)
         {
             t_context.audio.play("metal-hit");
             t_context.audio.play("bat-death");
             std::erase_if(m_bats, [](const Bat & t_bat) { return !t_bat.is_alive; });
         }
 
-        return wereAnyKilled;
+        return harm;
     }
 
 } // namespace halloween

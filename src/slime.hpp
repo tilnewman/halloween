@@ -81,7 +81,7 @@ namespace halloween
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const final;
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
-        bool attack(const Context & t_context, const sf::FloatRect & t_attackRect);
+        const Harm attack(const Context & t_context, const sf::FloatRect & t_attackRect);
         constexpr std::size_t count() const noexcept { return m_slimes.size(); }
 
       private:
