@@ -3,9 +3,9 @@
 //
 // spiders.hpp
 //
-#include "spider-textures.hpp"
-// #include "spider.hpp"
 #include "object-manager.hpp"
+#include "spider-textures.hpp"
+#include "spider.hpp"
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -18,26 +18,6 @@ namespace halloween
 {
 
     struct Context;
-
-    //
-
-    class Spider
-    {
-      public:
-        Spider(const Context &, const sf::FloatRect &) {}
-
-        [[nodiscard]] const sf::FloatRect collisionRect() const { return {}; }
-        [[nodiscard]] const sf::FloatRect attackRect(const SpiderAnim) const { return {}; }
-        void update(const Context &, const float) {}
-        void moveWithMap(const sf::Vector2f &) {}
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const { return false; }
-        [[nodiscard]] constexpr bool isAlive() const noexcept { return (m_hitPoints > 0); }
-        void hit(const Context &) {}
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const {}
-
-      private:
-        std::size_t m_hitPoints;
-    };
 
     //
 
