@@ -70,7 +70,7 @@ namespace halloween
         Frog(const Context & t_context, const sf::FloatRect & t_rect);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
-        [[nodiscard]] const sf::FloatRect attackRect() const;
+        [[nodiscard]] const sf::FloatRect attackRect(const FrogAnim t_anim) const;
 
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
@@ -82,7 +82,7 @@ namespace halloween
       private:
         void turn();
         void setupTask(const FrogTask t_task, const FrogAnim t_anim, const std::size_t t_animRepeatCount);
-        void turnToFace(const sf::Vector2f & t_position);
+        bool turnToFace(const sf::Vector2f & t_position);
 
       private:
         FrogTask m_task;

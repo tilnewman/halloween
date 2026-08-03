@@ -114,17 +114,17 @@ namespace halloween
         return rect;
     }
 
-    const sf::FloatRect Frog::attackRect() const
+    const sf::FloatRect Frog::attackRect(const FrogAnim t_anim) const
     {
-        sf::FloatRect rect{ collisionRect() };
+        sf::FloatRect rect;
 
-        if (FrogAnim::AttackBite == m_anim)
+        if (FrogAnim::AttackBite == t_anim)
         {
-            util::scaleRectInPlace(rect, { 0.5f, 0.5f });
+            rect = util::scaleRectInPlaceCopy(collisionRect(), { 0.5f, 0.5f });
         }
-        else
+        else if (FrogAnim::AttackTounge == t_anim)
         {
-            util::scaleRectInPlace(rect, { 0.65f, 0.5f });
+            rect = util::scaleRectInPlaceCopy(collisionRect(), { 0.65f, 0.5f });
         }
 
         rect.position.x += rect.size.x;
@@ -221,21 +221,39 @@ namespace halloween
         }
         else if (FrogTask::Roar == m_task)
         {
-            setupTask(FrogTask::Chase, FrogAnim::Hop,1);
+            setupTask(FrogTask::Chase, FrogAnim::Hop, 1);
         }
-        else if (FrogTask::Chase == m_task)
+        else if ((FrogTask::Chase == m_task) or (FrogTask::Attack == m_task))
         {
             turnToFace(util::center(t_context.avatar.collisionRect()));
-            setupTask(FrogTask::Chase, FrogAnim::Hop, 1);
+
+            const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
+            if (attackRect(FrogAnim::AttackBite).findIntersection(avatarRect))
+            {
+                setupTask(FrogTask::Attack, FrogAnim::AttackBite, 1);
+            }
+            else if (attackRect(FrogAnim::AttackTounge).findIntersection(avatarRect))
+            {
+                setupTask(FrogTask::Attack, FrogAnim::AttackTounge, 1);
+            }
+            else
+            {
+                setupTask(FrogTask::Chase, FrogAnim::Hop, 1);
+            }
         }
     }
 
-    void Frog::turnToFace(const sf::Vector2f & t_position)
+    bool Frog::turnToFace(const sf::Vector2f & t_position)
     {
         const bool isPositionRight{ util::center(collisionRect()).x < t_position.x };
         if (isPositionRight != m_isFacingRight)
         {
             turn();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
