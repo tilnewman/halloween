@@ -30,7 +30,7 @@ namespace halloween
         , m_taskElapsedSec{ 0.0f }
         , m_rect{ t_rect }
         , m_isFacingRight{ t_context.random.boolean() }
-        , m_taskRepeatAnimCount{ 0 }
+        , m_animRepeatCount{ 0 }
         , m_debugText{ t_context.fonts.makeText(Font::General, 20, "") }
     {
         m_sprite.setTexture(t_context.frog_textures.textures(m_anim).at(0), true);
@@ -137,17 +137,33 @@ namespace halloween
         return rect;
     }
 
-    void Frog::setupTask(const FrogTask t_task, const FrogAnim t_anim)
+    void Frog::setupTask(
+        const FrogTask t_task, const FrogAnim t_anim, const std::size_t t_animRepeatCount)
     {
         m_task = t_task;
         m_anim = t_anim;
         m_frameIndex = 0;
         m_animElapsedSec = 0.0f;
         m_taskElapsedSec = 0.0f;
+        m_animRepeatCount = t_animRepeatCount;
     }
 
     void Frog::update(const Context & t_context, const float t_frameTimeSec)
     {
+        // update movement
+        if ((FrogTask::Chase == m_task) and (FrogAnim::Hop == m_anim))
+        {
+            if ((m_frameIndex > 8) and (m_frameIndex < 18))
+            {
+                const float hopSpeed{ 400.0f };
+
+                const float moveHoriz{ hopSpeed * t_frameTimeSec *
+                                       ((m_isFacingRight) ? 1.0f : -1.0f) };
+
+                m_sprite.move({ moveHoriz, 0.0f });
+            }
+        }
+
         // update animation
         m_animElapsedSec += t_frameTimeSec;
         const float timePerFrameSec{ timePerFrame(m_anim) };
@@ -160,9 +176,9 @@ namespace halloween
             {
                 m_frameIndex = 0;
 
-                if (m_taskRepeatAnimCount > 0)
+                if (m_animRepeatCount > 0)
                 {
-                    --m_taskRepeatAnimCount;
+                    --m_animRepeatCount;
                 }
             }
 
@@ -176,13 +192,12 @@ namespace halloween
             if (m_rect.findIntersection(avatarRect))
             {
                 turnToFace(util::center(avatarRect));
-                m_taskRepeatAnimCount = 3;
-                setupTask(FrogTask::Roar, FrogAnim::Roar);
+                setupTask(FrogTask::Roar, FrogAnim::Roar, 3);
             }
         }
 
         // only update tasks after an animation finishes repeating
-        if (m_taskRepeatAnimCount > 0)
+        if (m_animRepeatCount > 0)
         {
             return;
         }
@@ -195,19 +210,23 @@ namespace halloween
                 turn();
             }
 
-            m_taskRepeatAnimCount = t_context.random.fromTo(1_st, 2_st);
             if (t_context.random.boolean())
             {
-                setupTask(FrogTask::Idle, FrogAnim::Idle);
+                setupTask(FrogTask::Idle, FrogAnim::Idle, t_context.random.fromTo(1_st, 2_st));
             }
             else
             {
-                setupTask(FrogTask::Idle, FrogAnim::Eating);
+                setupTask(FrogTask::Idle, FrogAnim::Eating, t_context.random.fromTo(1_st, 2_st));
             }
         }
         else if (FrogTask::Roar == m_task)
         {
-            setupTask(FrogTask::Chase, FrogAnim::Hop);
+            setupTask(FrogTask::Chase, FrogAnim::Hop,1);
+        }
+        else if (FrogTask::Chase == m_task)
+        {
+            turnToFace(util::center(t_context.avatar.collisionRect()));
+            setupTask(FrogTask::Chase, FrogAnim::Hop, 1);
         }
     }
 

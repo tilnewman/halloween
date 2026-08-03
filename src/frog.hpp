@@ -4,6 +4,7 @@
 // frog.hpp
 //
 #include "frog-textures.hpp"
+#include "sliders.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -80,7 +81,7 @@ namespace halloween
 
       private:
         void turn();
-        void setupTask(const FrogTask t_task, const FrogAnim t_anim);
+        void setupTask(const FrogTask t_task, const FrogAnim t_anim, const std::size_t t_animRepeatCount);
         void turnToFace(const sf::Vector2f & t_position);
 
       private:
@@ -92,7 +93,7 @@ namespace halloween
         float m_taskElapsedSec;
         sf::FloatRect m_rect;
         bool m_isFacingRight;
-        std::size_t m_taskRepeatAnimCount;
+        std::size_t m_animRepeatCount;
 
         mutable sf::Text m_debugText;
     };
