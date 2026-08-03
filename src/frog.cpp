@@ -5,6 +5,7 @@
 //
 #include "frog.hpp"
 
+#include "avatar.hpp"
 #include "context.hpp"
 #include "fonts.hpp"
 #include "random.hpp"
@@ -168,6 +169,18 @@ namespace halloween
             m_sprite.setTexture(textures.at(m_frameIndex));
         }
 
+        // detect the player when getting too close
+        if (FrogTask::Idle == m_task)
+        {
+            const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
+            if (m_rect.findIntersection(avatarRect))
+            {
+                turnToFace(util::center(avatarRect));
+                m_taskRepeatAnimCount = 3;
+                setupTask(FrogTask::Roar, FrogAnim::Roar);
+            }
+        }
+
         // only update tasks after an animation finishes repeating
         if (m_taskRepeatAnimCount > 0)
         {
@@ -191,6 +204,19 @@ namespace halloween
             {
                 setupTask(FrogTask::Idle, FrogAnim::Eating);
             }
+        }
+        else if (FrogTask::Roar == m_task)
+        {
+            setupTask(FrogTask::Chase, FrogAnim::Hop);
+        }
+    }
+
+    void Frog::turnToFace(const sf::Vector2f & t_position)
+    {
+        const bool isPositionRight{ util::center(collisionRect()).x < t_position.x };
+        if (isPositionRight != m_isFacingRight)
+        {
+            turn();
         }
     }
 
