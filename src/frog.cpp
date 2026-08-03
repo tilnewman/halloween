@@ -168,6 +168,7 @@ namespace halloween
             m_sprite.setTexture(textures.at(m_frameIndex));
         }
 
+        // only update tasks after an animation finishes repeating
         if (m_taskRepeatAnimCount > 0)
         {
             return;
