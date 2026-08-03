@@ -29,6 +29,7 @@ namespace halloween
         , m_taskElapsedSec{ 0.0f }
         , m_rect{ t_rect }
         , m_isFacingRight{ t_context.random.boolean() }
+        , m_taskRepeatAnimCount{ 0 }
         , m_debugText{ t_context.fonts.makeText(Font::General, 20, "") }
     {
         m_sprite.setTexture(t_context.frog_textures.textures(m_anim).at(0), true);
@@ -135,11 +136,20 @@ namespace halloween
         return rect;
     }
 
+    void Frog::setupTask(const FrogTask t_task, const FrogAnim t_anim)
+    {
+        m_task = t_task;
+        m_anim = t_anim;
+        m_frameIndex = 0;
+        m_animElapsedSec = 0.0f;
+        m_taskElapsedSec = 0.0f;
+    }
+
     void Frog::update(const Context & t_context, const float t_frameTimeSec)
     {
         // update animation
         m_animElapsedSec += t_frameTimeSec;
-        const float timePerFrameSec{ 0.07f };
+        const float timePerFrameSec{ timePerFrame(m_anim) };
         if (m_animElapsedSec > timePerFrameSec)
         {
             m_animElapsedSec -= timePerFrameSec;
@@ -148,9 +158,38 @@ namespace halloween
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
+
+                if (m_taskRepeatAnimCount > 0)
+                {
+                    --m_taskRepeatAnimCount;
+                }
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex));
+        }
+
+        if (m_taskRepeatAnimCount > 0)
+        {
+            return;
+        }
+
+        // update task
+        if (FrogTask::Idle == m_task)
+        {
+            if (t_context.random.boolean())
+            {
+                turn();
+            }
+
+            m_taskRepeatAnimCount = t_context.random.fromTo(1_st, 2_st);
+            if (t_context.random.boolean())
+            {
+                setupTask(FrogTask::Idle, FrogAnim::Idle);
+            }
+            else
+            {
+                setupTask(FrogTask::Idle, FrogAnim::Eating);
+            }
         }
     }
 
@@ -169,20 +208,17 @@ namespace halloween
         {
             t_target.draw(m_sprite, t_states);
 
+            const sf::FloatRect collRect{ collisionRect() };
+
             std::string str{ toString(m_task) };
             str += ", ";
             str += toString(m_anim);
-            str += ", ";
-            str += ((m_isFacingRight) ? "right" : "left");
             m_debugText.setString(str);
             util::setOriginToPosition(m_debugText);
-
-            const sf::FloatRect collRect{ collisionRect() };
             m_debugText.setPosition({ util::right(collRect), collRect.position.y });
-
             t_target.draw(m_debugText, t_states);
 
-            util::drawRectangleShape(t_target, collRect, false, sf::Color::Red);
+            // util::drawRectangleShape(t_target, collRect, false, sf::Color::Red);
             // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
         }
     }

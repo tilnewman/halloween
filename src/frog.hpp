@@ -17,10 +17,11 @@ namespace halloween
 
     //
 
-    enum class FrogTask
+    enum class FrogTask : unsigned char
     {
         Idle,
-        Attack
+        Attack,
+        Hop
     };
 
     [[nodiscard]] constexpr std::string_view toString(const FrogTask t_task) noexcept
@@ -28,9 +29,31 @@ namespace halloween
         // clang-format off
         switch (t_task)
         {
-            case FrogTask::Idle:   { return "idle"; }
+            case FrogTask::Idle:   { return "idle";   }
             case FrogTask::Attack:
-            default:             { return "attack"; }
+            default:               { return "attack"; }
+        }
+        // clang-format on
+    }
+
+    //
+
+    [[nodiscard]] constexpr float timePerFrame(const FrogAnim t_anim) noexcept
+    {
+        // clang-format off
+        switch(t_anim)
+        {
+            case FrogAnim::Hop:          { return 0.09f;  }
+            case FrogAnim::AttackTounge: { return 0.06f;  }
+            case FrogAnim::AttackBite:   { return 0.065f; }
+            case FrogAnim::Death:        { return 0.085f; }
+            case FrogAnim::Hit:          { return 0.1f;   }
+            case FrogAnim::Dizzy:        
+            case FrogAnim::Eating:      
+            case FrogAnim::Idle:
+            case FrogAnim::Roar:         
+            case FrogAnim::Count:    
+            default:                     { return 0.07f;  }
         }
         // clang-format on
     }
@@ -54,6 +77,7 @@ namespace halloween
 
       private:
         void turn();
+        void setupTask(const FrogTask t_task, const FrogAnim t_anim);
 
       private:
         FrogTask m_task;
@@ -64,6 +88,7 @@ namespace halloween
         float m_taskElapsedSec;
         sf::FloatRect m_rect;
         bool m_isFacingRight;
+        std::size_t m_taskRepeatAnimCount;
 
         mutable sf::Text m_debugText;
     };
