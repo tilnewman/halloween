@@ -8,6 +8,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 namespace halloween
 {
@@ -21,6 +22,18 @@ namespace halloween
         Idle,
         Attack
     };
+
+    [[nodiscard]] constexpr std::string_view toString(const FrogTask t_task) noexcept
+    {
+        // clang-format off
+        switch (t_task)
+        {
+            case FrogTask::Idle:   { return "idle"; }
+            case FrogTask::Attack:
+            default:             { return "attack"; }
+        }
+        // clang-format on
+    }
 
     //
 
@@ -40,6 +53,9 @@ namespace halloween
             const;
 
       private:
+        void turn();
+
+      private:
         FrogTask m_task;
         FrogAnim m_anim;
         sf::Sprite m_sprite;
@@ -47,6 +63,9 @@ namespace halloween
         std::size_t m_frameIndex;
         float m_taskElapsedSec;
         sf::FloatRect m_rect;
+        bool m_isFacingRight;
+
+        mutable sf::Text m_debugText;
     };
 
 } // namespace halloween

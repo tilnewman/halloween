@@ -6,6 +6,8 @@
 #include "frog.hpp"
 
 #include "context.hpp"
+#include "fonts.hpp"
+#include "random.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
@@ -13,36 +15,131 @@
 
 #include <SFML/Graphics/Texture.hpp>
 
+#include <string>
+
 namespace halloween
 {
 
     Frog::Frog(const Context & t_context, const sf::FloatRect & t_rect)
         : m_task{ FrogTask::Idle }
-        , m_anim{ FrogAnim::Idle }
+        , m_anim{ FrogAnim::Hop }
         , m_sprite{ util::SfmlDefaults::instance().texture() }
         , m_animElapsedSec{ 0.0f }
         , m_frameIndex{ 0 }
         , m_taskElapsedSec{ 0.0f }
         , m_rect{ t_rect }
+        , m_isFacingRight{ t_context.random.boolean() }
+        , m_debugText{ t_context.fonts.makeText(Font::General, 20, "") }
     {
         m_sprite.setTexture(t_context.frog_textures.textures(m_anim).at(0), true);
+        m_sprite.setOrigin(m_sprite.getLocalBounds().size * 0.5f);
 
         const float scale{ 1.5f };
         m_sprite.setScale({ scale, scale });
 
         m_sprite.setPosition(
-            { util::center(t_rect).x, (util::bottom(t_rect) - m_sprite.getGlobalBounds().size.y) });
+            { util::center(t_rect).x, (util::bottom(t_rect) - collisionRect().size.y) });
+
+        m_sprite.move({ 0.0f, -(collisionRect().size.y * 0.225f) });
+
+        // the frog art shows him facing left
+        if (m_isFacingRight)
+        {
+            m_sprite.scale({ -1.0f, 1.0f });
+        }
     }
 
-    const sf::FloatRect Frog::collisionRect() const { return m_sprite.getGlobalBounds(); }
+    void Frog::turn()
+    {
+        m_isFacingRight = not m_isFacingRight;
+        m_sprite.scale({ -1.0f, 1.0f });
+    }
 
-    const sf::FloatRect Frog::attackRect() const { return collisionRect(); }
+    const sf::FloatRect Frog::collisionRect() const
+    {
+        sf::FloatRect rect{ m_sprite.getGlobalBounds() };
+        rect.position.y += (rect.size.y * 0.55f);
+        rect.size.y -= (rect.size.y * 0.5f);
+        util::scaleRectInPlace(rect, { 0.5f, 0.8f });
 
-    void Frog::update(const Context & t_context, const float t_frameTimeSec) 
+        if (FrogAnim::Hop == m_anim)
+        {
+            if (8 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.15f);
+            }
+            else if (9 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.45f);
+            }
+            else if (10 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.75f);
+            }
+            else if (11 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.95f);
+            }
+            else if (12 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 1.20f);
+            }
+            else if (13 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 1.1f);
+            }
+            else if (14 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.95f);
+            }
+            else if (15 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.8f);
+            }
+            else if (16 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.65f);
+            }
+            else if (17 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.4f);
+            }
+            else if (18 == m_frameIndex)
+            {
+                rect.position.y -= (rect.size.y * 0.2f);
+            }
+        }
+        return rect;
+    }
+
+    const sf::FloatRect Frog::attackRect() const
+    {
+        sf::FloatRect rect{ collisionRect() };
+
+        if (FrogAnim::AttackBite == m_anim)
+        {
+            util::scaleRectInPlace(rect, { 0.5f, 0.5f });
+        }
+        else
+        {
+            util::scaleRectInPlace(rect, { 0.65f, 0.5f });
+        }
+
+        rect.position.x += rect.size.x;
+
+        if (not m_isFacingRight)
+        {
+            rect.position.x -= (rect.size.x * 2.0f);
+        }
+
+        return rect;
+    }
+
+    void Frog::update(const Context & t_context, const float t_frameTimeSec)
     {
         // update animation
         m_animElapsedSec += t_frameTimeSec;
-        const float timePerFrameSec{ 0.075f };
+        const float timePerFrameSec{ 0.07f };
         if (m_animElapsedSec > timePerFrameSec)
         {
             m_animElapsedSec -= timePerFrameSec;
@@ -51,14 +148,6 @@ namespace halloween
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
-
-                std::size_t animIndex{ static_cast<std::size_t>(m_anim) };
-                if (++animIndex >= static_cast<std::size_t>(FrogAnim::Count))
-                {
-                    animIndex = 0;
-                }
-
-                m_anim = static_cast<FrogAnim>(animIndex);
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex));
@@ -79,6 +168,22 @@ namespace halloween
         if (t_context.layout.wholeRegion().findIntersection(m_sprite.getGlobalBounds()))
         {
             t_target.draw(m_sprite, t_states);
+
+            std::string str{ toString(m_task) };
+            str += ", ";
+            str += toString(m_anim);
+            str += ", ";
+            str += ((m_isFacingRight) ? "right" : "left");
+            m_debugText.setString(str);
+            util::setOriginToPosition(m_debugText);
+
+            const sf::FloatRect collRect{ collisionRect() };
+            m_debugText.setPosition({ util::right(collRect), collRect.position.y });
+
+            t_target.draw(m_debugText, t_states);
+
+            util::drawRectangleShape(t_target, collRect, false, sf::Color::Red);
+            // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
         }
     }
 
