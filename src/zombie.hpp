@@ -27,8 +27,8 @@ namespace halloween
             case ZombieAnim::Walk:   { return 0.05f;  }
             case ZombieAnim::Attack: { return 0.03f;  }
             case ZombieAnim::Death:  { return 0.05f;  }
-            case ZombieAnim::Hit:      
-            case ZombieAnim::Count:    
+            case ZombieAnim::Hit:
+            case ZombieAnim::Count:
             default:                 { return 0.01f; }
         }
         // clang-format on
