@@ -4,6 +4,7 @@
 // frogs.hpp
 //
 #include "frog-textures.hpp"
+#include "frog.hpp"
 #include "object-manager.hpp"
 
 #include <SFML/Graphics/Rect.hpp>
@@ -17,21 +18,6 @@ namespace halloween
 {
 
     struct Context;
-
-    //
-
-    class Frog
-    {
-      public:
-        Frog(const Context &, const sf::FloatRect &) {}
-
-        const sf::FloatRect collisionRect() const { return {}; }
-        const sf::FloatRect attackRect() const { return {}; }
-        void update(const Context &, const float) {}
-        void moveWithMap(const sf::Vector2f &) {}
-        void collideWithAvatar(const Context &, const sf::FloatRect &) {}
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const {}
-    };
 
     //
 

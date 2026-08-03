@@ -45,7 +45,7 @@ namespace halloween
             for (std::size_t pathIndex{ 0 }; pathIndex < imagePaths.size(); ++pathIndex)
             {
                 sf::Texture & texture{ textures.emplace_back() };
-                util::TextureLoader::load(texture, imagePaths.at(pathIndex));
+                util::TextureLoader::load(texture, imagePaths.at(pathIndex), true);
             }
         }
     }
