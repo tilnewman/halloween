@@ -404,15 +404,37 @@
          "name":"enemy",
          "objects":[
                 {
-                 "height":224,
+                 "height":128,
                  "id":74,
-                 "name":"frog",
+                 "name":"spider",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":1728,
-                 "x":544,
-                 "y":992
+                 "width":128,
+                 "x":640,
+                 "y":672
+                }, 
+                {
+                 "height":128,
+                 "id":78,
+                 "name":"spider",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":128,
+                 "x":480,
+                 "y":864
+                }, 
+                {
+                 "height":160,
+                 "id":79,
+                 "name":"spider",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":160,
+                 "x":1440,
+                 "y":704
                 }, 
                 {
                  "height":224,
@@ -432,7 +454,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":78,
+ "nextobjectid":80,
  "orientation":"orthogonal",
  "properties":[
         {

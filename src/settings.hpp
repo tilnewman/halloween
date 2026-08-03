@@ -59,10 +59,11 @@ namespace halloween
         int kill_boss_score{ 50 };
         int kill_zombie_score{ 25 };
         int kill_frog_score{ 40 };
+        int kill_spider_score{ 35 };
 
         sf::Color pause_screen_color{ 120, 110, 215 };
 
-        sf::Color smoke_color{0,255,0};
+        sf::Color smoke_color{ 0, 255, 0 };
         float smoke_animation_time_between_frames{ 0.08f };
     };
 

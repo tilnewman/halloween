@@ -42,6 +42,7 @@ namespace halloween
     class ObjectManagerList;
     class FrogObjectManager;
     class FrogTextureManager;
+    class SpiderObjectManager;
     class ZombieObjectManager;
     class ZombieTextureManager;
     class SpiderTextureManager;
@@ -81,7 +82,8 @@ namespace halloween
             ZombieTextureManager & t_zombieTextureManager,
             FrogTextureManager & t_frogTextureManager,
             FrogObjectManager & t_frogObjectManager,
-            SpiderTextureManager & t_spiderTextureManager)
+            SpiderTextureManager & t_spiderTextureManager,
+            SpiderObjectManager & t_spiderObjectManager)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -114,6 +116,7 @@ namespace halloween
             , frog_textures{ t_frogTextureManager }
             , frogs{ t_frogObjectManager }
             , spider_textures{ t_spiderTextureManager }
+            , spiders{ t_spiderObjectManager }
         {}
 
         const Settings & settings;
@@ -148,6 +151,7 @@ namespace halloween
         FrogTextureManager & frog_textures;
         FrogObjectManager & frogs;
         SpiderTextureManager & spider_textures;
+        SpiderObjectManager & spiders;
     };
 
 } // namespace halloween

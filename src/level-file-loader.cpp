@@ -20,6 +20,7 @@
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "smoke.hpp"
+#include "spiders.hpp"
 #include "spiked-ball.hpp"
 #include "zombies.hpp"
 
@@ -328,6 +329,10 @@ namespace halloween
             else if ("frog" == name)
             {
                 t_context.frogs.add(t_context, rect, name);
+            }
+            else if ("spider" == name)
+            {
+                t_context.spiders.add(t_context, rect, name);
             }
             else
             {
