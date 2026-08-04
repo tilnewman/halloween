@@ -81,6 +81,7 @@ namespace halloween
         sf::FloatRect m_webRect;
         sf::Vector2f m_sitPosition;
         bool m_hasDeathAnimFinished;
+        float m_descendSpeed;
     };
 
 } // namespace halloween

@@ -29,6 +29,7 @@ namespace halloween
         , m_webRect{ t_rect.position, { t_rect.size.x, t_rect.size.x } }
         , m_sitPosition{}
         , m_hasDeathAnimFinished{ false }
+        , m_descendSpeed{ t_context.random.fromTo(20.0f, 40.0f) }
     {
         //
         util::setOriginToCenter(m_webSprite);
@@ -109,8 +110,7 @@ namespace halloween
         // update tasks
         if (SpiderTask::Descend == m_task)
         {
-            const float descendSpeed{ 30.0f };
-            m_spiderSprite.move({ 0.0f, (descendSpeed * t_frameTimeSec) });
+            m_spiderSprite.move({ 0.0f, (m_descendSpeed * t_frameTimeSec) });
 
             const float distFromGround{ std::abs(
                 util::bottom(m_mapRect) - util::bottom(m_spiderSprite.getGlobalBounds())) };
@@ -122,7 +122,7 @@ namespace halloween
         }
         else if (SpiderTask::Ascend == m_task)
         {
-            const float ascendSpeed{ -60.0f };
+            const float ascendSpeed{ m_descendSpeed * -2.0f };
             m_spiderSprite.move({ 0.0f, (ascendSpeed * t_frameTimeSec) });
 
             const float distFromWeb{ std::abs(
@@ -156,8 +156,7 @@ namespace halloween
         m_sitPosition += t_move;
     }
 
-    bool Spider::doesAvatarCollideWithAnyAndDie(
-        const Context & t_context, const sf::FloatRect & t_avatarRect)
+    bool Spider::doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect & t_avatarRect)
     {
         if (isAlive() and t_avatarRect.findIntersection(collisionRect()))
         {
