@@ -55,7 +55,7 @@ namespace halloween
         m_killCollisions.clear();
         m_acidCollisions.clear();
         m_waterCollisions.clear();
-        t_context.managers.clearAll();
+        t_context.managers.clear();
         m_farthestHorizMapPixel = 0.0f;
         m_farthestHorizTraveled = 0.0f;
         m_traveledVert = 0.0f;
@@ -158,7 +158,7 @@ namespace halloween
                 }
             }
 
-            t_context.managers.moveAllWithMap(move);
+            t_context.managers.moveWithMap(move);
 
             populateVisibleVerts(t_context.layout);
             return true;
