@@ -56,6 +56,7 @@ namespace halloween
         , m_deadDelaySec{ 0.0f }
         , m_willDie{ false }
         , m_timeSinceLastThrowSec{ 0.0f }
+        , m_hasAttackedAlready{ false }
         , m_collisionRectCache{}
     {
         m_collisionRectCache.reserve(1'000);
