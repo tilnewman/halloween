@@ -275,7 +275,7 @@ namespace halloween
         exitCollisions(t_context);
         handleAttackingEnemies(t_context);
 
-        t_context.managers.collideAllWithAvatar(t_context, collisionRect());
+        t_context.managers.collideWithAvatar(t_context, collisionRect());
 
         //
         // The normal collision rect is small, and makes gathering coins unfair.
@@ -670,7 +670,7 @@ namespace halloween
         }
 
         m_collisionRectCache.clear();
-        t_context.managers.appendAllCollisions(m_collisionRectCache);
+        t_context.managers.appendCollisions(m_collisionRectCache);
         for (const sf::FloatRect & collRect : m_collisionRectCache)
         {
             const auto intersectionOpt{ avatarRect.findIntersection(collRect) };

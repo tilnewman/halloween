@@ -17,18 +17,21 @@
 namespace halloween
 {
 
-    Fly::Fly(const Context & t_context, const sf::FloatRect & t_rect)
+    Fly::Fly(
+        const Context & t_context,
+        const sf::FloatRect & t_rect, const FlyTextureManager & t_textureManager)
         : m_type{ t_context.random.from(
               { FlyType::Beholder, FlyType::Chomp, FlyType::Face, FlyType::Horn, FlyType::Peek }) }
         , m_anim{ FlyAnim::Fly }
         , m_task{ FlyTask::Wander }
-        , m_sprite{ t_context.fly_textures.textures(m_type, m_anim).at(0) }
+        , m_sprite{ t_textureManager.textures(m_type, m_anim).at(0) }
         , m_animElapsedSec{ 0.0f }
         , m_rect{ t_rect }
         , m_frameIndex{ 0 }
         , m_hitPoints{ 1 }
         , m_isFacingRight{ t_context.random.boolean() }
         , m_hasDeathAnimFinished{ false }
+        , m_textureManager{ t_textureManager }
     {
         util::setOriginToCenter(m_sprite);
 
@@ -82,7 +85,7 @@ namespace halloween
         {
             m_animElapsedSec -= timePerFrameSec;
 
-            const auto & textures{ t_context.fly_textures.textures(m_type, m_anim) };
+            const auto & textures{ m_textureManager.textures(m_type, m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;

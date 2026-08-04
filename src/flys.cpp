@@ -17,12 +17,10 @@ namespace halloween
         : m_flys{}
     {}
 
-    void FlyObjectManager::setup(const Context &) {}
-
     void FlyObjectManager::add(
         const Context & t_context, const sf::FloatRect & t_region, const std::string &)
     {
-        m_flys.emplace_back(t_context, t_region);
+        m_flys.emplace_back(t_context, t_region, m_textureManager);
     }
 
     void FlyObjectManager::update(const Context & t_context, const float t_frameTimeSec)

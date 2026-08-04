@@ -85,8 +85,9 @@ namespace halloween
         Bats();
         virtual ~Bats() final = default;
 
+        void setup(const Context &) final;
+        void teardown() final {}
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Context & t_context) final;
 
         void
             add(const Context & t_context,
@@ -101,10 +102,10 @@ namespace halloween
 
         void moveWithMap(const sf::Vector2f &) final;
         void collideWithAvatar(const Context &, const sf::FloatRect &) final {}
-        
+
         bool doesAvatarCollideWithAnyAndDie(
             const Context & t_context, const sf::FloatRect & t_avatarRect) final;
-        
+
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
         const Harm attack(const Context & t_context, const sf::FloatRect & t_attackRect);

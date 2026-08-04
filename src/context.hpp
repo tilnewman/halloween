@@ -40,7 +40,6 @@ namespace halloween
     class ScreenRegions;
     class MovingPlatforms;
     class FlyObjectManager;
-    class FlyTextureManager;
     class ObjectManagerList;
     class FrogObjectManager;
     class FrogTextureManager;
@@ -86,7 +85,6 @@ namespace halloween
             FrogObjectManager & t_frogObjectManager,
             SpiderTextureManager & t_spiderTextureManager,
             SpiderObjectManager & t_spiderObjectManager,
-            FlyTextureManager & t_flyTextureManager,
             FlyObjectManager & t_flyObjectManager)
             : settings{ t_settings }
             , window{ t_window }
@@ -121,7 +119,6 @@ namespace halloween
             , frogs{ t_frogObjectManager }
             , spider_textures{ t_spiderTextureManager }
             , spiders{ t_spiderObjectManager }
-            , fly_textures{ t_flyTextureManager }
             , flies{ t_flyObjectManager }
         {}
 
@@ -158,7 +155,6 @@ namespace halloween
         FrogObjectManager & frogs;
         SpiderTextureManager & spider_textures;
         SpiderObjectManager & spiders;
-        FlyTextureManager & fly_textures;
         FlyObjectManager & flies;
     };
 

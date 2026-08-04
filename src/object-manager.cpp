@@ -20,7 +20,7 @@ namespace halloween
 
     void ObjectManagerList::add(IObjectManager & t_manager) { m_managers.push_back(t_manager); }
 
-    void ObjectManagerList::clearAll()
+    void ObjectManagerList::clear()
     {
         for (auto & manager : m_managers)
         {
@@ -28,7 +28,7 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::setupAll(const Context & t_context)
+    void ObjectManagerList::setup(const Context & t_context)
     {
         for (auto & manager : m_managers)
         {
@@ -36,7 +36,15 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::updateAll(const Context & t_context, const float t_frameTimeSec)
+    void ObjectManagerList::teardown()
+    {
+        for (auto & manager : m_managers)
+        {
+            manager.get().teardown();
+        }
+    }
+
+    void ObjectManagerList::update(const Context & t_context, const float t_frameTimeSec)
     {
         for (auto & manager : m_managers)
         {
@@ -44,7 +52,7 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::drawAllBeforeMap(
+    void ObjectManagerList::drawBeforeMap(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (auto & manager : m_managers)
@@ -56,7 +64,7 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::drawAllAfterMap(
+    void ObjectManagerList::drawAfterMap(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         for (auto & manager : m_managers)
@@ -68,7 +76,7 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::moveAllWithMap(const sf::Vector2f & t_move)
+    void ObjectManagerList::moveWithMap(const sf::Vector2f & t_move)
     {
         for (auto & manager : m_managers)
         {
@@ -76,7 +84,7 @@ namespace halloween
         }
     }
 
-    void ObjectManagerList::collideAllWithAvatar(
+    void ObjectManagerList::collideWithAvatar(
         const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         for (auto & manager : m_managers)
@@ -100,7 +108,7 @@ namespace halloween
         return didAnyCollideAndCauseDeath;
     }
 
-    void ObjectManagerList::appendAllCollisions(std::vector<sf::FloatRect> & t_rects) const
+    void ObjectManagerList::appendCollisions(std::vector<sf::FloatRect> & t_rects) const
     {
         for (auto & manager : m_managers)
         {

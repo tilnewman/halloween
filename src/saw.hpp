@@ -34,10 +34,11 @@ namespace halloween
     {
       public:
         Saws();
-        virtual ~Saws() final = default;
+        ~Saws() final = default;
 
+        void setup(const Context &) final;
+        void teardown() final {}
         bool willDrawBeforeMap() const final { return true; }
-        void setup(const Context & t_context) final;
         
         void
             add(const Context & t_context,

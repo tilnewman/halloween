@@ -29,7 +29,9 @@ namespace halloween
     class Fly
     {
       public:
-        Fly(const Context & t_context, const sf::FloatRect & t_rect);
+        Fly(const Context & t_context,
+            const sf::FloatRect & t_rect,
+            const FlyTextureManager & t_textureManager);
 
         void update(const Context & t_context, const float m_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
@@ -59,6 +61,7 @@ namespace halloween
         std::size_t m_hitPoints;
         bool m_isFacingRight;
         bool m_hasDeathAnimFinished;
+        const FlyTextureManager & m_textureManager;
     };
 } // namespace halloween
 

@@ -27,9 +27,10 @@ namespace halloween
         FlyObjectManager();
         ~FlyObjectManager() override = default;
 
+        void setup(const Context & t_context) final { m_textureManager.setup(t_context); }
+        void teardown() final { m_textureManager.teardown(); }
         bool willDrawBeforeMap() const final { return false; }
         void clear() final { m_flys.clear(); }
-        void setup(const Context & t_context) final;
 
         void
             add(const Context & t_context,
@@ -51,6 +52,7 @@ namespace halloween
 
       private:
         std::vector<Fly> m_flys;
+        FlyTextureManager m_textureManager;
     };
 
 } // namespace halloween

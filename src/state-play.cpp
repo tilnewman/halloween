@@ -81,7 +81,7 @@ namespace halloween
         t_context.info_region.update(t_context, t_frameTimeSec);
         t_context.missiles.update(t_context, t_frameTimeSec);
         t_context.owl_calls.update(t_context, t_frameTimeSec);
-        t_context.managers.updateAll(t_context, t_frameTimeSec);
+        t_context.managers.update(t_context, t_frameTimeSec);
         t_context.avatar.update(t_context, t_frameTimeSec);
     }
 
@@ -120,9 +120,9 @@ namespace halloween
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
         m_backgroundImage.draw(t_target, t_states);
-        t_context.managers.drawAllBeforeMap(t_context, t_target, t_states);
+        t_context.managers.drawBeforeMap(t_context, t_target, t_states);
         t_context.level.draw(t_context, t_target, t_states);
-        t_context.managers.drawAllAfterMap(t_context, t_target, t_states);
+        t_context.managers.drawAfterMap(t_context, t_target, t_states);
         t_context.missiles.draw(t_target, t_states);
         t_context.info_region.draw(t_target, t_states);
         t_context.avatar.draw(t_target, t_states);

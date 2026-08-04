@@ -46,8 +46,9 @@ namespace halloween
         FireSpouts();
         virtual ~FireSpouts() final = default;
 
+        void setup(const Context &) final;
+        void teardown() final {}
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Context & t_context) final;
 
         void
             add(const Context & t_context,

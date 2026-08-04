@@ -50,10 +50,11 @@ namespace halloween
     {
       public:
         Ghosts();
-        virtual ~Ghosts() final = default;
+        ~Ghosts() final = default;
 
+        void setup(const Context &) final;
+        void teardown() final {}
         bool willDrawBeforeMap() const final { return false; }
-        void setup(const Context & t_context) final;
         void clear() final;
 
         void
