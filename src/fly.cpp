@@ -85,7 +85,7 @@ namespace halloween
         }
 
         // notice when player gets too close
-        if ((FlyTask::Wander == m_task) and
+        if (not t_context.avatar.isDead() and (FlyTask::Wander == m_task) and
             t_context.avatar.collisionRect().findIntersection(m_rect))
         {
             // TODO play 'fly noticed the player' sfx
@@ -132,14 +132,24 @@ namespace halloween
         m_rect.position += t_move;
     }
 
-    [[nodiscard]] bool Fly::doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect &)
+    [[nodiscard]] bool
+        Fly::doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect & t_avatarRect)
     {
-        return false;
+        if (isAlive() and
+            t_avatarRect.findIntersection(util::scaleRectInPlaceCopy(collisionRect(), 1.05f)))
+        {
+            setupTask(FlyTask::Wander, FlyAnim::Fly);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     [[nodiscard]] const sf::FloatRect Fly::collisionRect() const
     {
-        return util::scaleRectInPlaceCopy(m_sprite.getGlobalBounds(), 0.75f);
+        return util::scaleRectInPlaceCopy(m_sprite.getGlobalBounds(), { 0.45f, 0.75f });
     }
 
     void Fly::draw(
@@ -148,6 +158,7 @@ namespace halloween
         if (t_context.layout.wholeRegion().findIntersection(collisionRect()))
         {
             t_target.draw(m_sprite, t_states);
+            // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
         }
     }
 
