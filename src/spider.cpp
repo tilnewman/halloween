@@ -16,11 +16,14 @@
 
 namespace halloween
 {
-    Spider::Spider(const Context & t_context, const sf::FloatRect & t_rect)
+    Spider::Spider(
+        const Context & t_context,
+        const sf::FloatRect & t_rect,
+        const SpiderTextureManager & t_textureManager)
         : m_anim{ SpiderAnim::Idle }
         , m_type{ t_context.random.from({ SpiderType::Mom, SpiderType::Dad, SpiderType::Child }) }
         , m_task{ SpiderTask::Descend }
-        , m_webSprite{ t_context.spider_textures.webTexture() }
+        , m_webSprite{ t_textureManager.webTexture() }
         , m_spiderSprite{ util::SfmlDefaults::instance().texture() }
         , m_animElapsedSec{ 0.0f }
         , m_frameIndex{ 0 }
@@ -30,6 +33,7 @@ namespace halloween
         , m_sitPosition{}
         , m_hasDeathAnimFinished{ false }
         , m_descendSpeed{ t_context.random.fromTo(20.0f, 40.0f) }
+        , m_textureManager{ t_textureManager }
     {
         //
         util::setOriginToCenter(m_webSprite);
@@ -40,7 +44,7 @@ namespace halloween
         m_sitPosition = m_webSprite.getPosition();
 
         //
-        m_spiderSprite.setTexture(t_context.spider_textures.textures(m_type, m_anim).at(0), true);
+        m_spiderSprite.setTexture(m_textureManager.textures(m_type, m_anim).at(0), true);
         util::setOriginToCenter(m_spiderSprite);
         const float scale{ (SpiderType::Child == m_type) ? 0.4f : 0.25f };
         m_spiderSprite.scale({ scale, scale });
@@ -93,7 +97,7 @@ namespace halloween
         {
             m_animElapsedSec -= timePerFrame;
 
-            const auto & textures{ t_context.spider_textures.textures(m_type, m_anim) };
+            const auto & textures{ m_textureManager.textures(m_type, m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
@@ -131,9 +135,7 @@ namespace halloween
             if (distFromWeb < 5.0f)
             {
                 setupTask(SpiderTask::Wait, SpiderAnim::Idle);
-
-                changeTextureWithoutMovingSprite(
-                    t_context.spider_textures.textures(m_type, m_anim).at(0));
+                changeTextureWithoutMovingSprite(m_textureManager.textures(m_type, m_anim).at(0));
             }
         }
     }

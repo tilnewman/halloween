@@ -46,7 +46,6 @@ namespace halloween
     class SpiderObjectManager;
     class ZombieObjectManager;
     class ZombieTextureManager;
-    class SpiderTextureManager;
     class FireSpoutLargeManager;
 
     struct Context
@@ -83,7 +82,6 @@ namespace halloween
             ZombieTextureManager & t_zombieTextureManager,
             FrogTextureManager & t_frogTextureManager,
             FrogObjectManager & t_frogObjectManager,
-            SpiderTextureManager & t_spiderTextureManager,
             SpiderObjectManager & t_spiderObjectManager,
             FlyObjectManager & t_flyObjectManager)
             : settings{ t_settings }
@@ -117,7 +115,6 @@ namespace halloween
             , zombie_textures{ t_zombieTextureManager }
             , frog_textures{ t_frogTextureManager }
             , frogs{ t_frogObjectManager }
-            , spider_textures{ t_spiderTextureManager }
             , spiders{ t_spiderObjectManager }
             , flies{ t_flyObjectManager }
         {}
@@ -153,7 +150,6 @@ namespace halloween
         ZombieTextureManager & zombie_textures;
         FrogTextureManager & frog_textures;
         FrogObjectManager & frogs;
-        SpiderTextureManager & spider_textures;
         SpiderObjectManager & spiders;
         FlyObjectManager & flies;
     };

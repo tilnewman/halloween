@@ -17,12 +17,10 @@ namespace halloween
         : m_spiders{}
     {}
 
-    void SpiderObjectManager::setup(const Context &) {}
-
     void SpiderObjectManager::add(
         const Context & t_context, const sf::FloatRect & t_region, const std::string &)
     {
-        m_spiders.emplace_back(t_context, t_region);
+        m_spiders.emplace_back(t_context, t_region, m_textureManager);
     }
 
     void SpiderObjectManager::update(const Context & t_context, const float t_frameTimeSec)

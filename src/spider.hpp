@@ -49,7 +49,10 @@ namespace halloween
     class Spider
     {
       public:
-        Spider(const Context & t_context, const sf::FloatRect & t_rect);
+        Spider(
+            const Context & t_context,
+            const sf::FloatRect & t_rect,
+            const SpiderTextureManager & t_textureManager);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
@@ -82,6 +85,7 @@ namespace halloween
         sf::Vector2f m_sitPosition;
         bool m_hasDeathAnimFinished;
         float m_descendSpeed;
+        const SpiderTextureManager & m_textureManager;
     };
 
 } // namespace halloween

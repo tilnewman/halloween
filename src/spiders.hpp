@@ -25,10 +25,10 @@ namespace halloween
     {
       public:
         SpiderObjectManager();
-        ~SpiderObjectManager() override = default;
+        ~SpiderObjectManager() final = default;
 
-        void setup(const Context &) final;
-        void teardown() final {}
+        void setup(const Context & t_context) final { m_textureManager.setup(t_context); }
+        void teardown() final { m_textureManager.teardown(); }
         bool willDrawBeforeMap() const final { return false; }
         void clear() final { m_spiders.clear(); }
 
@@ -52,6 +52,7 @@ namespace halloween
 
       private:
         std::vector<Spider> m_spiders;
+        SpiderTextureManager m_textureManager;
     };
 
 } // namespace halloween

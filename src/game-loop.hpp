@@ -33,7 +33,6 @@
 #include "slime.hpp"
 #include "smoke.hpp"
 #include "sound-player.hpp"
-#include "spider-textures.hpp"
 #include "spiders.hpp"
 #include "spiked-ball.hpp"
 #include "state-machine.hpp"
@@ -100,7 +99,6 @@ namespace halloween
         std::unique_ptr<ZombieTextureManager> m_zombieTexturesUPtr;
         std::unique_ptr<FrogTextureManager> m_frogTexturesUPtr;
         std::unique_ptr<FrogObjectManager> m_frogsUPtr;
-        std::unique_ptr<SpiderTextureManager> m_spiderTexturesUPtr;
         std::unique_ptr<SpiderObjectManager> m_spidersUPtr;
         std::unique_ptr<FlyObjectManager> m_fliesUPtr;
 
