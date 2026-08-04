@@ -42,10 +42,35 @@ namespace halloween
         }
     }
 
-    void Fly::update(const Context & t_context, const float m_frameTimeSec) 
+    void Fly::turn()
     {
+        m_isFacingRight = not m_isFacingRight;
+        m_sprite.scale({ -1.0f, 1.0f });
+    }
+
+    void Fly::setupTask(const FlyTask t_task, const FlyAnim t_anim)
+    {
+        m_task = t_task;
+        m_anim = t_anim;
+        m_animElapsedSec = 0.0f;
+        m_frameIndex = 0;
+    }
+
+    void Fly::turnToFacePlayer(const Context & t_context)
+    {
+        const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
+        const bool isPlayerRight{ util::center(collisionRect()).x < util::center(avatarRect).x };
+        if (isPlayerRight != m_isFacingRight)
+        {
+            turn();
+        }
+    }
+
+    void Fly::update(const Context & t_context, const float m_frameTimeSec)
+    {
+        // animate
         m_animElapsedSec += m_frameTimeSec;
-        const float timePerFrameSec{ 0.08f };
+        const float timePerFrameSec{ 0.08f * ((FlyTask::Chase == m_task) ? 0.5f : 1.0f) };
         if (m_animElapsedSec > timePerFrameSec)
         {
             m_animElapsedSec -= timePerFrameSec;
@@ -54,16 +79,50 @@ namespace halloween
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
-
-                std::size_t animIndex{ static_cast<std::size_t>(m_anim) };
-                if (++animIndex >= static_cast<std::size_t>(FlyAnim::Count))
-                {
-                    animIndex = 0;
-                }
-                m_anim = static_cast<FlyAnim>(animIndex);
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex), true);
+        }
+
+        // notice when player gets too close
+        if ((FlyTask::Wander == m_task) and
+            t_context.avatar.collisionRect().findIntersection(m_rect))
+        {
+            // TODO play 'fly noticed the player' sfx
+            turnToFacePlayer(t_context);
+            setupTask(FlyTask::Chase, FlyAnim::Fly);
+        }
+
+        // update tasks
+        if (FlyTask::Wander == m_task)
+        {
+            const float wanderSpeed{ (m_isFacingRight) ? 30.0f : -30.0f };
+            const sf::Vector2f move{ (wanderSpeed * m_frameTimeSec), 0.0f };
+            m_sprite.move(move);
+
+            const sf::FloatRect collRect{ collisionRect() };
+            if ((collRect.position.x < m_rect.position.x) or
+                (util::right(collRect) > util::right(m_rect)))
+            {
+                m_sprite.move(move * -1.0f);
+                turn();
+            }
+        }
+        else if (FlyTask::Chase == m_task)
+        {
+            turnToFacePlayer(t_context);
+
+            const float chaseSpeed{ (m_isFacingRight) ? 60.0f : -60.0f };
+            const sf::Vector2f move{ (chaseSpeed * m_frameTimeSec), 0.0f };
+            m_sprite.move(move);
+
+            const sf::FloatRect collRect{ collisionRect() };
+            if ((collRect.position.x < m_rect.position.x) or
+                (util::right(collRect) > util::right(m_rect)))
+            {
+                m_sprite.move(move * -1.0f);
+                setupTask(FlyTask::Wander, FlyAnim::Fly);
+            }
         }
     }
 

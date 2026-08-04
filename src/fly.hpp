@@ -46,6 +46,11 @@ namespace halloween
         const Harm hit(const Context & t_context);
 
       private:
+        void turn();
+        void setupTask(const FlyTask t_task, const FlyAnim t_anim);
+        void turnToFacePlayer(const Context & t_context);
+
+      private:
         FlyType m_type;
         FlyAnim m_anim;
         FlyTask m_task;
