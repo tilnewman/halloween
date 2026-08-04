@@ -22,6 +22,7 @@
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "spiders.hpp"
 #include "spiked-ball.hpp"
 #include "state-machine.hpp"
 #include "states.hpp"
@@ -103,6 +104,7 @@ namespace halloween
     {
         t_target.draw(m_sprite, t_states);
         m_blood.draw(t_target, t_states);
+        // util::drawRectangleShape(t_target, attackCollisionRect(), false, sf::Color::Yellow);
     }
 
     const sf::FloatRect Avatar::collisionRect() const
@@ -213,7 +215,7 @@ namespace halloween
         rect.position.y += hairVertAdj;
         rect.size.y -= (1.5f * hairVertAdj);
 
-        rect.size.x *= 0.4f;
+        rect.size.x *= 0.6f;
 
         if (m_isFacingRight)
         {
@@ -781,7 +783,8 @@ namespace halloween
         if (t_context.slimes.attack(t_context, attackRect).wasAnyHarm() ||
             t_context.bats.attack(t_context, attackRect).wasAnyHarm() ||
             t_context.zombies.attack(t_context, attackRect).wasAnyHarm() ||
-            t_context.frogs.attack(t_context, attackRect).wasAnyHarm())
+            t_context.frogs.attack(t_context, attackRect).wasAnyHarm() ||
+            t_context.spiders.attack(t_context, attackRect).wasAnyHarm())
         {
             m_hasAttackedAlready = true;
         }
