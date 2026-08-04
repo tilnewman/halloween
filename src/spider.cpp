@@ -6,6 +6,7 @@
 #include "spider.hpp"
 
 #include "avatar.hpp"
+#include "check-macros.hpp"
 #include "context.hpp"
 #include "random.hpp"
 #include "screen-regions.hpp"
@@ -19,11 +20,12 @@ namespace halloween
     Spider::Spider(
         const Context & t_context,
         const sf::FloatRect & t_rect,
-        const SpiderTextureManager & t_textureManager)
+        const sf::Texture & t_webTexture,
+        const std::vector<std::vector<std::vector<sf::Texture>>> & t_texturesVecVec)
         : m_anim{ SpiderAnim::Idle }
         , m_type{ t_context.random.from({ SpiderType::Mom, SpiderType::Dad, SpiderType::Child }) }
         , m_task{ SpiderTask::Descend }
-        , m_webSprite{ t_textureManager.webTexture() }
+        , m_webSprite{ t_webTexture }
         , m_spiderSprite{ util::SfmlDefaults::instance().texture() }
         , m_animElapsedSec{ 0.0f }
         , m_frameIndex{ 0 }
@@ -33,7 +35,7 @@ namespace halloween
         , m_sitPosition{}
         , m_hasDeathAnimFinished{ false }
         , m_descendSpeed{ t_context.random.fromTo(20.0f, 40.0f) }
-        , m_textureManager{ t_textureManager }
+        , m_texturesVecVec{ t_texturesVecVec }
     {
         //
         util::setOriginToCenter(m_webSprite);
@@ -44,7 +46,7 @@ namespace halloween
         m_sitPosition = m_webSprite.getPosition();
 
         //
-        m_spiderSprite.setTexture(m_textureManager.textures(m_type, m_anim).at(0), true);
+        m_spiderSprite.setTexture(getTextures(m_type, m_anim).at(0), true);
         util::setOriginToCenter(m_spiderSprite);
         const float scale{ (SpiderType::Child == m_type) ? 0.4f : 0.25f };
         m_spiderSprite.scale({ scale, scale });
@@ -97,7 +99,7 @@ namespace halloween
         {
             m_animElapsedSec -= timePerFrame;
 
-            const auto & textures{ m_textureManager.textures(m_type, m_anim) };
+            const auto & textures{ getTextures(m_type, m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
@@ -135,7 +137,7 @@ namespace halloween
             if (distFromWeb < 5.0f)
             {
                 setupTask(SpiderTask::Wait, SpiderAnim::Idle);
-                changeTextureWithoutMovingSprite(m_textureManager.textures(m_type, m_anim).at(0));
+                changeTextureWithoutMovingSprite(getTextures(m_type, m_anim).at(0));
             }
         }
     }
@@ -217,6 +219,29 @@ namespace halloween
                 // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
             }
         }
+    }
+
+    const std::vector<sf::Texture> &
+        Spider::getTextures(const SpiderType t_type, const SpiderAnim t_action) const
+    {
+        const std::size_t typeIndex{ static_cast<std::size_t>(t_type) };
+
+        M_CHECK(
+            (typeIndex < m_texturesVecVec.size()),
+            "textures(" << toString(t_type) << ", " << toString(t_action)
+                        << ") when t_type=" << typeIndex << " is out of range!");
+
+        const std::vector<std::vector<sf::Texture>> & textureActions{ m_texturesVecVec.at(
+            typeIndex) };
+
+        const std::size_t actionIndex{ static_cast<std::size_t>(t_action) };
+
+        M_CHECK(
+            (actionIndex < textureActions.size()),
+            "textures(" << toString(t_type) << ", " << toString(t_action)
+                        << ") when t_action=" << actionIndex << " is out of range!");
+
+        return textureActions.at(actionIndex);
     }
 
 } // namespace halloween

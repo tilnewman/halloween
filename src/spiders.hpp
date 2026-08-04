@@ -4,13 +4,13 @@
 // spiders.hpp
 //
 #include "object-manager.hpp"
-#include "spider-textures.hpp"
 #include "spider.hpp"
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 #include <vector>
 
@@ -27,8 +27,8 @@ namespace halloween
         SpiderObjectManager();
         ~SpiderObjectManager() final = default;
 
-        void setup(const Context & t_context) final { m_textureManager.setup(t_context); }
-        void teardown() final { m_textureManager.teardown(); }
+        void setup(const Context & t_context) final;
+        void teardown() final { m_texturesVecVec.clear(); }
         bool willDrawBeforeMap() const final { return false; }
         void clear() final { m_spiders.clear(); }
 
@@ -43,7 +43,7 @@ namespace halloween
 
         bool doesAvatarCollideWithAnyAndDie(
             const Context & t_context, const sf::FloatRect & t_avatarRect) final;
-        
+
         void appendCollisions(std::vector<sf::FloatRect> & t_rects) const final;
         const Harm attack(const Context & t_context, const sf::FloatRect & t_attackRect);
 
@@ -52,7 +52,8 @@ namespace halloween
 
       private:
         std::vector<Spider> m_spiders;
-        SpiderTextureManager m_textureManager;
+        sf::Texture m_webTexture;
+        std::vector<std::vector<std::vector<sf::Texture>>> m_texturesVecVec;
     };
 
 } // namespace halloween

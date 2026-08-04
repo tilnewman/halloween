@@ -3,11 +3,10 @@
 //
 // spider.hpp
 //
-#include "spider-textures.hpp"
-
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 #include <vector>
 
@@ -17,6 +16,54 @@ namespace halloween
     struct Context;
 
     //
+
+    enum class SpiderType : unsigned char
+    {
+        Mom = 0,
+        Dad,
+        Child,
+        Count
+    };
+
+    [[nodiscard]] constexpr std::string_view toString(const SpiderType t_type) noexcept
+    {
+        // clang-format off
+        switch(t_type)
+        {
+            case SpiderType::Mom:   { return "mom";   }
+            case SpiderType::Dad:   { return "dad";   }
+            case SpiderType::Child: { return "child"; }
+            case SpiderType::Count:    
+            default:   { return "unknown_spidertype"; }
+        }
+        // clang-format on
+    }
+
+    //
+
+    enum class SpiderAnim : unsigned char
+    {
+        Idle = 0,
+        Move,
+        Attack,
+        Death,
+        Count
+    };
+
+    [[nodiscard]] constexpr std::string_view toString(const SpiderAnim t_anim) noexcept
+    {
+        // clang-format off
+        switch(t_anim)
+        {
+            case SpiderAnim::Idle:   { return "idle";   }
+            case SpiderAnim::Move:   { return "move";   }
+            case SpiderAnim::Attack: { return "attack"; }
+            case SpiderAnim::Death:  { return "death";  }
+            case SpiderAnim::Count:    
+            default:     { return "unknown_spideranim"; }
+        }
+        // clang-format on
+    }
 
     enum class SpiderTask : unsigned char
     {
@@ -52,7 +99,8 @@ namespace halloween
         Spider(
             const Context & t_context,
             const sf::FloatRect & t_rect,
-            const SpiderTextureManager & t_textureManager);
+            const sf::Texture & t_webTexture,
+            const std::vector<std::vector<std::vector<sf::Texture>>> & t_texturesVecVec);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
@@ -71,6 +119,9 @@ namespace halloween
         void setupTask(const SpiderTask t_task, const SpiderAnim t_anim);
         void changeTextureWithoutMovingSprite(const sf::Texture & t_texture);
 
+        [[nodiscard]] const std::vector<sf::Texture> &
+            getTextures(const SpiderType t_type, const SpiderAnim t_action) const;
+
       private:
         SpiderAnim m_anim;
         SpiderType m_type;
@@ -85,7 +136,7 @@ namespace halloween
         sf::Vector2f m_sitPosition;
         bool m_hasDeathAnimFinished;
         float m_descendSpeed;
-        const SpiderTextureManager & m_textureManager;
+        const std::vector<std::vector<std::vector<sf::Texture>>> & m_texturesVecVec;
     };
 
 } // namespace halloween
