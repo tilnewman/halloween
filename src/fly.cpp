@@ -42,7 +42,30 @@ namespace halloween
         }
     }
 
-    void Fly::update(const Context &, const float) {}
+    void Fly::update(const Context & t_context, const float m_frameTimeSec) 
+    {
+        m_animElapsedSec += m_frameTimeSec;
+        const float timePerFrameSec{ 0.08f };
+        if (m_animElapsedSec > timePerFrameSec)
+        {
+            m_animElapsedSec -= timePerFrameSec;
+
+            const auto & textures{ t_context.fly_textures.textures(m_type, m_anim) };
+            if (++m_frameIndex >= textures.size())
+            {
+                m_frameIndex = 0;
+
+                std::size_t animIndex{ static_cast<std::size_t>(m_anim) };
+                if (++animIndex >= static_cast<std::size_t>(FlyAnim::Count))
+                {
+                    animIndex = 0;
+                }
+                m_anim = static_cast<FlyAnim>(animIndex);
+            }
+
+            m_sprite.setTexture(textures.at(m_frameIndex), true);
+        }
+    }
 
     void Fly::moveWithMap(const sf::Vector2f & t_move)
     {
