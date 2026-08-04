@@ -177,6 +177,14 @@ namespace halloween
                                        ((m_isFacingRight) ? 1.0f : -1.0f) };
 
                 m_sprite.move({ moveHoriz, 0.0f });
+
+                const sf::FloatRect collRect{ collisionRect() };
+                if ((collRect.position.x < m_rect.position.x) or
+                    (util::right(collRect) > util::right(m_rect)))
+                {
+                    m_sprite.move({ -moveHoriz, 0.0f });
+                    setupTask(FrogTask::Idle, FrogAnim::Idle, t_context.random.fromTo(1_st, 2_st));
+                }
             }
         }
 
@@ -196,13 +204,13 @@ namespace halloween
                 {
                     --m_animRepeatCount;
                 }
-                
+
                 if (FrogAnim::Death == m_anim)
                 {
                     m_hasFinishedDeathAnim = true;
                     return;
                 }
-                
+
                 if (FrogTask::Hit == m_task)
                 {
                     return;
@@ -335,13 +343,13 @@ namespace halloween
 
             if (0 == m_hitPoints)
             {
-                //t_context.audio.play("frog-death");
+                // t_context.audio.play("frog-death");
                 setupTask(FrogTask::Hit, FrogAnim::Death, 1);
                 m_sprite.setColor(sf::Color(100, 0, 0));
             }
             else
             {
-                //t_context.audio.play("frog-hit");
+                // t_context.audio.play("frog-hit");
                 setupTask(FrogTask::Hit, FrogAnim::Hit, 1);
             }
         }

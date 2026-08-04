@@ -415,37 +415,15 @@
                  "y":672
                 }, 
                 {
-                 "height":96,
-                 "id":78,
-                 "name":"fly",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":480,
-                 "x":544,
-                 "y":1120
-                }, 
-                {
-                 "height":96,
-                 "id":80,
-                 "name":"fly",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":512,
-                 "x":1024,
-                 "y":1120
-                }, 
-                {
-                 "height":96,
+                 "height":160,
                  "id":81,
-                 "name":"fly",
+                 "name":"frog",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":384,
-                 "x":1536,
-                 "y":1120
+                 "width":1184,
+                 "x":544,
+                 "y":1056
                 }, 
                 {
                  "height":448,
