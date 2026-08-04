@@ -125,7 +125,7 @@ namespace halloween
     void FireSpoutLargeManager::collideWithAvatar(const Context &, const sf::FloatRect &) {}
 
     bool FireSpoutLargeManager::doesAvatarCollideWithAnyAndDie(
-        const sf::FloatRect & t_avatarRect) const
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         for (const FireSpoutLargeAnim & anim : m_anims)
         {

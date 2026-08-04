@@ -56,7 +56,9 @@ namespace halloween
 
         void collideWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect) final;
 
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const final;
+        bool doesAvatarCollideWithAnyAndDie(
+            const Context & t_context, const sf::FloatRect & t_avatarRect) final;
+        
         void appendCollisions(std::vector<sf::FloatRect> & t_rects) const final;
 
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)

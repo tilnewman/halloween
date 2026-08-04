@@ -40,7 +40,8 @@ namespace halloween
         }
     }
 
-    bool FrogObjectManager::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool FrogObjectManager::doesAvatarCollideWithAnyAndDie(
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         for (const Frog & frog : m_frogs)
         {

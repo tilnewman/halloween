@@ -244,9 +244,10 @@ namespace halloween
         }
     }
 
-    bool Bats::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool Bats::doesAvatarCollideWithAnyAndDie(
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
-        for (const Bat & bat : m_bats)
+        for (Bat & bat : m_bats)
         {
             const sf::FloatRect batCollRect{ util::scaleRectInPlaceCopy(
                 bat.sprite.getGlobalBounds(), { 0.45f, 0.7f }) };

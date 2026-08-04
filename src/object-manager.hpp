@@ -45,7 +45,9 @@ namespace halloween
         virtual void
             collideWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect) = 0;
 
-        virtual bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const = 0;
+        virtual bool doesAvatarCollideWithAnyAndDie(
+            const Context & t_context, const sf::FloatRect & t_avatarRect) = 0;
+
         virtual void appendCollisions(std::vector<sf::FloatRect> & t_rects) const = 0;
 
         virtual void draw(
@@ -79,7 +81,10 @@ namespace halloween
 
         void moveAllWithMap(const sf::Vector2f & t_move);
         void collideAllWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect);
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
+        
+        bool doesAvatarCollideWithAnyAndDie(
+            const Context & t_context, const sf::FloatRect & t_avatarRect);
+
         void appendAllCollisions(std::vector<sf::FloatRect> & t_rects) const;
 
       private:

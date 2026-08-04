@@ -283,7 +283,7 @@ namespace halloween
         t_context.coins.collideWithAvatar(
             t_context, util::scaleRectInPlaceCopy(collisionRect(), { 1.3f, 1.75f }));
 
-        if (t_context.managers.doesAvatarCollideWithAnyAndDie(collisionRect()))
+        if (t_context.managers.doesAvatarCollideWithAnyAndDie(t_context, collisionRect()))
         {
             triggerDeath(t_context);
         }

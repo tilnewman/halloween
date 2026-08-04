@@ -54,7 +54,10 @@ namespace halloween
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
+
+        bool doesAvatarCollideWithAnyAndDie(
+            const Context & t_context, const sf::FloatRect & t_avatarRect);
+
         [[nodiscard]] constexpr bool isAlive() const noexcept { return (m_hitPoints > 0); }
         void hit(const Context & t_context);
 

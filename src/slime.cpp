@@ -56,8 +56,7 @@ namespace halloween
 
     void Slimes::clear() { m_slimes.clear(); }
 
-    void Slimes::add(
-        const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
+    void Slimes::add(const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
     {
         const float speed{ t_context.random.fromTo(20.0f, 75.0f) };
 
@@ -172,7 +171,7 @@ namespace halloween
         }
     }
 
-    bool Slimes::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool Slimes::doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect & t_avatarRect)
     {
         for (const Slime & slime : m_slimes)
         {

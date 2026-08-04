@@ -67,7 +67,12 @@ namespace halloween
 
         void moveWithMap(const sf::Vector2f & t_move) final;
         void collideWithAvatar(const Context & t_context, const sf::FloatRect & t_avatarRect) final;
-        bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const final { return false; }
+
+        bool doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect &) final
+        {
+            return false;
+        }
+
         void appendCollisions(std::vector<sf::FloatRect> &) const final {}
 
       private:

@@ -309,7 +309,7 @@ namespace halloween
         }
     }
 
-    bool Zombie::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool Zombie::doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect & t_avatarRect)
     {
         if (ZombieAnim::Attack == m_anim)
         {

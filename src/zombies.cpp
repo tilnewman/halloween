@@ -63,11 +63,11 @@ namespace halloween
     }
 
     bool ZombieObjectManager::doesAvatarCollideWithAnyAndDie(
-        const sf::FloatRect & t_avatarRect) const
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
-        for (const Zombie & zombie : m_zombies)
+        for (Zombie & zombie : m_zombies)
         {
-            if (zombie.doesAvatarCollideWithAnyAndDie(t_avatarRect))
+            if (zombie.doesAvatarCollideWithAnyAndDie(t_context, t_avatarRect))
             {
                 return true;
             }

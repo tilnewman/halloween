@@ -156,9 +156,18 @@ namespace halloween
         m_sitPosition += t_move;
     }
 
-    bool Spider::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool Spider::doesAvatarCollideWithAnyAndDie(
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
-        return (isAlive() and t_avatarRect.findIntersection(collisionRect()).has_value());
+        if (isAlive() and t_avatarRect.findIntersection(collisionRect()))
+        {
+            setupTask(SpiderTask::Ascend, SpiderAnim::Move);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void Spider::hit(const Context & t_context)
@@ -171,7 +180,7 @@ namespace halloween
 
             if (not isAlive())
             {
-                // TODO t_context.audio.play("spider-death");
+                t_context.audio.play("spider-death");
                 setupTask(SpiderTask::Death, SpiderAnim::Death);
             }
             else

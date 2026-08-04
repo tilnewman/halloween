@@ -13,9 +13,7 @@ namespace halloween
 {
 
     PlatformAnim::PlatformAnim(
-        const Context & t_context,
-        const sf::Texture & t_texture,
-        const sf::FloatRect & t_rect)
+        const Context & t_context, const sf::Texture & t_texture, const sf::FloatRect & t_rect)
         : is_horiz{ t_rect.size.x > t_rect.size.y }
         , sprite{ t_texture }
         , rect{ t_rect }
@@ -111,7 +109,7 @@ namespace halloween
 
     void MovingPlatforms::collideWithAvatar(const Context &, const sf::FloatRect &) {}
 
-    bool MovingPlatforms::doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const
+    bool MovingPlatforms::doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect &)
     {
         return false;
     }

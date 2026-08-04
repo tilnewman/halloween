@@ -85,12 +85,13 @@ namespace halloween
         }
     }
 
-    bool ObjectManagerList::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool ObjectManagerList::doesAvatarCollideWithAnyAndDie(
+        const Context & t_context, const sf::FloatRect & t_avatarRect)
     {
         bool didAnyCollideAndCauseDeath{ false };
         for (auto & manager : m_managers)
         {
-            if (manager.get().doesAvatarCollideWithAnyAndDie(t_avatarRect))
+            if (manager.get().doesAvatarCollideWithAnyAndDie(t_context, t_avatarRect))
             {
                 didAnyCollideAndCauseDeath = true;
             }

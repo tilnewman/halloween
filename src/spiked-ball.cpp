@@ -40,8 +40,7 @@ namespace halloween
             m_texture, (t_context.settings.media_path / "image" / "spiked-ball.png"));
     }
 
-    void SpikedBalls::add(
-        const Context &, const sf::FloatRect & t_region, const std::string &)
+    void SpikedBalls::add(const Context &, const sf::FloatRect & t_region, const std::string &)
     {
         SpikedBall & ball{ m_balls.emplace_back(m_texture) };
         ball.sprite.setScale(m_scale);
@@ -111,7 +110,8 @@ namespace halloween
         }
     }
 
-    bool SpikedBalls::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool SpikedBalls::doesAvatarCollideWithAnyAndDie(
+        const Context &, const sf::FloatRect & t_avatarRect)
     {
         for (const SpikedBall & ball : m_balls)
         {

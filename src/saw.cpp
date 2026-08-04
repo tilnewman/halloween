@@ -72,7 +72,7 @@ namespace halloween
         }
     }
 
-    bool Saws::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool Saws::doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect & t_avatarRect)
     {
         const sf::Vector2f avatarCenterPos = util::center(t_avatarRect);
 

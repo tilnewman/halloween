@@ -41,11 +41,12 @@ namespace halloween
         }
     }
 
-    bool SpiderObjectManager::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    bool SpiderObjectManager::doesAvatarCollideWithAnyAndDie(
+        const Context & t_context, const sf::FloatRect & t_avatarRect) 
     {
-        for (const Spider & spider : m_spiders)
+        for (Spider & spider : m_spiders)
         {
-            if (spider.doesAvatarCollideWithAnyAndDie(t_avatarRect))
+            if (spider.doesAvatarCollideWithAnyAndDie(t_context, t_avatarRect))
             {
                 return true;
             }
