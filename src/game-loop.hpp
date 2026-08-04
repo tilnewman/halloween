@@ -12,6 +12,7 @@
 #include "fire-spout-large.hpp"
 #include "fire-spout.hpp"
 #include "fly-textures.hpp"
+#include "flys.hpp"
 #include "fonts.hpp"
 #include "framerate-display.hpp"
 #include "frog-textures.hpp"
@@ -103,6 +104,7 @@ namespace halloween
         std::unique_ptr<SpiderTextureManager> m_spiderTexturesUPtr;
         std::unique_ptr<SpiderObjectManager> m_spidersUPtr;
         std::unique_ptr<FlyTextureManager> m_flyTexturesUPtr;
+        std::unique_ptr<FlyObjectManager> m_fliesUPtr;
 
         std::unique_ptr<Context> m_contextUPtr;
     };

@@ -60,6 +60,7 @@ namespace halloween
         int kill_zombie_score{ 25 };
         int kill_frog_score{ 40 };
         int kill_spider_score{ 35 };
+        int kill_fly_score{ 12 };
 
         sf::Color pause_screen_color{ 120, 110, 215 };
 

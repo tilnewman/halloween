@@ -9,6 +9,7 @@
 #include "dart.hpp"
 #include "fire-spout-large.hpp"
 #include "fire-spout.hpp"
+#include "flys.hpp"
 #include "frogs.hpp"
 #include "ghost.hpp"
 #include "level.hpp"
@@ -333,6 +334,10 @@ namespace halloween
             else if ("spider" == name)
             {
                 t_context.spiders.add(t_context, rect, name);
+            }
+            else if ("fly" == name)
+            {
+                t_context.flies.add(t_context, rect, name);
             }
             else
             {
