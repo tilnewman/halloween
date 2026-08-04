@@ -3,7 +3,6 @@
 //
 // flys.hpp
 //
-#include "fly-textures.hpp"
 #include "object-manager.hpp"
 #include "fly.hpp"
 
@@ -27,8 +26,8 @@ namespace halloween
         FlyObjectManager();
         ~FlyObjectManager() override = default;
 
-        void setup(const Context & t_context) final { m_textureManager.setup(t_context); }
-        void teardown() final { m_textureManager.teardown(); }
+        void setup(const Context & t_context) final;
+        void teardown() final { m_texturesVecVec.clear(); }
         bool willDrawBeforeMap() const final { return false; }
         void clear() final { m_flys.clear(); }
 
@@ -52,7 +51,7 @@ namespace halloween
 
       private:
         std::vector<Fly> m_flys;
-        FlyTextureManager m_textureManager;
+        std::vector<std::vector<std::vector<sf::Texture>>> m_texturesVecVec;
     };
 
 } // namespace halloween

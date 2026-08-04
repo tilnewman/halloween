@@ -6,6 +6,7 @@
 #include "fly.hpp"
 
 #include "avatar.hpp"
+#include "check-macros.hpp"
 #include "context.hpp"
 #include "random.hpp"
 #include "screen-regions.hpp"
@@ -19,20 +20,22 @@ namespace halloween
 
     Fly::Fly(
         const Context & t_context,
-        const sf::FloatRect & t_rect, const FlyTextureManager & t_textureManager)
+        const sf::FloatRect & t_rect,
+        const std::vector<std::vector<std::vector<sf::Texture>>> & t_texturesVecVec)
         : m_type{ t_context.random.from(
               { FlyType::Beholder, FlyType::Chomp, FlyType::Face, FlyType::Horn, FlyType::Peek }) }
         , m_anim{ FlyAnim::Fly }
         , m_task{ FlyTask::Wander }
-        , m_sprite{ t_textureManager.textures(m_type, m_anim).at(0) }
+        , m_sprite{ util::SfmlDefaults::instance().texture() }
         , m_animElapsedSec{ 0.0f }
         , m_rect{ t_rect }
         , m_frameIndex{ 0 }
         , m_hitPoints{ 1 }
         , m_isFacingRight{ t_context.random.boolean() }
         , m_hasDeathAnimFinished{ false }
-        , m_textureManager{ t_textureManager }
+        , m_texturesVecVec{ t_texturesVecVec }
     {
+        m_sprite.setTexture(getTextures(m_type, m_anim).at(0), true);
         util::setOriginToCenter(m_sprite);
 
         const float scale{ 0.5f };
@@ -85,7 +88,7 @@ namespace halloween
         {
             m_animElapsedSec -= timePerFrameSec;
 
-            const auto & textures{ m_textureManager.textures(m_type, m_anim) };
+            const auto & textures{ getTextures(m_type, m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
@@ -171,7 +174,8 @@ namespace halloween
     void Fly::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        if (not m_hasDeathAnimFinished && t_context.layout.wholeRegion().findIntersection(collisionRect()))
+        if (not m_hasDeathAnimFinished &&
+            t_context.layout.wholeRegion().findIntersection(collisionRect()))
         {
             t_target.draw(m_sprite, t_states);
             // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
@@ -188,12 +192,12 @@ namespace halloween
 
             if (not isAlive())
             {
-                //t_context.audio.play("spider-death");
+                // t_context.audio.play("spider-death");
 
                 // the artwork sucks so this is needed
                 m_sprite.scale({ 0.75f, 0.75f });
                 m_sprite.move({ 0.0f, -(m_sprite.getGlobalBounds().size.y * 0.25f) });
-                
+
                 setupTask(FlyTask::Death, FlyAnim::Hit);
             }
             else
@@ -202,6 +206,28 @@ namespace halloween
                 // setupTask(SpiderTask::Hit, ZombieAnim::Hit);
             }
         }
+    }
+
+    const std::vector<sf::Texture> &
+        Fly::getTextures(const FlyType t_type, const FlyAnim t_action) const
+    {
+        const std::size_t typeIndex{ static_cast<std::size_t>(t_type) };
+
+        M_CHECK(
+            (typeIndex < m_texturesVecVec.size()),
+            "textures(" << toString(t_type) << ", " << toString(t_action)
+                        << ") when t_type=" << typeIndex << " is out of range!");
+
+        const std::vector<std::vector<sf::Texture>> & textureActions{ m_texturesVecVec.at(typeIndex) };
+
+        const std::size_t actionIndex{ static_cast<std::size_t>(t_action) };
+
+        M_CHECK(
+            (actionIndex < textureActions.size()),
+            "textures(" << toString(t_type) << ", " << toString(t_action)
+                        << ") when t_action=" << actionIndex << " is out of range!");
+
+        return textureActions.at(actionIndex);
     }
 
 } // namespace halloween

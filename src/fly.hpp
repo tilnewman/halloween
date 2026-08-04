@@ -3,7 +3,6 @@
 //
 // fly.hpp
 //
-#include "fly-textures.hpp"
 #include "object-manager.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
@@ -26,12 +25,64 @@ namespace halloween
 
     //
 
+    enum class FlyType : unsigned char
+    {
+        Beholder = 0,
+        Chomp,
+        Face,
+        Horn,
+        Peek,
+        Count
+    };
+
+    [[nodiscard]] constexpr std::string_view toString(const FlyType t_type) noexcept
+    {
+        // clang-format off
+        switch(t_type)
+        {
+            case FlyType::Beholder: { return "beholder"; }
+            case FlyType::Chomp:    { return "chomp";    }
+            case FlyType::Face:     { return "face";     }
+            case FlyType::Horn:     { return "horn";     }
+            case FlyType::Peek:     { return "Peek";     }
+            case FlyType::Count:    
+            default:         { return "unknown_flytype"; }
+        }
+        // clang-format on
+    }
+
+    //
+
+    enum class FlyAnim : unsigned char
+    {
+        Fly = 0,
+        Hit,
+        Death,
+        Count
+    };
+
+    [[nodiscard]] constexpr std::string_view toString(const FlyAnim t_anim) noexcept
+    {
+        // clang-format off
+        switch(t_anim)
+        {
+            case FlyAnim::Fly:   { return "fly";   }
+            case FlyAnim::Hit:   { return "hit";   }
+            case FlyAnim::Death: { return "death"; }
+            case FlyAnim::Count:    
+            default:   { return "unknown_flyanim"; }
+        }
+        // clang-format on
+    }
+
+    //
+
     class Fly
     {
       public:
         Fly(const Context & t_context,
             const sf::FloatRect & t_rect,
-            const FlyTextureManager & t_textureManager);
+            const std::vector<std::vector<std::vector<sf::Texture>>> & t_texturesVecVec);
 
         void update(const Context & t_context, const float m_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
@@ -50,6 +101,9 @@ namespace halloween
         void setupTask(const FlyTask t_task, const FlyAnim t_anim);
         void turnToFacePlayer(const Context & t_context);
 
+        [[nodiscard]] const std::vector<sf::Texture> &
+            getTextures(const FlyType t_type, const FlyAnim t_action) const;
+
       private:
         FlyType m_type;
         FlyAnim m_anim;
@@ -61,7 +115,7 @@ namespace halloween
         std::size_t m_hitPoints;
         bool m_isFacingRight;
         bool m_hasDeathAnimFinished;
-        const FlyTextureManager & m_textureManager;
+        const std::vector<std::vector<std::vector<sf::Texture>>> & m_texturesVecVec;
     };
 } // namespace halloween
 
