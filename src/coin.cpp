@@ -139,9 +139,10 @@ namespace halloween
     void Coins::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
         for (const Coin & coin : m_coins)
         {
-            if (t_context.layout.mapRegion().findIntersection(coin.sprite.getGlobalBounds()))
+            if (mapRect.findIntersection(coin.sprite.getGlobalBounds()))
             {
                 t_target.draw(coin.sprite, t_states);
             }
@@ -149,7 +150,7 @@ namespace halloween
 
         for (const CoinAnim & coinAnim : m_animations)
         {
-            if (t_context.layout.mapRegion().findIntersection(coinAnim.sprite.getGlobalBounds()))
+            if (mapRect.findIntersection(coinAnim.sprite.getGlobalBounds()))
             {
                 t_target.draw(coinAnim.sprite, t_states);
             }
@@ -174,7 +175,7 @@ namespace halloween
         bool wereAnyCollected{ false };
         for (Coin & coin : m_coins)
         {
-            const sf::FloatRect coinRect = coin.sprite.getGlobalBounds();
+            const sf::FloatRect coinRect{ coin.sprite.getGlobalBounds() };
 
             if (t_avatarRect.findIntersection(coinRect))
             {
