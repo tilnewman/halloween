@@ -18,13 +18,41 @@ namespace halloween
 
     //
 
+    enum class SpiderTask : unsigned char
+    {
+        Wait,
+        Descend,
+        Attack,
+        Ascend,
+        Hit
+    };
+
+    //
+
+    [[nodiscard]] constexpr float timePerFrameSec(const SpiderAnim t_anim) noexcept
+    {
+        // clang-format off
+        switch(t_anim)
+        {
+            case SpiderAnim::Move:   { return 0.1f; }
+            case SpiderAnim::Attack: { return 0.1f; }
+            case SpiderAnim::Death:  { return 0.1f; }
+            case SpiderAnim::Idle:  
+            case SpiderAnim::Count:
+            default:                 { return 0.05f; }
+        }
+        // clang-format on
+    }
+
+    //
+
     class Spider
     {
       public:
         Spider(const Context & t_context, const sf::FloatRect & t_rect);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
-        [[nodiscard]] const sf::FloatRect attackRect(const SpiderAnim) const;
+        [[nodiscard]] const sf::FloatRect attackRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
@@ -35,14 +63,20 @@ namespace halloween
             const;
 
       private:
+        void setupTask(const SpiderTask t_task, const SpiderAnim t_anim);
+        void changeTextureWithoutMovingSprite(const sf::Texture & t_texture);
+
+      private:
         SpiderAnim m_anim;
         SpiderType m_type;
+        SpiderTask m_task;
         sf::Sprite m_webSprite;
         sf::Sprite m_spiderSprite;
-        float m_animElapsedTimeSec;
+        float m_animElapsedSec;
         std::size_t m_frameIndex;
         std::size_t m_hitPoints;
         sf::FloatRect m_rect;
+        sf::Vector2f m_sitPosition;
     };
 
 } // namespace halloween

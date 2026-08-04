@@ -5,6 +5,7 @@
 //
 #include "spider.hpp"
 
+#include "avatar.hpp"
 #include "context.hpp"
 #include "random.hpp"
 #include "screen-regions.hpp"
@@ -17,12 +18,14 @@ namespace halloween
     Spider::Spider(const Context & t_context, const sf::FloatRect & t_rect)
         : m_anim{ SpiderAnim::Idle }
         , m_type{ t_context.random.from({ SpiderType::Mom, SpiderType::Dad, SpiderType::Child }) }
+        , m_task{ SpiderTask::Wait }
         , m_webSprite{ t_context.spider_textures.webTexture() }
         , m_spiderSprite{ util::SfmlDefaults::instance().texture() }
-        , m_animElapsedTimeSec{ 0.0f }
+        , m_animElapsedSec{ 0.0f }
         , m_frameIndex{ 0 }
         , m_hitPoints{ 2 }
         , m_rect{ t_rect }
+        , m_sitPosition{}
     {
         //
         util::setOriginToCenter(m_webSprite);
@@ -30,12 +33,14 @@ namespace halloween
         m_webSprite.setPosition(util::center(m_rect));
         m_webSprite.setRotation(sf::degrees(t_context.random.fromTo(0.0f, 360.0f)));
         m_webSprite.setColor(sf::Color(255, 255, 255, 127));
+        m_sitPosition = m_webSprite.getPosition();
 
         //
         m_spiderSprite.setTexture(t_context.spider_textures.textures(m_type, m_anim).at(0), true);
         util::setOriginToCenter(m_spiderSprite);
-        util::fitAndCenterInside(m_spiderSprite, m_rect);
-        m_spiderSprite.setPosition(util::center(m_rect));
+        const float scale{ (SpiderType::Child == m_type) ? 0.45f : 0.3f };
+        m_spiderSprite.scale({ scale, scale });
+        m_spiderSprite.setPosition(m_sitPosition);
 
         if (t_context.random.boolean())
         {
@@ -43,17 +48,113 @@ namespace halloween
         }
     }
 
-    const sf::FloatRect Spider::collisionRect() const { return m_spiderSprite.getGlobalBounds(); }
+    const sf::FloatRect Spider::collisionRect() const
+    {
+        return util::scaleRectInPlaceCopy(m_spiderSprite.getGlobalBounds(), { 0.4f, 0.65f });
+    }
 
-    const sf::FloatRect Spider::attackRect(const SpiderAnim) const { return collisionRect(); }
+    const sf::FloatRect Spider::attackRect() const
+    {
+        sf::FloatRect rect{ collisionRect() };
+        util::scaleRectInPlace(rect, { 0.75f, 0.5f });
+        rect.position.y += (rect.size.y * 0.75f);
+        return rect;
+    }
 
-    void Spider::update(const Context &, const float) {}
+    void Spider::setupTask(const SpiderTask t_task, const SpiderAnim t_anim)
+    {
+        m_task = t_task;
+        m_anim = t_anim;
+        m_animElapsedSec = 0.0f;
+        m_frameIndex = 0;
+    }
+
+    void Spider::update(const Context & t_context, const float t_frameTimeSec)
+    {
+        // stay waiting until the player comes close enough
+        if (SpiderTask::Wait == m_task)
+        {
+            const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
+
+            const float horizDistanceToPlayer{ std::abs(
+                util::center(m_rect).x - util::right(avatarRect)) };
+
+            const float heightFromGround{ util::bottom(avatarRect) - util::center(m_rect).y };
+
+            if (horizDistanceToPlayer < heightFromGround)
+            {
+                // TODO play 'spider spots the player' sfx
+                setupTask(SpiderTask::Descend, SpiderAnim::Idle);
+            }
+
+            return;
+        }
+
+        // animate
+        m_animElapsedSec += t_frameTimeSec;
+        const float timePerFrame{ timePerFrameSec(m_anim) };
+        if (m_animElapsedSec > timePerFrame)
+        {
+            m_animElapsedSec -= timePerFrame;
+
+            const auto & textures{ t_context.spider_textures.textures(m_type, m_anim) };
+            if (++m_frameIndex >= textures.size())
+            {
+                m_frameIndex = 0;
+            }
+
+            changeTextureWithoutMovingSprite(textures.at(m_frameIndex));
+        }
+
+        // update tasks
+        if (SpiderTask::Descend == m_task)
+        {
+            const float descendSpeed{ 30.0f };
+            m_spiderSprite.move({ 0.0f, (descendSpeed * t_frameTimeSec) });
+
+            const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
+
+            const float distFromGround{ std::abs(
+                util::bottom(avatarRect) - util::bottom(m_spiderSprite.getGlobalBounds())) };
+
+            if (distFromGround < 5.0f)
+            {
+                setupTask(SpiderTask::Ascend, SpiderAnim::Move);
+            }
+        }
+        else if (SpiderTask::Ascend == m_task)
+        {
+            const float ascendSpeed{ -50.0f };
+            m_spiderSprite.move({ 0.0f, (ascendSpeed * t_frameTimeSec) });
+
+            const float distFromWeb{ std::abs(
+                util::center(m_spiderSprite.getGlobalBounds()).y - m_sitPosition.y) };
+
+            if (distFromWeb < 5.0f)
+            {
+                setupTask(SpiderTask::Wait, SpiderAnim::Idle);
+
+                changeTextureWithoutMovingSprite(
+                    t_context.spider_textures.textures(m_type, m_anim).at(0));
+            }
+        }
+    }
+
+    // some of the spider animations are different png sizes, so we have to re-center when changing
+    void Spider::changeTextureWithoutMovingSprite(const sf::Texture & t_texture)
+    {
+        const sf::Vector2f spiderPos{ m_spiderSprite.getPosition() };
+        m_spiderSprite.setTexture(t_texture, true);
+        util::setOriginToCenter(m_spiderSprite);
+        m_spiderSprite.setPosition(spiderPos);
+    }
 
     void Spider::moveWithMap(const sf::Vector2f & t_move)
     {
         m_webSprite.move(t_move);
         m_spiderSprite.move(t_move);
         m_rect.position += t_move;
+        m_sitPosition += t_move;
     }
 
     bool Spider::doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const { return false; }
@@ -66,7 +167,16 @@ namespace halloween
         if (t_context.layout.wholeRegion().findIntersection(m_webSprite.getGlobalBounds()))
         {
             t_target.draw(m_webSprite, t_states);
+
+            const sf::FloatRect strandRect(
+                m_sitPosition, { 0.0f, (m_spiderSprite.getPosition().y - m_sitPosition.y) });
+
+            util::drawRectangleShape(t_target, strandRect, false, sf::Color(255, 255, 255, 92));
+
             t_target.draw(m_spiderSprite, t_states);
+
+            // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
+            // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
         }
     }
 
