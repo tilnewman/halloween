@@ -42,7 +42,6 @@ namespace halloween
     class FlyObjectManager;
     class ObjectManagerList;
     class FrogObjectManager;
-    class FrogTextureManager;
     class SpiderObjectManager;
     class ZombieObjectManager;
     class ZombieTextureManager;
@@ -80,7 +79,6 @@ namespace halloween
             FireSpoutLargeManager & t_fireSpoutLargeManager,
             ZombieObjectManager & t_zombieObjectManager,
             ZombieTextureManager & t_zombieTextureManager,
-            FrogTextureManager & t_frogTextureManager,
             FrogObjectManager & t_frogObjectManager,
             SpiderObjectManager & t_spiderObjectManager,
             FlyObjectManager & t_flyObjectManager)
@@ -113,7 +111,6 @@ namespace halloween
             , platforms{ t_movingPlatforms }
             , zombies{ t_zombieObjectManager }
             , zombie_textures{ t_zombieTextureManager }
-            , frog_textures{ t_frogTextureManager }
             , frogs{ t_frogObjectManager }
             , spiders{ t_spiderObjectManager }
             , flies{ t_flyObjectManager }
@@ -148,7 +145,6 @@ namespace halloween
         MovingPlatforms & platforms;
         ZombieObjectManager & zombies;
         ZombieTextureManager & zombie_textures;
-        FrogTextureManager & frog_textures;
         FrogObjectManager & frogs;
         SpiderObjectManager & spiders;
         FlyObjectManager & flies;

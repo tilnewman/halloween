@@ -45,7 +45,6 @@ namespace halloween
         , m_movingPlatformsUPtr{}
         , m_zombiesUPtr{}
         , m_zombieTexturesUPtr{}
-        , m_frogTexturesUPtr{}
         , m_frogsUPtr{}
         , m_spidersUPtr{}
         , m_fliesUPtr{}
@@ -109,7 +108,6 @@ namespace halloween
         m_movingPlatformsUPtr = std::make_unique<MovingPlatforms>();
         m_zombiesUPtr = std::make_unique<ZombieObjectManager>();
         m_zombieTexturesUPtr = std::make_unique<ZombieTextureManager>();
-        m_frogTexturesUPtr = std::make_unique<FrogTextureManager>();
         m_frogsUPtr = std::make_unique<FrogObjectManager>();
         m_spidersUPtr = std::make_unique<SpiderObjectManager>();
         m_fliesUPtr = std::make_unique<FlyObjectManager>();
@@ -150,7 +148,6 @@ namespace halloween
             *m_fireSpoutLargeManagerUPtr,
             *m_zombiesUPtr,
             *m_zombieTexturesUPtr,
-            *m_frogTexturesUPtr,
             *m_frogsUPtr,
             *m_spidersUPtr,
             *m_fliesUPtr);
@@ -179,7 +176,6 @@ namespace halloween
 
         m_avatarUPtr->setup(m_settings);
         m_zombieTexturesUPtr->setup(*m_contextUPtr);
-        m_frogTexturesUPtr->setup(*m_contextUPtr);
         m_fliesUPtr->setup(*m_contextUPtr);
         m_infoRegionUPtr->setup(*m_contextUPtr);
         m_levelUPtr->setup(*m_contextUPtr);
@@ -188,7 +184,6 @@ namespace halloween
     void GameLoop::teardown()
     {
         m_managersUPtr->teardown();
-        m_frogTexturesUPtr->teardown();
         m_zombieTexturesUPtr->teardown();
 
         m_contextUPtr.reset();
@@ -198,7 +193,6 @@ namespace halloween
         m_fliesUPtr.reset();
         m_spidersUPtr.reset();
         m_frogsUPtr.reset();
-        m_frogTexturesUPtr.reset();
         m_zombieTexturesUPtr.reset();
         m_movingPlatformsUPtr.reset();
         m_fireSpoutLargeManagerUPtr.reset();

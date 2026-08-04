@@ -22,7 +22,10 @@
 namespace halloween
 {
 
-    Frog::Frog(const Context & t_context, const sf::FloatRect & t_rect)
+    Frog::Frog(
+        const Context & t_context,
+        const sf::FloatRect & t_rect,
+        const FrogTextureManager & t_textureManager)
         : m_task{ FrogTask::Idle }
         , m_anim{ FrogAnim::Hop }
         , m_sprite{ util::SfmlDefaults::instance().texture() }
@@ -34,8 +37,9 @@ namespace halloween
         , m_animRepeatCount{ 0 }
         , m_hitPoints{ 3 }
         , m_hasFinishedDeathAnim{ false }
+        , m_textureManager{ t_textureManager }
     {
-        m_sprite.setTexture(t_context.frog_textures.textures(m_anim).at(0), true);
+        m_sprite.setTexture(m_textureManager.textures(m_anim).at(0), true);
         m_sprite.setOrigin(m_sprite.getLocalBounds().size * 0.5f);
 
         const float scale{ 1.5f };
@@ -183,7 +187,7 @@ namespace halloween
         {
             m_animElapsedSec -= timePerFrameSec;
 
-            const std::vector<sf::Texture> & textures{ t_context.frog_textures.textures(m_anim) };
+            const std::vector<sf::Texture> & textures{ m_textureManager.textures(m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;

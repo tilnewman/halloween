@@ -15,6 +15,7 @@ namespace halloween
 
     SpiderObjectManager::SpiderObjectManager()
         : m_spiders{}
+        , m_textureManager{}
     {}
 
     void SpiderObjectManager::add(

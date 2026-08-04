@@ -14,14 +14,13 @@ namespace halloween
 {
     FrogObjectManager::FrogObjectManager()
         : m_frogs{}
+        , m_textureManager{}
     {}
-
-    void FrogObjectManager::setup(const Context &) {}
 
     void FrogObjectManager::add(
         const Context & t_context, const sf::FloatRect & t_region, const std::string &)
     {
-        m_frogs.emplace_back(t_context, t_region);
+        m_frogs.emplace_back(t_context, t_region, m_textureManager);
     }
 
     void FrogObjectManager::update(const Context & t_context, const float t_frameTimeSec)

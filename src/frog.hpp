@@ -69,7 +69,10 @@ namespace halloween
     class Frog
     {
       public:
-        Frog(const Context & t_context, const sf::FloatRect & t_rect);
+        Frog(
+            const Context & t_context,
+            const sf::FloatRect & t_rect,
+            const FrogTextureManager & t_textureManager);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         [[nodiscard]] const sf::FloatRect attackRect(const FrogAnim t_anim) const;
@@ -84,7 +87,10 @@ namespace halloween
 
       private:
         void turn();
-        void setupTask(const FrogTask t_task, const FrogAnim t_anim, const std::size_t t_animRepeatCount);
+
+        void setupTask(
+            const FrogTask t_task, const FrogAnim t_anim, const std::size_t t_animRepeatCount);
+        
         bool turnToFace(const sf::Vector2f & t_position);
 
       private:
@@ -99,6 +105,7 @@ namespace halloween
         std::size_t m_animRepeatCount;
         std::size_t m_hitPoints;
         bool m_hasFinishedDeathAnim;
+        const FrogTextureManager & m_textureManager;
     };
 
 } // namespace halloween
