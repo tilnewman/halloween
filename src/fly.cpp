@@ -12,6 +12,7 @@
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
+#include "sound-player.hpp"
 
 namespace halloween
 {
@@ -27,6 +28,7 @@ namespace halloween
         , m_frameIndex{ 0 }
         , m_hitPoints{ 1 }
         , m_isFacingRight{ t_context.random.boolean() }
+        , m_hasDeathAnimFinished{ false }
     {
         util::setOriginToCenter(m_sprite);
 
@@ -68,6 +70,11 @@ namespace halloween
 
     void Fly::update(const Context & t_context, const float m_frameTimeSec)
     {
+        if (m_hasDeathAnimFinished)
+        {
+            return;
+        }
+
         // animate
         m_animElapsedSec += m_frameTimeSec;
         const float timePerFrameSec{ 0.08f * ((FlyTask::Chase == m_task) ? 0.5f : 1.0f) };
@@ -79,6 +86,12 @@ namespace halloween
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
+
+                if (FlyAnim::Hit == m_anim)
+                {
+                    m_hasDeathAnimFinished = true;
+                    return;
+                }
             }
 
             m_sprite.setTexture(textures.at(m_frameIndex), true);
@@ -155,13 +168,32 @@ namespace halloween
     void Fly::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        if (t_context.layout.wholeRegion().findIntersection(collisionRect()))
+        if (not m_hasDeathAnimFinished && t_context.layout.wholeRegion().findIntersection(collisionRect()))
         {
             t_target.draw(m_sprite, t_states);
             // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
         }
     }
 
-    const Harm Fly::hit(const Context &) { return {}; }
+    void Fly::hit(const Context & t_context)
+    {
+        t_context.audio.play("metal-hit");
+
+        if (m_hitPoints > 0)
+        {
+            --m_hitPoints;
+
+            if (not isAlive())
+            {
+                //t_context.audio.play("spider-death");
+                setupTask(FlyTask::Death, FlyAnim::Hit);
+            }
+            else
+            {
+                // TODO t_context.audio.play("spider-hit");
+                // setupTask(SpiderTask::Hit, ZombieAnim::Hit);
+            }
+        }
+    }
 
 } // namespace halloween

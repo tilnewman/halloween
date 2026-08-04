@@ -33,17 +33,15 @@ namespace halloween
 
         void update(const Context & t_context, const float m_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
+        [[nodiscard]] bool isAlive() const noexcept { return (m_hitPoints > 0); }
+        [[nodiscard]] const sf::FloatRect collisionRect() const;
+        void hit(const Context & t_context);
 
         [[nodiscard]] bool doesAvatarCollideWithAnyAndDie(
             const Context & t_context, const sf::FloatRect & t_avatarRect);
 
-        [[nodiscard]] bool isAlive() const noexcept { return (m_hitPoints > 0); }
-        [[nodiscard]] const sf::FloatRect collisionRect() const;
-
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const;
-
-        const Harm hit(const Context & t_context);
 
       private:
         void turn();
@@ -60,6 +58,7 @@ namespace halloween
         std::size_t m_frameIndex;
         std::size_t m_hitPoints;
         bool m_isFacingRight;
+        bool m_hasDeathAnimFinished;
     };
 } // namespace halloween
 

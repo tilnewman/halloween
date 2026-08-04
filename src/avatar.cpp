@@ -8,6 +8,7 @@
 #include "context.hpp"
 #include "dart.hpp"
 #include "fire-spout.hpp"
+#include "flys.hpp"
 #include "frogs.hpp"
 #include "ghost.hpp"
 #include "info-region.hpp"
@@ -784,7 +785,8 @@ namespace halloween
             t_context.bats.attack(t_context, attackRect).wasAnyHarm() ||
             t_context.zombies.attack(t_context, attackRect).wasAnyHarm() ||
             t_context.frogs.attack(t_context, attackRect).wasAnyHarm() ||
-            t_context.spiders.attack(t_context, attackRect).wasAnyHarm())
+            t_context.spiders.attack(t_context, attackRect).wasAnyHarm() ||
+            t_context.flies.attack(t_context, attackRect).wasAnyHarm())
         {
             m_hasAttackedAlready = true;
         }
