@@ -404,7 +404,7 @@
          "name":"enemy",
          "objects":[
                 {
-                 "height":128,
+                 "height":544,
                  "id":74,
                  "name":"spider",
                  "rotation":0,
@@ -415,7 +415,7 @@
                  "y":672
                 }, 
                 {
-                 "height":128,
+                 "height":352,
                  "id":78,
                  "name":"spider",
                  "rotation":0,
@@ -426,7 +426,7 @@
                  "y":864
                 }, 
                 {
-                 "height":160,
+                 "height":512,
                  "id":79,
                  "name":"spider",
                  "rotation":0,

@@ -75,7 +75,8 @@ namespace halloween
         float m_animElapsedSec;
         std::size_t m_frameIndex;
         std::size_t m_hitPoints;
-        sf::FloatRect m_rect;
+        sf::FloatRect m_mapRect;
+        sf::FloatRect m_webRect;
         sf::Vector2f m_sitPosition;
     };
 

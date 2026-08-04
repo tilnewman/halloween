@@ -18,19 +18,20 @@ namespace halloween
     Spider::Spider(const Context & t_context, const sf::FloatRect & t_rect)
         : m_anim{ SpiderAnim::Idle }
         , m_type{ t_context.random.from({ SpiderType::Mom, SpiderType::Dad, SpiderType::Child }) }
-        , m_task{ SpiderTask::Wait }
+        , m_task{ SpiderTask::Descend }
         , m_webSprite{ t_context.spider_textures.webTexture() }
         , m_spiderSprite{ util::SfmlDefaults::instance().texture() }
         , m_animElapsedSec{ 0.0f }
         , m_frameIndex{ 0 }
         , m_hitPoints{ 2 }
-        , m_rect{ t_rect }
+        , m_mapRect{ t_rect }
+        , m_webRect{ t_rect.position, { t_rect.size.x, t_rect.size.x } }
         , m_sitPosition{}
     {
         //
         util::setOriginToCenter(m_webSprite);
-        util::fitAndCenterInside(m_webSprite, m_rect);
-        m_webSprite.setPosition(util::center(m_rect));
+        util::fitAndCenterInside(m_webSprite, m_webRect);
+        m_webSprite.setPosition(util::center(m_webRect));
         m_webSprite.setRotation(sf::degrees(t_context.random.fromTo(0.0f, 360.0f)));
         m_webSprite.setColor(sf::Color(255, 255, 255, 127));
         m_sitPosition = m_webSprite.getPosition();
@@ -38,7 +39,7 @@ namespace halloween
         //
         m_spiderSprite.setTexture(t_context.spider_textures.textures(m_type, m_anim).at(0), true);
         util::setOriginToCenter(m_spiderSprite);
-        const float scale{ (SpiderType::Child == m_type) ? 0.45f : 0.3f };
+        const float scale{ (SpiderType::Child == m_type) ? 0.4f : 0.25f };
         m_spiderSprite.scale({ scale, scale });
         m_spiderSprite.setPosition(m_sitPosition);
 
@@ -77,9 +78,9 @@ namespace halloween
             const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
 
             const float horizDistanceToPlayer{ std::abs(
-                util::center(m_rect).x - util::right(avatarRect)) };
+                util::center(m_webRect).x - util::right(avatarRect)) };
 
-            const float heightFromGround{ util::bottom(avatarRect) - util::center(m_rect).y };
+            const float heightFromGround{ util::bottom(m_mapRect) - util::center(m_webRect).y };
 
             if (horizDistanceToPlayer < heightFromGround)
             {
@@ -112,10 +113,8 @@ namespace halloween
             const float descendSpeed{ 30.0f };
             m_spiderSprite.move({ 0.0f, (descendSpeed * t_frameTimeSec) });
 
-            const sf::FloatRect avatarRect{ t_context.avatar.collisionRect() };
-
             const float distFromGround{ std::abs(
-                util::bottom(avatarRect) - util::bottom(m_spiderSprite.getGlobalBounds())) };
+                util::bottom(m_mapRect) - util::bottom(m_spiderSprite.getGlobalBounds())) };
 
             if (distFromGround < 5.0f)
             {
@@ -124,7 +123,7 @@ namespace halloween
         }
         else if (SpiderTask::Ascend == m_task)
         {
-            const float ascendSpeed{ -50.0f };
+            const float ascendSpeed{ -60.0f };
             m_spiderSprite.move({ 0.0f, (ascendSpeed * t_frameTimeSec) });
 
             const float distFromWeb{ std::abs(
@@ -153,7 +152,8 @@ namespace halloween
     {
         m_webSprite.move(t_move);
         m_spiderSprite.move(t_move);
-        m_rect.position += t_move;
+        m_webRect.position += t_move;
+        m_mapRect.position += t_move;
         m_sitPosition += t_move;
     }
 
