@@ -189,6 +189,11 @@ namespace halloween
             if (not isAlive())
             {
                 //t_context.audio.play("spider-death");
+
+                // the artwork sucks so this is needed
+                m_sprite.scale({ 0.75f, 0.75f });
+                m_sprite.move({ 0.0f, -(m_sprite.getGlobalBounds().size.y * 0.25f) });
+                
                 setupTask(FlyTask::Death, FlyAnim::Hit);
             }
             else
