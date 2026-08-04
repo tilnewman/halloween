@@ -5,7 +5,7 @@
 //
 #include "fly-textures.hpp"
 #include "object-manager.hpp"
-// #include "fly.hpp"
+#include "fly.hpp"
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -18,26 +18,6 @@ namespace halloween
 {
 
     struct Context;
-
-    //
-
-    class Fly
-    {
-      public:
-        Fly(const Context &, const sf::FloatRect &) {}
-        void update(const Context &, const float) {}
-        void moveWithMap(const sf::Vector2f &) {}
-
-        bool doesAvatarCollideWithAnyAndDie(const Context &, const sf::FloatRect &)
-        {
-            return false;
-        }
-
-        bool isAlive() const { return false; }
-        const sf::FloatRect collisionRect() const { return {}; }
-        void draw(const Context &, sf::RenderTarget &, sf::RenderStates) const {}
-        const Harm hit(const Context &) { return {}; }
-    };
 
     //
 
