@@ -21,7 +21,7 @@ namespace halloween
     Zombie::Zombie(
         const Context & t_context,
         const sf::FloatRect & t_rect,
-        const ZombieTextureManager & t_textureManager)
+        const std::vector<std::vector<sf::Texture>> & t_texturesVec)
         : m_anim{ ZombieAnim::Idle }
         , m_task{ ZombieTask::Stare }
         , m_sprite{ util::SfmlDefaults::instance().texture() }
@@ -34,9 +34,9 @@ namespace halloween
         , m_walkSpeed{ 30.0f }
         , m_hitPoints{ 3 }
         , m_hasFinishedDeathAnim{ false }
-        , m_textureManager{ t_textureManager }
+        , m_texturesVec{ t_texturesVec }
     {
-        m_sprite.setTexture(m_textureManager.textures(m_anim).at(0), true);
+        m_sprite.setTexture(getTextures(m_anim).at(0), true);
 
         const float scale{ 0.6f };
         m_sprite.setScale({ scale, scale });
@@ -149,7 +149,7 @@ namespace halloween
         {
             m_animElpasedSec -= timePerFrameSec;
 
-            const auto & textures{ m_textureManager.textures(m_anim) };
+            const auto & textures{ getTextures(m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
@@ -344,6 +344,18 @@ namespace halloween
                 setupTask(ZombieTask::Hit, ZombieAnim::Hit);
             }
         }
+    }
+
+    const std::vector<sf::Texture> & Zombie::getTextures(const ZombieAnim t_action) const
+    {
+        const std::size_t actionIndex{ static_cast<std::size_t>(t_action) };
+
+        M_CHECK(
+            (actionIndex < m_texturesVec.size()),
+            "textures(" << toString(t_action) << ") when t_action=" << toString(t_action)
+                        << " is out of range!");
+
+        return m_texturesVec.at(actionIndex);
     }
 
 } // namespace halloween

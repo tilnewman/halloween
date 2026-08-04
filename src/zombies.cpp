@@ -5,24 +5,57 @@
 //
 #include "zombies.hpp"
 
+#include "check-macros.hpp"
 #include "context.hpp"
+#include "filesystem-util.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
 #include "settings.hpp"
 #include "sound-player.hpp"
+#include "texture-loader.hpp"
 
 namespace halloween
 {
 
     ZombieObjectManager::ZombieObjectManager()
         : m_zombies{}
-        , m_textureManager{}
+        , m_texturesVec{}
     {}
+
+    void ZombieObjectManager::setup(const Context & t_context)
+    {
+        m_texturesVec.clear();
+
+        const std::size_t actionCount{ static_cast<std::size_t>(ZombieAnim::Count) };
+        m_texturesVec.reserve(actionCount); // prevent any reallocations
+
+        for (std::size_t actionIndex{ 0 }; actionIndex < actionCount; ++actionIndex)
+        {
+            const ZombieAnim action{ static_cast<ZombieAnim>(actionIndex) };
+
+            const auto path{ t_context.settings.media_path / "image" / "zombie" /
+                             toString(action) };
+
+            const auto imagePaths{ util::findFilesInDirectory(path, ".png") };
+
+            M_CHECK(not imagePaths.empty(), "No images to load found in " << path.string());
+
+            std::vector<sf::Texture> & textures{ m_texturesVec.emplace_back() };
+
+            textures.reserve(imagePaths.size()); // prevent any reallocations
+
+            for (std::size_t pathIndex{ 0 }; pathIndex < imagePaths.size(); ++pathIndex)
+            {
+                sf::Texture & texture{ textures.emplace_back() };
+                util::TextureLoader::load(texture, imagePaths.at(pathIndex));
+            }
+        }
+    }
 
     void ZombieObjectManager::add(
         const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
     {
-        m_zombies.emplace_back(t_context, t_rect, m_textureManager);
+        m_zombies.emplace_back(t_context, t_rect, m_texturesVec);
     }
 
     void ZombieObjectManager::update(const Context & t_context, const float t_frameTimeSec)

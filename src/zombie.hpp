@@ -3,12 +3,13 @@
 //
 // zombie.hpp
 //
-#include "zombie-textures.hpp"
-
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+
+#include <vector>
 
 namespace halloween
 {
@@ -16,6 +17,32 @@ namespace halloween
     struct Context;
 
     //
+
+    enum class ZombieAnim : unsigned char
+    {
+        Idle = 0,
+        Walk,
+        Attack,
+        Death,
+        Hit,
+        Count
+    };
+
+    [[nodiscard]] constexpr std::string_view toString(const ZombieAnim t_anim) noexcept
+    {
+        // clang-format off
+        switch(t_anim)
+        {
+            case ZombieAnim::Idle:   { return "idle";   }
+            case ZombieAnim::Walk:   { return "walk";   }
+            case ZombieAnim::Attack: { return "attack"; }
+            case ZombieAnim::Death:  { return "death";  }
+            case ZombieAnim::Hit:    { return "hit";    }
+            case ZombieAnim::Count:    
+            default:     { return "unknown_zombieanim"; }
+        }
+        // clang-format on
+    }
 
     [[nodiscard]] constexpr float timePerFrame(const ZombieAnim t_action) noexcept
     {
@@ -67,16 +94,16 @@ namespace halloween
         Zombie(
             const Context & t_context,
             const sf::FloatRect & t_rect,
-            const ZombieTextureManager & t_textureManager);
+            const std::vector<std::vector<sf::Texture>> & t_texturesVec);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         [[nodiscard]] const sf::FloatRect attackRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
-        
+
         bool doesAvatarCollideWithAnyAndDie(
             const Context & t_context, const sf::FloatRect & t_avatarRect);
-        
+
         [[nodiscard]] constexpr bool isAlive() const noexcept { return (m_hitPoints > 0); }
         void hit(const Context & t_context);
 
@@ -91,6 +118,7 @@ namespace halloween
         void startWanderingOrStaring(const Context & t_context);
         void startChasing(const Context & t_context);
         [[nodiscard]] float calcTimePerFrame() const;
+        const std::vector<sf::Texture> & getTextures(const ZombieAnim t_action) const;
 
       private:
         ZombieAnim m_anim;
@@ -106,7 +134,7 @@ namespace halloween
         float m_walkSpeed;
         std::size_t m_hitPoints;
         bool m_hasFinishedDeathAnim;
-        const ZombieTextureManager & m_textureManager;
+        const std::vector<std::vector<sf::Texture>> & m_texturesVec;
     };
 
 } // namespace halloween
