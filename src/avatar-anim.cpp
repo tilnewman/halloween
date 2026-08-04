@@ -36,10 +36,10 @@ namespace halloween
 
         for (std::size_t i{ 0 }; i < t_frameCount; ++i)
         {
-            const std::string filename = (t_name + "-" + std::to_string(i).append(".png"));
-            const std::string filePath = (t_mediaPath / filename).string();
+            const std::string filename{ t_name + "-" + std::to_string(i).append(".png") };
+            const std::string filePath{ (t_mediaPath / filename).string() };
 
-            sf::Texture & texture = m_textures.emplace_back();
+            sf::Texture & texture{ m_textures.emplace_back() };
             util::TextureLoader::load(texture, filePath);
         }
 
