@@ -25,7 +25,7 @@ namespace halloween
     Frog::Frog(
         const Context & t_context,
         const sf::FloatRect & t_rect,
-        const FrogTextureManager & t_textureManager)
+        const std::vector<std::vector<sf::Texture>> & t_texturesVec)
         : m_task{ FrogTask::Idle }
         , m_anim{ FrogAnim::Hop }
         , m_sprite{ util::SfmlDefaults::instance().texture() }
@@ -37,9 +37,9 @@ namespace halloween
         , m_animRepeatCount{ 0 }
         , m_hitPoints{ 3 }
         , m_hasFinishedDeathAnim{ false }
-        , m_textureManager{ t_textureManager }
+        , m_texturesVec{ t_texturesVec }
     {
-        m_sprite.setTexture(m_textureManager.textures(m_anim).at(0), true);
+        m_sprite.setTexture(getTextures(m_anim).at(0), true);
         m_sprite.setOrigin(m_sprite.getLocalBounds().size * 0.5f);
 
         const float scale{ 1.5f };
@@ -195,7 +195,7 @@ namespace halloween
         {
             m_animElapsedSec -= timePerFrameSec;
 
-            const std::vector<sf::Texture> & textures{ m_textureManager.textures(m_anim) };
+            const std::vector<sf::Texture> & textures{ getTextures(m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
@@ -353,6 +353,18 @@ namespace halloween
                 setupTask(FrogTask::Hit, FrogAnim::Hit, 1);
             }
         }
+    }
+
+    const std::vector<sf::Texture> & Frog::getTextures(const FrogAnim t_action) const
+    {
+        const std::size_t actionIndex{ static_cast<std::size_t>(t_action) };
+
+        M_CHECK(
+            (actionIndex < m_texturesVec.size()),
+            "textures(" << toString(t_action) << ") when t_action=" << toString(t_action)
+                        << " is out of range!");
+
+        return m_texturesVec.at(actionIndex);
     }
 
 } // namespace halloween

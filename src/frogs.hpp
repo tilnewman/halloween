@@ -3,7 +3,6 @@
 //
 // frogs.hpp
 //
-#include "frog-textures.hpp"
 #include "frog.hpp"
 #include "object-manager.hpp"
 
@@ -27,8 +26,8 @@ namespace halloween
         FrogObjectManager();
         ~FrogObjectManager() override = default;
 
-        void setup(const Context & t_context) final { m_textureManager.setup(t_context); }
-        void teardown() final { m_textureManager.teardown(); }
+        void setup(const Context & t_context) final;
+        void teardown() final { m_texturesVec.clear(); }
         bool willDrawBeforeMap() const final { return false; }
         void clear() final { m_frogs.clear(); }
 
@@ -52,7 +51,7 @@ namespace halloween
 
       private:
         std::vector<Frog> m_frogs;
-        FrogTextureManager m_textureManager;
+        std::vector<std::vector<sf::Texture>> m_texturesVec;
     };
 
 } // namespace halloween

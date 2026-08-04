@@ -3,18 +3,56 @@
 //
 // frog.hpp
 //
-#include "frog-textures.hpp"
 #include "sliders.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Texture.hpp>
+
+#include <vector>
 
 namespace halloween
 {
 
     struct Context;
+
+    //
+
+    enum class FrogAnim : unsigned char
+    {
+        Idle = 0,
+        Hop,
+        AttackTounge,
+        AttackBite,
+        Death,
+        Hit,
+        Dizzy,
+        Eating,
+        Roar,
+        Count
+    };
+
+    [[nodiscard]] constexpr std::string_view toString(const FrogAnim t_anim) noexcept
+    {
+        // clang-format off
+        switch(t_anim)
+        {
+            case FrogAnim::Idle:         { return "idle";          }
+            case FrogAnim::Hop:          { return "hop";           }
+            case FrogAnim::AttackTounge: { return "attack-tounge"; }
+            case FrogAnim::AttackBite:   { return "attack-bite";   }
+            case FrogAnim::Death:        { return "death";         }
+            case FrogAnim::Hit:          { return "hit";           }
+            case FrogAnim::Dizzy:        { return "dizzy";         }
+            case FrogAnim::Eating:       { return "eating";        }
+            case FrogAnim::Roar:         { return "roar";          }
+            case FrogAnim::Count:    
+            default:                  { return "unknown_froganim"; }
+        }
+        // clang-format on
+    }
 
     //
 
@@ -72,7 +110,7 @@ namespace halloween
         Frog(
             const Context & t_context,
             const sf::FloatRect & t_rect,
-            const FrogTextureManager & t_textureManager);
+            const std::vector<std::vector<sf::Texture>> & t_texturesVec);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         [[nodiscard]] const sf::FloatRect attackRect(const FrogAnim t_anim) const;
@@ -90,8 +128,9 @@ namespace halloween
 
         void setupTask(
             const FrogTask t_task, const FrogAnim t_anim, const std::size_t t_animRepeatCount);
-        
+
         bool turnToFace(const sf::Vector2f & t_position);
+        [[nodiscard]] const std::vector<sf::Texture> & getTextures(const FrogAnim t_action) const;
 
       private:
         FrogTask m_task;
@@ -105,7 +144,7 @@ namespace halloween
         std::size_t m_animRepeatCount;
         std::size_t m_hitPoints;
         bool m_hasFinishedDeathAnim;
-        const FrogTextureManager & m_textureManager;
+        const std::vector<std::vector<sf::Texture>> & m_texturesVec;
     };
 
 } // namespace halloween
