@@ -64,7 +64,10 @@ namespace halloween
     class Zombie
     {
       public:
-        Zombie(const Context & t_context, const sf::FloatRect & t_rect);
+        Zombie(
+            const Context & t_context,
+            const sf::FloatRect & t_rect,
+            const ZombieTextureManager & t_textureManager);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
         [[nodiscard]] const sf::FloatRect attackRect() const;
@@ -103,6 +106,7 @@ namespace halloween
         float m_walkSpeed;
         std::size_t m_hitPoints;
         bool m_hasFinishedDeathAnim;
+        const ZombieTextureManager & m_textureManager;
     };
 
 } // namespace halloween

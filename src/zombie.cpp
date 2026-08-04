@@ -18,7 +18,10 @@
 namespace halloween
 {
 
-    Zombie::Zombie(const Context & t_context, const sf::FloatRect & t_rect)
+    Zombie::Zombie(
+        const Context & t_context,
+        const sf::FloatRect & t_rect,
+        const ZombieTextureManager & t_textureManager)
         : m_anim{ ZombieAnim::Idle }
         , m_task{ ZombieTask::Stare }
         , m_sprite{ util::SfmlDefaults::instance().texture() }
@@ -31,8 +34,9 @@ namespace halloween
         , m_walkSpeed{ 30.0f }
         , m_hitPoints{ 3 }
         , m_hasFinishedDeathAnim{ false }
+        , m_textureManager{ t_textureManager }
     {
-        m_sprite.setTexture(t_context.zombie_textures.textures(m_anim).at(0), true);
+        m_sprite.setTexture(m_textureManager.textures(m_anim).at(0), true);
 
         const float scale{ 0.6f };
         m_sprite.setScale({ scale, scale });
@@ -145,7 +149,7 @@ namespace halloween
         {
             m_animElpasedSec -= timePerFrameSec;
 
-            const auto & textures{ t_context.zombie_textures.textures(m_anim) };
+            const auto & textures{ m_textureManager.textures(m_anim) };
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;

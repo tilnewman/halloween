@@ -16,14 +16,13 @@ namespace halloween
 
     ZombieObjectManager::ZombieObjectManager()
         : m_zombies{}
+        , m_textureManager{}
     {}
-
-    void ZombieObjectManager::setup(const Context &) {}
 
     void ZombieObjectManager::add(
         const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
     {
-        m_zombies.emplace_back(t_context, t_rect);
+        m_zombies.emplace_back(t_context, t_rect, m_textureManager);
     }
 
     void ZombieObjectManager::update(const Context & t_context, const float t_frameTimeSec)
