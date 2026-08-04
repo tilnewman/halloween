@@ -12,6 +12,7 @@
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
+#include "sound-player.hpp"
 
 namespace halloween
 {
@@ -23,10 +24,11 @@ namespace halloween
         , m_spiderSprite{ util::SfmlDefaults::instance().texture() }
         , m_animElapsedSec{ 0.0f }
         , m_frameIndex{ 0 }
-        , m_hitPoints{ 2 }
+        , m_hitPoints{ 1 }
         , m_mapRect{ t_rect }
         , m_webRect{ t_rect.position, { t_rect.size.x, t_rect.size.x } }
         , m_sitPosition{}
+        , m_hasDeathAnimFinished{ false }
     {
         //
         util::setOriginToCenter(m_webSprite);
@@ -52,14 +54,6 @@ namespace halloween
     const sf::FloatRect Spider::collisionRect() const
     {
         return util::scaleRectInPlaceCopy(m_spiderSprite.getGlobalBounds(), { 0.4f, 0.65f });
-    }
-
-    const sf::FloatRect Spider::attackRect() const
-    {
-        sf::FloatRect rect{ collisionRect() };
-        util::scaleRectInPlace(rect, { 0.75f, 0.5f });
-        rect.position.y += (rect.size.y * 0.75f);
-        return rect;
     }
 
     void Spider::setupTask(const SpiderTask t_task, const SpiderAnim t_anim)
@@ -102,6 +96,11 @@ namespace halloween
             if (++m_frameIndex >= textures.size())
             {
                 m_frameIndex = 0;
+
+                if (SpiderAnim::Death == m_anim)
+                {
+                    m_hasDeathAnimFinished = true;
+                }
             }
 
             changeTextureWithoutMovingSprite(textures.at(m_frameIndex));
@@ -157,9 +156,31 @@ namespace halloween
         m_sitPosition += t_move;
     }
 
-    bool Spider::doesAvatarCollideWithAnyAndDie(const sf::FloatRect &) const { return false; }
+    bool Spider::doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const
+    {
+        return (isAlive() and t_avatarRect.findIntersection(collisionRect()).has_value());
+    }
 
-    void Spider::hit(const Context &) {}
+    void Spider::hit(const Context & t_context)
+    {
+        t_context.audio.play("metal-hit");
+
+        if (m_hitPoints > 0)
+        {
+            --m_hitPoints;
+
+            if (not isAlive())
+            {
+                // TODO t_context.audio.play("spider-death");
+                setupTask(SpiderTask::Death, SpiderAnim::Death);
+            }
+            else
+            {
+                // TODO t_context.audio.play("spider-hit");
+                // setupTask(SpiderTask::Hit, ZombieAnim::Hit);
+            }
+        }
+    }
 
     void Spider::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
@@ -168,15 +189,23 @@ namespace halloween
         {
             t_target.draw(m_webSprite, t_states);
 
-            const sf::FloatRect strandRect(
-                m_sitPosition, { 0.0f, (m_spiderSprite.getPosition().y - m_sitPosition.y) });
+            if (not m_hasDeathAnimFinished)
+            {
+                if (isAlive())
+                {
+                    const sf::FloatRect strandRect(
+                        m_sitPosition,
+                        { 0.0f, (m_spiderSprite.getPosition().y - m_sitPosition.y) });
 
-            util::drawRectangleShape(t_target, strandRect, false, sf::Color(255, 255, 255, 92));
+                    util::drawRectangleShape(
+                        t_target, strandRect, false, sf::Color(255, 255, 255, 92));
+                }
 
-            t_target.draw(m_spiderSprite, t_states);
+                t_target.draw(m_spiderSprite, t_states);
 
-            // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
-            // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
+                // util::drawRectangleShape(t_target, collisionRect(), false, sf::Color::Red);
+                // util::drawRectangleShape(t_target, attackRect(), false, sf::Color::Yellow);
+            }
         }
     }
 

@@ -17,6 +17,7 @@
 #include "sfml-util.hpp"
 #include "slime.hpp"
 #include "sound-player.hpp"
+#include "spiders.hpp"
 #include "texture-loader.hpp"
 #include "zombies.hpp"
 
@@ -87,7 +88,8 @@ namespace halloween
                 t_context.bats.attack(t_context, missileRect).did_hit ||
                 t_context.boss.attack(t_context, missileRect).did_hit ||
                 t_context.zombies.attack(t_context, missileRect).did_hit ||
-                t_context.frogs.attack(t_context, missileRect).did_hit)
+                t_context.frogs.attack(t_context, missileRect).did_hit ||
+                t_context.spiders.attack(t_context, missileRect).did_hit)
             {
                 wereAnyKilled = true;
                 missile.is_alive = false;

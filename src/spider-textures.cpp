@@ -75,14 +75,16 @@ namespace halloween
             "textures(" << toString(t_type) << ", " << toString(t_action)
                         << ") when t_type=" << typeIndex << " is out of range!");
 
+        const std::vector<std::vector<sf::Texture>> & textureActions{ m_texturesVec.at(typeIndex) };
+
         const std::size_t actionIndex{ static_cast<std::size_t>(t_action) };
 
         M_CHECK(
-            (actionIndex < m_texturesVec.size()),
+            (actionIndex < textureActions.size()),
             "textures(" << toString(t_type) << ", " << toString(t_action)
                         << ") when t_action=" << actionIndex << " is out of range!");
 
-        return m_texturesVec.at(typeIndex).at(actionIndex);
+        return textureActions.at(actionIndex);
     }
 
 } // namespace halloween

@@ -24,7 +24,7 @@ namespace halloween
         Descend,
         Attack,
         Ascend,
-        Hit
+        Death
     };
 
     //
@@ -52,7 +52,6 @@ namespace halloween
         Spider(const Context & t_context, const sf::FloatRect & t_rect);
 
         [[nodiscard]] const sf::FloatRect collisionRect() const;
-        [[nodiscard]] const sf::FloatRect attackRect() const;
         void update(const Context & t_context, const float t_frameTimeSec);
         void moveWithMap(const sf::Vector2f & t_move);
         bool doesAvatarCollideWithAnyAndDie(const sf::FloatRect & t_avatarRect) const;
@@ -78,6 +77,7 @@ namespace halloween
         sf::FloatRect m_mapRect;
         sf::FloatRect m_webRect;
         sf::Vector2f m_sitPosition;
+        bool m_hasDeathAnimFinished;
     };
 
 } // namespace halloween

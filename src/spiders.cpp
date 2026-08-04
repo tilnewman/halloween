@@ -58,7 +58,10 @@ namespace halloween
     {
         for (const Spider & spider : m_spiders)
         {
-            t_rects.push_back(spider.collisionRect());
+            if (spider.isAlive())
+            {
+                t_rects.push_back(spider.collisionRect());
+            }
         }
     }
 
