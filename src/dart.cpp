@@ -52,7 +52,7 @@ namespace halloween
         bool wereAnyKilled{ false };
         for (DartAnim & anim : m_dartAnims)
         {
-            std::uint8_t alpha = anim.sprite.getColor().a;
+            std::uint8_t alpha{ anim.sprite.getColor().a };
             if (alpha >= 10u)
             {
                 alpha -= 10u;
