@@ -165,7 +165,7 @@ namespace halloween
     }
 
     bool FireSpouts::doesAvatarCollideWithAnyAndDie(
-        const Context & t_context, const sf::FloatRect & t_avatarRect)
+        const Context &, const sf::FloatRect & t_avatarRect)
     {
         for (const FireSpout & spout : m_fireSpouts)
         {

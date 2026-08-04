@@ -49,6 +49,7 @@ namespace halloween
         , m_frogsUPtr{}
         , m_spiderTexturesUPtr{}
         , m_spidersUPtr{}
+        , m_flyTexturesUPtr{}
         , m_contextUPtr{}
     {}
 
@@ -113,6 +114,7 @@ namespace halloween
         m_frogsUPtr = std::make_unique<FrogObjectManager>();
         m_spiderTexturesUPtr = std::make_unique<SpiderTextureManager>();
         m_spidersUPtr = std::make_unique<SpiderObjectManager>();
+        m_flyTexturesUPtr = std::make_unique<FlyTextureManager>();
 
         m_audioUPtr->mediaPath(m_settings.media_path / "sfx");
         m_audioUPtr->loadAll();
@@ -153,7 +155,8 @@ namespace halloween
             *m_frogTexturesUPtr,
             *m_frogsUPtr,
             *m_spiderTexturesUPtr,
-            *m_spidersUPtr);
+            *m_spidersUPtr,
+            *m_flyTexturesUPtr);
 
         m_layoutUPtr->setup(m_windowUPtr->getSize());
         m_fontManagerUPtr->setup(m_settings);
@@ -180,6 +183,7 @@ namespace halloween
         m_zombieTexturesUPtr->setup(*m_contextUPtr);
         m_frogTexturesUPtr->setup(*m_contextUPtr);
         m_spiderTexturesUPtr->setup(*m_contextUPtr);
+        m_flyTexturesUPtr->setup(*m_contextUPtr);
         m_infoRegionUPtr->setup(*m_contextUPtr);
         m_levelUPtr->setup(*m_contextUPtr);
     }
@@ -189,11 +193,13 @@ namespace halloween
         m_frogTexturesUPtr->teardown();
         m_zombieTexturesUPtr->teardown();
         m_spiderTexturesUPtr->teardown();
+        m_flyTexturesUPtr->teardown();
 
         m_contextUPtr.reset();
 
         m_managersUPtr.reset();
 
+        m_flyTexturesUPtr.reset();
         m_spidersUPtr.reset();
         m_spiderTexturesUPtr.reset();
         m_frogsUPtr.reset();

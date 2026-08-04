@@ -39,6 +39,7 @@ namespace halloween
     class MushroomBoss;
     class ScreenRegions;
     class MovingPlatforms;
+    class FlyTextureManager;
     class ObjectManagerList;
     class FrogObjectManager;
     class FrogTextureManager;
@@ -83,7 +84,8 @@ namespace halloween
             FrogTextureManager & t_frogTextureManager,
             FrogObjectManager & t_frogObjectManager,
             SpiderTextureManager & t_spiderTextureManager,
-            SpiderObjectManager & t_spiderObjectManager)
+            SpiderObjectManager & t_spiderObjectManager,
+            FlyTextureManager & t_flyTextureManager)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -117,6 +119,7 @@ namespace halloween
             , frogs{ t_frogObjectManager }
             , spider_textures{ t_spiderTextureManager }
             , spiders{ t_spiderObjectManager }
+            , fly_textures{ t_flyTextureManager }
         {}
 
         const Settings & settings;
@@ -152,6 +155,7 @@ namespace halloween
         FrogObjectManager & frogs;
         SpiderTextureManager & spider_textures;
         SpiderObjectManager & spiders;
+        FlyTextureManager & fly_textures;
     };
 
 } // namespace halloween
