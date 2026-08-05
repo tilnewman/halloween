@@ -20,7 +20,6 @@ namespace halloween
         void setup(
             const std::filesystem::path & t_mediaPath,
             const std::string & t_name,
-            const std::size_t t_frameCount,
             const float t_timePerFrameSec,
             const bool t_willLoop);
 
@@ -36,7 +35,6 @@ namespace halloween
         float m_elapsedTimeSec;
         float m_timePerFrameSec;
         std::size_t m_index;
-        std::size_t m_frameCount;
         std::vector<sf::Texture> m_textures;
     };
 

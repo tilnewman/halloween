@@ -6,6 +6,7 @@
 #include "avatar-anim.hpp"
 
 #include "check-macros.hpp"
+#include "filesystem-util.hpp"
 #include "settings.hpp"
 #include "texture-loader.hpp"
 
@@ -20,30 +21,26 @@ namespace halloween
         , m_elapsedTimeSec{ 0.0f }
         , m_timePerFrameSec{ 0.0f }
         , m_index{ 0 }
-        , m_frameCount{ 0 }
         , m_textures{}
     {}
 
     void AvatarAnim::setup(
         const std::filesystem::path & t_mediaPath,
         const std::string & t_name,
-        const std::size_t t_frameCount,
         const float t_timePerFrameSec,
         const bool t_willLoop)
     {
         m_timePerFrameSec = t_timePerFrameSec;
         m_willLoop = t_willLoop;
 
-        for (std::size_t i{ 0 }; i < t_frameCount; ++i)
+        const auto dirPath{ t_mediaPath / t_name };
+        const auto imagePaths{ util::findFilesInDirectory(dirPath, ".png") };
+        M_CHECK(not imagePaths.empty(), "Failed to find any PNG images in: " << dirPath);
+
+        for (const auto & path : imagePaths)
         {
-            const std::string filename{ t_name + "-" + std::to_string(i).append(".png") };
-            const std::string filePath{ (t_mediaPath / filename).string() };
-
-            sf::Texture & texture{ m_textures.emplace_back() };
-            util::TextureLoader::load(texture, filePath);
+            util::TextureLoader::load(m_textures.emplace_back(), path);
         }
-
-        m_frameCount = t_frameCount;
     }
 
     void AvatarAnim::restart()
@@ -64,7 +61,7 @@ namespace halloween
         m_elapsedTimeSec -= m_timePerFrameSec;
 
         ++m_index;
-        if (m_index >= m_frameCount)
+        if (m_index >= m_textures.size())
         {
             if (m_willLoop)
             {
@@ -72,7 +69,7 @@ namespace halloween
             }
             else
             {
-                m_index = (m_frameCount - 1);
+                m_index = (m_textures.size() - 1);
                 m_isFinished = true;
             }
         }

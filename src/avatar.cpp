@@ -88,14 +88,14 @@ namespace halloween
 
         const auto avatarPath{ t_settings.media_path / "image" / "avatar" };
 
-        m_runAnim.setup(avatarPath, "Run", 10, 0.045f, true);
-        m_attackAnim.setup(avatarPath, "Attack", 10, 0.03f, false);
-        m_deathAnim.setup(avatarPath, "Dead", 10, 0.05f, false);
-        m_throwAnim.setup(avatarPath, "Throw", 10, 0.02f, false);
-        m_glideAnim.setup(avatarPath, "Glide", 10, 0.33f, true);
-        m_idleAnim.setup(avatarPath, "Idle", 10, 0.1f, true);
+        m_runAnim.setup(avatarPath, "run", 0.045f, true);
+        m_attackAnim.setup(avatarPath, "attack", 0.03f, false);
+        m_deathAnim.setup(avatarPath, "death", 0.05f, false);
+        m_throwAnim.setup(avatarPath, "throw", 0.02f, false);
+        m_glideAnim.setup(avatarPath, "glide", 0.33f, true);
+        m_idleAnim.setup(avatarPath, "idle", 0.1f, true);
 
-        util::TextureLoader::load(m_jumpTexture, (avatarPath / "Jump-6.png"));
+        util::TextureLoader::load(m_jumpTexture, (avatarPath / "jump.png"));
 
         m_idleAnim.restart();
         m_sprite.setTexture(m_idleAnim.texture(), true);
