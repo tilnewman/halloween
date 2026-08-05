@@ -55,6 +55,7 @@ namespace halloween
         m_acidCollisions.clear();
         m_waterCollisions.clear();
         t_context.managers.clear();
+        t_context.platforms.clear();
         m_farthestHorizMapPixel = 0.0f;
         m_farthestHorizTraveled = 0.0f;
         m_traveledVert = 0.0f;
