@@ -75,12 +75,12 @@ namespace halloween
 
     void Ghosts::update(const Context & t_context, const float t_frameTimeSec)
     {
-        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+        const sf::FloatRect wholeRect{ t_context.layout.mapRegion() };
         for (GhostSpawnPoint & spawnPoint : m_spawnPoints)
         {
             spawnPoint.time_remaining_sec -= t_frameTimeSec;
 
-            if ((spawnPoint.time_remaining_sec > 0.0f) || !mapRect.contains(spawnPoint.position))
+            if ((spawnPoint.time_remaining_sec > 0.0f) || !wholeRect.contains(spawnPoint.position))
             {
                 continue;
             }
@@ -155,13 +155,13 @@ namespace halloween
             return;
         }
 
-        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 
         t_states.blendMode = sf::BlendAdd;
 
         for (const Ghost & ghost : m_ghosts)
         {
-            if (mapRect.findIntersection(ghost.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(ghost.sprite.getGlobalBounds()))
             {
                 t_target.draw(ghost.sprite, t_states);
             }

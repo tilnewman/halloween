@@ -164,10 +164,10 @@ namespace halloween
     void Smoke::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const SmokeAnim & anim : m_animations)
         {
-            if (mapRect.findIntersection(anim.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(anim.sprite.getGlobalBounds()))
             {
                 t_target.draw(anim.sprite, t_states);
             }

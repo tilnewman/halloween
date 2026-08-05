@@ -214,11 +214,11 @@ namespace halloween
     void Bats::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 
         for (const Bat & bat : m_bats)
         {
-            if (mapRect.findIntersection(bat.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(bat.sprite.getGlobalBounds()))
             {
                 t_target.draw(bat.sprite, t_states);
             }
@@ -226,7 +226,10 @@ namespace halloween
 
         for (const BatDeathAnim & anim : m_deathAnims)
         {
-            t_target.draw(anim.sprite, t_states);
+            if (wholeRect.findIntersection(anim.sprite.getGlobalBounds()))
+            {
+                t_target.draw(anim.sprite, t_states);
+            }
         }
     }
 

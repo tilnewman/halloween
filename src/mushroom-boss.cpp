@@ -158,7 +158,7 @@ namespace halloween
             return;
         }
 
-        if (t_context.layout.mapRegion().findIntersection(m_sprite.getGlobalBounds()))
+        if (t_context.layout.wholeRegion().findIntersection(m_sprite.getGlobalBounds()))
         {
             t_target.draw(m_sprite, t_states);
         }

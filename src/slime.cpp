@@ -143,9 +143,11 @@ namespace halloween
     void Slimes::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
+
         for (const Slime & slime : m_slimes)
         {
-            if (t_context.layout.mapRegion().findIntersection(slime.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(slime.sprite.getGlobalBounds()))
             {
                 t_target.draw(slime.sprite, t_states);
             }
@@ -153,7 +155,10 @@ namespace halloween
 
         for (const SlimeDeathAnim & anim : m_deathAnims)
         {
-            t_target.draw(anim.sprite, t_states);
+            if (wholeRect.findIntersection(anim.sprite.getGlobalBounds()))
+            {
+                t_target.draw(anim.sprite, t_states);
+            }
         }
     }
 

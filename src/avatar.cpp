@@ -844,7 +844,7 @@ namespace halloween
 
     void Avatar::killIfOutOfBounds(const Context & t_context)
     {
-        if (!t_context.layout.mapRegion().findIntersection(collisionRect()))
+        if (!t_context.layout.wholeRegion().findIntersection(collisionRect()))
         {
             triggerDeath(t_context);
         }

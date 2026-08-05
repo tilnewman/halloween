@@ -55,9 +55,11 @@ namespace halloween
     void Saws::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
+
         for (const Saw & saw : m_saws)
         {
-            if (t_context.layout.mapRegion().findIntersection(saw.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(saw.sprite.getGlobalBounds()))
             {
                 t_target.draw(saw.sprite, t_states);
             }

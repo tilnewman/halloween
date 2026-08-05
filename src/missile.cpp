@@ -63,6 +63,8 @@ namespace halloween
 
     void Missiles::update(const Context & t_context, const float t_frameTimeSec)
     {
+        const sf::FloatRect wholeRect{ t_context.layout.mapRegion() };
+
         bool wereAnyKilled{ false };
         for (Missile & missile : m_missiles)
         {
@@ -77,9 +79,7 @@ namespace halloween
 
             const sf::FloatRect missileRect{ missile.sprite.getGlobalBounds() };
 
-            missile.is_alive =
-                t_context.layout.mapRegion().findIntersection(missileRect).has_value();
-
+            missile.is_alive = wholeRect.findIntersection(missileRect).has_value();
             if (!missile.is_alive)
             {
                 continue;
