@@ -934,6 +934,7 @@ namespace halloween
             if (moveId.id == m_platformLandedOnId)
             {
                 m_sprite.move(moveId.move);
+                return;
             }
         }
     }
