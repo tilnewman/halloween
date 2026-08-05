@@ -8,6 +8,7 @@
 #include "avatar.hpp"
 #include "check-macros.hpp"
 #include "context.hpp"
+#include "filesystem-util.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
 #include "level.hpp"
@@ -42,38 +43,39 @@ namespace halloween
 
     void Bats::setup(const Context & t_context)
     {
-        m_textures.resize(m_batCount);
+        m_textures.reserve(m_batCount);
 
-        for (std::size_t batIndex{ 0 }; batIndex < m_textures.size(); ++batIndex)
+        for (std::size_t batIndex{ 0 }; batIndex < m_batCount; ++batIndex)
         {
-            BatTextures & textureSet{ m_textures.at(batIndex) };
+            BatTextures & textureSet{ m_textures.emplace_back() };
 
-            const std::string preStr{ (t_context.settings.media_path / "image" / "bat" / "bat")
-                                          .string()
-                                          .append(std::to_string(batIndex + 1)) };
+            const auto batDir{ t_context.settings.media_path / "image" / "bat" /
+                               std::to_string(batIndex + 1) };
 
-            const std::size_t flyingFrameCount{ 10 };
-            textureSet.flying.resize(flyingFrameCount);
-            for (std::size_t textureIndex{ 0 }; textureIndex < flyingFrameCount; ++textureIndex)
+            //
+            const auto flyImagePaths{ util::findFilesInDirectory((batDir / "fly"), ".png") };
+
+            M_CHECK(
+                not flyImagePaths.empty(),
+                "Failed to find any PNG bat flying images in: " << batDir);
+
+            textureSet.flying.reserve(flyImagePaths.size());
+            for (const auto & path : flyImagePaths)
             {
-                std::string pathStr{ preStr };
-                pathStr += "-fly-";
-                pathStr += std::to_string(textureIndex);
-                pathStr += ".png";
-
-                util::TextureLoader::load(textureSet.flying.at(textureIndex), pathStr);
+                util::TextureLoader::load(textureSet.flying.emplace_back(), path);
             }
 
-            const std::size_t dyingFrameCount{ 6 };
-            textureSet.dying.resize(dyingFrameCount);
-            for (std::size_t textureIndex{ 0 }; textureIndex < dyingFrameCount; ++textureIndex)
-            {
-                std::string pathStr{ preStr };
-                pathStr += "-die-";
-                pathStr += std::to_string(textureIndex);
-                pathStr += ".png";
+            //
+            const auto deathImagePaths{ util::findFilesInDirectory((batDir / "death"), ".png") };
 
-                util::TextureLoader::load(textureSet.dying.at(textureIndex), pathStr);
+            M_CHECK(
+                not deathImagePaths.empty(),
+                "Failed to find any PNG bat death images in: " << batDir);
+
+            textureSet.dying.reserve(deathImagePaths.size());
+            for (const auto & path : deathImagePaths)
+            {
+                util::TextureLoader::load(textureSet.dying.emplace_back(), path);
             }
         }
     }

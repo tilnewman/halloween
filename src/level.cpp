@@ -34,7 +34,7 @@ namespace halloween
         , m_exitRect{}
         , m_farthestHorizMapPixel{ 0.0f }
         , m_farthestHorizTraveled{ 0.0f }
-        , m_number{ 2 }
+        , m_number{ 0 }
         , m_loader{}
         , m_traveledVert{ 0.0f }
         , m_backgroundImage{ 0 }
