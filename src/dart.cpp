@@ -79,10 +79,10 @@ namespace halloween
     void Darts::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const Dart & dart : m_darts)
         {
-            if (mapRect.findIntersection(dart.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(dart.sprite.getGlobalBounds()))
             {
                 t_target.draw(dart.sprite, t_states);
             }
@@ -90,7 +90,10 @@ namespace halloween
 
         for (const DartAnim & dartAnim : m_dartAnims)
         {
-            t_target.draw(dartAnim.sprite, t_states);
+            if (wholeRect.findIntersection(dartAnim.sprite.getGlobalBounds()))
+            {
+                t_target.draw(dartAnim.sprite, t_states);
+            }
         }
     }
 
