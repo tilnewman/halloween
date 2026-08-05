@@ -7,6 +7,7 @@
 
 #include "check-macros.hpp"
 #include "context.hpp"
+#include "filesystem-util.hpp"
 #include "info-region.hpp"
 #include "level-stats.hpp"
 #include "level.hpp"
@@ -29,7 +30,6 @@ namespace halloween
         , m_slimes{}
         , m_timePerTextureSec{ 0.0333f }
         , m_elapsedTimeSec{ 0.0f }
-        , m_textureCount{ 30 }
         , m_deathAnims{}
     {
         // probably never more than one dozen of each in a level
@@ -39,18 +39,14 @@ namespace halloween
 
     void Slimes::setup(const Context & t_context)
     {
-        m_textures.resize(m_textureCount);
+        const auto imagePath{ t_context.settings.media_path / "image" / "slime" };
+        const auto imagePaths{ util::findFilesInDirectory(imagePath, ".png") };
+        M_CHECK(not imagePaths.empty(), "Failed to find any PNG slime images in: " << imagePath);
 
-        for (std::size_t i{ 0 }; i < m_textureCount; ++i)
+        m_textures.reserve(imagePaths.size()); // prevent any reallocations
+        for (const auto & path : imagePaths)
         {
-            std::string str{
-                (t_context.settings.media_path / "image" / "slime" / "slime-").string()
-            };
-
-            str += std::to_string(i);
-            str += ".png";
-
-            util::TextureLoader::load(m_textures.at(i), str);
+            util::TextureLoader::load(m_textures.emplace_back(), path);
         }
     }
 
@@ -82,8 +78,7 @@ namespace halloween
         {
             for (Slime & slime : m_slimes)
             {
-                ++slime.texture_index;
-                if (slime.texture_index >= m_textureCount)
+                if (++slime.texture_index >= m_textures.size())
                 {
                     slime.texture_index = 0;
                 }

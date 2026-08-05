@@ -93,7 +93,6 @@ namespace halloween
         std::vector<Slime> m_slimes;
         float m_timePerTextureSec;
         float m_elapsedTimeSec;
-        std::size_t m_textureCount;
         std::vector<SlimeDeathAnim> m_deathAnims;
     };
 
