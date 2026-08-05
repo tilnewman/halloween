@@ -39,8 +39,11 @@ namespace halloween
 
         void setup(const Settings & t_settings);
         void add(const sf::Vector2f & t_position, const bool t_isMovingRight);
-        void update(const Context &, const float t_frameTimeSec);
-        void draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const;
+        void update(const Context & t_context, const float t_frameTimeSec);
+
+        void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
+            const;
+
         constexpr void clear() noexcept { m_missiles.clear(); }
 
       private:

@@ -117,11 +117,21 @@ namespace halloween
         }
     }
 
-    void Missiles::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
+    void Missiles::draw(
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        if (m_missiles.empty())
+        {
+            return;
+        }
+
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const Missile & missile : m_missiles)
         {
-            t_target.draw(missile.sprite, t_states);
+            if (wholeRect.findIntersection(missile.sprite.getGlobalBounds()))
+            {
+                t_target.draw(missile.sprite, t_states);
+            }
         }
     }
 
