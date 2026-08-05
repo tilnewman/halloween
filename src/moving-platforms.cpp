@@ -5,6 +5,7 @@
 
 #include "context.hpp"
 #include "random.hpp"
+#include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "texture-loader.hpp"
@@ -123,11 +124,21 @@ namespace halloween
     }
 
     void MovingPlatforms::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        if (m_anims.empty())
+        {
+            return;
+        }
+
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
+
         for (const PlatformAnim & anim : m_anims)
         {
-            t_target.draw(anim.sprite, t_states);
+            if (wholeRect.findIntersection(anim.sprite.getGlobalBounds()))
+            {
+                t_target.draw(anim.sprite, t_states);
+            }
         }
     }
 
