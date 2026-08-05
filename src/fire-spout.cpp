@@ -138,6 +138,11 @@ namespace halloween
     void FireSpouts::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        if (m_fireSpouts.empty())
+        {
+            return;
+        }
+
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const FireSpout & spout : m_fireSpouts)
         {

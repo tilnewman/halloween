@@ -120,6 +120,8 @@ namespace halloween
 
     void Blood::draw(sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        // no wholeRegion check because these will always be on the player and on screen
+
         if (!m_isFinished)
         {
             t_target.draw(m_sprite, t_states);

@@ -149,6 +149,11 @@ namespace halloween
     void FireSpoutLargeManager::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        if (m_anims.empty())
+        {
+            return;
+        }
+
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const FireSpoutLargeAnim & anim : m_anims)
         {
