@@ -150,6 +150,11 @@ namespace halloween
     void Ghosts::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        if (m_ghosts.empty())
+        {
+            return;
+        }
+
         const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
 
         t_states.blendMode = sf::BlendAdd;
