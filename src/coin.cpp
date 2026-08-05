@@ -124,8 +124,7 @@ namespace halloween
 
         m_elapsedTimeSec -= m_timePerFrame;
 
-        ++m_textureIndex;
-        if (m_textureIndex >= m_textureCoords.size())
+        if (++m_textureIndex >= m_textureCoords.size())
         {
             m_textureIndex = 0;
         }
@@ -139,10 +138,10 @@ namespace halloween
     void Coins::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        const sf::FloatRect mapRect{ t_context.layout.mapRegion() };
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const Coin & coin : m_coins)
         {
-            if (mapRect.findIntersection(coin.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(coin.sprite.getGlobalBounds()))
             {
                 t_target.draw(coin.sprite, t_states);
             }
@@ -150,7 +149,7 @@ namespace halloween
 
         for (const CoinAnim & coinAnim : m_animations)
         {
-            if (mapRect.findIntersection(coinAnim.sprite.getGlobalBounds()))
+            if (wholeRect.findIntersection(coinAnim.sprite.getGlobalBounds()))
             {
                 t_target.draw(coinAnim.sprite, t_states);
             }
