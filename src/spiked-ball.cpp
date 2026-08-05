@@ -82,6 +82,11 @@ namespace halloween
     void SpikedBalls::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        if (m_balls.empty())
+        {
+            return;
+        }
+
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
 
         for (const SpikedBall & ball : m_balls)
