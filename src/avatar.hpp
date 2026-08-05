@@ -5,6 +5,7 @@
 //
 #include "avatar-anim.hpp"
 #include "blood.hpp"
+#include "moving-platforms.hpp"
 
 #include <vector>
 
@@ -41,6 +42,7 @@ namespace halloween
         constexpr bool isDead() const noexcept { return (Action::Dead == m_action); }
         const sf::FloatRect collisionRect() const;
         const sf::FloatRect attackCollisionRect() const;
+        void moveWithPlatforms(const MoveIdVec_t & t_moveIDs);
 
       private:
         void moveMap(const Context & t_context);
@@ -88,6 +90,8 @@ namespace halloween
         float m_timeSinceLastThrowSec;
         bool m_hasAttackedAlready;
         std::vector<sf::FloatRect> m_collisionRectCache;
+        RectIdVec_t m_platformCollisionRectCache;
+        std::size_t m_platformLandedOnId;
     };
 
 } // namespace halloween

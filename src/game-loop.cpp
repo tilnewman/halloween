@@ -163,7 +163,6 @@ namespace halloween
         m_managersUPtr->add(*m_batsUPtr);
         m_managersUPtr->add(*m_bossUPtr);
         m_managersUPtr->add(*m_smokeUPtr);
-        m_managersUPtr->add(*m_movingPlatformsUPtr);
         m_managersUPtr->add(*m_fireSpoutLargeManagerUPtr);
         m_managersUPtr->add(*m_zombiesUPtr);
         m_managersUPtr->add(*m_frogsUPtr);
@@ -171,6 +170,7 @@ namespace halloween
         m_managersUPtr->add(*m_fliesUPtr);
         m_managersUPtr->setup(*m_contextUPtr);
 
+        m_movingPlatformsUPtr->setup(*m_contextUPtr);
         m_avatarUPtr->setup(m_settings);
         m_fliesUPtr->setup(*m_contextUPtr);
         m_infoRegionUPtr->setup(*m_contextUPtr);
@@ -180,6 +180,7 @@ namespace halloween
     void GameLoop::teardown()
     {
         m_managersUPtr->teardown();
+        m_movingPlatformsUPtr->teardown();
 
         m_managersUPtr.reset();
         m_fliesUPtr.reset();

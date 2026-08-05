@@ -16,10 +16,12 @@ namespace halloween
 
     PlatformAnim::PlatformAnim(
         const Context & t_context,
+        const std::size_t t_uniqueId,
         const sf::Texture & t_texture,
         const sf::FloatRect & t_rect,
         const sf::FloatRect & t_collisionOffsetRect)
-        : is_horiz{ t_rect.size.x > t_rect.size.y }
+        : unique_id{ t_uniqueId }
+        , is_horiz{ t_rect.size.x > t_rect.size.y }
         , sprite{ t_texture }
         , rect{ t_rect }
         , collision_offset_rect{ t_collisionOffsetRect }
@@ -57,7 +59,8 @@ namespace halloween
     //
 
     MovingPlatforms::MovingPlatforms()
-        : m_normalTexture{}
+        : m_nextUniqueId{ 0 }
+        , m_normalTexture{}
         , m_jungleTexture{}
         , m_anims{}
     {
@@ -79,12 +82,16 @@ namespace halloween
         if ("normal" == t_details)
         {
             const sf::FloatRect collisionOffsetRect({ 0.0f, 0.0f }, { 144.0f, 50.0f });
-            m_anims.emplace_back(t_context, m_normalTexture, t_rect, collisionOffsetRect);
+
+            m_anims.emplace_back(
+                t_context, ++m_nextUniqueId, m_normalTexture, t_rect, collisionOffsetRect);
         }
         else if ("jungle" == t_details)
         {
             const sf::FloatRect collisionOffsetRect({ 8.0f, 13.0f }, { 113.0f, 38.0f });
-            m_anims.emplace_back(t_context, m_jungleTexture, t_rect, collisionOffsetRect);
+
+            m_anims.emplace_back(
+                t_context, ++m_nextUniqueId, m_jungleTexture, t_rect, collisionOffsetRect);
         }
         else
         {
@@ -92,10 +99,15 @@ namespace halloween
         }
     }
 
-    void MovingPlatforms::update(const Context &, const float t_elapsedTimeSec)
+    const MoveIdVec_t MovingPlatforms::update(const Context &, const float t_elapsedTimeSec)
     {
+        MoveIdVec_t moveIds;
+        moveIds.reserve(m_anims.size());
+
         for (PlatformAnim & anim : m_anims)
         {
+            const sf::Vector2f posBefore{ anim.sprite.getPosition() };
+
             if (anim.is_horiz)
             {
                 const float span{ anim.rect.size.x - anim.sprite.getGlobalBounds().size.x };
@@ -118,7 +130,12 @@ namespace halloween
 
                 anim.sprite.setPosition({ anim.sprite.getPosition().x, posVert });
             }
+
+            const sf::Vector2f posAfter{ anim.sprite.getPosition() };
+            moveIds.emplace_back(anim.unique_id, (posAfter - posBefore));
         }
+
+        return moveIds;
     }
 
     void MovingPlatforms::moveWithMap(const sf::Vector2f & t_move)
@@ -137,11 +154,11 @@ namespace halloween
         return false;
     }
 
-    void MovingPlatforms::appendCollisions(std::vector<sf::FloatRect> & t_rects) const
+    void MovingPlatforms::appendCollisions(RectIdVec_t & t_rectIDs) const
     {
         for (const PlatformAnim & anim : m_anims)
         {
-            t_rects.push_back(anim.collisionRect());
+            t_rectIDs.emplace_back(anim.unique_id, anim.collisionRect());
         }
     }
 

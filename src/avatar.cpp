@@ -58,6 +58,8 @@ namespace halloween
         , m_timeSinceLastThrowSec{ 0.0f }
         , m_hasAttackedAlready{ false }
         , m_collisionRectCache{}
+        , m_platformCollisionRectCache{}
+        , m_platformLandedOnId{ 0 }
     {
         m_collisionRectCache.reserve(1'000);
     }
@@ -681,9 +683,27 @@ namespace halloween
             }
         }
 
+        m_platformCollisionRectCache.clear();
+        t_context.platforms.appendCollisions(m_platformCollisionRectCache);
+        for (const PlatformRectId & rectId : m_platformCollisionRectCache)
+        {
+            const auto intersectionOpt{ avatarRect.findIntersection(rectId.rect) };
+            if (intersectionOpt)
+            {
+                const bool detectLandingBefore{ detectLanding };
+                collide(t_context, intersectionOpt.value(), avatarCenter, detectLanding);
+                const bool detectLandingAfter{ detectLanding };
+                if (not detectLandingBefore and detectLandingAfter)
+                {
+                    m_platformLandedOnId = rectId.id;
+                }
+            }
+        }
+
         if (!detectLanding)
         {
             m_hasLanded = false;
+            m_platformLandedOnId = 0;
         }
     }
 
@@ -902,5 +922,21 @@ namespace halloween
     }
 
     void Avatar::handleHitByBoss(const Context & t_context) { triggerDeath(t_context); }
+
+    void Avatar::moveWithPlatforms(const MoveIdVec_t & t_moveIDs)
+    {
+        if (not m_hasLanded or (0 == m_platformLandedOnId))
+        {
+            return;
+        }
+
+        for (const PlatformMoveId & moveId : t_moveIDs)
+        {
+            if (moveId.id == m_platformLandedOnId)
+            {
+                m_sprite.move(moveId.move);
+            }
+        }
+    }
 
 } // namespace halloween

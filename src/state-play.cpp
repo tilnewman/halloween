@@ -13,6 +13,7 @@
 #include "level-stats.hpp"
 #include "level.hpp"
 #include "missile.hpp"
+#include "moving-platforms.hpp"
 #include "music-player.hpp"
 #include "owl-calls.hpp"
 #include "pause-screen.hpp"
@@ -82,7 +83,9 @@ namespace halloween
         t_context.missiles.update(t_context, t_frameTimeSec);
         t_context.owl_calls.update(t_context, t_frameTimeSec);
         t_context.managers.update(t_context, t_frameTimeSec);
+        const MoveIdVec_t moveIDs{ t_context.platforms.update(t_context, t_frameTimeSec) };
         t_context.avatar.update(t_context, t_frameTimeSec);
+        t_context.avatar.moveWithPlatforms(moveIDs);
     }
 
     bool PlayState::handleEvent(const Context & t_context, const sf::Event & t_event)
@@ -123,6 +126,7 @@ namespace halloween
         t_context.managers.drawBeforeMap(t_context, t_target, t_states);
         t_context.level.draw(t_context, t_target, t_states);
         t_context.managers.drawAfterMap(t_context, t_target, t_states);
+        t_context.platforms.draw(t_context, t_target, t_states);
         t_context.missiles.draw(t_context, t_target, t_states);
         t_context.info_region.draw(t_target, t_states);
         t_context.avatar.draw(t_target, t_states);
