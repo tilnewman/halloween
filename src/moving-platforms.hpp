@@ -23,13 +23,15 @@ namespace halloween
         PlatformAnim(
             const Context & t_context,
             const sf::Texture & t_texture,
-            const sf::FloatRect & t_rect);
+            const sf::FloatRect & t_rect,
+            const sf::FloatRect & t_collisionOffsetRect);
 
-        [[nodiscard]] inline const sf::FloatRect collisionRect() const;
+        [[nodiscard]] const sf::FloatRect collisionRect() const;
 
         bool is_horiz;
         sf::Sprite sprite;
         sf::FloatRect rect;
+        sf::FloatRect collision_offset_rect;
         util::SliderOscillator<float> slider;
     };
 
@@ -65,7 +67,8 @@ namespace halloween
             const final;
 
       private:
-        sf::Texture m_texture;
+        sf::Texture m_normalTexture;
+        sf::Texture m_jungleTexture;
         std::vector<PlatformAnim> m_anims;
     };
 

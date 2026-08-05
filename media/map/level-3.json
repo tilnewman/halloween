@@ -329,13 +329,24 @@
                 {
                  "height":128,
                  "id":68,
-                 "name":"",
+                 "name":"jungle",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":960,
-                 "x":4896,
-                 "y":928
+                 "width":704,
+                 "x":3840,
+                 "y":960
+                }, 
+                {
+                 "height":128,
+                 "id":83,
+                 "name":"normal",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":704,
+                 "x":2752,
+                 "y":960
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -455,7 +466,7 @@
                  "type":"",
                  "visible":true,
                  "width":1952,
-                 "x":2944,
+                 "x":5856,
                  "y":992
                 }],
          "opacity":1,
@@ -465,7 +476,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":83,
+ "nextobjectid":84,
  "orientation":"orthogonal",
  "properties":[
         {

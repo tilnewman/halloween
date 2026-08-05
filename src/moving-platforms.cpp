@@ -3,6 +3,7 @@
 //
 #include "moving-platforms.hpp"
 
+#include "check-macros.hpp"
 #include "context.hpp"
 #include "random.hpp"
 #include "screen-regions.hpp"
@@ -14,10 +15,14 @@ namespace halloween
 {
 
     PlatformAnim::PlatformAnim(
-        const Context & t_context, const sf::Texture & t_texture, const sf::FloatRect & t_rect)
+        const Context & t_context,
+        const sf::Texture & t_texture,
+        const sf::FloatRect & t_rect,
+        const sf::FloatRect & t_collisionOffsetRect)
         : is_horiz{ t_rect.size.x > t_rect.size.y }
         , sprite{ t_texture }
         , rect{ t_rect }
+        , collision_offset_rect{ t_collisionOffsetRect }
         , slider{ 0.0f, 1.0f, t_context.random.fromTo(0.2f, 0.35f) }
     {
         if (is_horiz)
@@ -43,16 +48,17 @@ namespace halloween
 
     const sf::FloatRect PlatformAnim::collisionRect() const
     {
-        sf::FloatRect collRect(sprite.getGlobalBounds());
-        collRect.position += { 8.0f, 13.0f };
-        collRect.size = { 113.0f, 38.0f };
+        sf::FloatRect collRect{ sprite.getGlobalBounds() };
+        collRect.position += collision_offset_rect.position;
+        collRect.size = collision_offset_rect.size;
         return collRect;
     }
 
     //
 
     MovingPlatforms::MovingPlatforms()
-        : m_texture{}
+        : m_normalTexture{}
+        , m_jungleTexture{}
         , m_anims{}
     {
         m_anims.reserve(32); // just a harmless guess
@@ -61,13 +67,29 @@ namespace halloween
     void MovingPlatforms::setup(const Context & t_context)
     {
         util::TextureLoader::load(
-            m_texture, (t_context.settings.media_path / "image" / "platform.png"));
+            m_normalTexture, (t_context.settings.media_path / "image" / "platform-normal.png"));
+
+        util::TextureLoader::load(
+            m_jungleTexture, (t_context.settings.media_path / "image" / "platform-jungle.png"));
     }
 
     void MovingPlatforms::add(
-        const Context & t_context, const sf::FloatRect & t_rect, const std::string &)
+        const Context & t_context, const sf::FloatRect & t_rect, const std::string & t_details)
     {
-        m_anims.emplace_back(t_context, m_texture, t_rect);
+        if ("normal" == t_details)
+        {
+            const sf::FloatRect collisionOffsetRect({ 0.0f, 0.0f }, { 144.0f, 50.0f });
+            m_anims.emplace_back(t_context, m_normalTexture, t_rect, collisionOffsetRect);
+        }
+        else if ("jungle" == t_details)
+        {
+            const sf::FloatRect collisionOffsetRect({ 8.0f, 13.0f }, { 113.0f, 38.0f });
+            m_anims.emplace_back(t_context, m_jungleTexture, t_rect, collisionOffsetRect);
+        }
+        else
+        {
+            M_LOG("Error:  Unknown moving platform name found in map file \"" << t_details << "\"");
+        }
     }
 
     void MovingPlatforms::update(const Context &, const float t_elapsedTimeSec)
