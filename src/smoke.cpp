@@ -94,8 +94,7 @@ namespace halloween
 
         for (const auto & path : paths)
         {
-            sf::Texture & texture{ m_textures.emplace_back() };
-            util::TextureLoader::load(texture, path, true);
+            util::TextureLoader::load(m_textures.emplace_back(), path, true);
         }
     }
 
@@ -164,6 +163,11 @@ namespace halloween
     void Smoke::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        if (m_animations.empty())
+        {
+            return;
+        }
+
         const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const SmokeAnim & anim : m_animations)
         {
