@@ -123,7 +123,7 @@ namespace halloween
         t_context.managers.drawBeforeMap(t_context, t_target, t_states);
         t_context.level.draw(t_context, t_target, t_states);
         t_context.managers.drawAfterMap(t_context, t_target, t_states);
-        t_context.missiles.draw(t_target, t_states);
+        t_context.missiles.draw(t_context, t_target, t_states);
         t_context.info_region.draw(t_target, t_states);
         t_context.avatar.draw(t_target, t_states);
     }
