@@ -5,7 +5,9 @@
 //
 #include "fire-spout.hpp"
 
+#include "check-macros.hpp"
 #include "context.hpp"
+#include "filesystem-util.hpp"
 #include "info-region.hpp"
 #include "level.hpp"
 #include "screen-regions.hpp"
@@ -36,19 +38,16 @@ namespace halloween
         util::TextureLoader::load(
             m_spoutTexture, (t_context.settings.media_path / "image" / "fire-spouts.png"));
 
-        const std::size_t fireTextureCount{ 14 };
-        m_fireTextures.reserve(fireTextureCount);
-        for (std::size_t i{ 1 }; i <= fireTextureCount; ++i)
+        const std::filesystem::path imagePath{ (
+            t_context.settings.media_path / "image" / "fire-small") };
+
+        const auto imagePaths{ util::findFilesInDirectory(imagePath, ".png") };
+        M_CHECK((not imagePaths.empty()), "Failed to find any PNG images in: " << imagePath);
+
+        m_fireTextures.reserve(imagePaths.size()); // prevent any reallocations
+        for (const auto & path : imagePaths)
         {
-            std::string filePath{
-                (t_context.settings.media_path / "image" / "fire-small" / "fire-").string()
-            };
-
-            filePath += std::to_string(i);
-            filePath += ".png";
-
-            sf::Texture & texture{ m_fireTextures.emplace_back() };
-            util::TextureLoader::load(texture, filePath);
+            util::TextureLoader::load(m_fireTextures.emplace_back(), path);
         }
     }
 
@@ -105,8 +104,7 @@ namespace halloween
 
                 spout.elapsed_time_sec -= m_timePerFrame;
 
-                ++spout.texture_index;
-                if (spout.texture_index >= m_fireTextures.size())
+                if (++spout.texture_index >= m_fireTextures.size())
                 {
                     spout.texture_index = 0;
                     spout.elapsed_time_sec = 0.0f;
@@ -140,14 +138,14 @@ namespace halloween
     void FireSpouts::draw(
         const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const FireSpout & spout : m_fireSpouts)
         {
-            t_target.draw(spout.spout_sprite, t_states);
-
-            if (spout.is_spurting)
+            if (wholeRect.findIntersection(spout.fire_sprite.getGlobalBounds()))
             {
-                if (t_context.layout.mapRegion().findIntersection(
-                        spout.fire_sprite.getGlobalBounds()))
+                t_target.draw(spout.spout_sprite, t_states);
+
+                if (spout.is_spurting)
                 {
                     t_target.draw(spout.fire_sprite, t_states);
                 }
