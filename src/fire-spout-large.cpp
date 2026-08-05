@@ -9,6 +9,7 @@
 #include "context.hpp"
 #include "filesystem-util.hpp"
 #include "random.hpp"
+#include "screen-regions.hpp"
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "texture-loader.hpp"
@@ -77,8 +78,7 @@ namespace halloween
 
         for (const std::filesystem::path & path : imagePaths)
         {
-            sf::Texture & texture{ m_fireTextures.emplace_back() };
-            util::TextureLoader::load(texture, path.string());
+            util::TextureLoader::load(m_fireTextures.emplace_back(), path.string());
         }
 
         M_CHECK(!m_fireTextures.empty(), "Unable to find and load any fire-spout-large textures!");
@@ -98,7 +98,7 @@ namespace halloween
         for (FireSpoutLargeAnim & anim : m_anims)
         {
             anim.elapsed_time_sec += t_frameTimeSec;
-            const float timePerFrameSec{ 0.075f };
+            const float timePerFrameSec{ 0.065f };
             if (anim.elapsed_time_sec > timePerFrameSec)
             {
                 anim.elapsed_time_sec -= timePerFrameSec;
@@ -147,12 +147,16 @@ namespace halloween
     }
 
     void FireSpoutLargeManager::draw(
-        const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
+        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
+        const sf::FloatRect wholeRect{ t_context.layout.wholeRegion() };
         for (const FireSpoutLargeAnim & anim : m_anims)
         {
-            t_target.draw(anim.fire_sprite, t_states);
-            t_target.draw(anim.spout_sprite, t_states);
+            if (wholeRect.findIntersection(anim.spout_sprite.getGlobalBounds()))
+            {
+                t_target.draw(anim.fire_sprite, t_states);
+                t_target.draw(anim.spout_sprite, t_states);
+            }
         }
     }
 
