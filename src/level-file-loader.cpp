@@ -15,6 +15,7 @@
 #include "level.hpp"
 #include "moving-platforms.hpp"
 #include "mushroom-boss.hpp"
+#include "ninjas.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -295,6 +296,10 @@ namespace halloween
             else if (layerName == "smoke")
             {
                 parseObjectLayerRects(t_context.smoke, t_context, jsonLayer);
+            }
+            else if (layerName == "ninja-trader")
+            {
+                parseObjectLayerRects(t_context.ninjas, t_context, jsonLayer);
             }
             else
             {

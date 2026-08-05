@@ -47,6 +47,7 @@ namespace halloween
         , m_frogsUPtr{}
         , m_spidersUPtr{}
         , m_fliesUPtr{}
+        , m_ninjaUPtr{}
         , m_contextUPtr{}
     {}
 
@@ -109,6 +110,7 @@ namespace halloween
         m_frogsUPtr = std::make_unique<FrogObjectManager>();
         m_spidersUPtr = std::make_unique<SpiderObjectManager>();
         m_fliesUPtr = std::make_unique<FlyObjectManager>();
+        m_ninjaUPtr = std::make_unique<NinjaObjectManager>();
 
         m_audioUPtr->mediaPath(m_settings.media_path / "sfx");
         m_audioUPtr->loadAll();
@@ -147,7 +149,8 @@ namespace halloween
             *m_zombiesUPtr,
             *m_frogsUPtr,
             *m_spidersUPtr,
-            *m_fliesUPtr);
+            *m_fliesUPtr,
+            *m_ninjaUPtr);
 
         m_layoutUPtr->setup(m_windowUPtr->getSize());
         m_fontManagerUPtr->setup(m_settings);
@@ -168,6 +171,7 @@ namespace halloween
         m_managersUPtr->add(*m_frogsUPtr);
         m_managersUPtr->add(*m_spidersUPtr);
         m_managersUPtr->add(*m_fliesUPtr);
+        m_managersUPtr->add(*m_ninjaUPtr);
         m_managersUPtr->setup(*m_contextUPtr);
 
         m_movingPlatformsUPtr->setup(*m_contextUPtr);

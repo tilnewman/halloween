@@ -23,6 +23,7 @@
 #include "moving-platforms.hpp"
 #include "mushroom-boss.hpp"
 #include "music-player.hpp"
+#include "ninjas.hpp"
 #include "object-manager.hpp"
 #include "owl-calls.hpp"
 #include "random.hpp"
@@ -97,6 +98,7 @@ namespace halloween
         std::unique_ptr<FrogObjectManager> m_frogsUPtr;
         std::unique_ptr<SpiderObjectManager> m_spidersUPtr;
         std::unique_ptr<FlyObjectManager> m_fliesUPtr;
+        std::unique_ptr<NinjaObjectManager> m_ninjaUPtr;
 
         std::unique_ptr<Context> m_contextUPtr;
     };

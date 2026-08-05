@@ -42,6 +42,7 @@ namespace halloween
     class FlyObjectManager;
     class ObjectManagerList;
     class FrogObjectManager;
+    class NinjaObjectManager;
     class SpiderObjectManager;
     class ZombieObjectManager;
     class FireSpoutLargeManager;
@@ -79,7 +80,8 @@ namespace halloween
             ZombieObjectManager & t_zombieObjectManager,
             FrogObjectManager & t_frogObjectManager,
             SpiderObjectManager & t_spiderObjectManager,
-            FlyObjectManager & t_flyObjectManager)
+            FlyObjectManager & t_flyObjectManager,
+            NinjaObjectManager & t_ninjaObjectManager)
             : settings{ t_settings }
             , window{ t_window }
             , random{ t_random }
@@ -111,6 +113,7 @@ namespace halloween
             , frogs{ t_frogObjectManager }
             , spiders{ t_spiderObjectManager }
             , flies{ t_flyObjectManager }
+            , ninjas{ t_ninjaObjectManager }
         {}
 
         const Settings & settings;
@@ -144,6 +147,7 @@ namespace halloween
         FrogObjectManager & frogs;
         SpiderObjectManager & spiders;
         FlyObjectManager & flies;
+        NinjaObjectManager & ninjas;
     };
 
 } // namespace halloween
