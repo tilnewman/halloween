@@ -83,7 +83,7 @@ namespace halloween
     {
       public:
         Bats();
-        virtual ~Bats() final = default;
+        ~Bats() final = default;
 
         void setup(const Context &) final;
         void teardown() final {}
