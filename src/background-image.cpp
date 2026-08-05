@@ -24,10 +24,8 @@ namespace halloween
 
     void BackgroundImage::setup(const Context & t_context, const int t_backgroundImageNumber)
     {
-        std::string path{ (t_context.settings.media_path / "image" / "background-").string() };
-        path += std::to_string(t_backgroundImageNumber);
-        path += ".png";
-
+        const std::string filename{ std::to_string(t_backgroundImageNumber).append(".png") };
+        const auto path{ t_context.settings.media_path / "image" / "background" / filename };
         util::TextureLoader::load(m_texture, path, true);
         m_sprite.setTexture(m_texture, true);
         util::growAndCenterInside(m_sprite, t_context.layout.wholeRegion());
