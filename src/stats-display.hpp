@@ -9,7 +9,10 @@
 #include <iostream>
 #include <string>
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace util
 {
@@ -21,7 +24,7 @@ namespace util
         explicit GraphDisplay(
             const std::vector<data_t> & t_data,
             const sf::Vector2u & t_size = { 1000, 500 },
-            const std::uint8_t t_alpha  = 255)
+            const std::uint8_t t_alpha = 255)
             : m_size{ t_size }
             , m_data{ t_data }
             , m_alpha{ t_alpha }
@@ -145,7 +148,7 @@ namespace util
                     break;
                 }
 
-                const data_t b       = t_oldValues.at(oldIndex++);
+                const data_t b = t_oldValues.at(oldIndex++);
                 const data_t average = (a + b) / data_t(2);
                 newValues.push_back(average);
             }
@@ -194,8 +197,8 @@ namespace util
 
                 sf::FloatRect dataBarRect;
                 dataBarRect.position.x = posLeft;
-                dataBarRect.size.x     = dataBarWidth;
-                dataBarRect.size.y     = (static_cast<float>(m_size.y) * valueRatio);
+                dataBarRect.size.x = dataBarWidth;
+                dataBarRect.size.y = (static_cast<float>(m_size.y) * valueRatio);
                 dataBarRect.position.y = (static_cast<float>(m_size.y) - dataBarRect.size.y);
 
                 t_dataBarRects.push_back(dataBarRect);
