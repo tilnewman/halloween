@@ -13,6 +13,11 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+namespace sf
+{
+    class RenderTarget;
+}
+
 namespace halloween
 {
     struct Context;

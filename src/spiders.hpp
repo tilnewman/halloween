@@ -6,13 +6,16 @@
 #include "object-manager.hpp"
 #include "spider.hpp"
 
-#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
 #include <vector>
+
+namespace sf
+{
+    class RenderTarget;
+}
 
 namespace halloween
 {

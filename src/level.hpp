@@ -10,16 +10,12 @@
 #include <vector>
 
 #include <SFML/Graphics/Rect.hpp>
-
-//
+#include <SFML/Graphics/RenderStates.hpp>
 
 namespace sf
 {
     class RenderTarget;
-    struct RenderStates;
 } // namespace sf
-
-//
 
 namespace halloween
 {

@@ -5,10 +5,14 @@
 //
 #include <vector>
 
-#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Vertex.hpp>
+
+namespace sf
+{
+    class RenderTarget;
+}
 
 namespace halloween
 {

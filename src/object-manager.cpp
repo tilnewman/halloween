@@ -8,6 +8,8 @@
 #include "context.hpp"
 #include "settings.hpp"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace halloween
 {
 

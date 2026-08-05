@@ -5,20 +5,15 @@
 //
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
-
-//
+#include <SFML/Graphics/RenderStates.hpp>
 
 namespace sf
 {
     class RenderTarget;
-    struct RenderStates;
 } // namespace sf
-
-//
 
 namespace halloween
 {
-
     struct Context;
 
     //

@@ -9,18 +9,14 @@
 #include <string>
 #include <vector>
 
+#include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/Text.hpp>
-
-//
 
 namespace sf
 {
     class Event;
     class RenderTarget;
-    struct RenderStates;
 } // namespace sf
-
-//
 
 namespace halloween
 {

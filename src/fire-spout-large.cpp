@@ -14,7 +14,6 @@
 #include "sfml-util.hpp"
 #include "texture-loader.hpp"
 
-#include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include <filesystem>

@@ -13,6 +13,7 @@
 #include "sfml-util.hpp"
 
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace halloween
 {

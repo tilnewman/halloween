@@ -9,6 +9,11 @@
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
+namespace sf
+{
+    class RenderTarget;
+}
+
 namespace halloween
 {
 

@@ -15,6 +15,8 @@
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace halloween
 {
     Spider::Spider(

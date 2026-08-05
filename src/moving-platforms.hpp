@@ -7,8 +7,14 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 
 #include <vector>
+
+namespace sf
+{
+    class RenderTarget;
+}
 
 namespace halloween
 {

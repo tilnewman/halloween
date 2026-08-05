@@ -16,16 +16,11 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-//
-
 namespace sf
 {
     class Event;
     class RenderTarget;
-    struct RenderStates;
 } // namespace sf
-
-//
 
 namespace halloween
 {

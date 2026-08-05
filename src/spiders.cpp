@@ -13,6 +13,8 @@
 #include "settings.hpp"
 #include "texture-loader.hpp"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace halloween
 {
 

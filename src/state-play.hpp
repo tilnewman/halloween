@@ -6,16 +6,13 @@
 #include "background-image.hpp"
 #include "states.hpp"
 
-//
+#include <SFML/Graphics/RenderStates.hpp>
 
 namespace sf
 {
     class Event;
     class RenderTarget;
-    struct RenderStates;
 } // namespace sf
-
-//
 
 namespace halloween
 {

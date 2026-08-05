@@ -8,11 +8,15 @@
 #include <string>
 #include <vector>
 
-#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+
+namespace sf
+{
+    class RenderTarget;
+}
 
 namespace halloween
 {

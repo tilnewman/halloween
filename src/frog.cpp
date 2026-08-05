@@ -16,6 +16,7 @@
 #include "sound-player.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 #include <string>
 
