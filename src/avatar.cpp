@@ -16,6 +16,7 @@
 #include "level.hpp"
 #include "missile.hpp"
 #include "mushroom-boss.hpp"
+#include "ninjas.hpp"
 #include "saw.hpp"
 #include "screen-regions.hpp"
 #include "settings.hpp"
@@ -806,7 +807,8 @@ namespace halloween
             t_context.zombies.attack(t_context, attackRect).wasAnyHarm() ||
             t_context.frogs.attack(t_context, attackRect).wasAnyHarm() ||
             t_context.spiders.attack(t_context, attackRect).wasAnyHarm() ||
-            t_context.flies.attack(t_context, attackRect).wasAnyHarm())
+            t_context.flies.attack(t_context, attackRect).wasAnyHarm() ||
+            t_context.ninjas.attack(t_context, attackRect).wasAnyHarm())
         {
             m_hasAttackedAlready = true;
         }

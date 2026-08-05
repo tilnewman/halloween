@@ -38,6 +38,7 @@ namespace halloween
         Lose,
         Win,
         Credits,
+        Trader,
         Quit
     };
 

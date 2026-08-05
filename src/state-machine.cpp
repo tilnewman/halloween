@@ -10,6 +10,7 @@
 #include "state-credits.hpp"
 #include "state-level-complete.hpp"
 #include "state-play.hpp"
+#include "state-trader.hpp"
 
 namespace halloween
 {
@@ -49,9 +50,10 @@ namespace halloween
             case State::Win:      { return std::make_unique<WinState>();           }
             case State::Credits:  { return std::make_unique<StateCredits>();       }
             case State::Quit:     { return std::make_unique<QuitState>();          }
+            case State::Trader:   { return std::make_unique<TraderState>();        }
             default:
             {
-                M_LOG("Asked to make a state that is not implemented.  Til, you forgot"\
+                M_LOG("Asked to make a state that is not implemented.  Til, you forgot "\
                       "to update the makeState() function after adding a new state again...");
 
                 assert(false);

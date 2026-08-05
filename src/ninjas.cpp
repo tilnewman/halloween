@@ -13,6 +13,8 @@
 #include "settings.hpp"
 #include "sfml-util.hpp"
 #include "sound-player.hpp"
+#include "state-machine.hpp"
+#include "state-trader.hpp"
 #include "texture-loader.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -69,7 +71,7 @@ namespace halloween
         m_ninjas.emplace_back(t_context, m_textures.at(0), t_rect);
     }
 
-    void NinjaObjectManager::update(const Context &, const float m_frameTimeSec) 
+    void NinjaObjectManager::update(const Context &, const float m_frameTimeSec)
     {
         for (Ninja & ninja : m_ninjas)
         {
@@ -119,6 +121,24 @@ namespace halloween
         return false;
     }
 
-    const Harm NinjaObjectManager::attack(const Context &, const sf::FloatRect &) { return {}; }
+    const Harm
+        NinjaObjectManager::attack(const Context & t_context, const sf::FloatRect & t_avatarRect)
+    {
+        for (Ninja & ninja : m_ninjas)
+        {
+            if (t_avatarRect.findIntersection(ninja.sprite.getGlobalBounds()))
+            {
+                TraderState::m_traderRect = ninja.sprite.getGlobalBounds();
+                t_context.state.setChangePending(State::Trader);
+                
+                Harm harm;
+                harm.did_hit = true;
+                harm.did_kill = true;
+                return harm;
+            }
+        }
+
+        return {};
+    }
 
 } // namespace halloween
