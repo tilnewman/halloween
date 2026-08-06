@@ -25,9 +25,12 @@ namespace halloween
         Ninja(
             const Context & t_context, const sf::Texture & t_texture, const sf::FloatRect & t_rect);
 
+        void turnToFace(const sf::Vector2f & t_position);
+
         sf::Sprite sprite;
         float anim_elapsed_sec;
         std::size_t frame_index;
+        bool is_facing_right;
     };
 
     class NinjaObjectManager final : public IObjectManager

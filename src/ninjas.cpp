@@ -27,6 +27,7 @@ namespace halloween
         : sprite{ t_texture }
         , anim_elapsed_sec{ 0.0f }
         , frame_index{ 0 }
+        , is_facing_right{ t_context.random.boolean() }
     {
         util::setOriginToCenter(sprite);
 
@@ -37,8 +38,18 @@ namespace halloween
             { util::center(t_rect).x,
               (util::bottom(t_rect) - (sprite.getGlobalBounds().size.y * 0.5f)) });
 
-        if (t_context.random.boolean())
+        if (not is_facing_right)
         {
+            sprite.scale({ -1.0f, 1.0f });
+        }
+    }
+
+    void Ninja::turnToFace(const sf::Vector2f & t_position)
+    {
+        const bool isPosRight{ util::center(sprite).x < t_position.x };
+        if (isPosRight != is_facing_right)
+        {
+            is_facing_right = not is_facing_right;
             sprite.scale({ -1.0f, 1.0f });
         }
     }
@@ -128,9 +139,10 @@ namespace halloween
         {
             if (t_avatarRect.findIntersection(ninja.sprite.getGlobalBounds()))
             {
+                ninja.turnToFace(util::center(t_avatarRect));
                 TraderState::m_traderRect = ninja.sprite.getGlobalBounds();
                 t_context.state.setChangePending(State::Trader);
-                
+
                 Harm harm;
                 harm.did_hit = true;
                 harm.did_kill = true;
