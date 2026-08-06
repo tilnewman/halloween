@@ -68,7 +68,7 @@ namespace halloween
         sf::Color smoke_color{ 0, 255, 0 };
         float smoke_animation_time_between_frames{ 0.08f };
 
-        std::size_t dart_coin_cost{5};
+        int dart_coin_cost{5};
     };
 
 } // namespace halloween

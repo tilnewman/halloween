@@ -28,6 +28,7 @@ namespace halloween
         , m_timePerScoreUpdate{ 0.1f }
         , m_lives{ 0 }
         , m_dartCount{ 0 }
+        , m_coinCount{ 0 }
         , m_text{ util::SfmlDefaults::instance().font() }
         , m_region{}
         , m_bgVerts{}
@@ -45,7 +46,7 @@ namespace halloween
         {
             m_elapsedTimeSec -= m_timePerScoreUpdate;
 
-            if ((m_score - m_visibleScore) > 10)
+            if ((m_score - m_visibleScore) > 20)
             {
                 m_visibleScore = m_score;
                 t_context.audio.play("bell", 0.5f);
@@ -99,12 +100,19 @@ namespace halloween
         updateText();
     }
 
+    void InfoRegion::coinsAdjust(int t_adjustment)
+    {
+        m_coinCount += t_adjustment;
+        updateText();
+    }
+
     void InfoRegion::updateText()
     {
         std::ostringstream ss;
 
         ss << "Lives: " << std::setw(2) << std::setfill('0') << m_lives
            << "    Darts: " << std::setw(2) << std::setfill('0') << m_dartCount
+           << "    Coins: " << std::setw(3) << std::setfill('0') << m_coinCount
            << "    Score: " << std::setw(6) << std::setfill('0') << m_visibleScore;
 
         m_text.setString(ss.str());

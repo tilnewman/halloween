@@ -73,7 +73,7 @@ namespace halloween
         m_dialogSprite.setPosition(m_traderDialogPos);
 
         //
-        m_dartsToGive = (t_context.stats.coin_collected / t_context.settings.dart_coin_cost);
+        m_dartsToGive = (t_context.info_region.coins() / t_context.settings.dart_coin_cost);
         m_coinsToTake = (m_dartsToGive * t_context.settings.dart_coin_cost);
 
         if (m_dartsToGive > 0)
@@ -90,14 +90,17 @@ namespace halloween
         }
 
         //
+        updateDialogRect();
+        m_dialogTextDetails = TextDetails(Font::General, 30u, sf::Color::Black);
+        m_dialogTextPack = TextLayout::typeset(t_context, "", m_dialogRect, m_dialogTextDetails);
+    }
+
+    void TraderState::updateDialogRect()
+    {
         m_dialogRect =
             util::scaleRectInPlaceCopy(m_dialogSprite.getGlobalBounds(), { 0.9f, 0.65f });
 
         m_dialogRect.position.y -= (m_dialogRect.size.y * 0.1f);
-
-        m_dialogTextDetails = TextDetails(Font::General, 30u, sf::Color::Black);
-
-        m_dialogTextPack = TextLayout::typeset(t_context, "", m_dialogRect, m_dialogTextDetails);
     }
 
     void TraderState::onExit(const Context &) {}
@@ -124,9 +127,7 @@ namespace halloween
             m_elapsedSec = 0.0f;
             m_phase = TraderPhase::PlayerHey;
             m_dialogSprite.setPosition(m_playerDialogPos);
-
-            m_dialogRect =
-                util::scaleRectInPlaceCopy(m_dialogSprite.getGlobalBounds(), { 0.9f, 0.65f });
+            updateDialogRect();
 
             m_dialogTextPack =
                 TextLayout::typeset(t_context, "Hey", m_dialogRect, m_dialogTextDetails);
@@ -141,9 +142,7 @@ namespace halloween
             m_elapsedSec = 0.0f;
             m_phase = TraderPhase::TraderOffer;
             m_dialogSprite.setPosition(m_traderDialogPos);
-
-            m_dialogRect =
-                util::scaleRectInPlaceCopy(m_dialogSprite.getGlobalBounds(), { 0.9f, 0.65f });
+            updateDialogRect();
 
             m_dialogTextPack =
                 TextLayout::typeset(t_context, m_offerMessage, m_dialogRect, m_dialogTextDetails);
@@ -163,8 +162,9 @@ namespace halloween
             if ((TraderPhase::TraderOffer == m_phase) and (m_dartsToGive > 0) and
                 (keyPtr->scancode == sf::Keyboard::Scancode::Y))
             {
-                t_context.info_region.dartsAdjust(static_cast<int>(m_dartsToGive));
-                //t_context.info_region.coin // TODO
+                t_context.info_region.dartsAdjust(m_dartsToGive);
+                t_context.info_region.coinsAdjust(-m_coinsToTake);
+                t_context.state.setChangePending(State::Play);
             }
             else
             {

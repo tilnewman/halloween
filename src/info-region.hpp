@@ -37,6 +37,9 @@ namespace halloween
         constexpr int darts() const noexcept { return m_dartCount; }
         void dartsAdjust(const int t_adjustment);
 
+        constexpr int coins() const noexcept { return m_coinCount; }
+        void coinsAdjust(const int t_adjustment);
+
       private:
         void updateText();
 
@@ -47,6 +50,7 @@ namespace halloween
         float m_timePerScoreUpdate;
         int m_lives;
         int m_dartCount;
+        int m_coinCount;
         sf::Text m_text;
         sf::FloatRect m_region;
         std::vector<sf::Vertex> m_bgVerts;

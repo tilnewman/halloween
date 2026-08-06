@@ -49,6 +49,9 @@ namespace halloween
         void draw(const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states)
             const final;
 
+      private:
+        void updateDialogRect();
+
       public:
         static inline sf::FloatRect m_traderRect{};
 
@@ -61,8 +64,8 @@ namespace halloween
         sf::FloatRect m_dialogRect;
         TextDetails m_dialogTextDetails;
         TextLayoutPack m_dialogTextPack;
-        std::size_t m_dartsToGive;
-        std::size_t m_coinsToTake;
+        int m_dartsToGive;
+        int m_coinsToTake;
         std::string m_offerMessage;
         sf::Vector2f m_traderDialogPos;
         sf::Vector2f m_playerDialogPos;

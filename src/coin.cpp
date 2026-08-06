@@ -183,6 +183,7 @@ namespace halloween
                 t_context.audio.play("coin");
                 t_context.info_region.scoreAdjust(1);
                 ++t_context.stats.coin_collected;
+                t_context.info_region.coinsAdjust(1);
                 addAnimation(t_context, util::center(coinRect));
             }
         }
