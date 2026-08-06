@@ -147,6 +147,14 @@ namespace halloween
             m_dialogTextPack =
                 TextLayout::typeset(t_context, m_offerMessage, m_dialogRect, m_dialogTextDetails);
         }
+        else if ((TraderPhase::TraderHint == m_phase) and (m_elapsedSec > 2.0f))
+        {
+            m_elapsedSec = 0.0f;
+            m_phase = TraderPhase::TraderOffer;
+
+            m_dialogTextPack =
+                TextLayout::typeset(t_context, m_offerMessage, m_dialogRect, m_dialogTextDetails);
+        }
     }
 
     bool TraderState::handleEvent(const Context & t_context, const sf::Event & t_event)
@@ -159,12 +167,28 @@ namespace halloween
                 return true;
             }
 
-            if ((TraderPhase::TraderOffer == m_phase) and (m_dartsToGive > 0) and
-                (keyPtr->scancode == sf::Keyboard::Scancode::Y))
+            if ((TraderPhase::TraderOffer == m_phase) and (m_dartsToGive > 0))
             {
-                t_context.info_region.dartsAdjust(m_dartsToGive);
-                t_context.info_region.coinsAdjust(-m_coinsToTake);
-                t_context.state.setChangePending(State::Play);
+                if (keyPtr->scancode == sf::Keyboard::Scancode::Y)
+                {
+                    t_context.info_region.dartsAdjust(m_dartsToGive);
+                    t_context.info_region.coinsAdjust(-m_coinsToTake);
+                    t_context.state.setChangePending(State::Play);
+                }
+                if (keyPtr->scancode == sf::Keyboard::Scancode::N)
+                {
+                    t_context.state.setChangePending(State::Play);
+                }
+                else if (
+                    (keyPtr->scancode != sf::Keyboard::Scancode::Y) and
+                    (keyPtr->scancode != sf::Keyboard::Scancode::N))
+                {
+                    m_elapsedSec = 0.0f;
+                    m_phase = TraderPhase::TraderHint;
+
+                    m_dialogTextPack = TextLayout::typeset(
+                        t_context, "Press Y or N to answer.", m_dialogRect, m_dialogTextDetails);
+                }
             }
             else
             {
@@ -181,7 +205,7 @@ namespace halloween
         t_target.draw(m_backgroundSprite, t_states);
 
         if ((TraderPhase::TraderHey == m_phase) or (TraderPhase::PlayerHey == m_phase) or
-            (TraderPhase::TraderOffer == m_phase))
+            (TraderPhase::TraderOffer == m_phase) or (TraderPhase::TraderHint == m_phase))
         {
             t_target.draw(m_dialogSprite, t_states);
 
