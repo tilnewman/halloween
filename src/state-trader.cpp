@@ -161,12 +161,6 @@ namespace halloween
     {
         if (const auto * const keyPtr = t_event.getIf<sf::Event::KeyPressed>())
         {
-            if (keyPtr->scancode == sf::Keyboard::Scancode::Escape)
-            {
-                t_context.state.setChangePending(State::Play);
-                return true;
-            }
-
             if ((TraderPhase::TraderOffer == m_phase) and (m_dartsToGive > 0))
             {
                 if (keyPtr->scancode == sf::Keyboard::Scancode::Y)
@@ -175,7 +169,7 @@ namespace halloween
                     t_context.info_region.coinsAdjust(-m_coinsToTake);
                     t_context.state.setChangePending(State::Play);
                 }
-                if (keyPtr->scancode == sf::Keyboard::Scancode::N)
+                else if (keyPtr->scancode == sf::Keyboard::Scancode::N)
                 {
                     t_context.state.setChangePending(State::Play);
                 }
@@ -190,7 +184,9 @@ namespace halloween
                         t_context, "Press Y or N to answer.", m_dialogRect, m_dialogTextDetails);
                 }
             }
-            else
+            else if (
+                (TraderPhase::TraderOffer == m_phase) and (0 == m_dartsToGive) and
+                (keyPtr->scancode == sf::Keyboard::Scancode::N))
             {
                 t_context.state.setChangePending(State::Play);
             }
