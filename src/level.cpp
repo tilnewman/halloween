@@ -262,9 +262,9 @@ namespace halloween
     }
 
     void Level::draw(
-        const Context & t_context, sf::RenderTarget & t_target, sf::RenderStates t_states) const
+        const Context &, sf::RenderTarget & t_target, sf::RenderStates t_states) const
     {
-        for (const TileLayer & layer : t_context.level.tileLayers())
+        for (const TileLayer & layer : m_mapTiles.layers)
         {
             if (layer.visibleVerts.empty())
             {
