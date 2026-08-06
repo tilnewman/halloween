@@ -31,8 +31,7 @@ namespace halloween
         PlayerHey,
         PlayerHeyDelay,
         TraderOffer,
-        TraderHint,
-        TraderGoodbye
+        TraderHint
     };
 
     class TraderState final : public TimedMessageState
