@@ -5,6 +5,7 @@
 //
 #include "ninjas.hpp"
 
+#include "avatar.hpp"
 #include "check-macros.hpp"
 #include "context.hpp"
 #include "filesystem-util.hpp"
@@ -82,7 +83,7 @@ namespace halloween
         m_ninjas.emplace_back(t_context, m_textures.at(0), t_rect);
     }
 
-    void NinjaObjectManager::update(const Context &, const float m_frameTimeSec)
+    void NinjaObjectManager::update(const Context & t_context, const float m_frameTimeSec)
     {
         for (Ninja & ninja : m_ninjas)
         {
@@ -99,6 +100,8 @@ namespace halloween
 
                 ninja.sprite.setTexture(m_textures.at(ninja.frame_index));
             }
+
+            ninja.turnToFace(util::center(t_context.avatar.collisionRect()));
         }
     }
 
