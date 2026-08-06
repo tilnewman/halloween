@@ -5,6 +5,7 @@
 
 #include "check-macros.hpp"
 #include "context.hpp"
+#include "info-region.hpp"
 #include "level-stats.hpp"
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
@@ -27,12 +28,15 @@ namespace halloween
         , m_diaglogTexture{}
         , m_dialogSprite{ m_diaglogTexture }
         , m_elapsedSec{ 0.0f }
-        , m_timeBeforeDialog{ 1.0f }
         , m_dialogRect{}
         , m_dialogTextDetails{}
         , m_dialogTextPack{}
         , m_dartsToGive{ 0 }
         , m_coinsToTake{ 0 }
+        , m_offerMessage{}
+        , m_traderDialogPos{}
+        , m_playerDialogPos{}
+        , m_phase{ TraderPhase::InitailDelay }
     {}
 
     void TraderState::onEnter(const Context & t_context)
@@ -60,22 +64,29 @@ namespace halloween
             { (util::center(m_traderRect).x - util::center(m_dialogSprite.getGlobalBounds()).x),
               (m_traderRect.position.y - m_dialogSprite.getGlobalBounds().size.y) });
 
-        //
+        m_dialogSprite.move({ (m_traderRect.size.x * 0.75f), 0.0f });
+        m_traderDialogPos = m_dialogSprite.getPosition();
 
+        m_dialogSprite.move({ -(m_traderRect.size.x * 2.0f), 0.0f });
+        m_playerDialogPos = m_dialogSprite.getPosition();
+
+        m_dialogSprite.setPosition(m_traderDialogPos);
+
+        //
         m_dartsToGive = (t_context.stats.coin_collected / t_context.settings.dart_coin_cost);
         m_coinsToTake = (m_dartsToGive * t_context.settings.dart_coin_cost);
-        std::string message{ "Hey!" };
+
         if (m_dartsToGive > 0)
         {
-            message += "  Wanna buy ";
-            message += std::to_string(m_dartsToGive);
-            message += " darts for ";
-            message += std::to_string(m_coinsToTake);
-            message += " coins?";
+            m_offerMessage = "Wanna buy ";
+            m_offerMessage += std::to_string(m_dartsToGive);
+            m_offerMessage += " darts for ";
+            m_offerMessage += std::to_string(m_coinsToTake);
+            m_offerMessage += " coins?";
         }
         else
         {
-            message += " If you collect more coins I can sell you darts.";
+            m_offerMessage = " If you collect more coins I can sell you darts.";
         }
 
         //
@@ -85,14 +96,58 @@ namespace halloween
         m_dialogRect.position.y -= (m_dialogRect.size.y * 0.1f);
 
         m_dialogTextDetails = TextDetails(Font::General, 30u, sf::Color::Black);
-        m_dialogTextPack = TextLayout::typeset(t_context, message, m_dialogRect, m_dialogTextDetails);
+
+        m_dialogTextPack = TextLayout::typeset(t_context, "", m_dialogRect, m_dialogTextDetails);
     }
 
     void TraderState::onExit(const Context &) {}
 
-    void TraderState::update(const Context &, const float m_frameTimeSec)
+    void TraderState::update(const Context & t_context, const float m_frameTimeSec)
     {
         m_elapsedSec += m_frameTimeSec;
+
+        if ((TraderPhase::InitailDelay == m_phase) and (m_elapsedSec > 1.0f))
+        {
+            m_elapsedSec = 0.0f;
+            m_phase = TraderPhase::TraderHey;
+
+            m_dialogTextPack =
+                TextLayout::typeset(t_context, "Hey", m_dialogRect, m_dialogTextDetails);
+        }
+        else if ((TraderPhase::TraderHey == m_phase) and (m_elapsedSec > 0.75f))
+        {
+            m_elapsedSec = 0.0f;
+            m_phase = TraderPhase::TraderHeyDelay;
+        }
+        else if ((TraderPhase::TraderHeyDelay == m_phase) and (m_elapsedSec > 0.75f))
+        {
+            m_elapsedSec = 0.0f;
+            m_phase = TraderPhase::PlayerHey;
+            m_dialogSprite.setPosition(m_playerDialogPos);
+
+            m_dialogRect =
+                util::scaleRectInPlaceCopy(m_dialogSprite.getGlobalBounds(), { 0.9f, 0.65f });
+
+            m_dialogTextPack =
+                TextLayout::typeset(t_context, "Hey", m_dialogRect, m_dialogTextDetails);
+        }
+        else if ((TraderPhase::PlayerHey == m_phase) and (m_elapsedSec > 0.75f))
+        {
+            m_elapsedSec = 0.0f;
+            m_phase = TraderPhase::PlayerHeyDelay;
+        }
+        else if ((TraderPhase::PlayerHeyDelay == m_phase) and (m_elapsedSec > 0.75f))
+        {
+            m_elapsedSec = 0.0f;
+            m_phase = TraderPhase::TraderOffer;
+            m_dialogSprite.setPosition(m_traderDialogPos);
+
+            m_dialogRect =
+                util::scaleRectInPlaceCopy(m_dialogSprite.getGlobalBounds(), { 0.9f, 0.65f });
+
+            m_dialogTextPack =
+                TextLayout::typeset(t_context, m_offerMessage, m_dialogRect, m_dialogTextDetails);
+        }
     }
 
     bool TraderState::handleEvent(const Context & t_context, const sf::Event & t_event)
@@ -104,6 +159,17 @@ namespace halloween
                 t_context.state.setChangePending(State::Play);
                 return true;
             }
+
+            if ((TraderPhase::TraderOffer == m_phase) and (m_dartsToGive > 0) and
+                (keyPtr->scancode == sf::Keyboard::Scancode::Y))
+            {
+                t_context.info_region.dartsAdjust(static_cast<int>(m_dartsToGive));
+                //t_context.info_region.coin // TODO
+            }
+            else
+            {
+                t_context.state.setChangePending(State::Play);
+            }
         }
 
         return false;
@@ -114,7 +180,8 @@ namespace halloween
     {
         t_target.draw(m_backgroundSprite, t_states);
 
-        if (m_elapsedSec > m_timeBeforeDialog)
+        if ((TraderPhase::TraderHey == m_phase) or (TraderPhase::PlayerHey == m_phase) or
+            (TraderPhase::TraderOffer == m_phase))
         {
             t_target.draw(m_dialogSprite, t_states);
 

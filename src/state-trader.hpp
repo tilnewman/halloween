@@ -23,6 +23,18 @@ namespace halloween
 {
     struct Context;
 
+    enum class TraderPhase : unsigned char
+    {
+        InitailDelay,
+        TraderHey,
+        TraderHeyDelay,
+        PlayerHey,
+        PlayerHeyDelay,
+        TraderOffer,
+        TraderHint,
+        TraderGoodbye
+    };
+
     class TraderState final : public TimedMessageState
     {
       public:
@@ -46,12 +58,15 @@ namespace halloween
         sf::Texture m_diaglogTexture;
         sf::Sprite m_dialogSprite;
         float m_elapsedSec;
-        float m_timeBeforeDialog;
         sf::FloatRect m_dialogRect;
         TextDetails m_dialogTextDetails;
         TextLayoutPack m_dialogTextPack;
         std::size_t m_dartsToGive;
         std::size_t m_coinsToTake;
+        std::string m_offerMessage;
+        sf::Vector2f m_traderDialogPos;
+        sf::Vector2f m_playerDialogPos;
+        TraderPhase m_phase;
     };
 
 } // namespace halloween
