@@ -50,6 +50,8 @@ namespace halloween
         sf::FloatRect m_dialogRect;
         TextDetails m_dialogTextDetails;
         TextLayoutPack m_dialogTextPack;
+        std::size_t m_dartsToGive;
+        std::size_t m_coinsToTake;
     };
 
 } // namespace halloween

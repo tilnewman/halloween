@@ -5,6 +5,7 @@
 
 #include "check-macros.hpp"
 #include "context.hpp"
+#include "level-stats.hpp"
 #include "settings.hpp"
 #include "sfml-defaults.hpp"
 #include "sfml-util.hpp"
@@ -13,6 +14,8 @@
 #include "texture-loader.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
+
+#include <string>
 
 namespace halloween
 {
@@ -28,6 +31,8 @@ namespace halloween
         , m_dialogRect{}
         , m_dialogTextDetails{}
         , m_dialogTextPack{}
+        , m_dartsToGive{ 0 }
+        , m_coinsToTake{ 0 }
     {}
 
     void TraderState::onEnter(const Context & t_context)
@@ -56,13 +61,31 @@ namespace halloween
               (m_traderRect.position.y - m_dialogSprite.getGlobalBounds().size.y) });
 
         //
+
+        m_dartsToGive = (t_context.stats.coin_collected / t_context.settings.dart_coin_cost);
+        m_coinsToTake = (m_dartsToGive * t_context.settings.dart_coin_cost);
+        std::string message{ "Hey!" };
+        if (m_dartsToGive > 0)
+        {
+            message += "  Wanna buy ";
+            message += std::to_string(m_dartsToGive);
+            message += " darts for ";
+            message += std::to_string(m_coinsToTake);
+            message += " coins?";
+        }
+        else
+        {
+            message += " If you collect more coins I can sell you darts.";
+        }
+
+        //
         m_dialogRect =
-            util::scaleRectInPlaceCopy(m_dialogSprite.getGlobalBounds(), { 0.8f, 0.65f });
+            util::scaleRectInPlaceCopy(m_dialogSprite.getGlobalBounds(), { 0.9f, 0.65f });
 
-        m_dialogRect.position.y -= (m_dialogRect.size.y * 0.2f);
+        m_dialogRect.position.y -= (m_dialogRect.size.y * 0.1f);
 
-        m_dialogTextDetails = TextDetails(Font::General, 45u, sf::Color::Black);
-        m_dialogTextPack = TextLayout::typeset(t_context, "Hey", m_dialogRect, m_dialogTextDetails);
+        m_dialogTextDetails = TextDetails(Font::General, 30u, sf::Color::Black);
+        m_dialogTextPack = TextLayout::typeset(t_context, message, m_dialogRect, m_dialogTextDetails);
     }
 
     void TraderState::onExit(const Context &) {}
