@@ -41,21 +41,28 @@ namespace halloween
         const std::string & t_message,
         const sf::Color & t_color) const
     {
-        sf::Text text =
-            [&]() {
-                if (Font::Title == t_font)
-                {
-                   return sf::Text(m_titleFont, t_message, t_charSize);
-                }
-                else
-                {
-                    return sf::Text(m_generalFont, t_message, t_charSize);
-                }
+        sf::Text text = [&]() {
+            if (Font::Title == t_font)
+            {
+                return sf::Text(m_titleFont, t_message, t_charSize);
+            }
+            else
+            {
+                return sf::Text(m_generalFont, t_message, t_charSize);
+            }
         }();
-        
+
         text.setFillColor(t_color);
         util::setOriginToPosition(text);
         return text;
+    }
+
+    const sf::Vector2f FontManager::makeExtent(const Font t_font, const unsigned t_size) const
+    {
+        sf::Vector2f size;
+        size.x = makeText(t_font, t_size, "M").getGlobalBounds().size.x;
+        size.y = makeText(t_font, t_size, "|g").getGlobalBounds().size.y;
+        return size;
     }
 
 } // namespace halloween

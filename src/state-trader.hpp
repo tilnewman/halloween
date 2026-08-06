@@ -3,12 +3,16 @@
 //
 // ninja-trader.hpp
 //
+#include "fonts.hpp"
 #include "states.hpp"
+#include "text-layout.hpp"
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
+
+#include <vector>
 
 namespace sf
 {
@@ -43,7 +47,11 @@ namespace halloween
         sf::Sprite m_dialogSprite;
         float m_elapsedSec;
         float m_timeBeforeDialog;
+        sf::FloatRect m_dialogRect;
+        TextDetails m_dialogTextDetails;
+        TextLayoutPack m_dialogTextPack;
     };
+
 } // namespace halloween
 
 #endif // NINJA_TRADER_HPP_INCLUDED
